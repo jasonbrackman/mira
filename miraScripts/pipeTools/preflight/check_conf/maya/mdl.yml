@@ -1,0 +1,150 @@
+check_display_wireframe:
+  name: "Display wireframe | 线框显示"
+  order: 0
+  ignorable: False
+  description: "以线框显示保存文件"
+check_display_smooth:
+  name: "Display smooth | 按1显示"
+  order: 5
+  ignorable: False
+  description: "所有模型按1显示"
+check_duplicate_names:
+  name: "Duplicate names | 同名物体"
+  order: 10
+  ignorable: False
+  description: "检查是否有同名物体存在"
+check_mdl_something_selected:
+  name: "Something Selected | 选中模型大组"
+  order: 20
+  ignorable: False
+  description: "选中模型大组"
+check_extra_camera:
+  name: "Extra Camera | 多余的相机"
+  order: 30
+  ignorable: True
+  description: "场景中多余的相机"
+check_mdl_reference_node:
+  name: "Has reference node | 有reference"
+  order: 40
+  ignorable: False
+  description: "检查模型大组下是否有reference节点的存在"
+check_mdl_delete_history:
+  name: "Delete History | 删除历史"
+  order: 50
+  ignorable: False
+  description: "删除大组下所有模型的历史"
+check_naming_space:
+  name: "Naming space | 名称空间"
+  order: 60
+  ignorable: False
+  description: "检查模型大组下是否有名称空间存在"
+check_mdl_lock_central:
+  name: "Lock central pivot | 锁定中心坐标"
+  order: 70
+  ignorable: False
+  description: "锁定模型大组中心坐标"
+check_only_one_model_group:
+  name: "Only one _MODEL | 只有一个以_MODEL结尾的"
+  order: 80
+  ignorable: False
+  description: "检查模型大组下是否有以_MODEL结尾的，在动画环节导出abc选中该组，所以确保只有一个"
+check_mdl_top_node:
+  name: "Top Node | 模型大组在最顶层"
+  order: 100
+  ignorable: False
+  description: "检查模型大组在最顶层"
+check_mdl_not_polygon:
+  name: "Not polygon | 模型全为polygon"
+  order: 110
+  ignorable: False
+  description: "检查所有模型是否都是polygon"
+check_mdl_empty_mesh:
+  name: "Empty mesh | 无面模型"
+  order: 120
+  ignorable: False
+  description: "检查模型是否没有面"
+check_mdl_five_faces:
+  name: "Five faces | 五边面"
+  order: 125
+  ignorable: False
+  description: "检查模型是否包含五边面"
+check_mdl_T_faces:
+  name: "T faces | T形面"
+  order: 127
+  ignorable: False
+  description: "检查是否有T形面存在"
+check_mdl_instance:
+  name: "Instance model | 不允许关联复制"
+  order: 130
+  ignorable: False
+  description: "检查是否有关联复制的模型"
+check_mdl_extra_shape:
+  name: "Extra shape | 多余的shape"
+  order: 140
+  ignorable: False
+  description: "检查一个transform下是否有多个shape"
+check_mdl_suffix:
+  name: "_GEOSHAPE | shape={transform}_GEOSAHPE"
+  order: 145
+  ignorable: False
+  description: "模型shape名必须为transform_GEOSHAPE"
+check_mdl_connection:
+  name: "Attribute connection | 基础属性有连接"
+  order: 150
+  ignorable: False
+  description: "检查模型的位移、缩放、旋转属性上是否有连接"
+check_mdl_keyframe:
+  name: "keyframe | 不允许K帧"
+  order: 160
+  ignorable: False
+  description: "检查模型是否有K帧，流程不允许在模型阶段对模型K帧"
+check_mdl_transform_freeze:
+  name: "transform freeze | freeze所有模型"
+  order: 170
+  ignorable: False
+  description: "将模型大组下的所有transform freeze"
+check_mdl_transform_locked:
+  name: "Transform locked | 锁定模型基础属性"
+  order: 180
+  ignorable: True
+  description: "锁定所有模型的旋转缩放位移属性"
+check_backup_visibility_unlocked:
+  name: "Unlock _BACKUP.v | 解锁_BACKUP组的显示属性"
+  order: 190
+  ignorable: False
+  description: "检查_BACKUP组的显示属性是否被锁定，保证后续环节reference状态下能被隐藏，如果锁定则无法被隐藏"
+check_mdl_render_property:
+  name: "Render property | 打开渲染属性"
+  order: 200
+  ignorable: True
+  description: "打开模型大组下所有模型的渲染属性"
+check_use_default_lambert:
+  name: "Assign lambert1 | 赋予了lambert1"
+  order: 228
+  ignorable: False
+  description: "检查模型上是否赋予了lambert1材质球，流程上不允许使用lambert1材质球"
+check_assigned_faces:
+  name: "Assgin shader by face | 选面赋材质"
+  order: 230
+  ignorable: True
+  description: "检查是否有模型选面赋材质"
+check_shd_empty_file_path:
+  name: "Invalid file path | 贴图路径"
+  order: 240
+  ignorable: False
+  description: "检查贴图路径是否正确"
+check_unused_nodes:
+  name: "Unused nodes | 删除无用节点"
+  order: 250
+  ignorable: False
+  description: "删除无用节点"
+check_duplicate_names_again:
+  name: "Duplicate names | 同名物体"
+  order: 260
+  ignorable: False
+  description: "检查是否有同名物体存在"
+check_save_file:
+  name: "Save file | 保存文件"
+  order: 270
+  ignorable: True
+  description: "保存检查后的文件"

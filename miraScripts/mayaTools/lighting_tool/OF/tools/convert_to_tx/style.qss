@@ -1,0 +1,31 @@
+*{   
+  font-size:12px;   
+  color:#DDDDDD;   
+  font-family:Arial;
+}   
+
+QPushButton, QToolButton
+{
+    background-color:transparent;
+}
+
+
+QPushButton::hover,QToolButton::hover
+{   
+    color:#00FF00;   
+}   
+
+QPushButton::pressed,QToolButton::pressed
+{   
+    color: #FF00FF;   
+}   
+
+QListWidget::item:selected 
+{   
+     border:none;   
+     background: #ff8c00;   
+
+}   
+
+
+

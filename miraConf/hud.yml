@@ -1,0 +1,96 @@
+color:
+  label_color: 19
+  value_color: 17
+hud_company_name:
+  label: ""
+  section: 0
+  labelWidth: 0
+  command: "'{company_name}'"
+  event: NewSceneOpened
+  labelFontSize: small
+  dataFontSize: small
+  blockSize: small
+hud_project_name:
+  label: "项目名称："
+  section: 0
+  labelWidth: 50
+  command: "'{project_name}'"
+  event: NewSceneOpened
+  labelFontSize: small
+  dataFontSize: small
+  blockSize: small
+hud_resolution:
+  label: "长宽比："
+  section: 2
+  labelWidth: 40
+  command: "'{resolution}'"
+  event: NewSceneOpened
+  labelFontSize: small
+  dataFontSize: small
+  blockSize: small
+hud_shot_name:
+  label: "镜头号："
+  section: 4
+  labelWidth: 40
+  command: "'{shot_name}'"
+  event: NewSceneOpened
+  labelFontSize: small
+  dataFontSize: small
+  blockSize: small
+hud_frame_range:
+  label: "帧范围："
+  section: 4
+  labelWidth: 40
+  command: "'{frame_range}'"
+  event: NewSceneOpened
+  labelFontSize: small
+  dataFontSize: small
+  blockSize: small
+hud_date:
+  label: "日期："
+  section: 5
+  labelWidth: 40
+  command: "import time;time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())"
+  event: timeChanged
+  labelFontSize: small
+  dataFontSize: small
+  blockSize: small
+hud_user:
+  label: "制作者："
+  section: 5
+  labelWidth: 40
+  command: "'{user}'"
+  event: NewSceneOpened
+  labelFontSize: small
+  dataFontSize: small
+  blockSize: small
+hud_camera:
+  label: "摄像机："
+  section: 7
+  labelWidth: 40
+  command: "import maya.cmds as mc;mc.lookThru(q=1)"
+  event: cameraChange
+  labelFontSize: small
+  dataFontSize: small
+  blockSize: small
+hud_focal_length:
+  label: "焦距："
+  section: 7
+  labelWidth: 40
+  command: "import maya.cmds as mc;mc.getAttr('%s.focalLength' % mc.lookThru(q=1))"
+  event: cameraChange
+  labelFontSize: small
+  dataFontSize: small
+  blockSize: small
+hud_current_frame:
+  label: "当前帧："
+  section: 9
+  labelWidth: 40
+  command: "import maya.cmds as mc;mc.currentTime(q=1)"
+  event: timeChanged
+  labelFontSize: small
+  dataFontSize: small
+  blockSize: small
+
+
+

@@ -1,0 +1,19 @@
+plugins:
+  load:
+    - mtoa.mll
+    - pgYetiMaya.mll
+    - VectorRender.mll
+    - MayaExocortexAlembic.mll
+  unload:
+    - AbcImport.mll
+    - AbcExport.mll
+    - MayaMuscle.mll
+    - BifrostMain.mll
+    - bifrostshellnode.mll
+    - bifrostvisplugin.mll
+    - Mayatomr.mll
+    - redshift4maya.mll
+    - gameFbxExporter.mll
+    - GamePipeline.mll
+    - sceneAssembly.mll
+    - Turtle.mll

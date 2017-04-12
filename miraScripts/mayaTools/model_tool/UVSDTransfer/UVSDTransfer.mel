@@ -1,0 +1,403 @@
+global proc doCommand(){
+    global string $leftItem;
+    global string $rightItem[];
+    global int $UVmode;
+    global int $SDmode;
+    global int $tar;
+    global string $sGrp[];
+    global int $cll;
+    $cll = `frameLayout -q -cl frame2`;
+    if($cll != 1){
+        for($i in $rightItem)
+            PassInfo($UVmode,$SDmode,{$leftItem,$i},1);
+        print ($leftItem+" to "+stringArrayToString($rightItem," "));
+    }
+    else{
+        PassInfo($UVmode,$SDmode,$sGrp,$tar);
+        print ($sGrp[0]+" to "+$sGrp[1]);
+    }
+
+}
+global proc cBCommand(){
+    global int $UVmode;
+    global int $SDmode;
+    $UVmode = `checkBoxGrp -q -v1 cBox`;
+    $SDmode = `checkBoxGrp -q -v2 cBox`;
+    print ("Transfer UV?\t     "+$UVmode+"\n");
+    print ("Transfer shader?\t "+$SDmode+"\n");
+    print "\n";
+}
+global proc b1Command(){
+    global string $sGrp[];
+    string $temp[] = `ls -sl`;
+    if(size($temp)){
+        $sGrp[0] = $temp[0];
+        button -e -l $temp[0] btn1;   
+        print ("Now left is "+ $sGrp[0]+"\n");
+    }
+}
+global proc b2Command(){
+    global int $tar;
+    if(`iconTextButton -q -image1 btn2`=="arrowRight.png"){
+        iconTextButton -e -image1 "arrowLeft.png" btn2;
+        $tar=0;
+        print "right to left.\n";
+    }
+    else{
+        iconTextButton -e -image1 "arrowRight.png" btn2;
+        $tar=1;
+        print "left to right.\n";
+    }
+}
+global proc b3Command(){
+    global string $sGrp[];
+    string $temp[] = `ls -sl`;
+    if(size($temp)){
+        $sGrp[1] = $temp[0];
+        button -e -l $temp[0] btn3;    
+        print ("Now right is "+ $sGrp[1]+".\n");
+    }
+}
+global proc b_laCommand(){
+    global string $leftItem;
+    string $tempSl[] = `ls -sl`;
+    $leftItem = $tempSl[0];
+    textScrollList -e -ra txtScList1;
+    textScrollList -e -append $leftItem -si $leftItem txtScList1;
+    textScrollList -e -ri $leftItem txtScList2;
+    print ("Now the left group is "+$leftItem);
+    print ".\n";
+}
+global proc b_lrCommand(){
+    global string $leftItem;
+    $leftItem = "Get Left";
+    textScrollList -e -ra txtScList1;
+    print ("Now the left group is None");
+    print ".\n";
+}
+global proc b_raCommand(){
+    global string $rightItem[];
+    global string $leftItem;
+    string $tempSl[] = `ls -sl`;
+    for($i in $tempSl){
+        if($i != $leftItem){
+            textScrollList -e -ri $i txtScList2;
+            textScrollList -e -append $i -si $i txtScList2;
+        }
+    }
+    $rightItem = `textScrollList -q -ai txtScList2`;
+    print ("Now the right groups are:   "+stringArrayToString($rightItem," "));
+    print ".\n";
+}
+global proc b_rrCommand(){
+    global string $rightItem[];
+    string $temp[] = `textScrollList -q -si txtScList2`;
+    for($i in $temp){
+        textScrollList -e -ri $i txtScList2;
+    }
+    $rightItem = `textScrollList -q -ai txtScList2`;
+    if($rightItem[0]==""){
+        $rightItem = {"Get Right"};
+        print "Now the right item is:    None";   
+    }
+    else
+        print ("Now the right items are:   "+stringArrayToString($rightItem," "));
+    
+    print ".\n";
+}
+//---------------------------//
+//commands
+
+
+
+
+global proc string tgPassInfoAddZero(string $inputStringDate) {
+
+	string $TGJ_MUV_ZeroString = "000000000";
+	int $inputStringDateSize = size($inputStringDate);
+	string $outputStringDate = startString($TGJ_MUV_ZeroString,9 - $inputStringDateSize) + $inputStringDate;
+	return $outputStringDate ;
+
+}
+
+
+
+global proc string tgPassInfoGetIndex(string $inputObj,string $inputStringDate) {
+
+	string $q[];
+	tokenize $inputStringDate ".[]" $q;
+	if ($q[0]== $inputObj) return $q[2];
+	else return "";
+
+}
+
+
+
+global proc string tgPassInfoGetNum(string $inputStringDate) {
+
+	string $outputStringDate[];
+	tokenize $inputStringDate "," $outputStringDate;
+	return $outputStringDate[0];
+
+}
+
+
+
+global proc string tgPassInfoGetName(string $inputStringDate) {
+
+	string $outputStringDate[];
+	tokenize $inputStringDate "," $outputStringDate;
+	return $outputStringDate[2];
+
+}
+
+
+
+global proc string tgPassInfoTransferUV(string $transShp[]) {
+
+	string $polyTransNode[] = `polyTransfer -uv 1 -v 0 -vc 0 -ch 0 -ao $transShp[0] $transShp[1]`;
+
+	string $transSourceUVs[] = `polyListComponentConversion -fv -tuv $transShp[0]`;
+	string $transTargetUVs[] = `polyListComponentConversion -fv -tuv $transShp[1]`;
+	int $transSourceUVsSize = size(`ls -fl $transSourceUVs`);
+	int $transTargetUVsSize = size(`ls -fl $transTargetUVs`);
+
+	string $transTarget0Vtx2UVs[] = `polyListComponentConversion -fv -tuv ($transShp[1] + ".vtx[0]")`;
+	string $transTarget0Vtx2UVs2Vtxs[] = `polyListComponentConversion -fuv -tv $transTarget0Vtx2UVs`;
+	int $transTarget0Vtx2UVs2VtxsSize = size(`ls -fl $transTarget0Vtx2UVs2Vtxs`);
+
+	if ($transSourceUVsSize!=$transTargetUVsSize||$transTarget0Vtx2UVs2VtxsSize!=1) {
+		if ($polyTransNode[0]!="") delete $polyTransNode[0];
+		string $polyNormalNode1[] = `polyNormal -normalMode 0 -ch 0 $transShp[1]`;
+		$polyTransNode = `polyTransfer -uv 1 -v 0 -vc 0 -ch 0 -ao $transShp[0] $transShp[1]`;
+		string $polyNormalNode2[] = `polyNormal -normalMode 0 -ch 0 $transShp[1]`;
+		select -r $transShp;
+		if ($polyTransNode[0]=="") return "reverse normal & transfer(No history)";
+		else return ($polyNormalNode1[0] + "/" + $polyNormalNode2[0] + " & " + $polyTransNode[0]);
+	}
+	select -r $transShp;
+	if ($polyTransNode[0]=="") return "transfer(No history)";
+	else return ($polyTransNode[0]);
+
+}
+
+
+
+global proc tgPassInfoTransferShader(string $selObj[]) {
+    
+    string $shape[];
+    $shape = `listRelatives -shapes -fullPath $selObj[0]`;
+    string $sgNodep[];
+    $sgNode = `listConnections -type "shadingEngine" $shape[0]`;
+    sets -fe $sgNode[0] $selObj[1];
+}
+
+
+global proc PassInfo(int $UVmode,int $SDmode,string $sGrp[],int $tar) {
+	global string $selectedGrp[];
+	if ($sGrp[0] == "Get Left"||$sGrp[1]=="Get Right") 
+		error("Please get the left/right groups.");
+	if($tar==0)
+	    $selectedGrp = {$sGrp[1],$sGrp[0]};
+	else
+	    $selectedGrp = $sGrp;
+	string $sourceObj[] = `listRelatives -ad -f -type "transform" $selectedGrp[0]`;
+	$sourceObj[size($sourceObj)] = $selectedGrp[0];
+	string $sourceVisObj[] = `ls -v -l -fl $sourceObj`;
+	string $sourceVisMeshObj[] = {};
+	for ($i=0,$j=0;$i<size($sourceVisObj);$i++) {
+		string $sourceVisObjShp[] = `listRelatives -s -f $sourceVisObj[$i]`;
+		if (size($sourceVisObjShp) != 0) {
+			if (`nodeType($sourceVisObjShp[0])` == "mesh") {
+				$sourceVisMeshObj[$j] = $sourceVisObj[$i];
+				$j++;
+			}
+		}
+	}
+	string $targetObj[] = `listRelatives -ad -f -type "transform" $selectedGrp[1]`;
+	$targetObj[size($targetObj)] = $selectedGrp[1];
+	string $targetVisObj[] = `ls -v -l -fl $targetObj`;
+	string $targetVisMeshObj[] = {};
+	for ($i=0,$j=0;$i<size($targetVisObj);$i++) {
+		string $targetVisObjShp[] = `listRelatives -s -f $targetVisObj[$i]`;
+		if (size($targetVisObjShp) != 0) {
+			if (`nodeType($targetVisObjShp[0])` == "mesh") {
+				$targetVisMeshObj[$j] = $targetVisObj[$i];
+				$j++;
+			}
+		}
+	}
+
+	string $sourceObjFaceNum[] = {};
+	string $targetObjFaceNum[] = {};
+	for ($i=0;$i<size($sourceVisMeshObj);$i++) {
+		int $faceNumTmp[] = `polyEvaluate -f $sourceVisMeshObj[$i]`;
+		string $sourceObjNameTmp[] = {};
+		tokenize $sourceVisMeshObj[$i] ":|" $sourceObjNameTmp;
+		$sourceObjFaceNum[$i] = tgPassInfoProc("tgPassInfoAddZero",{(string)$faceNumTmp[0]}) + "," + $sourceObjNameTmp[size($sourceObjNameTmp)-1] + "," + $sourceVisMeshObj[$i];
+	}
+	for ($i=0;$i<size($targetVisMeshObj);$i++) {
+		int $faceNumTmp[] = `polyEvaluate -f $targetVisMeshObj[$i]`;
+		string $targetObjNameTmp[] = {};
+		tokenize $targetVisMeshObj[$i] ":|" $targetObjNameTmp;
+		$targetObjFaceNum[$i] = tgPassInfoProc("tgPassInfoAddZero",{(string)$faceNumTmp[0]}) + "," + $targetObjNameTmp[size($targetObjNameTmp)-1] + "," + $targetVisMeshObj[$i];
+	}
+
+	$sourceObjFaceNum = sort($sourceObjFaceNum);
+	$targetObjFaceNum = sort($targetObjFaceNum);
+
+
+	for ($i=0,$initJ=0;$i<size($sourceObjFaceNum);$i++) {
+		for ($j=$initJ;$j<size($targetObjFaceNum);$j++) {
+			if ( tgPassInfoProc("tgPassInfoGetNum",{$sourceObjFaceNum[$i]}) == tgPassInfoProc("tgPassInfoGetNum",{$targetObjFaceNum[$j]}) ) {
+				//print (tgPassInfoGetName($sourceObjFaceNum[$i]) + "                      " + tgPassInfoGetName($targetObjFaceNum[$j]) + "\n");
+				string $sourceName = tgPassInfoProc("tgPassInfoGetName",{$sourceObjFaceNum[$i]});
+				string $targetName = tgPassInfoProc("tgPassInfoGetName",{$targetObjFaceNum[$j]});
+				if($UVmode)tgPassInfoProc("tgPassInfoTransferUV",{$sourceName,$targetName});
+				if($SDmode)tgPassInfoProc("tgPassInfoTransferShader",{$sourceName,$targetName});
+				$initJ = $j + 1;
+				break;
+			}
+		}
+	}
+
+	select -r $selectedGrp;
+	print ( "Information has been passed to \"" + $selectedGrp[1] + "\" from \"" + $selectedGrp[0] + "\"" );
+
+}
+
+global proc string tgPassInfoProc(string $procName,string $args[]) {
+	
+	switch ($procName) {
+		
+		case "tgPassInfoAddZero":
+			return tgPassInfoAddZero($args[0]);
+		break;
+		
+		case "tgPassInfoGetNum":
+			return tgPassInfoGetNum($args[0]);
+		break;
+		
+		case "tgPassInfoGetName":
+			return tgPassInfoGetName($args[0]);
+		break;
+		
+		case "tgPassInfoTransferUV":
+			return tgPassInfoTransferUV($args);
+		break;
+		
+		case "tgPassInfoTransferShader":
+			tgPassInfoTransferShader($args);;
+		break;
+
+	}
+	
+	return "";
+	
+}
+
+
+global proc UVSDTransUI(){
+    global string $sGrp[];
+    $sGrp = `ls -sl -tr -fl`;
+    if (size($sGrp) != 2){
+        $sGrp = {"Get Left","Get Right"};
+    }
+    global int $tar;
+    $tar = 1;
+    global int $UVmode;
+    global int $SDmode;
+    $UVmode = 1;
+    $SDmode = 1;
+    global string $leftItem;
+    $leftItem = "Get Left";
+    global string $rightItem[];
+    $rightItem = {"Get Right"};
+    if(`window -exists transferUI`)
+    	{
+         deleteUI -window transferUI;
+        }
+    window -title "UV&ShaderTransfer"
+           -iconName "transferUV&Shader"
+           -minimizeButton 0
+           -maximizeButton 0
+           -rtf 1
+           transferUI;
+    columnLayout -adjustableColumn true;
+            checkBoxGrp
+            -numberOfCheckBoxes 2
+            -label "MODE:    "
+            -labelArray2 "UV" "Shader"
+            -value1 1
+            -value2 1
+            -cc "cBCommand()"
+            cBox;
+            frameLayout -label "One To One"
+                -cll 1
+                -cl 0
+                -borderStyle "in"
+                -ec "frameLayout -e -cl 1 frame2;window -e -w 400 -h 135 transferUI;"
+                frame1;
+
+                rowColumnLayout
+                    -numberOfColumns 3
+                    -columnWidth 1 190
+                    -columnWidth 2 20
+                    -columnWidth 3 190;
+                    button -h 30 -l $sGrp[0] -bgc 0.3 0.3 0.3 -c "b1Command()" btn1;
+                    iconTextButton -style "iconOnly" -h 30 -image1 "arrowRight.png" -c "b2Command()" btn2;
+                    button -h 30 -l $sGrp[1] -bgc 0.3 0.3 0.3 -c "b3Command()" btn3;
+                    setParent ..;
+                setParent ..;
+            frameLayout -label "One To Many"
+                -cll 1
+                -cl 1
+                -borderStyle "in"
+                -ec "frameLayout -e -cl 1 frame1;window -e -w 400 -h 300 transferUI;"
+                frame2;
+            rowColumnLayout
+                    -numberOfColumns 3
+                    -columnWidth 1 190
+                    -columnWidth 2 20
+                    -columnWidth 3 190;
+                button -h 30 -l "Get Left" -bgc 0.3 0.3 0.3 -c "b_laCommand()";
+                text -l " ";
+                button -h 30 -l "Add Rights" -bgc 0.3 0.3 0.3 -c "b_raCommand()";
+            setParent ..;
+            rowColumnLayout
+                    -numberOfColumns 3
+                    -columnWidth 1 190
+                    -columnWidth 2 20
+                    -columnWidth 3 190;
+                scrollLayout
+                    -horizontalScrollBarThickness 16
+                    -verticalScrollBarThickness   16;
+                    textScrollList -allowMultiSelection true
+                        -showIndexedItem 4
+                        txtScList1;
+                setParent ..;
+                iconTextButton -style "iconOnly" -h 30 -image1 "arrowRight.png";
+                scrollLayout
+                    -horizontalScrollBarThickness 16
+                    -verticalScrollBarThickness   16;
+                    textScrollList -allowMultiSelection true
+                        -showIndexedItem 4
+                        txtScList2;
+                setParent ..;
+            setParent ..;
+            rowColumnLayout
+                    -numberOfColumns 3
+                    -columnWidth 1 190
+                    -columnWidth 2 20
+                    -columnWidth 3 190;
+                button -h 30 -l "Remove Left" -bgc 0.3 0.3 0.3 -c "b_lrCommand()";
+                text -l " ";
+                button -h 30 -l "Remove Rights" -bgc 0.3 0.3 0.3 -c "b_rrCommand()";
+            setParent ..;
+        setParent ..;
+        button -label "Transfer!!!" -bgc .3 .3 .3 -h 40 -c "doCommand()" doBtn;
+    showWindow transferUI;
+    window -e -w 400 -h 135 transferUI;
+}
+
+UVSDTransUI();

@@ -1,0 +1,15 @@
+QGroupBox
+{
+    border: 1px solid #AAAAAA;
+    border-radius: 0px;
+}
+
+QLabel, QTextEdit
+{
+   background-color: #f2feff;
+}
+
+QMainWindow
+{
+   background-color: #faffff;
+}

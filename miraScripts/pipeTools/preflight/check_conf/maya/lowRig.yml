@@ -1,0 +1,60 @@
+check_display_wireframe:
+  name: "Display wireframe<线框显示>"
+  order: 0
+  ignorable: False
+  description: "以线框显示保存文件"
+check_display_smooth:
+  name: "Display smooth | 按1显示"
+  order: 5
+  ignorable: False
+  description: "所有模型按1显示"
+check_reference_is_newest:
+  name: "neweset reference | 最新的reference"
+  order: 8
+  ignorable: True
+  description: "检查文件中的reference文件是不是最新的"
+check_rig_something_selected:
+  name: "Something Selected<选中大组>"
+  order: 10
+  ignorable: False
+  description: "选中_ROOT模型大组"
+check_only_one_model_group:
+  name: "Only one _MODEL | 只有一个以_MODEL结尾的"
+  order: 20
+  ignorable: False
+  description: "检查模型大组下是否有以_MODEL结尾的，在动画环节导出abc选中该组，所以确保只有一个"
+check_backup_visibility_unlocked:
+  name: "Unlock _BACKUP.v | 解锁_BACKUP组的显示属性"
+  order: 30
+  ignorable: False
+  description: "检查_BACKUP组的显示属性是否被锁定，保证后续环节reference状态下能被隐藏，如果锁定则无法被隐藏"
+check_mdl_top_node:
+  name: "Top Node | 绑定_ROOT大组在最顶层"
+  order: 40
+  ignorable: False
+  description: "检查绑定_ROOT大组在最顶层"
+check_rig_structure:
+  name: "Structure | 大纲层级结构"
+  order: 50
+  ignorable: False
+  description: "检查绑定文件大纲层级结构"
+check_extra_camera:
+  name: "Extra Camera | 多余的相机"
+  order: 60
+  ignorable: False
+  description: "场景中多余的相机"
+check_unloaded_reference:
+  name: "Unload reference | 没有加载的reference"
+  order: 70
+  ignorable: True
+  description: "检查是否有没加载的reference"
+check_duplicate_names:
+  name: "Duplicate names | 同名物体"
+  order: 120
+  ignorable: False
+  description: "检查是否有同名物体存在"
+check_save_file:
+  name: "Save file | 保存文件"
+  order: 130
+  ignorable: True
+  description: "保存检查后的文件"

@@ -1,0 +1,8 @@
+tank_path: "Z:/mnt/software/shotgun/studio/install/core/python"
+sg_api_path: "Z:/mira/miraLibs/site-packages/py27"
+script_name: "connectShotgun"
+api_key: "eaf4d2b8fd3ad1426328e3c13511777e134ca30a1042df94f8d3041854dd46c8"
+sg_site: "https://aierpingfang.shotgunstudio.com"
+
+snowkid:
+  root_pn: "Z:/mnt/software/shotgun/snowkid"

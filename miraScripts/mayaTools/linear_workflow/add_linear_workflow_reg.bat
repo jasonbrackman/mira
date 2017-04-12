@@ -1,0 +1,3 @@
+reg add HKEY_CLASSES_ROOT\*\shell\convert_to_linear_exr\command /ve /t REG_SZ /d "python Z:/Resource/Support/aas_repos/aas_scripts/aas_pythonScripts/linear_workflow/convert_to_linear_exr_and_tiling_mipmapping.py %%1"
+reg add HKEY_CLASSES_ROOT\*\shell\only_tiling_mipmapping\command /ve /t REG_SZ /d "python Z:/Resource/Support/aas_repos/aas_scripts/aas_pythonScripts/linear_workflow/only_tiling_mipmapping.py %%1"
+pause

@@ -1,0 +1,1 @@
++ MAYAVERSION:2016 PLATFORM:win64 rbfSolver any C:\tools\mira_tools\mira_plugins\2016_x64

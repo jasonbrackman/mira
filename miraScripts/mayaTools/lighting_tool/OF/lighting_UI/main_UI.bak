@@ -1,0 +1,431 @@
+__author__ = 'heshuai'
+
+from PySide import QtGui, QtCore
+from get_parent_dir import get_parent_dir
+import os
+import maya_ctrls
+reload(maya_ctrls)
+import public_ctrls
+reload(public_ctrls)
+
+
+class MainUI(QtGui.QMainWindow):
+
+    def __init__(self, parent=None):
+        super(MainUI, self).__init__(parent)
+        self.setWindowTitle('Lighting Tools')
+        self.setWindowOpacity(0.7)
+        self.setMouseTracking(True)
+        self.setWindowFlags(QtCore.Qt.SplashScreen)
+        #self.setAttribute(QtCore.Qt.WA_TranslucentBackground, True)
+        self.resize(650, 80)
+        self.parent_dir = get_parent_dir()
+        self.UI_status = 1
+        ########
+        self.set_background()
+        ########create action
+        self.create_actions()
+        ########tool bar
+        self.create_tool_bar()
+        self.set_signals()
+        self.follow_maya_win()
+        try:
+            maya_ctrls.set_persp_far()
+        except:pass
+
+    def set_background(self):
+        image_path = os.path.join(self.parent_dir, 'icons', 'background_icons', 'main.png')
+        self.image = QtGui.QImage(image_path)
+        palette = QtGui.QPalette()
+        palette.setBrush(QtGui.QPalette.Background, QtGui.QBrush(self.image.scaled(self.size(), QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.SmoothTransformation)))
+        self.setPalette(palette)
+
+    def resizeEvent(self, event):
+        palette = QtGui.QPalette()
+        palette.setBrush(QtGui.QPalette.Background, QtGui.QBrush(self.image.scaled(event.size(), QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.SmoothTransformation)))
+        self.setPalette(palette)
+
+    def create_actions(self):
+        ########light action
+        self.directional_lt_action = Action('directionallight', self)
+        self.point_lt_action = Action('pointlight', self)
+        self.spot_lt_action = Action('spotlight', self)
+        self.area_lt_action = Action('arealight', self)
+        self.env_ball_action = Action('sky_dome_light', self)
+        ########window action
+        self.outliner_action = Action('outliner', self)
+        self.hypershade_action = Action('hypershade', self)
+        self.reference_action = Action('reference', self)
+        self.batch_reference_action = Action('batch_reference', self)
+        self.textureview_action = Action('textureview', self)
+        self.nodeeditor_action = Action('nodeeditor', self)
+        self.show_material_action = Action('materialAttr', self)
+        self.show_render_view_action = Action('render_view', self)
+        self.show_render_settings_action = Action('render_settings', self)
+        self.global_offset_action = Action('global_offset', self)
+        self.check_phong_action = Action('check_phong', self)
+        self.render_image_dir_action = Action('render_image_dir', self)
+        self.convert_tex_path_action = Action('convert_tex_path', self)
+        ########switch UI elements
+        self.switch_UI_elements_action = Action('switch_UI_element', self)
+        ########common_mistake
+        self.new_scene_action = Action('newSceneUI', self)
+        self.fix_render_error_action = Action('fixRenderError', self)
+        ########material
+        self.update_on_action = Action('updateMaterialOn', self)
+        self.update_off_action = Action('updateMaterialOff', self)
+        self.merge_same_shader_action = Action('merge_same_shader', self)
+        self.image_plane_action = Action('image_plane', self)
+        self.split_screen_action = Action('split_screen', self)
+        self.tx_action = Action('tx', self)
+        ########plygon
+        self.polygon_action = Action('polygon', self)
+        self.set_aimin_pixel_width_action = Action('hair', self)
+        self.assign_shave_hair_shader_action = Action('shaveShader', self)
+        ########mask
+        self.mask_action = Action('mask', self)
+        ########occ
+        self.occ_action = Action('occ', self)
+        ########aov
+        self.aov_action = Action('aov', self)
+        ########render
+        self.render_settings_action = Action('renderSettings', self)
+        ########help
+        self.help_action = Action('help', self)
+        self.close_action  = Action('close', self)
+
+    def create_menu_bar(self):
+        menu_bar = QtGui.QMenuBar()
+        self.setMenuBar(menu_bar)
+        file_menu_bar = menu_bar.addMenu('File')
+        file_menu_bar.addAction(self.help_action)
+
+    def create_tool_bar(self):
+        window_toolbar = self.addToolBar('Window')
+        window_toolbar.setMovable(False)
+        window_toolbar.addAction(self.outliner_action)
+        window_toolbar.addAction(self.hypershade_action)
+        window_toolbar.addAction(self.reference_action)
+        window_toolbar.addAction(self.batch_reference_action)
+        window_toolbar.addAction(self.show_material_action)
+        window_toolbar.addAction(self.nodeeditor_action)
+        #window_toolbar.addAction(self.textureview_action)
+        window_toolbar.addAction(self.show_render_view_action)
+        window_toolbar.addAction(self.show_render_settings_action)
+        light_toolbar = self.addToolBar('Light')
+        light_toolbar.setMovable(False)
+        light_toolbar.addAction(self.directional_lt_action)
+        light_toolbar.addAction(self.point_lt_action)
+        light_toolbar.addAction(self.spot_lt_action)
+        light_toolbar.addAction(self.area_lt_action)
+        light_toolbar.addAction(self.env_ball_action)
+        file_toolbar = self.addToolBar('file')
+        file_toolbar.setMovable(False)
+        file_toolbar.addAction(self.global_offset_action)
+        file_toolbar.addAction(self.check_phong_action)
+        file_toolbar.addAction(self.render_image_dir_action)
+        file_toolbar.addAction(self.convert_tex_path_action)
+        UI_toolbar = self.addToolBar('UI')
+        UI_toolbar.setMovable(False)
+        UI_toolbar.addAction(self.switch_UI_elements_action)
+        self.addToolBarBreak()
+        mistake_toolbar = self.addToolBar('Mistake')
+        mistake_toolbar.setMovable(False)
+        mistake_toolbar.addAction(self.new_scene_action)
+        mistake_toolbar.addAction(self.fix_render_error_action)
+        material_toolbar = self.addToolBar('Material')
+        material_toolbar.setMovable(False)
+        material_toolbar.addAction(self.update_on_action)
+        material_toolbar.addAction(self.update_off_action)
+        material_toolbar.addAction(self.merge_same_shader_action)
+        material_toolbar.addAction(self.image_plane_action)
+        material_toolbar.addAction(self.split_screen_action)
+        material_toolbar.addAction(self.tx_action)
+        polygon_toolbar = self.addToolBar('Polygon')
+        polygon_toolbar.setMovable(False)
+        polygon_toolbar.addAction(self.polygon_action)
+        hair_toolbar = self.addToolBar('shave_hair')
+        hair_toolbar.setMovable(False)
+        #hair_toolbar.addAction(self.shave_gamma_action)
+        hair_toolbar.addAction(self.set_aimin_pixel_width_action)
+        hair_toolbar.addAction(self.assign_shave_hair_shader_action)
+        mask_toolbar = self.addToolBar('Mask')
+        mask_toolbar.setMovable(False)
+        mask_toolbar.addAction(self.mask_action)
+        occ_toolbar = self.addToolBar('occ')
+        occ_toolbar.setMovable(False)
+        occ_toolbar.addAction(self.occ_action)
+        aov_toolbar = self.addToolBar('AOV')
+        aov_toolbar.setMovable(False)
+        aov_toolbar.addAction(self.aov_action)
+        render_toolbar = self.addToolBar('Render')
+        render_toolbar.setMovable(False)
+        render_toolbar.addAction(self.render_settings_action)
+        help_toolbar = self.addToolBar('Help')
+        help_toolbar.setMovable(False)
+        help_toolbar.addAction(self.help_action)
+        help_toolbar.addAction(self.close_action)
+
+    def set_signals(self):
+        self.help_action.triggered.connect(self.do_help)
+        self.directional_lt_action.triggered.connect(self.directional_light)
+        self.point_lt_action.triggered.connect(self.point_light)
+        self.spot_lt_action.triggered.connect(self.spot_light)
+        self.area_lt_action.triggered.connect(self.area_light)
+        self.env_ball_action.triggered.connect(self.create_sky_dome_light)
+        self.outliner_action.triggered.connect(self.outliner)
+        self.hypershade_action.triggered.connect(self.hypershade)
+        self.reference_action.triggered.connect(self.reference)
+        self.batch_reference_action.triggered.connect(self.batch_reference)
+        self.textureview_action.triggered.connect(self.textureview)
+        self.show_material_action.triggered.connect(self.show_material)
+        self.nodeeditor_action.triggered.connect(self.nodeeditor)
+        self.show_render_view_action.triggered.connect(self.show_render_view)
+        self.show_render_settings_action.triggered.connect(self.show_render_settings)
+        self.convert_tex_path_action.triggered.connect(self.convert_tex_path)
+        self.render_image_dir_action.triggered.connect(self.get_render_image_dir)
+        self.global_offset_action.triggered.connect(self.solve_global_offset)
+        self.check_phong_action.triggered.connect(self.check_phong)
+        self.new_scene_action.triggered.connect(self.new_scene_UI)
+        self.fix_render_error_action.triggered.connect(self.fix_render_error)
+        self.update_on_action.triggered.connect(self.update_on)
+        self.update_off_action.triggered.connect(self.update_off)
+        self.merge_same_shader_action.triggered.connect(self.merge_same_shader)
+        self.image_plane_action.triggered.connect(self.create_image_plane)
+        self.split_screen_action.triggered.connect(self.do_split_screen)
+        self.tx_action.triggered.connect(self.transform_tx)
+        self.polygon_action.triggered.connect(self.polygon_attr)
+        self.set_aimin_pixel_width_action.triggered.connect(self.set_min_pixel_width)
+        self.assign_shave_hair_shader_action.triggered.connect(self.assign_shave_hair_shader)
+        self.mask_action.triggered.connect(self.mask)
+        self.occ_action.triggered.connect(self.occ)
+        self.aov_action.triggered.connect(self.aov)
+        self.render_settings_action.triggered.connect(self.render_settings)
+        self.switch_UI_elements_action.triggered.connect(self.switch_UI_status)
+        self.close_action.triggered.connect(self.do_close)
+
+    ########light
+    def directional_light(self):
+        maya_ctrls.create_directional_light()
+
+    def point_light(self):
+        maya_ctrls.create_point_light()
+
+    def spot_light(self):
+        maya_ctrls.create_spot_light()
+
+    def area_light(self):
+        maya_ctrls.create_area_light()
+
+    def create_sky_dome_light(self):
+        maya_ctrls.create_sky_dome_light()
+
+    ########window
+    def outliner(self):
+        maya_ctrls.show_outliner_window()
+
+    def hypershade(self):
+        maya_ctrls.show_hypershade_window()
+
+    def show_material(self):
+        import maya_ctrls
+        reload(maya_ctrls)
+        maya_ctrls.show_material()
+
+    def reference(self):
+        import reference_operation
+        reload(reference_operation)
+        reference_operation.main()
+
+    def textureview(self):
+        maya_ctrls.show_textureview_window()
+
+    def nodeeditor(self):
+        maya_ctrls.show_nodeeditor_window()
+
+    def show_render_view(self):
+        maya_ctrls.show_render_view()
+
+    def show_render_settings(self):
+        maya_ctrls.show_render_settings()
+
+    def set_size(self, value):
+        self.setFixedSize(value[0], value[1]+50)
+
+    def solve_global_offset(self):
+        from maya_ctrls import solve_global_offset
+        reload(solve_global_offset)
+        solve_global_offset.solve_global_offset()
+
+    def check_phong(self):
+        import check_phong_widget
+        reload(check_phong_widget)
+        check_phong_widget.run()
+
+    def get_render_image_dir(self):
+        from maya_ctrls import get_render_image_dir
+        reload(get_render_image_dir)
+        get_render_image_dir.get_render_image_dir()
+
+    def convert_tex_path(self):
+        mel_path = os.path.join(self.parent_dir, 'maya_ctrls', 'FileTextureManager.mel')
+        mel_path = mel_path.replace('\\', '/')
+        print mel_path
+        import maya.mel as mel
+        mel.eval("source \"%s\";" % mel_path)
+        mel.eval("FileTextureManager;")
+
+
+    def new_scene_UI(self):
+        maya_ctrls.build_new_scene_UI()
+
+    def fix_render_error(self):
+        maya_ctrls.fix_renderlayer_error()
+
+    def update_on(self):
+        maya_ctrls.update_material(True)
+
+    def update_off(self):
+        maya_ctrls.update_material(False)
+
+    def merge_same_shader(self):
+        from maya_ctrls import merge_same_shader
+        reload(merge_same_shader)
+        merge_same_shader.main()
+
+    def create_image_plane(self):
+        import image_plane_widget
+        reload(image_plane_widget)
+        image_plane_widget.main()
+
+    def do_split_screen(self):
+        import split_screen_widget
+        reload(split_screen_widget)
+        split_screen_widget.main()
+
+    def batch_reference(self):
+        import batch_reference
+        reload(batch_reference)
+        batch_reference.main()
+
+    def transform_tx(self):
+        import tx_widget
+        reload(tx_widget)
+        tx_widget.run()
+
+    def polygon_attr(self):
+        import polygon_widget
+        reload(polygon_widget)
+        polygon_widget.run()
+
+    def shave_gammma_correction(self):
+        import shave_gamma_correct_widget
+        reload(shave_gamma_correct_widget)
+        shave_gamma_correct_widget.run()
+
+    def set_min_pixel_width(self):
+        from maya_ctrls import set_aiMinPixelWidth
+        reload(set_aiMinPixelWidth)
+        set_aiMinPixelWidth.set_aiMinPixelWidth()
+
+    def assign_shave_hair_shader(self):
+        import assign_hair_shader
+        reload(assign_hair_shader)
+        assign_hair_shader.run()
+
+    def mask(self):
+        import rgb_mask_widget
+        reload(rgb_mask_widget)
+        rgb_mask_widget.run()
+        
+    def occ(self):
+        from maya_ctrls import arnold_ao
+        reload(arnold_ao)
+        arnold_ao.main()
+
+    def aov(self):
+        from maya_ctrls import object_render_pass
+        reload(object_render_pass)
+        object_render_pass.aov_settings()
+
+    def render_settings(self):
+        import render_settings_widget
+        reload(render_settings_widget)
+        render_settings_widget.run()
+
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            self.dragPositon = event.globalPos() - self.frameGeometry().topLeft()
+            event.accept()
+
+    def mouseMoveEvent(self, event):
+        if event.buttons() == QtCore.Qt.LeftButton:
+            self.move(event.globalPos() - self.dragPositon)
+            event.accept()
+            
+    def enterEvent(self, event):
+        self.setWindowOpacity(1)
+
+    def leaveEvent(self, event):
+        self.setWindowOpacity(0.7)
+        
+    '''
+    def moveEvent(self, event):
+        if [self.pos().x(), self.pos().y()] != public_ctrls.get_maya_main_win_pos():
+            self.follow_maya_win()
+    '''
+    
+    def do_close(self):
+        self.close()
+
+    def do_help(self):
+        from maya_ctrls import get_os_type
+        os_type = get_os_type.get_os_type()
+        if os_type == 'windows':
+            os.startfile(os.path.join(self.parent_dir, 'help.docx'))
+        if os_type == 'linux':
+            os.system('xdg-open %s' % os.path.join(self.parent_dir, 'help.docx'))
+
+    def follow_maya_win(self):
+        add_stretch = public_ctrls.get_maya_main_win_size()[0]/4
+        self.move(public_ctrls.get_maya_main_win_pos()[0]+add_stretch, public_ctrls.get_maya_main_win_pos()[1]+40)
+
+    def switch_UI_status(self):
+        self.UI_status = not self.UI_status
+        if self.UI_status:
+            maya_ctrls.show_UI_elements()
+        else:
+            maya_ctrls.hide_UI_elements()
+        self.follow_maya_win()
+
+
+class Action(QtGui.QAction):
+    def __init__(self, name=None, parent=None):
+        super(Action, self).__init__(parent)
+        parent_dir = get_parent_dir()
+        icon_path = os.path.join(parent_dir, 'icons', 'main_icons', name+'.png')
+        self.setIcon(QtGui.QIcon(icon_path))
+        self.setText(name)
+
+
+def load_arnold():
+    from maya_ctrls import load_plugin
+    reload(load_plugin)
+    try:
+        load_plugin.load_plugin('mtoa.mll')
+    except:
+        print '[AAS] info: Arnold load failed'
+
+
+def run():
+    global lt
+    try:
+        lt.close()
+        lt.deleteLater()
+    except:pass
+    lt = MainUI(public_ctrls.get_maya_win())
+    lt.show()
+
+if __name__ == '__main__':
+    load_arnold()
+    run()

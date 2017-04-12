@@ -1,0 +1,19 @@
+import sys
+sys.path.append(r'E:\lighting_tool\tools')
+import diffuse_aov
+reload(diffuse_aov)
+diffuse_aov.main()
+
+
+import sys
+sys.path.append(r'Q:\lighting_tool\tools')
+import diffuse_aov
+reload(diffuse_aov)
+diffuse_aov.main()
+
+
+import sys
+sys.path.append(r'V:\lighting_tool\tools')
+import diffuse_aov
+reload(diffuse_aov)
+diffuse_aov.main()

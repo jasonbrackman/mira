@@ -1,0 +1,55 @@
+sct:
+  sql_host: "192.168.0.132"
+  root_dir: "W:"
+  vfx_cache_root_dir: "W:"
+  local_root_dir: "D:"
+  backup_dir: "T:"
+  arnold_version: "1.2.7.3"
+  yeti_version: "2.0.25"
+  resolution: "2048*858"
+  maya_path: "C:/tools/Autodesk/Maya2016/bin/maya.exe"
+  mayabatch_path: "C:/tools/Autodesk/Maya2016/bin/mayabatch.exe"
+  asset_file_name: "{project_name}_{asset_name}_{category}_v{version}.mb"
+  shot_file_name: "{project_name}_{sequence}_{shot}_{category}_v{version}.mb"
+  playblast_percent: 50
+  priority: ["A", "B", "C", "D"]
+
+SnowChildrenTest2:
+  sql_host: "192.168.0.253"
+  root_dir: "W:"
+  vfx_cache_root_dir: "W:"
+  local_root_dir: "D:"
+  backup_dir: "T:"
+  arnold_version: "1.2.7.3"
+  yeti_version: "2.0.25"
+  resolution: "2048*858"
+  maya_path: "C:/tools/Autodesk/Maya2016/bin/maya.exe"
+  mayabatch_path: "C:/tools/Autodesk/Maya2016/bin/mayabatch.exe"
+  asset_file_name: "{project_name}_{asset_name}_{category}_v{version}.mb"
+  shot_file_name: "{project_name}_{sequence}_{shot}_{category}_v{version}.mb"
+  playblast_percent: 50
+  priority: ["A", "B", "C", "D"]
+
+snowkid:
+  vfx_cache_root_dir: "W:"
+  local_root_dir: "D:"
+  resolution: "2048*858"
+  maya_path: "C:/tools/Autodesk/Maya2016/bin/maya.exe"
+  mayabatch_path: "C:/tools/Autodesk/Maya2016/bin/mayabatch.exe"
+  playblast_percent: 50
+  primary: "Z:/mnt/shotgun/projects"
+  task_log_dir: "{primary}/snowkid/log"
+  priority: ["A", "B", "C", "D"]
+
+  asset_template: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/{area}/{engine}/{project}_{asset_name}_{step}_v{version}.{ext}"
+  maya_asset_work: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_workarea/{engine}/{project}_{asset_name}_{step}_v{version}.mb"
+  maya_asset_image: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_image/{engine}/{project}_{asset_name}_{step}_v{version}.png"
+  maya_asset_publish: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_publish/{engine}/{project}_{asset_name}_{step}_v{version}.mb"
+  maya_asset_video: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_video/{engine}/{project}_{asset_name}_{step}_v{version}.mov"
+  maya_asset_version: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_version/{engine}/{project}_{asset_name}_{step}_v{version}.png"
+
+  shot_template: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/{area}/{engine}/{project}_{sequence}_{shot}_{step}_v{version}.{ext}"
+  maya_shot_work: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/_workarea/{project}_{sequence}_{shot}_{step}_v{version}.mb"
+  maya_shot_image: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/_image/{project}_{sequence}_{shot}_{step}_v{version}.png"
+  maya_shot_video: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/_video/{project}_{sequence}_{shot}_{step}_v{version}.mov"
+  maya_shot_publish: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/_publish/{project}_{sequence}_{shot}_{step}_v{version}.mb"

@@ -1,0 +1,27 @@
+pipeline_shelf:
+#  reload_shelves:
+#    order: 0
+  workfile:
+    order: 10
+  quality_control:
+    order: 20
+  cwd:
+    order: 30
+  version_up:
+    order: 40
+#  turntable_create:
+#    order: 3
+#  turntable_remove:
+#    order: 4
+#  assign_shader:
+#    order: 5
+#  screen_shot:
+#    order: 6
+#  scene_break_down:
+#    order: 7
+#  playblast:
+#    order: 8
+  preflight:
+    order: 50
+  qcpublish:
+    order: 60

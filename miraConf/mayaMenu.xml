@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu name="[MIRA]">
+    <!--model tools-->
+    <submenu name="model" type="submenu">
+        <command cmd="import miraScripts.mayaTools.model_tool.uv_mover.UVMoverMainUI as uv;reload(uv);uv.main()"
+                 mode="python" name="移动UV【move UV】" type="command"/>
+        <command cmd="miraScripts/mayaTools/model_tool/UVSDTransfer/UVSDTransfer.mel"
+                 mode="mel" name="传递UV【transport UV】" type="command"/>
+        <command cmd="from miraScripts.mayaTools.model_tool import normal_copy;reload(normal_copy);normal_copy.main()"
+                 mode="python" name="拷贝法线【copy normal】" type="command"/>
+        <command cmd="from miraScripts.mayaTools.model_tool.model_group import add_group_ui;reload(add_group_ui);add_group_ui.main()"
+                 mode="python" name="模型打组【group model】" type="command"/>
+    </submenu>
+
+    <!--shading tools-->
+    <submenu name="shading" type="submenu">
+        <command cmd="import miraScripts.pipeTools.liberay_manage.character_base_light as character_base_light;reload(character_base_light);reload(character_base_light);character_base_light.main()"
+                 mode="python" name="导入角色灯光【import character light】" type="command"/>
+    </submenu>
+    <!--rig tools-->
+    <submenu name="rig" type="submenu">
+        <!--<command cmd="from miraScripts.pipeTools.shelf import assign_shader;reload(assign_shader);assign_shader.main()"-->
+                 <!--mode="python" name="角色赋材质【char assign shader】" type="command"/>-->
+        <command cmd="import SoftClusterEX;SoftClusterEX.launch()"
+                 mode="python" name="SoftClusterEX" type="command"/>
+    </submenu>
+    <!--sceneset tools-->
+    <submenu name="sceneset" type="submenu">
+        <command cmd="from miraScripts.pipeTools.ass_operations import import_ass;reload(import_ass);import_ass.main()"
+                 mode="python" name="导入ASS工具【reference in ASS】" type="command"/>
+        <command cmd="from miraScripts.pipeTools.plantTree import plant_tree;reload(plant_tree);plant_tree.main()"
+                 mode="python" name="刷代理工具【proxy brush】" type="command"/>
+    </submenu>
+    <!--layout tools-->
+    <submenu name="layout" type="submenu">
+        <command cmd="from miraScripts.pipeTools.layout_producer import layout_producer;reload(layout_producer);layout_producer.main()"
+                 mode="python" name="导入资产工具【reference in assets】" type="command"/>
+        <!--<command cmd="from miraLibs.pipeLibs.pipeMaya.rebuild_scene import rebuild_scene;reload(rebuild_scene);rebuild_scene.rebuild_scene()"-->
+                 <!--mode="python" name="更新场景工具【refresh env】" type="command"/>-->
+        <!--<command cmd="from miraScripts.pipeTools.camera_sequencer import camera_sequencer;reload(camera_sequencer);camera_sequencer.main()"-->
+                 <!--mode="python" name="创建镜头【create shot】" type="command"/>-->
+        <!--<command cmd="from miraScripts.pipeTools.publish_single_lay import publish_single_lay;reload(publish_single_lay);publish_single_lay.main()"-->
+                 <!--mode="python" name="单个镜头入库【single shot publish】" type="command"/>-->
+    </submenu>
+    <!--anim tools-->
+    <submenu name="anim" type="submenu">
+        <!--<command cmd="from miraLibs.pipeLibs.pipeMaya.rebuild_scene import rebuild_scene;reload(rebuild_scene);rebuild_scene.rebuild_scene()"-->
+                 <!--mode="python" name="更新场景工具【refresh env】" type="command"/>-->
+        <command cmd="from miraScripts.mayaTools.animation_tool import run_animation_library;run_animation_library.main()"
+                 mode="python" name="动作库【Animation library】" type="command"/>
+        <command cmd="from miraScripts.mayaTools.animation_tool import find_edge;reload(find_edge);find_edge.find_edge()"
+                 mode="python" name="获取模型边缘线【get model edge】" type="command"/>
+        <!--<command cmd="from miraScripts.pipeTools.export_single_abc import single_publish;reload(single_publish);single_publish.main()"-->
+                 <!--mode="python" name="单个资产入库【single asset publish】" type="command"/>-->
+        <command cmd="from miraScripts.mayaTools.animation_tool import remove_model_smooth;reload(remove_model_smooth);remove_model_smooth.main()"
+                 mode="python" name="去掉模型的细分【get rid model subdivision】" type="command"/>
+        <command cmd="from miraScripts.pipeTools.replace_rig_reference import replace_rig_reference;reload(replace_rig_reference);replace_rig_reference.main()"
+                 mode="python" name="低模绑定切换为高模绑定【switch lowRig to rig】" type="command"/>
+        <command cmd="from miraScripts.pipeTools.switch_asset_version import switch_asset_version;reload(switch_asset_version);switch_asset_version.main()"
+                 mode="python" name="切换资产版本【switch asset version】" type="command"/>
+    </submenu>
+    <!--sim tools-->
+    <submenu name="sim" type="submenu">
+        <command cmd="from miraScripts.pipeTools.replace_asset import replace_asset;reload(replace_asset);replace_asset.main()"
+                 mode="python" name="切换资产【Switch Asset】" type="command"/>
+    </submenu>
+    <!--vfx tools-->
+    <submenu name="vfx" type="submenu">
+        <command cmd="from miraScripts.pipeTools.sim_reference_in import sim_reference_in;reload(sim_reference_in);sim_reference_in.main()"
+                 mode="python" name="参考动画缓存【reference in anim cache】" type="command"/>
+        <!--<command cmd="from miraScripts.pipeTools.gpu_to_mdl import gpu_to_mdl;reload(gpu_to_mdl);gpu_to_mdl.main()"-->
+                 <!--mode="python" name="GPU&ndash;&gt;模型【GPU&ndash;&gt;model】" type="command"/>-->
+    </submenu>
+    <!--lighting tools-->
+    <submenu name="lighting" type="submenu">
+        <command cmd="import miraScripts.mayaTools.lighting_tool.OF.lighting_UI.main_UI as mu; reload(mu); mu.run()"
+                 mode="python" name="lightingTool(arnold)" type="command"/>
+        <command cmd="import miraScripts.mayaTools.lighting_tool.foreground_render.ForegroundRender as fr; reload(fr); fr.main()"
+                 mode="python" name="窗口渲染【foreground render】" type="command"/>
+        <command cmd="from miraScripts.pipeTools.switch_shader import switch_shader; reload(switch_shader); switch_shader.main()"
+                 mode="python" name="切换材质【switch shader】" type="command"/>
+    </submenu>
+    <submenu name= "----------" type="separator"/>
+    <!--TD tools-->
+    <submenu name="TD" type="submenu">
+        <command cmd="from miraScripts.pipeTools.ass_operations import export_ass;reload(export_ass);export_ass.export_ass()"
+                 mode="python" name="导出ASS【export ass】" type="command"/>
+    </submenu>
+    <!--public tools-->
+    <submenu name= "----------" type="separator"/>
+    <submenu name="public" type="submenu">
+        <command cmd="import miraScripts.pipeTools.maya_save_timer.ResetUI as UI; reload(UI);dlg=UI.ResetUI();dlg.show()"
+                 mode="python" name="设置保存提醒时间【SetSaveTimer】" type="command"/>
+        <command cmd="from miraScripts.pipeTools.ass_display_mode import ass_display_mode;reload(ass_display_mode);ass_display_mode.main()"
+                 mode="python" name="切换ASS显示模式【switch ass display mode】" type="command"/>
+        <command cmd="from miraScripts.pipeTools.scene_break_down import scene_break_down;reload(scene_break_down);scene_break_down.main()"
+                 mode="python" name="更新reference【refresh reference】" type="command"/>
+        <command cmd="import miraScripts.pipeTools.scene_break_down.ResetUI as UI; reload(UI);dlg=UI.ResetUI();dlg.show()"
+                 mode="python" name="设置版本更新时间【ReferenceUpdateTimer】" type="command"/>
+    </submenu>
+    <submenu name= "----------" type="separator"/>
+    <!--custom tools-->
+    <submenu name="custom" type="submenu">
+        <command cmd="import miraScripts.pipeTools.playblast.get_hud_object as gho;reload(gho);hud=gho.get_hud_object();hud.show()"
+                 mode="python" name="显示HUD【Show hud】" type="command"/>
+        <command cmd="import miraScripts.pipeTools.playblast.get_hud_object as gho;reload(gho);hud=gho.get_hud_object();hud.clear()"
+                 mode="python" name="隐藏HUD【Hide hud】" type="command"/>
+    </submenu>
+</menu>

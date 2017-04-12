@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<nukeTools>
+    <tools name="tools" type="Nodes">
+        <submenu name="Single To Sequence"
+                 command="single_to_sequence"
+                 shortcut="F2"
+                 type="command"/>
+        <submenu type="separator"/>
+        <submenu name="Switch Shot"
+                 command="switch_shot"
+                 shortcut="F3"
+                 type="command"/>
+        <submenu type="separator"/>
+        <submenu name="Correct Error Read Node"
+                 command="correct_error_read_node"
+                 shortcut="F4"
+                 type="command"/>
+        <submenu type="separator"/>
+        <submenu name="List Shuffles"
+                 command="shuffle"
+                 shortcut="E"
+                 type="command"/>
+        <submenu type="separator"/>
+        <submenu name="Replace Read Node Path"
+                 command="replace_read_node_path"
+                 shortcut="F6"
+                 type="command"/>
+    </tools>
+
+    <tools name="scripts" type="Nuke">
+        <submenu name="script editor"
+                 command="script_editor"
+                 shortcut="Alt+D"
+                 type="command"/>
+        <submenu type="separator"/>
+    </tools>
+</nukeTools>

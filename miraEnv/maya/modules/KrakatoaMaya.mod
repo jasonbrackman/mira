@@ -1,0 +1,1 @@
++ MAYAVERSION:2016 PLATFORM:win64 KrakatoaMaya any C:/tools/mira_tools/mira_tools/KrakatoaMaya

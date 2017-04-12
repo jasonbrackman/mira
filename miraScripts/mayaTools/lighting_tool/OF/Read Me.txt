@@ -1,0 +1,20 @@
+import sys
+import getpass
+
+def run_lighting_tool():
+    
+    if 'win' in sys.platform:
+        script_path = r'V:\Barajoun_Bilal_CG\Workgroup\Lighting_WorkGrp\mira\lighting_tool'
+        if getpass.getuser() == 'heshuai':
+            script_path = 'E:/lighting_tool'
+    elif 'linux' in sys.platform:
+        script_path = r'/mnt/v/Barajoun_Bilal_CG/Workgroup/Lighting_WorkGrp/mira/lighting_tool'
+        
+    sys.path.insert(0, script_path)
+    import lighting_UI.main_UI
+    reload(lighting_UI.main_UI)
+    lighting_UI.main_UI.run()
+    
+    
+if __name__ == '__main__':        
+    run_lighting_tool()

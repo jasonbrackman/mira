@@ -1,0 +1,1 @@
++ MAYAVERSION:2016 PLATFORM:win64 miraEnv 1.0.0 E:\SGTest\miraEnv\maya
