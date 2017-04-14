@@ -90,7 +90,7 @@ class Sg(object):
         if not user:
             user = self.user
         task_filter = [["task_assignees", "name_contains", user], ["project", "is", project_info]]
-        my_tasks = self.sg.find("Task", task_filter, ["content", "step", "sg_status_list", "entity"])
+        my_tasks = self.sg.find("Task", task_filter, ["content", "step", "sg_status_list", "entity", "sg_priority_1"])
         if my_tasks:
             for task in my_tasks:
                 entity = task["entity"]

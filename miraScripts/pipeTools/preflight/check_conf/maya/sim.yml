@@ -1,5 +1,0 @@
-check_save_file:
-  name: "Save file | 保存文件"
-  order: 20
-  ignorable: True
-  description: "保存检查后的文件"

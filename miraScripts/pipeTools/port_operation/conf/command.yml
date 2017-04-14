@@ -1,3 +1,0 @@
-deadline off: "tskill deadlineslave"
-deadline on: "C:/Program Files/Thinkbox/Deadline7/bin/deadlineslave.exe"
-

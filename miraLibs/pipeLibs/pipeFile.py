@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import re
 import logging
 from miraLibs.pyLibs.Path import Path
 from miraLibs.pyLibs import opposite_format, join_path, get_latest_version
@@ -28,6 +29,7 @@ def get_project(path):
 class PathDetails(object):
     def __init__(self):
         self.logger = logging.getLogger("pipeFile")
+        self.path = None
         self.entity_type = None
         self.__is_local_file = False
         self.__is_working_file = False
@@ -47,6 +49,7 @@ class PathDetails(object):
             return None
         path_obj = Path(path)
         path = path_obj.regular()
+        x.path = path
         x.entity_type = get_entity_type(path)
         project = get_project(path)
         if x.entity_type == "Asset":
@@ -75,38 +78,53 @@ class PathDetails(object):
     def is_local_file(self):
         return self.__is_local_file
 
-    def get_path(self, format_str, local=False):
+    def get_path(self, format_area, local=False):
         if self.entity_type == "Asset":
+            format_str = "%s_asset_%s" % (self.engine, format_area)
             return get_task_file(self.project, self.asset_type, self.asset_name, self.step, self.task,
                                  format_str, self.version, self.engine, local)
         else:
+            format_str = "%s_shot_%s" % (self.engine, format_area)
             return get_task_file(self.project, self.sequence, self.shot, self.step, self.task,
                                  format_str, self.version, self.engine, local)
 
     @property
+    def next_version(self):
+        next_version = str(int(self.version) + 1).zfill(len(self.version))
+        return next_version
+
+    @property
+    def next_version_file(self):
+        next_version_file = re.sub("_v\d{3}\.", "_v%s." % self.next_version, self.path)
+        return next_version_file
+
+    @property
+    def work_path(self):
+        return self.get_path("work", False)
+
+    @property
+    def local_work_path(self):
+        return self.get_path("work", True)
+
+    @property
     def image_path(self):
-        format_str = "%s_asset_image" % self.engine
-        return self.get_path(format_str, False)
+        return self.get_path("image", False)
 
     @property
     def local_image_path(self):
-        format_str = "%s_asset_image" % self.engine
-        return self.get_path(format_str, True)
+        return self.get_path("image", True)
 
     @property
     def video_path(self):
-        format_str = "%s_asset_video" % self.engine
-        return self.get_path(format_str, False)
+        return self.get_path("video", False)
 
     @property
     def local_video_path(self):
-        format_str = "%s_asset_video" % self.engine
-        return self.get_path(format_str, True)
+        return self.get_path("video", True)
 
     @property
-    def local_work_file(self):
-        format_str = "%s_asset_work" % self.engine
-        return self.get_path(format_str, True)
+    def other_dir(self):
+        return self.get_path("other", False)
 
 
 ########################################################################################################################
@@ -119,16 +137,19 @@ def get_task_file(project, asset_type_sequence, asset_name_shot, step, task,
     else:
         primary = get_primary_dir(project)
     if not version:
-        version = "000"
+        version_str = "000"
+    else:
+        version_str = version
     file_format = get_site_value(project, format_str)
+    if not file_format:
+        return
     file_name = file_format.format(primary=primary, project=project, asset_type=asset_type_sequence,
                                    sequence=asset_type_sequence, shot=asset_name_shot.split("_")[-1],
                                    asset_name=asset_name_shot.split("_")[-1], step=step,
-                                   task=task, version=version, engine=engine)
+                                   task=task, version=version_str, engine=engine)
     if not version:
-        if os.path.isfile(file_name):
-            file_list = get_latest_version.get_latest_version(file_name)
-            file_name = file_list[0] if file_list else file_name
+        file_list = get_latest_version.get_latest_version(file_name)
+        file_name = file_list[0] if file_list else file_name
     return file_name
 
 

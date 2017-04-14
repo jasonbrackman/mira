@@ -3,8 +3,6 @@ pipeline_shelf:
 #    order: 0
   workfile:
     order: 10
-  quality_control:
-    order: 20
   cwd:
     order: 30
   version_up:

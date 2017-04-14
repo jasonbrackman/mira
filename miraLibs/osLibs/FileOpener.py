@@ -4,13 +4,7 @@ import sys
 import os
 import re
 import threading
-
-
-def get_run_app():
-    app = sys.executable
-    app_basename = os.path.basename(app)
-    app_name = os.path.splitext(app_basename)[0]
-    return app_name
+from get_engine import get_engine
 
 
 class RunCommandThread(threading.Thread):
@@ -68,7 +62,7 @@ class MayaOpener(object):
         self.threads.append(thread)
 
     def run(self):
-        app = get_run_app()
+        app = get_engine()
         if app == "maya":
             self.run_in_maya()
         elif app == "python":
@@ -84,6 +78,7 @@ class FileOpener(object):
         if self.ext in [".ma", ".mb"]:
             opener = MayaOpener(self.path)
         else:
+            # Todo add houdini nuke
             opener = None
         if opener:
             opener.run()
