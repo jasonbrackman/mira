@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-import re
 from PySide import QtGui, QtCore
 import miraCore
 from miraFramework.Filter import ButtonLineEdit
 from miraLibs.pyLibs import join_path
+from miraLibs.pipeLibs import pipeMira, get_current_project
+from miraLibs.sgLibs import Sg
 
 
 ENGINELIST = ["maya", "nuke", "houdini"]
@@ -125,11 +126,7 @@ class CommonWidget(QtGui.QWidget):
         icon_dir = miraCore.get_icons_dir()
         icon_path = join_path.join_path2(icon_dir, "search.png")
         self.filter_le = ButtonLineEdit(icon_path)
-        # self.add_btn = QtGui.QToolButton()
-        # icon_dir = miraCore.get_icons_dir()
-        # self.add_btn.setIcon(QtGui.QIcon(join_path.join_path2(icon_dir, "add.png")))
         horizon_layout.addWidget(self.filter_le)
-        # horizon_layout.addWidget(self.add_btn)
         self.list_view = ListView()
         group_layout.addLayout(horizon_layout)
         group_layout.addWidget(self.list_view)
@@ -150,30 +147,12 @@ class CommonWidget(QtGui.QWidget):
     def set_signals(self):
         self.add_btn.clicked.connect(self.add)
 
-    def add(self):
-        items_data = self.list_view.get_items_data()
-        text = QtGui.QInputDialog.getText(None, "Input the content you want to add", "Content:")
-        if text[1]:
-            if text[0]:
-                if text[0] in items_data:
-                    QtGui.QMessageBox.warning(self, "Warning", "Name Warning:%s has been existed in this project." % text[0])
-                    return
-                if "_" in text[0] or "-" in text[0]:
-                    QtGui.QMessageBox.critical(self, "Error", "Name Error:'-' or '_' error.")
-                    return
-                if not re.match("c\d{3}", text[0]) and not re.match("s\d{3}", text[0]) and re.search("\d+$", text[0]):
-                    QtGui.QMessageBox.critical(self, "Error", "Name Error: Asset name con not endswith number.")
-                    return
-                self.list_model.insertRows(0, 1, text[0])
-                row = self.list_model.model_data.index(text[0])
-                index = self.list_model.index(row, 0)
-                self.list_view.setCurrentIndex(index)
-                self.add_signal.emit(text[0])
-
     def set_group_name(self, value):
         self.group_box.setTitle(value)
 
     def set_model_data(self, value):
+        if not value:
+            return
         self.model_data = value
         self.set_model()
 
@@ -189,13 +168,16 @@ class CommonWidget(QtGui.QWidget):
             self.list_view.setEnabled(True)
 
 
-class TaskManagerUI(QtGui.QDialog):
+class CommonForm(QtGui.QWidget):
     def __init__(self, parent=None):
-        super(TaskManagerUI, self).__init__(parent)
-        self.setWindowFlags(QtCore.Qt.Window)
-        self.resize(950, 700)
-        self.setWindowTitle("Task Manager")
+        super(CommonForm, self).__init__(parent)
+        self.__asset_types = pipeMira.get_asset_type()
+        self.setup_ui()
+        self.init()
+        self.set_signals()
+        self.sg = Sg.Sg(self.project)
 
+    def setup_ui(self):
         main_layout = QtGui.QVBoxLayout(self)
         main_layout.setContentsMargins(3, 3, 3, 3)
 
@@ -206,18 +188,18 @@ class TaskManagerUI(QtGui.QDialog):
         project_layout.addWidget(project_label)
         project_layout.addWidget(self.project_cbox)
 
-        style_layout = QtGui.QHBoxLayout()
+        entity_type_layout = QtGui.QHBoxLayout()
         style_label = QtGui.QLabel("Asset/Shot")
         style_label.setFixedWidth(70)
-        self.btn_grp = QtGui.QButtonGroup()
+        self.entity_btn_grp = QtGui.QButtonGroup()
         self.asset_check = QtGui.QCheckBox("Asset")
         self.shot_check = QtGui.QCheckBox("Shot")
-        self.btn_grp.addButton(self.asset_check)
-        self.btn_grp.addButton(self.shot_check)
-        style_layout.addWidget(style_label)
-        style_layout.addWidget(self.asset_check)
-        style_layout.addWidget(self.shot_check)
-        style_layout.addStretch()
+        self.entity_btn_grp.addButton(self.asset_check)
+        self.entity_btn_grp.addButton(self.shot_check)
+        entity_type_layout.addWidget(style_label)
+        entity_type_layout.addWidget(self.asset_check)
+        entity_type_layout.addWidget(self.shot_check)
+        entity_type_layout.addStretch()
 
         engine_layout = QtGui.QHBoxLayout()
         engine_label = QtGui.QLabel("Engine")
@@ -253,82 +235,107 @@ class TaskManagerUI(QtGui.QDialog):
         frame.setStyleSheet('QFrame{color: #111111; width: 10px}')
         separator_layout.addWidget(frame)
 
-        bottom_layout = QtGui.QHBoxLayout()
-        bottom_layout.setContentsMargins(0, 3, 0, 3)
-        self.user_widget = CommonWidget()
-        # self.user_widget.add_btn.setEnabled(False)
-        self.user_widget.set_group_name("User")
-        self.user_widget.list_view.setSelectionMode(QtGui.QListView.ExtendedSelection)
-
-        start_group = QtGui.QGroupBox("Start date")
-        start_layout = QtGui.QHBoxLayout(start_group)
-        self.start_widget = QtGui.QCalendarWidget()
-        start_layout.addWidget(self.start_widget)
-
-        due_group = QtGui.QGroupBox("Due date")
-        due_layout = QtGui.QHBoxLayout(due_group)
-        self.due_widget = QtGui.QCalendarWidget()
-        due_layout.addWidget(self.due_widget)
-
-        setting_group = QtGui.QGroupBox("Settings")
-        setting_layout = QtGui.QGridLayout(setting_group)
-        priority_label = QtGui.QLabel("Priority")
-        self.priority_cbox = QtGui.QComboBox()
-        description_label = QtGui.QLabel("Description")
-        description_label.setAlignment(QtCore.Qt.AlignTop)
-        self.description_text_edit = QtGui.QTextEdit()
-        setting_layout.addWidget(priority_label, 0, 0)
-        setting_layout.addWidget(self.priority_cbox, 0, 1)
-        setting_layout.addWidget(description_label, 1, 0)
-        setting_layout.addWidget(self.description_text_edit, 1, 1)
-
-        bottom_layout.addWidget(self.user_widget)
-        bottom_layout.addWidget(start_group)
-        bottom_layout.addWidget(due_group)
-        bottom_layout.addWidget(setting_group)
-
-        path_layout = QtGui.QHBoxLayout()
-        path_label = QtGui.QLabel("Path:")
-        path_label.setFixedWidth(30)
-        self.path_le = QtGui.QLineEdit()
-        self.path_le.setReadOnly(True)
-        self.path_btn = QtGui.QToolButton()
-        icon = QtGui.QIcon()
-        icon.addPixmap(self.style().standardPixmap(QtGui.QStyle.SP_DirOpenIcon))
-        self.path_btn.setIcon(icon)
-        path_layout.addWidget(path_label)
-        path_layout.addWidget(self.path_le)
-        path_layout.addWidget(self.path_btn)
-
-        button_layout = QtGui.QHBoxLayout()
-        self.publish_task_btn = QtGui.QPushButton("Create Task")
-        self.cancel_btn = QtGui.QPushButton("Cancel")
-        button_layout.addWidget(self.publish_task_btn)
-        button_layout.addWidget(self.cancel_btn)
-
-        path_btn_layout = QtGui.QHBoxLayout()
-        path_btn_layout.setContentsMargins(0, 0, 0, 0)
-        path_btn_layout.addLayout(path_layout)
-        path_btn_layout.addLayout(button_layout)
-
-        self.progress_bar = QtGui.QProgressBar()
-        self.progress_bar.setTextVisible(False)
-        self.progress_bar.setRange(0, 10)
-        self.progress_bar.hide()
-
         main_layout.addLayout(project_layout)
-        main_layout.addLayout(style_layout)
+        main_layout.addLayout(entity_type_layout)
         main_layout.addLayout(engine_layout)
         main_layout.addLayout(list_layout)
         main_layout.addLayout(separator_layout)
-        main_layout.addLayout(bottom_layout)
-        main_layout.addLayout(path_btn_layout)
-        main_layout.addWidget(self.progress_bar)
+
+    @property
+    def project(self):
+        return self.project_cbox.currentText()
+
+    @property
+    def primary(self):
+        return pipeMira.get_primary_dir(self.project)
+
+    @property
+    def mayabatch(self):
+        return pipeMira.get_mayabatch_path(self.project)
+
+    @property
+    def engine(self):
+        return self.engine_btn_grp.checkedButton().text()
+
+    def init(self):
+        projects = pipeMira.get_projects()
+        self.project_cbox.addItems(projects)
+        current_project = get_current_project.get_current_project()
+        self.project_cbox.setCurrentIndex(self.project_cbox.findText(current_project))
+
+    def set_signals(self):
+        self.project_cbox.currentIndexChanged[str].connect(self.on_project_changed)
+        self.entity_btn_grp.buttonClicked.connect(self.init_grp)
+        self.first_widget.list_view.clicked.connect(self.show_asset_or_shot)
+        self.second_widget.list_view.clicked.connect(self.show_step)
+        self.third_widget.list_view.clicked.connect(self.show_task)
+
+    def on_project_changed(self, project):
+        self.sg = Sg.Sg(project)
+
+    def init_grp(self):
+        checked_btn_text = self.entity_btn_grp.checkedButton().text()
+        for widget in [self.first_widget, self.second_widget, self.third_widget, self.fourth_widget]:
+            widget.list_view.clear()
+        if checked_btn_text == "Asset":
+            # set group name
+            self.first_widget.set_group_name("Asset Type")
+            self.second_widget.set_group_name("Asset")
+            self.second_widget.list_view.clear()
+            # init list view
+            self.first_widget.set_model_data(self.__asset_types)
+        else:
+            self.first_widget.set_group_name("Sequence")
+            self.second_widget.set_group_name("Shot")
+            self.second_widget.list_view.clear()
+            # init list view
+            sequences = self.sg.get_sequence()
+            self.first_widget.set_model_data(sequences)
+
+    def show_asset_or_shot(self, index):
+        for widget in [self.second_widget, self.third_widget, self.fourth_widget]:
+            widget.list_view.clear()
+        selected = index.data()
+        checked = self.entity_btn_grp.checkedButton().text()
+        if checked == "Asset":
+            assets = self.sg.get_all_assets(selected)
+            asset_names = [asset["code"] for asset in assets]
+            self.second_widget.set_model_data(asset_names)
+        elif checked == "Shot":
+            shots = self.sg.get_all_shots_by_sequence(selected)
+            shot_names = [shot["name"] for shot in shots]
+            self.second_widget.set_model_data(shot_names)
+
+    def show_step(self, index):
+        for widget in [self.third_widget, self.fourth_widget]:
+            widget.list_view.clear()
+        entity_type = self.entity_btn_grp.checkedButton().text()
+        asset_or_shot = index.data()
+        asset_type_or_sequence = self.first_widget.list_view.get_selected()
+        if not asset_type_or_sequence:
+            return
+        steps = self.sg.get_step(entity_type, asset_type_or_sequence, asset_or_shot)
+        step_names = [step["short_name"] for step in steps]
+        self.third_widget.set_model_data(step_names)
+
+    def show_task(self, index):
+        self.fourth_widget.list_view.clear()
+        entity_type = self.entity_btn_grp.checkedButton().text()
+        asset_type_or_sequence = self.first_widget.list_view.get_selected()
+        asset_or_shot = self.second_widget.list_view.get_selected()
+        step = index.data()
+        if not all((asset_type_or_sequence, asset_or_shot)):
+            return
+        tasks = self.sg.get_task(entity_type, asset_type_or_sequence, asset_or_shot, step)
+        if not tasks:
+            return
+        task_names = [task["content"] for task in tasks]
+        self.fourth_widget.set_model_data(task_names)
 
 
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
-    tm = TaskManagerUI()
-    tm.show()
+    cf = CommonForm()
+    cf.show()
     app.exec_()

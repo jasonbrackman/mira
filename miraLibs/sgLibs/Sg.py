@@ -41,7 +41,7 @@ class Sg(object):
         shots = [shot for shot in sequence_info['shots'] if '_000' not in shot['name']]
         return shots
 
-    def get_task(self, entity_type, asset_type_or_sequence, asset_or_shot):
+    def get_task(self, entity_type, asset_type_or_sequence, asset_or_shot, step=None):
         project_info = self.get_project_by_name()
         if entity_type == "Asset":
             entity_info = self.sg.find_one("Asset",
@@ -54,8 +54,20 @@ class Sg(object):
             entity_info = self.sg.find_one("Shot",
                                            [["code", "is", asset_or_shot],
                                             ["sg_sequence", "is", sequence_info]])
-        tasks = self.sg.find("Task", [["entity", "is", entity_info]], ["content"])
+        if step:
+            step_info = self.sg.find_one("Step", [["short_name", "is", step]])
+            tasks = self.sg.find("Task", [["entity", "is", entity_info], ["step", "is", step_info]], ["content", "step"])
+        else:
+            tasks = self.sg.find("Task", [["entity", "is", entity_info]], ["content", "step"])
         return tasks
+
+    def get_step(self, entity_type, asset_type_or_sequence, asset_or_shot):
+        tasks = self.get_task(entity_type, asset_type_or_sequence, asset_or_shot)
+        if not tasks:
+            return
+        steps = [task["step"] for task in tasks]
+        steps = [self.sg.find_one("Step", [["id", "is", step["id"]]], ["short_name"]) for step in steps]
+        return steps
 
     def get_users(self):
         users = self.sg.find("HumanUser", [["sg_status_list", "is", "act"], ["projects", "name_contains", self.project_name]], ["name"])

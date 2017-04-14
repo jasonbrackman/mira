@@ -4,7 +4,7 @@ import os
 import subprocess
 import sys
 from PySide import QtGui, QtCore
-import task_manager_ui
+import task_start_ui
 import miraCore
 from miraLibs.pipeLibs import pipeMira, pipeFile, get_logger, pipeHistory
 from miraLibs.pyLibs import join_path, Path
@@ -48,7 +48,7 @@ class RunCommandThread(QtCore.QThread):
             self.__logger.error("Something wrong with run start file.")
 
 
-class TaskManager(task_manager_ui.TaskManagerUI):
+class TaskManager(task_start_ui.TaskStartUI):
 
     def __init__(self, parent=None):
         super(TaskManager, self).__init__(parent)
@@ -90,10 +90,11 @@ class TaskManager(task_manager_ui.TaskManagerUI):
 
     def set_signals(self):
         self.project_cbox.currentIndexChanged[str].connect(self.on_project_changed)
-        self.btn_grp.buttonClicked.connect(self.init_grp)
+        self.entity_btn_grp.buttonClicked.connect(self.init_grp)
         self.engine_btn_grp.buttonClicked.connect(self.set_engine)
         self.first_widget.list_view.clicked.connect(self.show_asset_or_shot)
-        self.second_widget.list_view.clicked.connect(self.show_task)
+        self.second_widget.list_view.clicked.connect(self.show_step)
+        self.third_widget.list_view.clicked.connect(self.show_task)
         self.fourth_widget.list_view.clicked.connect(self.show_path)
         self.publish_task_btn.clicked.connect(self.do_publish)
         self.cancel_btn.clicked.connect(self.close)
@@ -105,8 +106,9 @@ class TaskManager(task_manager_ui.TaskManagerUI):
         self.priority_cbox.addItems(priority)
 
     def init_grp(self):
-        self.path_le.setText("")
-        checked_btn_text = self.btn_grp.checkedButton().text()
+        checked_btn_text = self.entity_btn_grp.checkedButton().text()
+        for widget in [self.first_widget, self.second_widget, self.third_widget, self.fourth_widget]:
+            widget.list_view.clear()
         if checked_btn_text == "Asset":
             # set group name
             self.first_widget.set_group_name("Asset Type")
@@ -114,13 +116,11 @@ class TaskManager(task_manager_ui.TaskManagerUI):
             self.second_widget.list_view.clear()
             # init list view
             self.first_widget.set_model_data(self.__asset_types)
-            self.third_widget.set_model_data(self.__asset_steps)
         else:
             self.first_widget.set_group_name("Sequence")
             self.second_widget.set_group_name("Shot")
             self.second_widget.list_view.clear()
             # init list view
-            self.third_widget.set_model_data(self.__shot_steps)
             sequences = self.__sg.get_sequence()
             self.first_widget.set_model_data(sequences)
 
@@ -129,8 +129,10 @@ class TaskManager(task_manager_ui.TaskManagerUI):
         self.show_path()
 
     def show_asset_or_shot(self, index):
+        for widget in [self.second_widget, self.third_widget, self.fourth_widget]:
+            widget.list_view.clear()
         selected = index.data()
-        checked = self.btn_grp.checkedButton().text()
+        checked = self.entity_btn_grp.checkedButton().text()
         if checked == "Asset":
             assets = self.__sg.get_all_assets(selected)
             asset_names = [asset["code"] for asset in assets]
@@ -140,18 +142,34 @@ class TaskManager(task_manager_ui.TaskManagerUI):
             shot_names = [shot["name"] for shot in shots]
             self.second_widget.set_model_data(shot_names)
 
-    def show_task(self, index):
-        entity_type = self.btn_grp.checkedButton().text()
+    def show_step(self, index):
+        for widget in [self.third_widget, self.fourth_widget]:
+            widget.list_view.clear()
+        entity_type = self.entity_btn_grp.checkedButton().text()
         asset_or_shot = index.data()
         asset_type_or_sequence = self.first_widget.list_view.get_selected()
         if not asset_type_or_sequence:
             return
-        tasks = self.__sg.get_task(entity_type, asset_type_or_sequence, asset_or_shot)
-        task_name = [task["content"] for task in tasks]
-        self.fourth_widget.set_model_data(task_name)
+        steps = self.__sg.get_step(entity_type, asset_type_or_sequence, asset_or_shot)
+        step_names = [step["short_name"] for step in steps]
+        self.third_widget.set_model_data(step_names)
+
+    def show_task(self, index):
+        self.fourth_widget.list_view.clear()
+        entity_type = self.entity_btn_grp.checkedButton().text()
+        asset_type_or_sequence = self.first_widget.list_view.get_selected()
+        asset_or_shot = self.second_widget.list_view.get_selected()
+        step = index.data()
+        if not all((asset_type_or_sequence, asset_or_shot)):
+            return
+        tasks = self.__sg.get_task(entity_type, asset_type_or_sequence, asset_or_shot, step)
+        if not tasks:
+            return
+        task_names = [task["content"] for task in tasks]
+        self.fourth_widget.set_model_data(task_names)
 
     def show_path(self):
-        entity_type = self.btn_grp.checkedButton().text()
+        entity_type = self.entity_btn_grp.checkedButton().text()
         first_selected = self.first_widget.list_view.get_selected()
         second_selected = self.second_widget.list_view.get_selected()
         third_selected = self.third_widget.list_view.get_selected()
