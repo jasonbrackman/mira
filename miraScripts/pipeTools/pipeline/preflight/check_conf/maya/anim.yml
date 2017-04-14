@@ -1,0 +1,65 @@
+check_display_wireframe:
+  name: "Display wireframe | 线框显示"
+  order: 0
+  ignorable: False
+  description: "以线框显示保存文件"
+check_display_smooth:
+  name: "Display smooth | 按1显示"
+  order: 10
+  ignorable: False
+  description: "所有模型按1显示"
+check_start_frame:
+  name: "start frame | 从101帧开始"
+  order: 15
+  ignorable: False
+  description: "镜头从101帧开始"
+check_unloaded_reference:
+  name: "Unload reference | 没有加载的reference"
+  order: 20
+  ignorable: True
+  description: "检查是否有没加载的reference"
+check_reference_is_newest:
+  name: "neweset reference | 最新的reference"
+  order: 25
+  ignorable: True
+  description: "检查文件中的reference文件是不是最新的"
+check_anim_valid_camera:
+  name: "valid camera | 正确的摄像机"
+  order: 30
+  ignorable: True
+  description: "检查相机cam_{场号}_{镜头号}是否存在,并且摄像机上有frame_range属性，添加这个属性用于灯光设置帧范围"
+check_anim_frame_range:
+  name: "frame range | 帧范围"
+  order: 35
+  ignorable: False
+  description: "检查相机cam_{场号}_{镜头号}的frame_range属性值是否跟当前文件的帧范围是否一致。"
+check_lay_camera_locked:
+  name: "Lock camera | 锁定摄像机"
+  order: 40
+  ignorable: True
+  description: "检查相机cam_{场号}_{镜头号}是否锁定"
+check_light_exist:
+  name: "Light exist | 存在灯光"
+  order: 50
+  ignorable: False
+  description: "检查是否有灯光存在"
+check_lay_structure:
+  name: "Structure | 大纲结构"
+  order: 60
+  ignorable: True
+  description: "检查大纲结构是否正确"
+check_render_layer:
+  name: "Render layer | 删除渲染层"
+  order: 70
+  ignorable: False
+  description: "检查是否有渲染层的存在"
+check_duplicate_names:
+  name: "Duplicate names | 同名物体"
+  order: 80
+  ignorable: False
+  description: "检查是否有同名物体存在"
+check_save_file:
+  name: "Save file | 保存文件"
+  order: 90
+  ignorable: True
+  description: "保存检查后的文件"

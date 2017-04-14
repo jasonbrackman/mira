@@ -1,0 +1,26 @@
+includes:
+  - ./roots.yml
+
+asset_pool_dir: "@root_dir/asset_pool/{engine}"
+
+maya:
+  mdl_path: "@asset_pool_dir/{category}/{name}/_mdl/{name}.abc"
+  tex_dir: "@asset_pool_dir/{category}/{name}/_tex"
+  shd_path: "@asset_pool_dir/{category}/{name}/_shd/{name}.mb"
+  pic_path: "@asset_pool_dir/{category}/{name}/{name}.png"
+  actions:
+    - maya_import_mdl
+    - maya_reference_mdl
+    - maya_import_shd
+    - maya_reference_shd
+    - launch_folder
+
+houdini:
+  mdl_path: "@asset_pool_dir/{category}/{name}/_mdl/{name}.abc"
+  tex_dir: "@asset_pool_dir/{category}/{name}/_tex"
+  shd_path: "@asset_pool_dir/{category}/{name}/_shd/{name}.hip"
+  pic_path: "@asset_pool_dir/{category}/{name}/{name}.png"
+  actions:
+    - houdini_import_mdl
+    - houdini_import_shd
+    - launch_folder

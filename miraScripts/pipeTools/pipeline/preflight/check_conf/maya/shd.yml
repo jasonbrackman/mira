@@ -1,0 +1,115 @@
+check_display_wireframe:
+  name: "Display wireframe | 线框显示"
+  order: 0
+  ignorable: False
+  description: "以线框显示保存文件"
+check_display_smooth:
+  name: "Display smooth | 按1显示"
+  order: 5
+  ignorable: False
+  description: "所有模型按1显示"
+check_reference_is_newest:
+  name: "neweset reference | 最新的reference"
+  order: 8
+  ignorable: True
+  description: "检查文件中的reference文件是不是最新的"
+check_topology:
+  name: "topology | 拓扑结构"
+  order: 10
+  ignorable: False
+  description: "检查大纲结构是否与模型一致"
+check_mdl_something_selected:
+  name: "Something Selected | 选中模型大组"
+  order: 12
+  ignorable: False
+  description: "选中模型大组"
+check_unloaded_reference:
+  name: "Unload reference | 没有加载的reference"
+  order: 15
+  ignorable: True
+  description: "检查是否有没加载的reference"
+check_backup_visibility_unlocked:
+  name: "Unlock _BACKUP.v | 解锁_BACKUP组的显示属性"
+  order: 20
+  ignorable: False
+  description: "检查_BACKUP组的显示属性是否被锁定，保证后续环节reference状态下能被隐藏，如果锁定则无法被隐藏"
+check_mdl_keyframe:
+  name: "keyframe | 不允许K帧"
+  order: 30
+  ignorable: False
+  description: "检查模型是否有K帧，流程不允许在材质阶段对模型K帧"
+check_mdl_extra_shape:
+  name: "Extra shape | 多余的shape"
+  order: 40
+  ignorable: False
+  description: "检查一个transform下是否有多个shape"
+check_extra_camera:
+  name: "Extra Camera | 多余的相机"
+  order: 60
+  ignorable: False
+  description: "场景中多余的相机"
+check_naming_space:
+  name: "Naming space | 名称空间"
+  order: 70
+  ignorable: False
+  description: "检查模型大组下是否有名称空间存在"
+check_shd_reference_nodes:
+  name: "Reference material | reference的材质节点"
+  order: 75
+  ignorable: False
+  description: "检查有没有reference进来的材质节点"
+check_shd_node_name:
+  name: "Shd node name | 材质节点命名"
+  order: 80
+  ignorable: False
+  description: "检查材质节点命名规范，所有材质节点必须以'{资产名}_{材质版本}_'开始"
+check_use_default_lambert:
+  name: "Assign lambert1 | 赋予了lambert1"
+  order: 83
+  ignorable: False
+  description: "检查模型上是否赋予了lambert1材质球，流程上不允许使用lambert1材质球"
+check_assigned_faces:
+  name: "Assgin shader by face | 选面赋材质"
+  order: 85
+  ignorable: False
+  description: "检查是否有模型选面赋材质"
+check_shd_texture_name:
+  name: "Texture name | 贴图命名"
+  order: 87
+  ignorable: False
+  description: "检查贴图是否命名正确"
+check_shd_same_tex_name:
+  name: "Same texture name | 相同的贴图名字"
+  order: 90
+  ignorable: False
+  description: "检查贴图是否存在不同的路径下，但是有相同的名字，如果有这种情况，拷贝到服务器上的时候会报错"
+check_shd_empty_file_path:
+  name: "Invalid file path | 贴图路径"
+  order: 100
+  ignorable: False
+  description: "检查贴图路径是否正确"
+check_mdl_transform_freeze:
+  name: "transform freeze | freeze所有模型"
+  order: 110
+  ignorable: False
+  description: "将模型大组下的所有transform freeze"
+check_unused_nodes:
+  name: "Unused nodes | 删除无用节点"
+  order: 150
+  ignorable: False
+  description: "删除无用节点"
+check_mdl_extra_shape:
+  name: "Extra shape | 多余的shape"
+  order: 160
+  ignorable: True
+  description: "检查一个transform下是否有多个shape"
+check_duplicate_names:
+  name: "Duplicate names | 同名物体"
+  order: 200
+  ignorable: False
+  description: "检查是否有同名物体存在"
+check_save_file:
+  name: "Save file | 保存文件"
+  order: 210
+  ignorable: True
+  description: "保存检查后的文件"
