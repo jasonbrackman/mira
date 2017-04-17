@@ -7,7 +7,6 @@ import os
 import yaml
 
 
-
 def build_command_as_list(*args):
     return list(args)
 
@@ -23,7 +22,6 @@ def send_command(commands):
     process = subprocess.Popen(commands, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     a = process.communicate()[0]
     print a
-
 
 
 def send_message(receiver=[], message=''):
@@ -65,7 +63,6 @@ def submit_python_job(deadline_name,
                       pool='none',
                       priority=100,
                       version='2.7',
-                      log_path = None
                       ):
 
     command_tool_path = os.path.abspath(os.path.join(load_yaml(), 'deadlinecommand.exe'))

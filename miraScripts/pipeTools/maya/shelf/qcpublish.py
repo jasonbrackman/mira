@@ -125,7 +125,7 @@ def post_publish(obj):
         logger.warning("No matched task")
         return
     sg = tk.tk.shotgun
-    sg.update("Task", task["id"], {"sg_status_list": "rev"})
+    sg.update("Task", task["id"], {"sg_status_list": "rev", "sg_workfile": obj.work_path})
     sg.upload_thumbnail("Task", task["id"], obj.image_path)
 
 

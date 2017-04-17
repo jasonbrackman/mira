@@ -14,8 +14,7 @@ class Sg(object):
         return project_info
 
     def get_sequence(self):
-        project_info = self.get_project_by_name()
-        sequence_filter = [['project', 'is', project_info]]
+        sequence_filter = [['project', 'name_is', self.project_name]]
         all_sequence = self.sg.find('Sequence', sequence_filter, ['code'])
         if not all_sequence:
             return
@@ -24,49 +23,44 @@ class Sg(object):
         return all_sequence_name
 
     def get_all_assets(self, asset_type=None):
-        project_info = self.get_project_by_name()
         if asset_type is None:
-            assets = self.sg.find("Asset", [["project", "is", project_info]], ["code"])
+            assets = self.sg.find("Asset", [["project", "name_is", self.project_name]], ["code"])
         else:
             assets = self.sg.find("Asset",
-                                  [["project", "is", project_info], ["sg_asset_type", "is", asset_type]],
+                                  [["project", "name_is", self.project_name], ["sg_asset_type", "is", asset_type]],
                                   ["code"])
         return assets
 
     def get_all_shots_by_sequence(self, sequence_name):
-        project_info = self.get_project_by_name()
         sequence_info = self.sg.find_one('Sequence',
-                                         [['project', 'is', project_info], ['code', 'is', sequence_name]],
+                                         [['project', 'name_is', self.project_name], ['code', 'is', sequence_name]],
                                          ['shots'])
         shots = [shot for shot in sequence_info['shots'] if '_000' not in shot['name']]
         return shots
 
     def get_task(self, entity_type, asset_type_or_sequence, asset_or_shot, step=None):
-        project_info = self.get_project_by_name()
         if entity_type == "Asset":
             entity_info = self.sg.find_one("Asset",
                                            [["code", "is", asset_or_shot],
                                             ["sg_asset_type", "is", asset_type_or_sequence],
-                                            ["project", "is", project_info]])
+                                            ["project", "name_is", self.project_name]])
         elif entity_type == "Shot":
-            sequence_info = self.sg.find_one("Sequence", [["project", "is", project_info],
-                                                          ["code", "is", asset_type_or_sequence]])
             entity_info = self.sg.find_one("Shot",
                                            [["code", "is", asset_or_shot],
-                                            ["sg_sequence", "is", sequence_info]])
+                                            ["sg_sequence", "name_is", asset_type_or_sequence],
+                                            ["project", "name_is", self.project_name]])
         if step:
             step_info = self.sg.find_one("Step", [["short_name", "is", step]])
             tasks = self.sg.find("Task", [["entity", "is", entity_info], ["step", "is", step_info]], ["content", "step"])
         else:
-            tasks = self.sg.find("Task", [["entity", "is", entity_info]], ["content", "step"])
+            tasks = self.sg.find("Task", [["entity", "is", entity_info]], ["content", "step.Step.short_name"])
         return tasks
 
     def get_step(self, entity_type, asset_type_or_sequence, asset_or_shot):
         tasks = self.get_task(entity_type, asset_type_or_sequence, asset_or_shot)
         if not tasks:
             return
-        steps = [task["step"] for task in tasks]
-        steps = [self.sg.find_one("Step", [["id", "is", step["id"]]], ["short_name"]) for step in steps]
+        steps = [task["step.Step.short_name"] for task in tasks]
         return steps
 
     def get_users(self):
@@ -74,23 +68,22 @@ class Sg(object):
         return users
 
     def get_current_task(self, entity_type, asset_type_or_sequence, asset_or_shot, step, task_name):
-        project_info = self.get_project_by_name()
         step_info = self.sg.find_one("Step", [["short_name", "is", step]])
         if entity_type == "Asset":
             entity_info = self.sg.find_one("Asset",
                                            [["code", "is", asset_or_shot],
                                             ["sg_asset_type", "is", asset_type_or_sequence],
-                                            ["project", "is", project_info]])
+                                            ["project", "name_is", self.project_name]])
         else:
-            sequence_info = self.sg.find_one("Sequence", [["project", "is", project_info],
-                                                          ["code", "is", asset_type_or_sequence]])
             entity_info = self.sg.find_one("Shot",
                                            [["code", "is", asset_or_shot],
-                                            ["sg_sequence", "is", sequence_info]])
+                                            ["sg_sequence", "name_is", asset_type_or_sequence],
+                                            ["project", "name_is", self.project_name]])
         task_info = self.sg.find_one("Task",
                                      [["entity", "is", entity_info],
                                       ["step", "is", step_info],
-                                      ["content", "is", task_name]])
+                                      ["content", "is", task_name]],
+                                     ["sg_workfile"])
         return task_info
 
     def get_user_by_name(self, name):
@@ -98,25 +91,12 @@ class Sg(object):
         return user
 
     def get_my_tasks(self, user=None):
-        project_info = self.get_project_by_name()
         if not user:
             user = self.user
-        task_filter = [["task_assignees", "name_contains", user], ["project", "is", project_info]]
-        my_tasks = self.sg.find("Task", task_filter, ["content", "step", "sg_status_list", "entity", "sg_priority_1"])
-        if my_tasks:
-            for task in my_tasks:
-                entity = task["entity"]
-                entity_type = entity["type"]
-                id_filter = [["id", "is", entity["id"]]]
-                if entity_type == "Asset":
-                    entity_info = self.sg.find_one(entity_type, id_filter, ["sg_asset_type", "code"])
-                else:
-                    entity_info = self.sg.find_one(entity_type, id_filter, ["sg_sequence", "code"])
-                task["entity"] = entity_info
-                step = task["step"]
-                step_filter = [["id", "is", step["id"]]]
-                step_info = self.sg.find_one("Step", step_filter, ["short_name"])
-                task["step"] = step_info
+        task_filter = [["task_assignees", "name_contains", user], ["project", "name_is", self.project_name]]
+        fields = ["content", "sg_status_list", "sg_priority_1", "step.Step.short_name", "entity.Asset.sg_asset_type",
+                  "entity.Asset.code", "entity.Shot.sg_sequence", "entity.Shot.code", "entity"]
+        my_tasks = self.sg.find("Task", task_filter, fields)
         return my_tasks
 
     def update_task_status(self, task, status):

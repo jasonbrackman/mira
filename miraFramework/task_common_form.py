@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from PySide import QtGui, QtCore
 import miraCore
-from miraFramework.Filter import ButtonLineEdit
+from Filter import ButtonLineEdit
 from miraLibs.pyLibs import join_path
 from miraLibs.pipeLibs import pipeMira, get_current_project
 from miraLibs.sgLibs import Sg
@@ -58,6 +58,7 @@ class ListView(QtGui.QListView):
         self.menu = QtGui.QMenu()
         self.remove_action = QtGui.QAction("remove", self)
         self.setSelectionBehavior(QtGui.QListView.SelectRows)
+        self.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
         self.setStyleSheet("QListView::item:selected{background: #ff8c00;}")
 
@@ -121,14 +122,12 @@ class CommonWidget(QtGui.QWidget):
         main_layout.addWidget(self.group_box)
         group_layout = QtGui.QVBoxLayout()
 
-        horizon_layout = QtGui.QHBoxLayout()
-        horizon_layout.setSpacing(0)
         icon_dir = miraCore.get_icons_dir()
         icon_path = join_path.join_path2(icon_dir, "search.png")
         self.filter_le = ButtonLineEdit(icon_path)
-        horizon_layout.addWidget(self.filter_le)
+
         self.list_view = ListView()
-        group_layout.addLayout(horizon_layout)
+        group_layout.addWidget(self.filter_le)
         group_layout.addWidget(self.list_view)
         self.group_box.setLayout(group_layout)
         self.set_model()
@@ -241,6 +240,12 @@ class CommonForm(QtGui.QWidget):
         main_layout.addLayout(list_layout)
         main_layout.addLayout(separator_layout)
 
+    @staticmethod
+    def get_selected(widget):
+        temp = widget.list_view.get_selected()
+        result = temp[0] if temp else None
+        return result
+
     @property
     def project(self):
         return self.project_cbox.currentText()
@@ -257,6 +262,38 @@ class CommonForm(QtGui.QWidget):
     def engine(self):
         return self.engine_btn_grp.checkedButton().text()
 
+    @property
+    def entity_type(self):
+        return self.entity_btn_grp.checkedButton().text()
+
+    @property
+    def asset_type_or_sequence(self):
+        return self.get_selected(self.first_widget)
+
+    @property
+    def asset_or_shot(self):
+        return self.get_selected(self.second_widget)
+
+    @property
+    def step(self):
+        return self.get_selected(self.third_widget)
+
+    @property
+    def task(self):
+        return self.get_selected(self.fourth_widget)
+
+    @property
+    def task_info(self):
+        entity_type = self.entity_type
+        asset_type_or_sequence = self.asset_type_or_sequence
+        asset_or_shot = self.asset_or_shot
+        step = self.step
+        task = self.task
+        arg_list = (entity_type, asset_type_or_sequence, asset_or_shot, step, task)
+        if not all(arg_list):
+            return
+        return self.sg.get_current_task(*arg_list)
+
     def init(self):
         projects = pipeMira.get_projects()
         self.project_cbox.addItems(projects)
@@ -272,6 +309,10 @@ class CommonForm(QtGui.QWidget):
 
     def on_project_changed(self, project):
         self.sg = Sg.Sg(project)
+        self.asset_check.setChecked(False)
+        self.shot_check.setChecked(False)
+        for widget in [self.first_widget, self.second_widget, self.third_widget, self.fourth_widget]:
+            widget.list_view.clear()
 
     def init_grp(self):
         checked_btn_text = self.entity_btn_grp.checkedButton().text()
@@ -296,12 +337,11 @@ class CommonForm(QtGui.QWidget):
         for widget in [self.second_widget, self.third_widget, self.fourth_widget]:
             widget.list_view.clear()
         selected = index.data()
-        checked = self.entity_btn_grp.checkedButton().text()
-        if checked == "Asset":
+        if self.entity_type == "Asset":
             assets = self.sg.get_all_assets(selected)
             asset_names = [asset["code"] for asset in assets]
             self.second_widget.set_model_data(asset_names)
-        elif checked == "Shot":
+        elif self.entity_type == "Shot":
             shots = self.sg.get_all_shots_by_sequence(selected)
             shot_names = [shot["name"] for shot in shots]
             self.second_widget.set_model_data(shot_names)
@@ -309,24 +349,19 @@ class CommonForm(QtGui.QWidget):
     def show_step(self, index):
         for widget in [self.third_widget, self.fourth_widget]:
             widget.list_view.clear()
-        entity_type = self.entity_btn_grp.checkedButton().text()
         asset_or_shot = index.data()
-        asset_type_or_sequence = self.first_widget.list_view.get_selected()
-        if not asset_type_or_sequence:
+        if not self.asset_type_or_sequence:
             return
-        steps = self.sg.get_step(entity_type, asset_type_or_sequence, asset_or_shot)
-        step_names = [step["short_name"] for step in steps]
+        steps = self.sg.get_step(self.entity_type, self.asset_type_or_sequence, asset_or_shot)
+        step_names = list(set(steps))
         self.third_widget.set_model_data(step_names)
 
     def show_task(self, index):
         self.fourth_widget.list_view.clear()
-        entity_type = self.entity_btn_grp.checkedButton().text()
-        asset_type_or_sequence = self.first_widget.list_view.get_selected()
-        asset_or_shot = self.second_widget.list_view.get_selected()
         step = index.data()
-        if not all((asset_type_or_sequence, asset_or_shot)):
+        if not all((self.asset_type_or_sequence, self.asset_or_shot)):
             return
-        tasks = self.sg.get_task(entity_type, asset_type_or_sequence, asset_or_shot, step)
+        tasks = self.sg.get_task(self.entity_type, self.asset_type_or_sequence, self.asset_or_shot, step)
         if not tasks:
             return
         task_names = [task["content"] for task in tasks]

@@ -126,6 +126,10 @@ class PathDetails(object):
     def other_dir(self):
         return self.get_path("other", False)
 
+    @property
+    def publish_path(self):
+        return self.get_path("publish", False)
+
 
 ########################################################################################################################
 # below is for get asset files

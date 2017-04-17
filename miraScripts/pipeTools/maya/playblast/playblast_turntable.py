@@ -6,7 +6,7 @@ import playblaster
 from miraLibs.mayaLibs import set_image_size
 from miraLibs.pipeLibs import pipeFile, pipeMira
 from miraLibs.pipeLibs.pipeMaya import get_model_name
-from miraScripts.pipeTools.asset_turntable import create_turntable, remove_turntable
+from miraScripts.pipeTools.maya.asset_turntable import create_turntable, remove_turntable
 from miraLibs.pyLibs import create_parent_dir
 from miraLibs.pipeLibs.copy import Copy
 

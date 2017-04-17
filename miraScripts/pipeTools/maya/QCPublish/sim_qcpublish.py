@@ -3,7 +3,7 @@ import logging
 from miraLibs.pipeLibs.copy import Copy
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import get_scene_name
-from miraScripts.pipeTools.playblast import playblast_shot
+from miraScripts.pipeTools.maya.playblast import playblast_shot
 
 
 def sim_qcpublish():

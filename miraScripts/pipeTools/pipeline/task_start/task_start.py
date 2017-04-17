@@ -12,9 +12,6 @@ from miraLibs.sgLibs import Sg
 from miraLibs.pipeLibs.pipeMaya import get_current_project
 
 
-qss_path = join_path.join_path2(os.path.dirname(__file__), "style.qss")
-
-
 class RunCommandThread(QtCore.QThread):
 
     def __init__(self, command=None, callback=None, file_name=None, logger=None, parent=None):
@@ -52,8 +49,6 @@ class TaskManager(task_start_ui.TaskStartUI):
 
     def __init__(self, parent=None):
         super(TaskManager, self).__init__(parent)
-        self.setStyle(QtGui.QStyleFactory.create('plastique'))
-        self.setStyleSheet(open(qss_path, 'r').read())
         self.__threads = list()
         self.__logger = None
         self.__user = getpass.getuser()
@@ -66,8 +61,14 @@ class TaskManager(task_start_ui.TaskStartUI):
         self.__shot_steps = pipeMira.get_shot_step()
         self.__scene_steps = pipeMira.get_scene_step()
         self.__engine = self.engine_btn_grp.checkedButton().text()
+        self.set_style()
         self.init()
         self.set_signals()
+
+    def set_style(self):
+        qss_path = join_path.join_path2(os.path.dirname(__file__), "style.qss")
+        self.setStyle(QtGui.QStyleFactory.create('plastique'))
+        self.setStyleSheet(open(qss_path, 'r').read())
 
     def init(self):
         self.init_project()
@@ -104,6 +105,9 @@ class TaskManager(task_start_ui.TaskStartUI):
         self.__project = project
         priority = pipeMira.get_site_value(project, "priority")
         self.priority_cbox.addItems(priority)
+        self.__sg = Sg.Sg(self.__project)
+        for widget in [self.first_widget, self.second_widget, self.third_widget, self.fourth_widget]:
+            widget.list_view.clear()
 
     def init_grp(self):
         checked_btn_text = self.entity_btn_grp.checkedButton().text()
@@ -151,7 +155,7 @@ class TaskManager(task_start_ui.TaskStartUI):
         if not asset_type_or_sequence:
             return
         steps = self.__sg.get_step(entity_type, asset_type_or_sequence, asset_or_shot)
-        step_names = [step["short_name"] for step in steps]
+        step_names = list(set(steps))
         self.third_widget.set_model_data(step_names)
 
     def show_task(self, index):

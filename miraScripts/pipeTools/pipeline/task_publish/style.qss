@@ -105,7 +105,7 @@ QListWidget, QListView
     border: 1px solid #181818;
     border-radius: 8px;
     background:#303030;
-    margin: 5px;
+    /*margin: 5px;*/
 }
 
 QListWidget::selected, QListView::selected

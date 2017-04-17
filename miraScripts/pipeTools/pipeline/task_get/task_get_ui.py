@@ -13,6 +13,7 @@ class FileTreeView(QtGui.QTreeView):
         self.setFocusPolicy(QtCore.Qt.NoFocus)
         self.name = name
         self.expandAll()
+        self.header().setVisible(False)
         self.setSelectionMode(QtGui.QListWidget.SingleSelection)
         self.setSortingEnabled(True)
         self.menu = QtGui.QMenu(self)

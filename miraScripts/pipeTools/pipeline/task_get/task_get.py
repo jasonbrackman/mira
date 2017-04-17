@@ -327,23 +327,23 @@ class TaskGet(task_get_ui.TaskGetUI):
         sequence_nodes = list()
         for task in my_tasks:
             if task["entity"]["type"] == "Asset":
-                asset_type_name = task["entity"]["sg_asset_type"]
+                asset_type_name = task["entity.Asset.sg_asset_type"]
                 if asset_type_name not in asset_type_nodes:
                     asset_type_node = AssetTypeNode(asset_type_name, asset_entity_node)
                 asset_type_nodes.append(asset_type_name)
-                asset_name = task["entity"]["code"]
-                step = task["step"]["short_name"]
+                asset_name = task["entity.Asset.code"]
+                step = task["step.Step.short_name"]
                 task_name = task["content"]
                 status = task["sg_status_list"]
                 priority = task["sg_priority_1"]
                 asset_node = AssetNode(asset_name, step, task_name, status, priority, asset_type_node)
             else:
-                sequence_name = task["entity"]["sg_sequence"]["name"]
+                sequence_name = task["entity.Shot.sg_sequence"]["name"]
                 if sequence_name not in sequence_nodes:
                     sequence_node = SequenceNode(sequence_name, shot_eneity_node)
                 sequence_nodes.append(sequence_node)
-                shot = task["entity"]["code"]
-                step = task["step"]["short_name"]
+                shot = task["entity.Shot.code"]
+                step = task["step.Step.short_name"]
                 task_name = task["content"]
                 status = task["sg_status_list"]
                 priority = task["sg_priority_1"]

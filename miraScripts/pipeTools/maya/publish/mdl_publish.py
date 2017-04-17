@@ -4,7 +4,7 @@ import os
 import optparse
 import maya.cmds as mc
 from miraLibs.pipeLibs import pipeFile
-from miraLibs.pipeLibs.pipeMaya import get_model_name, publish_to_db
+from miraLibs.pipeLibs.pipeMaya import get_model_name
 from miraLibs.mayaLibs import export_gpu_cache, open_file, quit_maya, export_selected, delete_layer
 from miraLibs.pyLibs import create_parent_dir
 
@@ -15,7 +15,6 @@ def main():
     open_file.open_file(file_path)
     # get paths
     obj = pipeFile.PathDetails.parse_path(file_path)
-    project = obj.project
     publish_path = obj.publish_path
     gpu_cache_path = obj.gpu_cache_path
     asset_type = obj.asset_type
@@ -32,8 +31,6 @@ def main():
         logger.info("Exporting gpu cache...")
         export_gpu_cache.export_gpu_cache(model_name, gpu_directory, gpu_file_name, 1, 1)
         logger.info("Export gpu cache to %s" % gpu_cache_path)
-    # add to database
-    publish_to_db.publish_to_db(project)
     logger.info("Add to data base.")
     # quit maya
     quit_maya.quit_maya()
