@@ -9,12 +9,15 @@ from miraLibs.mayaLibs import new_file, save_as, create_reference, create_group,
 def main():
     logger = logging.getLogger("lowRig start")
     obj = pipeFile.PathDetails.parse_path(options.file)
-    project_name = obj.project
+    project = obj.project
     asset_type = obj.asset_type
     asset_type_short_name = obj.asset_type_short_name
     asset_name = obj.asset_name
-    lowRig_publish_file = pipeFile.get_asset_step_publish_file(asset_type, asset_name, "lowRig", project_name)
-    mdl_publish_file = pipeFile.get_asset_step_publish_file(asset_type, asset_name, "mdl", project_name)
+    step = obj.step
+    lowRig_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "lowRig", step)
+    if not os.path.isfile(lowRig_publish_file):
+        lowRig_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "lowRig", "lowRig")
+    mdl_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "mdl", "mdl")
     if not (os.path.isfile(lowRig_publish_file) and os.path.isfile(mdl_publish_file)):
         logger.warning("No model file published or No lowRig file published.")
         quit_maya.quit_maya()
@@ -29,12 +32,12 @@ def main():
     # create _BLENDS group
     blends_group = "_BLENDS"
     create_group.create_group(blends_group)
-    if asset_type == "character":
+    if asset_type == "Character":
         rig_group_name = "Grp_Master_Ctl"
         create_group.create_group("Others", root_group_name)
         create_group.create_group("Geometry", root_group_name)
         create_group.create_group(model_name, "Geometry")
-    elif asset_type == "prop":
+    elif asset_type == "Prop":
         rig_group_name = "%s_%s_RIG" % (asset_type_short_name, asset_name)
         create_group.create_group(model_name, root_group_name)
     create_group.create_group(rig_group_name, root_group_name)

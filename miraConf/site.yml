@@ -46,6 +46,8 @@ snowkid:
   maya_asset_image: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_image/{engine}/{project}_{asset_name}_{step}_v{version}.png"
   maya_asset_publish: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_publish/{engine}/{project}_{asset_name}_{step}_v{version}.mb"
   maya_asset_video: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_video/{engine}/{project}_{asset_name}_{step}_v{version}.mov"
+  maya_asset_topology: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_topology/{engine}/{project}_{asset_name}_{step}_v{version}.json"
+  maya_asset_gpu: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_gpu/{engine}/{project}_{asset_name}_{step}_v{version}.abc"
   maya_asset_other: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_other"
 
   shot_template: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/{area}/{engine}/{project}_{sequence}_{shot}_{step}_v{version}.{ext}"

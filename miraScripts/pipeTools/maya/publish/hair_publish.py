@@ -5,8 +5,6 @@ import maya.cmds as mc
 from miraLibs.mayaLibs import import_load_remove_unload_ref, open_file, save_as, \
     quit_maya, export_selected, delete_layer
 from miraLibs.pipeLibs import pipeFile
-from miraLibs.pipeLibs.pipeMaya.network import delete_network
-from miraLibs.pipeLibs.pipeMaya import publish_to_db
 
 
 def main():
@@ -16,7 +14,6 @@ def main():
     obj = pipeFile.PathDetails.parse_path(file_path)
     asset_type_short_name = obj.asset_type_short_name
     asset_name = obj.asset_name
-    project = obj.project
     publish_path = obj.publish_path
     hair_path = obj.hair_path
     yeti_group = "%s_%s_yetiNode" % (asset_type_short_name, asset_name)
@@ -28,11 +25,7 @@ def main():
     export_selected.export_selected(hair_path)
     logger.info("export yeti node to _hair done.")
     mc.delete(yeti_group)
-    # add to database
-    publish_to_db.publish_to_db(project)
-    logger.info("Add to data base.")
     # save to publish path
-    delete_network.delete_network()
     save_as.save_as(publish_path)
     # quit maya
     quit_maya.quit_maya()

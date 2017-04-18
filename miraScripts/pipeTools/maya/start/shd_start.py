@@ -9,10 +9,10 @@ from miraLibs.mayaLibs import new_file, save_as, create_reference, quit_maya
 def main():
     logger = logging.getLogger("shd start")
     obj = pipeFile.PathDetails.parse_path(options.file)
-    project_name = obj.project
+    project = obj.project
     asset_type = obj.asset_type
     asset_name = obj.asset_name
-    mdl_publish_file = pipeFile.get_asset_step_publish_file(asset_type, asset_name, "mdl", project_name)
+    mdl_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "mdl", "mdl")
     if not os.path.isfile(mdl_publish_file):
         logger.warning("No model file published.")
         quit_maya.quit_maya()

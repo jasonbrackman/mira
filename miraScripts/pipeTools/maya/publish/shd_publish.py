@@ -4,7 +4,7 @@ import logging
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import open_file, quit_maya, export_selected, \
     import_load_remove_unload_ref, delete_history, delete_unused_nodes, delete_layer
-from miraLibs.pipeLibs.pipeMaya import rename_pipeline_shape, publish_to_db
+from miraLibs.pipeLibs.pipeMaya import rename_pipeline_shape
 
 
 def main():
@@ -28,9 +28,6 @@ def main():
     delete_layer.delete_layer()
     export_selected.export_selected(publish_path)
     logger.info("Save to %s" % publish_path)
-    # add to database
-    publish_to_db.publish_to_db(project)
-    logger.info("Add to data base.")
     quit_maya.quit_maya()
 
 

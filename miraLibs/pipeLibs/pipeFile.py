@@ -130,6 +130,14 @@ class PathDetails(object):
     def publish_path(self):
         return self.get_path("publish", False)
 
+    @property
+    def topology_path(self):
+        return self.get_path("topology", False)
+
+    @property
+    def gpu_cache_path(self):
+        return self.get_path("gpu", False)
+
 
 ########################################################################################################################
 # below is for get asset files
@@ -194,4 +202,10 @@ def get_shot_task_publish_file(project, sequence, shot, step, task, version=None
     format_str = "%s_shot_publish" % engine
     publish_file = get_task_file(project, sequence, shot, step, task, format_str, version, engine, local)
     return publish_file
+
+
+def get_shot_task_video_file(project, sequence, shot, step, task, version=None, engine="maya", local=False):
+    format_str = "%s_shot_video" % engine
+    video_file = get_task_file(project, sequence, shot, step, task, format_str, version, engine, local)
+    return video_file
 

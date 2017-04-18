@@ -6,7 +6,8 @@ from get_task_name import get_task_name
 import miraCore
 from miraLibs.pyLibs import join_path
 from miraLibs.pipeLibs import pipeMira, pipeFile, get_logger
-from miraLibs.sgLibs import Tk
+from miraLibs.sgLibs import Sg
+from miraLibs.pipeLibs.pipeSg import task_from_sg_path
 
 
 class Publish(object):
@@ -16,6 +17,7 @@ class Publish(object):
         self.obj = pipeFile.PathDetails.parse_path(self.work_file)
         self.logger = self.get_logger()
         self.engine = self.obj.engine
+        self.project = self.obj.project
 
     def get_logger(self):
         task_name = get_task_name(self.obj)
@@ -53,16 +55,14 @@ class Publish(object):
             return
         # set task sg_publishfile
         self.logger.info("start post publish...")
-        tk = Tk.Tk(self.obj.project)
-        sg = tk.tk.shotgun
-        context = tk.get_context_from_path(self.work_file)
-        current_task = context.task
+        sg = Sg.Sg(self.project)
+        current_task = task_from_sg_path.task_from_sg_path(sg, self.work_file)
         self.logger.info("Current Task: %s" % current_task)
-        sg.update("Task", current_task["id"], {"sg_publishfile": self.obj.publish_path})
+        sg.update_task(current_task, sg_publishfile=self.obj.publish_path)
         self.logger.info("update task sg_publishfile: %s" % self.obj.publish_path)
         # change task status
         if self.change_task_status:
-            sg.update("Task", current_task["id"], {"sg_status_list": "fin"})
+            sg.update_task_status(current_task, "fin")
             self.logger.info("update task sg_status_list: fin")
 
     def main(self):

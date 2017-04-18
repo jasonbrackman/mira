@@ -24,7 +24,7 @@ def main():
     mc.select(model_name, r=1)
     export_selected.export_selected(publish_path)
     # export gpu cache
-    if asset_type in ["environment"]:
+    if asset_type in ["Environment"]:
         create_parent_dir.create_parent_dir(gpu_cache_path)
         gpu_directory = os.path.dirname(gpu_cache_path)
         gpu_file_name = os.path.splitext(os.path.basename(gpu_cache_path))[0]

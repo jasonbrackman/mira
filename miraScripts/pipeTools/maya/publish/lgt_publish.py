@@ -3,7 +3,6 @@ import logging
 import optparse
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import save_as, open_file, quit_maya
-from miraLibs.pipeLibs.pipeMaya.network import delete_network
 
 
 def main():
@@ -13,7 +12,6 @@ def main():
     obj = pipeFile.PathDetails.parse_path(file_path)
     publish_path = obj.publish_path
     # save to publish path
-    delete_network.delete_network()
     save_as.save_as(publish_path)
     logger.info("Save to %s" % publish_path)
     # quit maya

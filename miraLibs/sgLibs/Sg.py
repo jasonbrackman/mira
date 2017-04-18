@@ -101,3 +101,9 @@ class Sg(object):
 
     def update_task_status(self, task, status):
         self.sg.update("Task", task["id"], {"sg_status_list": status})
+
+    def update_task(self, task, **kwargs):
+        self.sg.update("Task", task["id"], kwargs)
+
+    def upload_thumbnail(self, task, image_path):
+        self.sg.upload_thumbnail("Task", task["id"], image_path)

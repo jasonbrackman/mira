@@ -13,7 +13,7 @@ def main():
     project = obj.project
     asset_type = obj.asset_type
     asset_name = obj.asset_name
-    lowMdl_publish_file = pipeFile.get_asset_step_publish_file(asset_type, asset_name, "lowMdl", project)
+    lowMdl_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "lowMdl", "lowMdl")
     if not os.path.isfile(lowMdl_publish_file):
         logger.warning("No lowMdl file published.")
         quit_maya.quit_maya()

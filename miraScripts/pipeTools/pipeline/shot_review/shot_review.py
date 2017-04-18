@@ -4,7 +4,7 @@ import subprocess
 from PySide import QtGui, QtCore
 from miraLibs.pipeLibs import pipeMira, pipeFile
 reload(pipeFile)
-from miraLibs.pipeLibs.pipeDb import sql_api
+from miraLibs.sgLibs import Sg
 
 
 class ListWidget(QtGui.QListWidget):
@@ -19,9 +19,9 @@ class ListWidget(QtGui.QListWidget):
     def init(self):
         if self.removable:
             self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-            self.customContextMenuRequested.connect(self.show_context_menu)
+            self.customContextMenuRequested.connect(self.show_step_menu)
 
-    def show_context_menu(self, pos):
+    def show_step_menu(self, pos):
         global_pos = self.mapToGlobal(pos)
         menu = QtGui.QMenu(self)
         remove_action = QtGui.QAction("Remove", self)
@@ -84,8 +84,8 @@ class ShotReview(QtGui.QDialog):
         self.setWindowFlags(QtCore.Qt.Window)
         self.__projects = pipeMira.get_projects()
         self.current_project = pipeMira.get_current_project()
-        self.__db = sql_api.SqlApi(self.current_project)
-        self.__shot_context = pipeMira.get_shot_step()
+        self.__sg = Sg.Sg(self.current_project)
+        self.__shot_step = pipeMira.get_shot_step()
         self.play_list = list()
 
         main_layout = QtGui.QVBoxLayout(self)
@@ -104,12 +104,12 @@ class ShotReview(QtGui.QDialog):
         self.sequence_group.check_box.setEnabled(False)
         self.sequence_group.list_widget.setSelectionMode(QtGui.QListWidget.SingleSelection)
         self.shot_group = MyGroup("shot", "All Shots", self)
-        self.context_group = MyGroup("context", "Latest", self)
-        self.context_group.list_widget.setSelectionMode(QtGui.QListWidget.SingleSelection)
+        self.step_group = MyGroup("step", "Latest", self)
+        self.step_group.list_widget.setSelectionMode(QtGui.QListWidget.SingleSelection)
 
         list_layout.addWidget(self.sequence_group)
         list_layout.addWidget(self.shot_group)
-        list_layout.addWidget(self.context_group)
+        list_layout.addWidget(self.step_group)
 
         btn_layout = QtGui.QHBoxLayout()
         self.add_to_playlist_btn = QtGui.QPushButton("Add to playlist")
@@ -145,7 +145,7 @@ class ShotReview(QtGui.QDialog):
         self.project_cbox.setCurrentIndex(self.project_cbox.findText(self.current_project))
 
     def init_sequence(self):
-        sequences = self.__db.getAssetListByAssetType({"assetType": "scene", "assetChildType": None})
+        sequences = self.__sg.get_sequence()
         self.sequence_group.list_widget.clear()
         self.sequence_group.list_widget.addItems(sequences)
 
@@ -159,30 +159,30 @@ class ShotReview(QtGui.QDialog):
 
     def change_project(self, index):
         self.current_project = self.__projects[index]
-        self.__db = sql_api.SqlApi(self.current_project)
+        self.__sg = Sg.Sg(self.current_project)
         self.init_sequence()
         self.shot_group.list_widget.clear()
         self.shot_group.check_box.setChecked(False)
 
     def on_sequence_clicked(self, item):
-        self.context_group.check_box.setChecked(False)
-        self.context_group.check_box.setEnabled(False)
-        self.context_group.list_widget.clear()
+        self.step_group.check_box.setChecked(False)
+        self.step_group.check_box.setEnabled(False)
+        self.step_group.list_widget.clear()
         self.shot_group.check_box.setChecked(False)
         self.shot_group.list_widget.clear()
-        arg_dict = {"assetScene": item.text()}
-        shots = self.__db.getShotListBySceneName(arg_dict)
+        shots = self.__sg.get_all_shots_by_sequence(item.text())
         if shots:
-            self.shot_group.list_widget.addItems(shots)
+            shot_names = [shot["name"] for shot in shots]
+            self.shot_group.list_widget.addItems(shot_names)
 
     def on_shot_clicked(self):
-        self.context_group.check_box.setEnabled(True)
-        self.context_group.list_widget.clear()
-        self.context_group.list_widget.addItems(self.__shot_context)
+        self.step_group.check_box.setEnabled(True)
+        self.step_group.list_widget.clear()
+        self.step_group.list_widget.addItems(self.__shot_step)
 
     def get_selected_in_group(self, custom_group):
         if custom_group.check_box.isChecked():
-            if custom_group is self.context_group:
+            if custom_group is self.step_group:
                 return ["newest"]
             items = [custom_group.list_widget.item(i) for i in xrange(custom_group.list_widget.count())]
             if not items:
@@ -203,15 +203,15 @@ class ShotReview(QtGui.QDialog):
         project = str(self.project_cbox.currentText())
         sequence = self.get_selected_in_group(self.sequence_group)
         shots = self.get_selected_in_group(self.shot_group)
-        context_list = self.get_selected_in_group(self.context_group)
-        if not all((sequence, shots, context_list)):
+        step_list = self.get_selected_in_group(self.step_group)
+        if not all((sequence, shots, step_list)):
             return
         for seq in sequence:
             for shot in shots:
-                if context_list == ["newest"]:
-                    context_list = ["comp", "lgt", "sim", "anim", "lay"]
-                for context in context_list:
-                    video = pipeFile.get_shot_step_video_file(seq, shot, context, project)
+                if step_list == ["newest"]:
+                    step_list = ["comp", "lgt", "sim", "anim", "lay"]
+                for step in step_list:
+                    video = pipeFile.get_shot_task_video_file(project, seq, shot, step, step)
                     if video and os.path.isfile(video):
                         play_list.append(video)
                         break

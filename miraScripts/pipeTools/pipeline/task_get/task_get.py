@@ -9,6 +9,7 @@ from miraLibs.pipeLibs.pipeMaya import get_current_project
 from miraLibs.pipeLibs import pipeMira, pipeHistory, pipeFile
 from miraLibs.pyLibs import copy, join_path
 from miraLibs.osLibs import get_engine, get_parent_win
+from miraLibs.pipeLibs.pipeSg import task_from_sg_path
 
 
 class Node(object):
@@ -293,21 +294,17 @@ class TaskGet(task_get_ui.TaskGetUI):
             return
         try:
             obj = pipeFile.PathDetails.parse_path(file_path)
-            project = obj.project
             local_path = obj.local_work_path
             copy.copy(file_path, local_path)
-            self.local_file_widget.set_dir(os.path.dirname(os.path.dirname(local_path)))
-            self.update_task_status(project, file_path)
+            work_dir = os.path.dirname(os.path.dirname(local_path))
+            work_engine_dir = join_path.join_path2(work_dir, self.__run_app)
+            self.local_file_widget.set_dir(work_engine_dir)
+            self.update_task_status(file_path)
         except RuntimeError as e:
             logging.error(str(e))
 
-    def update_task_status(self, project, file_path):
-        from miraLibs.sgLibs import Tk
-        tk = Tk.Tk(project)
-        task = tk.get_task_from_path(file_path)
-        if not task:
-            logging.warning("Can't get task from %s" % file_path)
-            return
+    def update_task_status(self, file_path):
+        task = task_from_sg_path.task_from_sg_path(self.__sg, file_path)
         self.__sg.update_task_status(task, "ip")
 
     def set_model(self):

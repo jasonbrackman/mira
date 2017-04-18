@@ -17,7 +17,7 @@ def main():
     asset_type_short_name = obj.asset_type_short_name
     yeti_name = "%s_%s_pgYetiMaya" % (asset_type_short_name, asset_name)
     create_yeti_node(asset_type_short_name, asset_name)
-    mdl_publish_file = pipeFile.get_asset_step_publish_file(asset_type, asset_name, "mdl", project)
+    mdl_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "mdl", "mdl")
     if not os.path.isfile(mdl_publish_file):
         logger.warning("No mdl file published.")
         quit_maya.quit_maya()
@@ -50,7 +50,6 @@ def create_yeti_node(asset_type, asset_name):
     yeti_group_name = "%s_%s_yetiNode" % (asset_type, asset_name)
     create_group.create_group(yeti_group_name)
     create_group.create_group(yeti_name, yeti_group_name)
-
 
 
 if __name__ == "__main__":

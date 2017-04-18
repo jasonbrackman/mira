@@ -6,8 +6,6 @@ import time
 import maya.cmds as mc
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.pipeLibs.backup import backup
-from miraLibs.pipeLibs.pipeDb import sql_api
-from miraLibs.pipeLibs.pipeMaya.network import delete_network
 from miraLibs.mayaLibs import open_file, quit_maya, save_as, remove_reference_by_group, load_plugin, new_file
 from miraLibs.pyLibs import create_parent_dir, copy
 
@@ -21,9 +19,6 @@ def main():
     open_file.open_file(file_path)
     # get paths
     obj = pipeFile.PathDetails.parse_path(file_path)
-    project = obj.project
-    seq = obj.seq
-    shot = obj.shot
     publish_path = obj.publish_path
     # export gpu cache
     '''
@@ -41,15 +36,6 @@ def main():
     # backup.backup(project, workarea_file_path, False)
     copy.copy(file_path, workarea_file_path)
     logger.info("Cover %s" % workarea_file_path)
-    # add to database
-    current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    task_id = int(mc.getAttr("ROOT.task_id"))
-    db = sql_api.SqlApi(project)
-    arg_dict = {'taskId': task_id, 'taskEndDate': current_time}
-    db.releaseTask(arg_dict)
-    logger.info("Add to data base.")
-    # save to publish path
-    delete_network.delete_network()
     # remove camera reference
     remove_reference_by_group.remove_reference_by_group("camera")
     remove_reference_by_group.remove_reference_by_group("_TEMP")
@@ -58,7 +44,6 @@ def main():
     create_parent_dir.create_parent_dir(publish_path)
     save_as.save_as(publish_path)
     logger.info("Save to %s" % publish_path)
-    backup.backup(project, publish_path, False)
     # quit maya
     quit_maya.quit_maya()
 

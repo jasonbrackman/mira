@@ -6,8 +6,6 @@ from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import open_file, quit_maya, export_gpu_cache, delete_all_lights, save_as
 from miraLibs.pyLibs import create_parent_dir
 from miraLibs.pipeLibs.pipeMaya.rebuild_scene import export_scene
-from miraLibs.pipeLibs.pipeMaya import publish_to_db
-from miraLibs.pipeLibs.pipeMaya.network import delete_network
 
 
 def main():
@@ -29,11 +27,8 @@ def main():
     logger.info("Export gpu cache to %s" % gpu_cache_path)
     # build a scene description
     export_scene.export_scene(connection_path)
-    # add to database
-    publish_to_db.publish_to_db(project)
     # delete all lights
     delete_all_lights.delete_all_lights()
-    delete_network.delete_network()
     save_as.save_as(publish_path)
     # quit maya
     quit_maya.quit_maya()

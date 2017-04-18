@@ -118,15 +118,15 @@ def is_local_file(path):
 
 
 def post_publish(obj):
-    from miraLibs.sgLibs import Tk
-    tk = Tk.Tk(obj.project)
-    task = tk.get_task_from_path(obj.work_path)
+    from miraLibs.sgLibs import Sg
+    from miraLibs.pipeLibs.pipeSg import task_from_sg_path
+    sg = Sg.Sg(obj.project)
+    task = task_from_sg_path.task_from_sg_path(sg, obj.work_path)
     if not task:
         logger.warning("No matched task")
         return
-    sg = tk.tk.shotgun
-    sg.update("Task", task["id"], {"sg_status_list": "rev", "sg_workfile": obj.work_path})
-    sg.upload_thumbnail("Task", task["id"], obj.image_path)
+    sg.update_task(task, sg_status_list="rev", sg_workfile=obj.work_path)
+    sg.upload_thumbnail(task, obj.image_path)
 
 
 def main():

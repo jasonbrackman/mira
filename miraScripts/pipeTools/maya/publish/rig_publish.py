@@ -4,7 +4,7 @@ import logging
 import maya.cmds as mc
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import open_file, quit_maya, delete_layer
-from miraLibs.pipeLibs.pipeMaya import get_model_name, publish_to_db, rename_pipeline_shape
+from miraLibs.pipeLibs.pipeMaya import get_model_name, rename_pipeline_shape
 from miraLibs.mayaLibs import export_selected, import_load_remove_unload_ref
 
 
@@ -28,9 +28,6 @@ def main():
     mc.select(rig_group, r=1)
     export_selected.export_selected(publish_path)
     logger.info("Export %s to %s" % (rig_group, publish_path))
-    # add to database
-    publish_to_db.publish_to_db(project)
-    logger.info("Add to data base.")
     # quit maya
     quit_maya.quit_maya()
 

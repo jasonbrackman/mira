@@ -18,7 +18,7 @@ class TaskPublish(QtGui.QDialog):
     def setup_ui(self):
         self.setWindowFlags(QtCore.Qt.Window)
         self.setWindowTitle("Task Publish")
-        self.resize(700, 400)
+        self.resize(800, 600)
         main_layout = QtGui.QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         self.common_widget = CommonForm()

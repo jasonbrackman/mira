@@ -10,6 +10,7 @@ from miraLibs.pipeLibs import pipeMira, pipeFile, get_logger, pipeHistory
 from miraLibs.pyLibs import join_path, Path
 from miraLibs.sgLibs import Sg
 from miraLibs.pipeLibs.pipeMaya import get_current_project
+from miraLibs.pipeLibs.pipeSg import create_filesystem_structure
 
 
 class RunCommandThread(QtCore.QThread):
@@ -292,6 +293,8 @@ class TaskManager(task_start_ui.TaskStartUI):
         try:
             self.__sg.sg.update("Task", current_task["id"], update_dict)
             self.__logger.info("update task done.")
+            create_filesystem_structure.create_filesystem_structure(file_name)
+            self.__logger.info("create file system structure done.")
         except RuntimeError as e:
             self.__logger.error(str(e))
 

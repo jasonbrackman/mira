@@ -105,6 +105,7 @@ QListWidget, QListView
     border: 1px solid #181818;
     border-radius: 8px;
     background:#303030;
+    /*margin: 5px;*/
 }
 
 QListWidget::selected, QListView::selected
@@ -221,97 +222,92 @@ QScrollArea
     border: 1px solid #181818;
 }
 
-QScrollBar::add-page:vertical,QScrollBar::sub-page:vertical,QScrollBar::add-page:horizontal,QScrollBar::sub-page:horizontal
+QScrollBar::add-page:vertical,QScrollBar::sub-page:vertical
 {
-    background-color: #181818;
+    background-color: #111111;
 }
 
-QScrollBar:horizontal, QScrollBar:vertical
+QScrollBar::add-page:horizontal,QScrollBar::sub-page:horizontal
 {
-     background: #181818;
-     height: 13px;
+    background-color: #111111;
+}
+
+QScrollBar:horizontal
+{
+     background: #111111;
+     height: 8px;
      margin: 0px 18px 0px 18px;
+     border:0px;
+}
+
+QScrollBar:vertical
+{
+     background: #111111;
+     width: 8px;
+     margin:10px 0px 10px 0px;
      border:0px;
 }
 
 QScrollBar::handle:horizontal
 {
      background:#454545;
-     min-width: 10px;
-     border-radius: 5px;
+     min-width: 4px;
+     max-width: 15px;
+     border-radius: 2px;
 }
+
+QScrollBar::handle:vertical
+{
+     background:#454545;
+     min-height: 4px;
+     max-height: 15px;
+     border-radius:2px;
+}
+
 
 QScrollBar::handle:horizontal:hover
 {
-     background:#505050;
+     background:#666666;
+}
+
+QScrollBar::handle:vertical:hover
+{
+     background:#666666;
 }
 
 QScrollBar::add-line:horizontal
 {
-     background: #404040;
-     width: 20px;
+     background: #353535;
+     width: 0px;
      subcontrol-position: right;
      subcontrol-origin: margin;
 }
 
 QScrollBar::sub-line:horizontal
 {
-     background: #404040;
-     width: 20px;
+     background: #353535;
+     width: 0px;
      subcontrol-position: left;
      subcontrol-origin: margin;
 }
 
-QScrollBar:vertical
-{
-     background: #181818;
-     width: 13px;
-     margin:10px 0px 10px 0px;
-     border:0px;
-}
-QScrollBar::handle:vertical
-{
-
-     background:#454545;
-     min-height: 20px;
-     border-radius:5px;
-}
-
-QScrollBar::handle:vertical:hover
-{
-     background:#505050;
-}
-
 QScrollBar::sub-line:vertical
 {
+    background: #353535;
     subcontrol-origin:margin;
     subcontrol-position: top;
-    height : 20px;
+    height : 0px;
     border:0px;
-}
-
-QScrollBar::up-arrow:vertical
-{
-    subcontrol-origin:margin;
-    background-color:#404040;
-    height:20px;
 }
 
 QScrollBar::add-line:vertical
 {
+    background: #353535;
     subcontrol-origin:margin;
     subcontrol-position: bottom;
-    height : 20px;
+    height : 0px;
     border:0px;
 }
-
-QScrollBar::down-arrow:vertical
-{
-    subcontrol-origin:margin;
-    background-color:#404040;
-    height:20px;
-}
-
 QTableView, QTreeView{
     color: #DDDDDD;
     gridline-color: #555555;
