@@ -20,7 +20,7 @@ def main():
     create_group.create_group(poly_group, model_name)
     backup_group = "%s_%s_BACKUP" % (asset_type_short_name, asset_name)
     create_group.create_group(backup_group, model_name)
-    if asset_type == "character":
+    if asset_type == "Character":
         hair_mdl_grp = "hair_model_grp"
         create_group.create_group(hair_mdl_grp, backup_group)
         brow_grp = "brow_grp"

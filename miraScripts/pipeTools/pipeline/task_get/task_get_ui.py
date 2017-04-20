@@ -120,7 +120,7 @@ class TaskGetUI(QtGui.QDialog):
         task_widget.addTab(my_task_widget, "My Tasks")
         my_task_layout = QtGui.QVBoxLayout(my_task_widget)
         self.filter_le = ButtonLineEdit()
-        self.final_checkbox = QtGui.QCheckBox("final")
+        self.final_checkbox = QtGui.QCheckBox("Complete")
         self.final_checkbox.setChecked(False)
         self.task_view = QtGui.QTreeView()
         my_task_layout.addWidget(self.filter_le)

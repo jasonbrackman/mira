@@ -77,13 +77,9 @@ class Publish(object):
 
 def main():
     work_file = sys.argv[1]
-    if len(sys.argv) == 3:
-        change_task = sys.argv[2]
-        p = Publish(work_file, change_task)
-        p.main()
-    elif len(sys.argv) == 2:
-        p = Publish(work_file)
-        p.main()
+    change_task = sys.argv[2]
+    p = Publish(work_file, change_task)
+    p.main()
 
 
 if __name__ == "__main__":

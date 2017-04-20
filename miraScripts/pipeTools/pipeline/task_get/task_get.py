@@ -213,7 +213,7 @@ class LeafFilterProxyModel(QtGui.QSortFilterProxyModel):
     def filter_accepts_row_itself(self, row_num, parent):
         final_index = self.sourceModel().index(row_num, 2, parent)
         index_data = final_index.data()
-        is_final = "status:  fin" not in index_data if index_data else False
+        is_final = "status:  cmpt" not in index_data if index_data else False
         filter_result = super(LeafFilterProxyModel, self).filterAcceptsRow(row_num, parent)
         if self.final_checked:
             return filter_result
@@ -324,10 +324,13 @@ class TaskGet(task_get_ui.TaskGetUI):
         sequence_nodes = list()
         for task in my_tasks:
             if task["entity"]["type"] == "Asset":
+                asset_type_names = [node.name for node in asset_type_nodes]
                 asset_type_name = task["entity.Asset.sg_asset_type"]
-                if asset_type_name not in asset_type_nodes:
+                if asset_type_name not in asset_type_names:
                     asset_type_node = AssetTypeNode(asset_type_name, asset_entity_node)
-                asset_type_nodes.append(asset_type_name)
+                    asset_type_nodes.append(asset_type_node)
+                else:
+                    asset_type_node = [node for node in asset_type_nodes if node.name == asset_type_name][0]
                 asset_name = task["entity.Asset.code"]
                 step = task["step.Step.short_name"]
                 task_name = task["content"]
@@ -335,10 +338,13 @@ class TaskGet(task_get_ui.TaskGetUI):
                 priority = task["sg_priority_1"]
                 asset_node = AssetNode(asset_name, step, task_name, status, priority, asset_type_node)
             else:
+                sequence_names = [node.name for node in sequence_nodes]
                 sequence_name = task["entity.Shot.sg_sequence"]["name"]
-                if sequence_name not in sequence_nodes:
+                if sequence_name not in sequence_names:
                     sequence_node = SequenceNode(sequence_name, shot_eneity_node)
-                sequence_nodes.append(sequence_node)
+                    sequence_nodes.append(sequence_node)
+                else:
+                    sequence_node = [node for node in sequence_nodes if node.name == sequence_name][0]
                 shot = task["entity.Shot.code"]
                 step = task["step.Step.short_name"]
                 task_name = task["content"]

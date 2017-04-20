@@ -348,12 +348,11 @@ class ForegroundRender(QtGui.QDialog):
                 else:
                     frame_range = self.maya.get_default_frame_range()
                     frames = get_range_data.get_range_data(frame_range)
-                progress_bar.setRange(0, len(frames)-1)
+                progress_bar.setRange(0, len(frames))
                 for frame_index, frame in enumerate(frames):
                     if mc.progressWindow(query=1, isCancelled=1):
                         print "Interrupt by press Esc."
                         break
-                    progress_bar.setValue(frame_index)
                     mc.RenderViewWindow()
                     mel.eval("setTestResolutionVar(1)")
                     mc.currentTime(frame)
@@ -361,6 +360,7 @@ class ForegroundRender(QtGui.QDialog):
                     mel.eval('renderWindowRenderCamera render renderView ' + camera)
                     self.maya.copy_from_temp(current_frame_render_path)
                     print "render to %s" % current_frame_render_path
+                    progress_bar.setValue(frame_index+1)
         mc.progressWindow(endProgress=1)
         if self.shut_down_check.isChecked():
             os.system("shutdown -s -t 60")
