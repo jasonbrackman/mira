@@ -1,1 +1,1 @@
-+ MAYAVERSION:2016 PLATFORM:win64 miraEnv 1.0.0 E:\miraSG\miraEnv\maya
++ MAYAVERSION:2016 PLATFORM:win64 miraEnv 1.0.0 Z:\miraSG\miraEnv\maya
