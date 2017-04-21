@@ -21,7 +21,7 @@ sct:
   maya_path: "C:/tools/Autodesk/Maya2016/bin/maya.exe"
   mayabatch_path: "C:/tools/Autodesk/Maya2016/bin/mayabatch.exe"
   playblast_percent: 50
-  primary: "W:/"
+  primary: "W:"
   task_log_dir: "{primary}/sct/log"
   priority: ["A", "B", "C", "D"]
 
