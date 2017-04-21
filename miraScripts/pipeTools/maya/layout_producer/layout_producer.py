@@ -127,7 +127,7 @@ class CollectAssetsThread(QtCore.QThread):
         for asset_name in asset_names:
             image_path = None
             publish_path = None
-            if asset_type in ["environment"]:
+            if asset_type in ["Environment"]:
                 category = "lowMld" if self.low else "mdl"
                 asset_image_dir = join_path.join_path2(self.__asset_type_dir, asset_name, category, "_image")
                 asset_publish_dir = join_path.join_path2(self.__asset_type_dir, asset_name, category, "_publish")
