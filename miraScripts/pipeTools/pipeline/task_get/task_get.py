@@ -300,6 +300,7 @@ class TaskGet(task_get_ui.TaskGetUI):
             work_engine_dir = join_path.join_path2(work_dir, self.__run_app)
             self.local_file_widget.set_dir(work_engine_dir)
             self.update_task_status(file_path)
+            self.file_widget.setCurrentIndex(0)
         except RuntimeError as e:
             logging.error(str(e))
 

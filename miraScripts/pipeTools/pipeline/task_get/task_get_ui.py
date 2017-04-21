@@ -127,16 +127,16 @@ class TaskGetUI(QtGui.QDialog):
         my_task_layout.addWidget(self.final_checkbox)
         my_task_layout.addWidget(self.task_view)
 
-        file_widget = QtGui.QTabWidget()
+        self.file_widget = QtGui.QTabWidget()
         self.local_file_widget = FileTreeView("local")
         self.work_file_widget = FileTreeView("work")
         self.publish_file_widget = FileTreeView("publish")
-        file_widget.addTab(self.local_file_widget, "Local")
-        file_widget.addTab(self.work_file_widget, "Working")
-        file_widget.addTab(self.publish_file_widget, "Publishes")
+        self.file_widget.addTab(self.local_file_widget, "Local")
+        self.file_widget.addTab(self.work_file_widget, "Working")
+        self.file_widget.addTab(self.publish_file_widget, "Publishes")
 
         main_splitter.addWidget(task_widget)
-        main_splitter.addWidget(file_widget)
+        main_splitter.addWidget(self.file_widget)
 
         btn_layout = QtGui.QHBoxLayout()
         self.open_btn = QtGui.QPushButton("Open")
