@@ -32,11 +32,11 @@ sct:
   maya_asset_video: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_video/{engine}/{project}_{asset_name}_{step}_v{version}.mov"
   maya_asset_topology: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_topology/{engine}/{project}_{asset_name}_{step}_v{version}.json"
   maya_asset_gpu: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_gpu/{engine}/{project}_{asset_name}_{step}_v{version}.abc"
-  maya_asset_other: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_other"
+  maya_asset_other: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_other/v{version}"
 
   shot_template: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/{area}/{engine}/{project}_{sequence}_{shot}_{step}_v{version}.{ext}"
   maya_shot_work: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/_workarea/{project}_{sequence}_{shot}_{step}_v{version}.mb"
   maya_shot_image: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/_image/{project}_{sequence}_{shot}_{step}_v{version}.png"
   maya_shot_video: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/_video/{project}_{sequence}_{shot}_{step}_v{version}.mov"
   maya_shot_publish: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/_publish/{project}_{sequence}_{shot}_{step}_v{version}.mb"
-  maya_shot_other: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/_other"
+  maya_shot_other: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/_other/v{version}"
