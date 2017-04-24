@@ -63,37 +63,11 @@ def get_playblast_percent(project_name):
 def get_primary_dir(project_name):
     primary_dir = get_site_value(project_name, "primary")
     return primary_dir
-# ******************************get step value****************************** #
-
-
-def get_step():
-    category_conf_path = join_path.join_path2(conf_dir, "step.yml")
-    yml_data = yml.get_yaml_data(category_conf_path)
-    return yml_data
-
-
-def get_asset_step():
-    step_data = get_step()
-    asset_step_str = step_data["asset"]
-    asset_steps = asset_step_str.split(",")
-    return asset_steps
-
-
-def get_shot_step():
-    step_data = get_step()
-    shot_step_str = step_data["shot"]
-    shot_steps = shot_step_str.split(",")
-    return shot_steps
-
-
-def get_scene_step():
-    step_data = get_step()
-    shot_step_str = step_data["scene"]
-    shot_steps = shot_step_str.split(",")
-    return shot_steps
 
 
 # ******************************get project value****************************** #
+
+
 def get_project_value():
     project_conf_dir = join_path.join_path2(conf_dir, "projects.yml")
     yml_data = yml.get_yaml_data(project_conf_dir)

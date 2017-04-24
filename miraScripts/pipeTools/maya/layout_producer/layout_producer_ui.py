@@ -71,7 +71,7 @@ class LayoutProducerUI(QtGui.QDialog):
         asset_layout = QtGui.QHBoxLayout(asset_group)
         self.asset_btn_grp = QtGui.QButtonGroup()
         self.asset_btn_grp.setExclusive(True)
-        for asset_type in ["character", "prop", "environment"]:
+        for asset_type in ["Character", "Prop", "Environment"]:
             self.asset_type_check = QtGui.QCheckBox(asset_type)
             self.asset_btn_grp.addButton(self.asset_type_check)
             asset_layout.addWidget(self.asset_type_check)
@@ -122,12 +122,10 @@ class LayoutProducerUI(QtGui.QDialog):
         btn_layout = QtGui.QHBoxLayout()
         self.reference_all_btn = QtGui.QPushButton("Reference All")
         self.reference_sel_btn = QtGui.QPushButton("Reference Selected")
-        self.cancel_btn = QtGui.QPushButton("Cancel")
         btn_layout.setSpacing(6)
         btn_layout.addStretch()
         btn_layout.addWidget(self.reference_all_btn)
         btn_layout.addWidget(self.reference_sel_btn)
-        btn_layout.addWidget(self.cancel_btn)
 
         main_layout.addLayout(project_layout)
         main_layout.addWidget(asset_group)

@@ -183,7 +183,6 @@ class LayoutProducer(layout_producer_ui.LayoutProducerUI):
         self.asset_btn_grp.buttonClicked.connect(self.show_asset_icons)
         self.low_check.stateChanged.connect(self.show_asset_icons)
         self.add_btn.clicked.connect(self.add_to_include)
-        self.cancel_btn.clicked.connect(self.close)
         self.reference_all_btn.clicked.connect(functools.partial(self.reference, True))
         self.reference_sel_btn.clicked.connect(functools.partial(self.reference, False))
         self.__show_thread.signal.connect(self.collect_assets)

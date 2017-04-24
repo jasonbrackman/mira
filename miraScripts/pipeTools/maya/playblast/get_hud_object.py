@@ -20,7 +20,7 @@ def get_project():
 def get_shot_name():
     try:
         obj = pipeFile.PathDetails.parse_path()
-        if obj.path_type == "shot":
+        if obj.entity_type == "Shot":
             return "_".join([obj.seq, obj.shot])
         else:
             return obj.asset_name

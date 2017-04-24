@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import shutil
 import getpass
 from PySide import QtGui, QtCore
 from ..libs import get_icon_path
@@ -92,11 +93,14 @@ class UserDisplay(QtGui.QWidget):
         self.menu.exec_(QtGui.QCursor.pos())
 
     def set_user_picture(self):
-        path, filter = QtGui.QFileDialog.getOpenFileName(self, "User Picture", "", "Image Files (*.png)")
+        path, _filter = QtGui.QFileDialog.getOpenFileName(self, "User Picture", "", "Image Files (*.png)")
         if not path:
             return
-        self.set_user_pixmap(path)
-        data = dict(user_icon_path=path)
+        conf_dir = os.path.dirname(get_conf_path.get_app_conf_dir())
+        icon_path = os.path.join(conf_dir, os.path.basename(path)).replace("\\", "/")
+        shutil.copy(path, icon_path)
+        self.set_user_pixmap(icon_path)
+        data = dict(user_icon_path=icon_path)
         user_icon_conf_path = str(self.get_user_icon_conf_path())
         cp = ConfParser(user_icon_conf_path)
         cp.parse().set(data)

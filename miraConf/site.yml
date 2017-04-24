@@ -24,6 +24,8 @@ sct:
   primary: "W:"
   task_log_dir: "{primary}/sct/log"
   priority: ["A", "B", "C", "D"]
+  asset_steps: "art,lowMdl,lowRig,mdl,rig,shd,hair"
+  shot_steps: "set,lay,anim,cfx,vfx,lgt,comp"
 
   asset_template: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/{area}/{engine}/{project}_{asset_name}_{step}_v{version}.{ext}"
   maya_asset_work: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_workarea/{engine}/{project}_{asset_name}_{step}_v{version}.mb"
