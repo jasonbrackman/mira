@@ -92,6 +92,7 @@ def init_user_setup():
     init_scene_break_down()
     add_system_python_path_env()
     open_port()
+    logger.info(mc.pluginInfo(query=True, listPlugins=True))
     # remove_invalid_clipboard_data()
 
 
@@ -155,7 +156,7 @@ def open_port():
     import subprocess
     from miraScripts.pipeTools.pipeline.port_operation import add_user_info_to_db
     add_user_info_to_db.add_user_info_to_db()
-    open_port_path = os.path.join(miraCore.mira_dir, "miraScripts/pipeTools/port_operation/run_open_port.py")
+    open_port_path = os.path.join(miraCore.mira_dir, "miraScripts/pipeTools/pipeline/port_operation/run_open_port.py")
     open_port_path = open_port_path.replace("\\", "/")
     if not os.path.isfile(open_port_path):
         return
