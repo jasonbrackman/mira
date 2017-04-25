@@ -92,7 +92,6 @@ def init_user_setup():
     init_scene_break_down()
     add_system_python_path_env()
     open_port()
-    logger.info(mc.pluginInfo(query=True, listPlugins=True))
     # remove_invalid_clipboard_data()
 
 
