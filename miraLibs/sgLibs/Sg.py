@@ -83,12 +83,28 @@ class Sg(object):
                                      [["entity", "is", entity_info],
                                       ["step", "is", step_info],
                                       ["content", "is", task_name]],
-                                     ["sg_workfile"])
+                                     ["sg_workfile", "entity"])
         return task_info
 
     def get_user_by_name(self, name):
         user = self.sg.find_one("HumanUser", [["name", "is", name]], ["email"])
         return user
+
+    def get_current_user(self):
+        import getpass
+        user_name = getpass.getuser()
+        return self.get_user_by_name(user_name)
+
+    def get_leader(self, user_info):
+        user_filter = [["id", "is", user_info["id"]]]
+        user = self.sg.find_one("HumanUser", user_filter, ["department"])
+        if not user. has_key("department"):
+            return
+        user_dep_info = user["department"]
+        user_dep_name = user_dep_info["name"]
+        leader_dep_name = "%sLeader" % user_dep_name
+        leaders = self.sg.find("HumanUser", [["department", "name_is", leader_dep_name]], ["email", "name"])
+        return leaders
 
     def get_my_tasks(self, user=None):
         if not user:

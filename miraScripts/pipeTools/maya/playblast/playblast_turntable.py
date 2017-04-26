@@ -32,3 +32,4 @@ def playblast_turntable():
     Copy.copy(local_video_path, video_path)
     logger.info("Copy %s >> %s" % (local_video_path, video_path))
     mc.lookThru("persp")
+    return video_path
