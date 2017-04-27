@@ -7,17 +7,17 @@ from miraLibs.mayaLibs import get_maya_win, save_as
 from miraLibs.mayaLibs import get_scene_name
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.sgLibs import Sg
-from miraScripts.pipeTools.maya.playblast import playblast_turntable
-from miraScripts.pipeTools.maya.playblast import playblast_shot
+import playblast_turntable
+import playblast_shot
 
-OBJECT_NAME = "Upload Movie"
+OBJECT_NAME = "Playblast"
 
 
 class UploadMovie(QtGui.QDialog):
     def __init__(self, parent=None):
         super(UploadMovie, self).__init__(parent)
         self.setObjectName(OBJECT_NAME)
-        self.setWindowTitle("Upload Movie to Shotgun")
+        self.setWindowTitle("Playblast")
         self.setWindowFlags(QtCore.Qt.Window)
         self.resize(400, 300)
         main_layout = QtGui.QVBoxLayout(self)
@@ -26,7 +26,7 @@ class UploadMovie(QtGui.QDialog):
         label.setText("<font size=4><b>Write some commit below:</font></b>")
         self.te = QtGui.QTextEdit()
         btn_layout = QtGui.QHBoxLayout()
-        self.upload_btn = QtGui.QPushButton("Upload")
+        self.upload_btn = QtGui.QPushButton("Playblast")
         btn_layout.addStretch()
         btn_layout.addWidget(self.upload_btn)
         main_layout.addWidget(label)
@@ -36,9 +36,10 @@ class UploadMovie(QtGui.QDialog):
 
     def do_upload(self):
         description = self.te.toPlainText()
-        upload_movie(description)
+        result = upload_movie(description)
+        if result:
+            QtGui.QMessageBox.information(None, "Warming Tip", "Upload done, congratulations.")
         self.close()
-        QtGui.QMessageBox.information(None, "Warming Tip", "Upload done, congratulations.")
 
 
 def upload_movie(description):
@@ -84,8 +85,10 @@ def upload_movie(description):
                 'user': user}
         result = sg.sg.create('Version', data)
         sg.sg.upload("Version", result["id"], video_path, "sg_uploaded_movie")
+        return True
     else:
         logger.warning("May playblast wrong.")
+        return False
 
 
 def main():

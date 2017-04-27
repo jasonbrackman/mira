@@ -57,6 +57,8 @@ class PathDetails(object):
         else:
             template = get_site_value(project, "shot_template")
         context_dict = opposite_format.opposite_format(template, path)
+        if not context_dict:
+            return x
         x.__dict__.update(context_dict)
         if x.area == "_workarea":
             x.__is_working_file = True

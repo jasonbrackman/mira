@@ -15,11 +15,11 @@ pipeline_shelf:
 #    order: 5
 #  screen_shot:
 #    order: 6
-#  scene_break_down:
-#    order: 7
-#  playblast:
-#    order: 8
-  preflight:
+  scene_break_down:
     order: 50
-  qcpublish:
+  playblast:
+    order: 55
+  preflight:
     order: 60
+  qcpublish:
+    order: 70

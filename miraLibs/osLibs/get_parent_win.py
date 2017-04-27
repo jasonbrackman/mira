@@ -34,5 +34,6 @@ def get_parent_win():
     elif engine == "nuke":
         parent_win = get_nuke_win()
     else:
+        # todo
         print "add method to how to get main window."
     return parent_win

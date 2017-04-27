@@ -13,8 +13,8 @@ def main():
     asset_type = obj.asset_type
     asset_type_short_name = obj.asset_type_short_name
     asset_name = obj.asset_name
-    step = obj.step
-    lowRig_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "lowRig", step)
+    task = obj.task
+    lowRig_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "lowRig", task)
     if not os.path.isfile(lowRig_publish_file):
         lowRig_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "lowRig", "lowRig")
     mdl_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "mdl", "mdl")

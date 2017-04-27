@@ -6,7 +6,7 @@ from miraLibs.pipeLibs.get_task_name import get_task_name
 import miraCore
 from miraLibs.pyLibs import join_path
 from miraLibs.pipeLibs import pipeMira, pipeFile, get_logger
-from miraLibs.sgLibs import Sg
+from miraLibs.sgLibs import Tk, Sg
 from miraLibs.pipeLibs.pipeSg import task_from_sg_path
 
 
@@ -55,6 +55,7 @@ class Publish(object):
             return
         # set task sg_publishfile
         self.logger.info("start post publish...")
+        tk = Tk.Tk(self.project)
         sg = Sg.Sg(self.project)
         current_task = task_from_sg_path.task_from_sg_path(sg, self.work_file)
         self.logger.info("Current Task: %s" % current_task)
@@ -64,6 +65,8 @@ class Publish(object):
         if self.change_task_status:
             sg.update_task_status(current_task, "cmpt")
             self.logger.info("update task sg_status_list: cmpt")
+        # register publish file
+        tk.publish_file(self.obj.publish_path)
         self.logger.info("\n\nAll Done.")
 
     def main(self):
