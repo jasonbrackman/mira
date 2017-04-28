@@ -117,7 +117,7 @@ def is_local_file(path):
         return True
 
 
-def post_publish(obj):
+def post_qcpublish(obj):
     from miraLibs.sgLibs import Sg
     from miraLibs.pipeLibs.pipeSg import task_from_sg_path
     sg = Sg.Sg(obj.project)
@@ -191,7 +191,7 @@ def main():
     progress_dialog.set_value(85)
     # write root task id to database
     progress_dialog.set_text("Add to database.")
-    post_publish(obj)
+    post_qcpublish(obj)
     logger.info("PostQCPublish successful.")
     # pop message
     progress_dialog.set_value(100)

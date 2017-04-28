@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pymel.core as pm
 import load_plugin
+from get_file_type import get_file_type
 
 
 def create_reference(path, namespace_name=":", allow_repeat=False, get_group=False):
@@ -37,17 +38,6 @@ def create_reference(path, namespace_name=":", allow_repeat=False, get_group=Fal
                     pm.system.loadReference(path)
     if get_group:
         return pm.referenceQuery(result.refNode, dagPath=1, nodes=1)[0]
-
-
-def get_file_type(path):
-    file_type = None
-    if path.endswith(".abc"):
-        file_type = "Alembic"
-    elif path.endswith(".mb"):
-        file_type = "mayaBinary"
-    elif path.endswith(".ma"):
-        file_type = "mayaAscii"
-    return file_type
 
 
 if __name__ == "__main__":

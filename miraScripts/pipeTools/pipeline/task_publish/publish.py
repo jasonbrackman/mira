@@ -55,7 +55,6 @@ class Publish(object):
             return
         # set task sg_publishfile
         self.logger.info("start post publish...")
-        tk = Tk.Tk(self.project)
         sg = Sg.Sg(self.project)
         current_task = task_from_sg_path.task_from_sg_path(sg, self.work_file)
         self.logger.info("Current Task: %s" % current_task)
@@ -66,8 +65,14 @@ class Publish(object):
             sg.update_task_status(current_task, "cmpt")
             self.logger.info("update task sg_status_list: cmpt")
         # register publish file
-        tk.publish_file(self.obj.publish_path)
-        self.logger.info("\n\nAll Done.")
+        self.logger.info("publish path: %s" % self.obj.publish_path)
+        try:
+            tk = Tk.Tk(self.project)
+            self.logger.info("%s" % repr(tk.get_context_from_path(self.obj.publish_path)))
+            tk.publish_file(self.obj.publish_path)
+        except RuntimeError as e:
+            self.logger.error(str(e))
+        self.logger.info("All Done.")
 
     def main(self):
         if self.engine == "maya":
@@ -85,6 +90,7 @@ def main():
         p = Publish(work_file, change_task)
         p.main()
     elif len(sys.argv) == 2:
+        print "yes"
         p = Publish(work_file)
         p.main()
 
