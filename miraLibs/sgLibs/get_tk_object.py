@@ -39,3 +39,23 @@ def tk_connect(api_script, api_key):
     # print "User is "%s"" % user
     # Tells Toolkit which user to use for connecting to Shotgun.
     sgtk.set_authenticated_user(user)
+
+
+def tk_connect_bak(api_script, api_key, host):
+    """
+    :param api_script: shotgun script name
+    :param api_key: key
+    :param host: host url
+    :return:
+    """
+    sa = sgtk.authentication.ShotgunAuthenticator()
+
+    # Use the authenticator to create a user object. This object
+    # identifies a Shotgun user or script and also wraps around
+    # a Shotgun API instance which is associated with that user.
+    user = sa.create_script_user(api_script=api_script,
+                                 api_key=api_key,
+                                 host=host)
+
+    # tell the Toolkit Core API which user to use
+    sgtk.set_authenticated_user(user)

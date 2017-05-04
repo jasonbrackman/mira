@@ -20,6 +20,7 @@ class Tk(object):
     def publish_file(self, publish_file_path, status="cmpt", file_type_name="Maya Scene", description="", user=None):
         from miraLibs.pyLibs import get_version_number
         import sgtk
+        self.tk.synchronize_filesystem_structure()
         version_number = get_version_number.get_version_number(publish_file_path)
         args = {
             "tk": self.tk,
