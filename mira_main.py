@@ -91,6 +91,7 @@ def init_user_setup():
     init_render_setting()
     init_scene_break_down()
     add_system_python_path_env()
+    init_shotgun()
     open_port()
     # remove_invalid_clipboard_data()
 
@@ -187,6 +188,12 @@ def add_system_python_path_env():
         logger.info("add system python path env done.")
     except:
         logger.info("add system python path env failed.")
+
+
+def init_shotgun():
+    from miraScripts.pipeTools.maya.init_shotgun import init_shotgun
+    init_shotgun.main()
+    logger.info("Initialize shotgun done.")
 
 
 # ------------------------------------------------------------------------------------------#

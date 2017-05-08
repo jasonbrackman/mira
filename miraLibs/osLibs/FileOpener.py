@@ -75,6 +75,7 @@ class FileOpener(object):
         self.ext = os.path.splitext(self.path)[-1]
 
     def run(self):
+        opener = None
         if self.ext in [".ma", ".mb"]:
             opener = MayaOpener(self.path)
         else:
