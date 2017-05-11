@@ -72,7 +72,7 @@ def load_menu():
 
 
 def reload_shelves():
-    from miraScripts.pipeTools.maya.shelf import reload_shelves
+    from miraPipeline.maya.shelf import reload_shelves
     reload_shelves.main()
     logger.info("Reload shelves done.")
 
@@ -97,13 +97,13 @@ def init_user_setup():
 
 
 def init_maya_saver_timer():
-    from miraScripts.pipeTools.maya.maya_save_timer import maya_save_timer
+    from miraPipeline.maya.maya_save_timer import maya_save_timer
     maya_save_timer.maya_save_timer()
     logger.info("Initialize maya save timer done.")
 
 
 def init_scene_break_down():
-    from miraScripts.pipeTools.maya.scene_break_down import auto_tip_update
+    from miraPipeline.maya.scene_break_down import auto_tip_update
     auto_tip_update.auto_tip_update()
     logger.info("Initialize scene break down done.")
 
@@ -147,16 +147,16 @@ def load_plugins():
 
 
 def init_current_project():
-    from miraScripts.pipeTools.maya.switch_project import switch_project
+    from miraPipeline.maya.switch_project import switch_project
     switch_project.main()
     logger.info("Initialize current project done.")
 
 
 def open_port():
     import subprocess
-    from miraScripts.pipeTools.pipeline.port_operation import add_user_info_to_db
+    from miraPipeline.pipeline.port_operation import add_user_info_to_db
     add_user_info_to_db.add_user_info_to_db()
-    open_port_path = os.path.join(miraCore.mira_dir, "miraScripts/pipeTools/pipeline/port_operation/run_open_port.py")
+    open_port_path = os.path.join(miraCore.mira_dir, "miraPipeline/pipeline/port_operation/run_open_port.py")
     open_port_path = open_port_path.replace("\\", "/")
     if not os.path.isfile(open_port_path):
         return
@@ -191,7 +191,7 @@ def add_system_python_path_env():
 
 
 def init_shotgun():
-    from miraScripts.pipeTools.maya.init_shotgun import init_shotgun
+    from miraPipeline.maya.init_shotgun import init_shotgun
     init_shotgun.main()
     logger.info("Initialize shotgun done.")
 

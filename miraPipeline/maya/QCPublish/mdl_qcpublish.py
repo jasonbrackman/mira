@@ -3,7 +3,7 @@ import logging
 from miraLibs.pipeLibs.copy import Copy
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import get_scene_name, hierarchy_opt
-from miraScripts.pipeTools.maya.playblast import playblast_turntable
+from miraPipeline.maya.playblast import playblast_turntable
 from miraLibs.pipeLibs.pipeMaya import get_model_name
 
 

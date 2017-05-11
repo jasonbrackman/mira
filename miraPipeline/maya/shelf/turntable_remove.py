@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from miraScripts.pipeTools.maya.asset_turntable import remove_turntable
+from miraPipeline.maya.asset_turntable import remove_turntable
 
 
 def main():

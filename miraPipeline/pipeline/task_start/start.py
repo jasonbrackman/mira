@@ -24,8 +24,8 @@ class Start(object):
         return logger
 
     def maya_start(self):
-        script_dir = miraCore.get_scripts_dir()
-        start_dir = join_path.join_path2(script_dir, "pipeTools", self.engine, "start")
+        pipeline_dir = miraCore.get_pipeline_dir()
+        start_dir = join_path.join_path2(pipeline_dir, self.engine, "start")
         start_py = join_path.join_path2(start_dir, "%s_start.py" % self.obj.step)
         if not os.path.isfile(start_py):
             self.logger.error("%s is not an exist file" % start_py)

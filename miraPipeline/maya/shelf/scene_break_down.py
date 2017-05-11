@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pymel.core as pm
 from PySide import QtGui
-from miraScripts.pipeTools.maya.scene_break_down import scene_break_down
+from miraPipeline.maya.scene_break_down import scene_break_down
 
 
 def main():

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from miraScripts.pipeTools.maya.playblast import playblast_main
+from miraPipeline.maya.playblast import playblast_main
 reload(playblast_main)
 
 

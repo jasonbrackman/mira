@@ -6,7 +6,7 @@ import miraCore
 from PySide import QtGui
 from miraLibs.pyLibs import join_path
 from miraLibs.pipeLibs import pipeFile, pipeMira
-from miraScripts.pipeTools.pipeline.preflight import check_gui
+from miraPipeline.pipeline.preflight import check_gui
 from miraLibs.pipeLibs.pipeMaya import screen_shot
 from miraLibs.mayaLibs import get_scene_name, get_maya_win, save_as
 from miraLibs.pipeLibs.copy import Copy
@@ -98,8 +98,8 @@ def qcpublish_screen_shot(entity_type, image_path):
 
 
 def qcpublish(step):
-    script_dir = miraCore.get_scripts_dir()
-    publish_dir = join_path.join_path2(script_dir, "pipeTools", "maya", "QCPublish")
+    script_dir = miraCore.get_pipeline_dir()
+    publish_dir = join_path.join_path2(script_dir, "maya", "QCPublish")
     if publish_dir not in sys.path:
         sys.path.insert(0, publish_dir)
     step_publish = "{0}_qcpublish".format(step)

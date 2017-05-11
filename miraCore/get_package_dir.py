@@ -48,3 +48,7 @@ def get_bin_dir():
 
 def get_batch_dir():
     return get_package_dir("miraBatch")
+
+
+def get_pipeline_dir():
+    return get_package_dir("miraPipeline")

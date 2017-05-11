@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from miraScripts.pipeTools.pipeline.task_get import task_get
+from miraPipeline.pipeline.task_get import task_get
 reload(task_get)
 
 

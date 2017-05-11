@@ -2,7 +2,7 @@
 import logging
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import get_scene_name
-from miraScripts.pipeTools.maya.playblast import playblast_lay
+from miraPipeline.maya.playblast import playblast_lay
 from miraLibs.pipeLibs.copy import Copy
 
 

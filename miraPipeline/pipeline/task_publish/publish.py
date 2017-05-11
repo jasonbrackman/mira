@@ -26,8 +26,8 @@ class Publish(object):
 
     def maya_publish(self):
         # publish mayabatch cmd to deadline
-        script_dir = miraCore.get_scripts_dir()
-        publish_dir = join_path.join_path2(script_dir, "pipeTools", self.engine, "publish")
+        pipeline_dir = miraCore.get_pipeline_dir()
+        publish_dir = join_path.join_path2(pipeline_dir, self.engine, "publish")
         publish_py = join_path.join_path2(publish_dir, "%s_publish.py" % self.obj.step)
         if not os.path.isfile(publish_py):
             self.logger.error("%s is not an exist file" % publish_py)

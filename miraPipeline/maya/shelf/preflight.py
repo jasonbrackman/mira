@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from miraScripts.pipeTools.pipeline.preflight import check_gui
+from miraPipeline.pipeline.preflight import check_gui
 reload(check_gui)
 
 

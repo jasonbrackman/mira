@@ -5,7 +5,7 @@ reload(ui)
 import mayaOpt
 reload(mayaOpt)
 from miraLibs.mayaLibs import get_maya_win
-from miraLibs.pipeLibs import pipeMira
+from miraLibs.pipeLibs import pipeMira, get_current_project
 
 
 class ComboModel(QtCore.QAbstractListModel):
@@ -192,15 +192,17 @@ class LeafFilterProxyModel(QtGui.QSortFilterProxyModel):
 
 
 class ReplaceAsset(ui.ReplaceAssetUI):
-    def __init__(self, parent=None):
+    def __init__(self, project, parent=None):
         super(ReplaceAsset, self).__init__(parent)
+        self.project = project
         self.init()
         self.set_model()
         self.set_signals()
 
     def init(self):
-        asset_step_list = pipeMira.get_asset_step()
-        asset_step_list.remove("art")
+        asset_step_list = pipeMira.get_site_value(self.project, "asset_steps").split(",")
+        if "art" in asset_step_list:
+            asset_step_list.remove("art")
         src_cbox_model = ComboModel(asset_step_list, self.src_cbox)
         dst_cbox_model = ComboModel(asset_step_list, self.dst_cbox)
         self.src_cbox.setModel(src_cbox_model)
@@ -294,8 +296,9 @@ class ReplaceAsset(ui.ReplaceAssetUI):
 
 
 def main():
+    project = get_current_project.get_current_project()
     import maya.cmds as mc
     if mc.window("Replace Asset", q=1, ex=1):
         mc.deleteUI("Replace Asset")
-    ra = ReplaceAsset(get_maya_win.get_maya_win("PySide"))
+    ra = ReplaceAsset(project, get_maya_win.get_maya_win("PySide"))
     ra.show()
