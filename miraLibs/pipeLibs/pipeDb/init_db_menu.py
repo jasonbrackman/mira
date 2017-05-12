@@ -1,11 +1,10 @@
-from miraLibs.sgLibs import get_tk_object
-import sgtk
 from miraLibs.pipeLibs import pipeFile
 import task_from_path
 from miraLibs.osLibs import get_engine, get_scene_name
 
 
 def start_engine(tk, path, template_name):
+    import sgtk
     try:
         template = tk.templates[template_name]
     except:
@@ -22,12 +21,9 @@ def start_engine(tk, path, template_name):
         return True
 
 
-def init_shotgun_menu(*args):
+def init_shotgun_menu(project):
+    from miraLibs.sgLibs import get_tk_object
     path = get_scene_name.get_scene_name()
-    obj = pipeFile.PathDetails.parse_path(path)
-    if not obj:
-        return
-    project = obj.project
     tk = get_tk_object.get_tk_object(project)
     engine = get_engine.get_engine()
     if start_engine(tk, path, "%s_asset_local" % engine):
@@ -38,3 +34,15 @@ def init_shotgun_menu(*args):
         return
     if start_engine(tk, path, "%s_shot_work" % engine):
         return
+
+
+def init_db_menu(*args):
+    from miraLibs.pipeLibs import pipeMira
+    path = get_scene_name.get_scene_name()
+    obj = pipeFile.PathDetails.parse_path(path)
+    if not obj:
+        return
+    project = obj.project
+    database = pipeMira.get_site_value(project, "database")
+    if database == "shotgun":
+        init_shotgun_menu(project)

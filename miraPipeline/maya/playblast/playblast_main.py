@@ -6,7 +6,7 @@ import maya.cmds as mc
 from miraLibs.mayaLibs import get_maya_win, save_as
 from miraLibs.mayaLibs import get_scene_name
 from miraLibs.pipeLibs import pipeFile
-from miraLibs.sgLibs import Sg
+from miraLibs.dbLibs import db_api
 import playblast_turntable
 import playblast_shot
 
@@ -66,15 +66,15 @@ def upload_movie(description):
     logger.info("Playblast done")
     if video_path and os.path.isfile(video_path):
         save_as.save_as(next_version_file)
-        sg = Sg.Sg(project)
+        db = db_api.DbApi(project).db_obj
     # entity_type, asset_type_or_sequence, asset_or_shot, step, task_name
-        current_task = sg.get_current_task(entity_type, asset_type_or_sequence, asset_or_shot, step, task)
+        current_task = db.get_current_task(entity_type, asset_type_or_sequence, asset_or_shot, step, task)
         logger.info("Current Task: %s" % current_task)
         if not current_task:
             logger.warning("Task is None")
             return
-        project_info = sg.get_project_by_name()
-        user = sg.get_current_user()
+        project_info = db.get_project_by_name()
+        user = db.get_current_user()
         code = os.path.splitext(os.path.basename(video_path))[0]
         data = {'project': project_info,
                 'code': code,
@@ -83,8 +83,8 @@ def upload_movie(description):
                 'entity': current_task["entity"],
                 'sg_task': current_task,
                 'user': user}
-        result = sg.sg.create('Version', data)
-        sg.sg.upload("Version", result["id"], video_path, "sg_uploaded_movie")
+        result = db.create('Version', data)
+        db.upload("Version", result["id"], video_path, "sg_uploaded_movie")
         return True
     else:
         logger.warning("May playblast wrong.")

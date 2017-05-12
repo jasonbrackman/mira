@@ -10,7 +10,7 @@ from miraLibs.pipeLibs import pipeMira, pipeFile, get_logger, pipeHistory
 from miraLibs.pyLibs import join_path, Path
 from miraLibs.sgLibs import Sg
 from miraLibs.pipeLibs.pipeMaya import get_current_project
-from miraLibs.pipeLibs.pipeSg import create_filesystem_structure
+from miraLibs.pipeLibs.pipeDb import create_filesystem_structure
 
 
 class RunCommandThread(QtCore.QThread):

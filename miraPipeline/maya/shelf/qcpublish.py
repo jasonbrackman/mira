@@ -118,15 +118,15 @@ def is_local_file(path):
 
 
 def post_qcpublish(obj):
-    from miraLibs.sgLibs import Sg
-    from miraLibs.pipeLibs.pipeSg import task_from_sg_path
-    sg = Sg.Sg(obj.project)
-    task = task_from_sg_path.task_from_sg_path(sg, obj.work_path)
+    from miraLibs.dbLibs import db_api
+    from miraLibs.pipeLibs.pipeDb import task_from_db_path
+    db = db_api.DbApi(obj.project).db_obj
+    task = task_from_db_path.task_from_db_path(db, obj.work_path)
     if not task:
         logger.warning("No matched task")
         return
-    sg.update_task(task, sg_status_list="rev", sg_workfile=obj.work_path)
-    sg.upload_thumbnail(task, obj.image_path)
+    db.update_task(task, sg_status_list="rev", sg_workfile=obj.work_path)
+    db.upload_thumbnail(task, obj.image_path)
 
 
 def main():

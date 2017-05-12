@@ -17,6 +17,7 @@ SnowChildrenTest2:
 sct:
   vfx_cache_root_dir: "W:"
   local_root_dir: "D:"
+  database: "shotgun"
   resolution: "2048*858"
   maya_path: "C:/tools/Autodesk/Maya2016/bin/maya.exe"
   mayabatch_path: "C:/tools/Autodesk/Maya2016/bin/mayabatch.exe"

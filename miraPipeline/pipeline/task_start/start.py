@@ -6,8 +6,8 @@ from miraLibs.pipeLibs.get_task_name import get_task_name
 import miraCore
 from miraLibs.pyLibs import join_path
 from miraLibs.pipeLibs import pipeMira, pipeFile, get_logger
-from miraLibs.sgLibs import Sg
-from miraLibs.pipeLibs.pipeSg import task_from_sg_path, create_filesystem_structure
+from miraLibs.dbLibs import db_api
+from miraLibs.pipeLibs.pipeDb import task_from_db_path, create_filesystem_structure
 
 
 class Start(object):
@@ -18,15 +18,19 @@ class Start(object):
         self.engine = self.obj.engine
         self.logger = self.get_logger()
 
+    def get_start_py(self):
+        pipeline_dir = miraCore.get_pipeline_dir()
+        start_dir = join_path.join_path2(pipeline_dir, self.engine, "start")
+        start_py = join_path.join_path2(start_dir, "%s_start.py" % self.obj.step)
+        return start_py
+
     def get_logger(self):
         task_name = get_task_name(self.obj)
         logger = get_logger.get_logger(self.project, "create", task_name)
         return logger
 
     def maya_start(self):
-        pipeline_dir = miraCore.get_pipeline_dir()
-        start_dir = join_path.join_path2(pipeline_dir, self.engine, "start")
-        start_py = join_path.join_path2(start_dir, "%s_start.py" % self.obj.step)
+        start_py = self.get_start_py()
         if not os.path.isfile(start_py):
             self.logger.error("%s is not an exist file" % start_py)
             return
@@ -53,15 +57,16 @@ class Start(object):
             return
         # set task sg_startfile
         self.logger.info("start post start...")
-        sg = Sg.Sg(self.project)
-        current_task = task_from_sg_path.task_from_sg_path(sg, self.work_file)
+        db = db_api.DbApi(self.project).db_obj
+        # register the file path
+        current_task = task_from_db_path.task_from_db_path(db, self.work_file)
         create_filesystem_structure.create_filesystem_structure(self.work_file, engine="tk-%s" % self.engine)
         self.logger.info("Current Task: %s" % current_task)
         # update sg_workfile
-        sg.update_task(current_task, sg_workfile=self.work_file)
+        db.update_task(current_task, sg_workfile=self.work_file)
         self.logger.info("update task sg_workfile: %s" % self.work_file)
         # update sg_status_list
-        sg.update_task_status(current_task, "rdy")
+        db.update_task_status(current_task, "rdy")
         self.logger.info("update task sg_status_list: rdy")
         self.logger.info("\n\nALL Done!")
 

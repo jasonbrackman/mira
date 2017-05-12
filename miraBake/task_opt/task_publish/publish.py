@@ -7,7 +7,7 @@ import miraCore
 from miraLibs.pyLibs import join_path
 from miraLibs.pipeLibs import pipeMira, pipeFile, get_logger
 from miraLibs.sgLibs import Sg
-from miraLibs.pipeLibs.pipeSg import task_from_sg_path
+from miraLibs.pipeLibs.pipeDb import task_from_db_path
 
 
 class Publish(object):
@@ -56,7 +56,7 @@ class Publish(object):
         # set task sg_publishfile
         self.logger.info("start post publish...")
         sg = Sg.Sg(self.project)
-        current_task = task_from_sg_path.task_from_sg_path(sg, self.work_file)
+        current_task = task_from_db_path.task_from_sg_path(sg, self.work_file)
         self.logger.info("Current Task: %s" % current_task)
         sg.update_task(current_task, sg_publishfile=self.obj.publish_path)
         self.logger.info("update task sg_publishfile: %s" % self.obj.publish_path)

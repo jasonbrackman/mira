@@ -7,7 +7,7 @@ import miraCore
 from miraLibs.pyLibs import join_path
 from miraLibs.pipeLibs import pipeMira, pipeFile, get_logger
 from miraLibs.sgLibs import Sg
-from miraLibs.pipeLibs.pipeSg import task_from_sg_path, create_filesystem_structure
+from miraLibs.pipeLibs.pipeDb import task_from_db_path, create_filesystem_structure
 
 
 class Start(object):
@@ -54,7 +54,7 @@ class Start(object):
         # set task sg_startfile
         self.logger.info("start post start...")
         sg = Sg.Sg(self.project)
-        current_task = task_from_sg_path.task_from_sg_path(sg, self.work_file)
+        current_task = task_from_db_path.task_from_sg_path(sg, self.work_file)
         create_filesystem_structure.create_filesystem_structure(self.work_file, engine="tk-%s" % self.engine)
         self.logger.info("Current Task: %s" % current_task)
         # update sg_workfile

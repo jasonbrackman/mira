@@ -4,12 +4,12 @@ import logging
 from PySide import QtGui, QtCore
 import task_get_ui
 reload(task_get_ui)
-from miraLibs.sgLibs import Sg
+from miraLibs.dbLibs import db_api
 from miraLibs.pipeLibs.pipeMaya import get_current_project
 from miraLibs.pipeLibs import pipeMira, pipeHistory, pipeFile
 from miraLibs.pyLibs import copy, join_path
 from miraLibs.osLibs import get_engine, get_parent_win
-from miraLibs.pipeLibs.pipeSg import task_from_sg_path
+from miraLibs.pipeLibs.pipeDb import task_from_db_path
 
 
 class Node(object):
@@ -244,7 +244,7 @@ class TaskGet(task_get_ui.TaskGetUI):
         self.__logger = logging.getLogger("TaskGet")
         self.__project = get_current_project.get_current_project()
         self.__run_app = get_engine.get_engine()
-        self.__sg = Sg.Sg(self.__project)
+        self.__db = db_api.DbApi(self.__project).db_obj
         self.init()
         self.set_style()
         self.set_model()
@@ -305,12 +305,12 @@ class TaskGet(task_get_ui.TaskGetUI):
             logging.error(str(e))
 
     def update_task_status(self, file_path):
-        task = task_from_sg_path.task_from_sg_path(self.__sg, file_path)
-        self.__sg.update_task_status(task, "ip")
+        task = task_from_db_path.task_from_db_path(self.__db, file_path)
+        self.__db.update_task_status(task, "ip")
 
     def set_model(self):
         self.root_node = Node("Task get")
-        my_tasks = self.__sg.get_my_tasks()
+        my_tasks = self.__db.get_my_tasks()
         if not my_tasks:
             self.model = QtGui.QStandardItemModel()
             self.task_view.setModel(self.model)

@@ -8,6 +8,7 @@ class Sg(object):
         self.project_name = project
         self.sg = get_standalone_sg()
         self.user = getpass.getuser()
+        self.typ = "shotgun"
 
     def get_project_by_name(self):
         project_info = self.sg.find_one('Project', [['name', 'is', self.project_name]], [])
@@ -123,3 +124,9 @@ class Sg(object):
 
     def upload_thumbnail(self, task, image_path):
         self.sg.upload_thumbnail("Task", task["id"], image_path)
+
+    def create(self, entity_type, data):
+        return self.sg.create(entity_type, data)
+
+    def upload(self, entity_type, entity_id, path, field=None):
+        self.sg.upload(entity_type, entity_id, path, field)

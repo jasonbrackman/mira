@@ -8,6 +8,7 @@ class Tk(object):
         self.project = project
         self.tk = get_tk_object(self.project)
         self.sg = self.tk.shotgun
+        self.typ = "shotgun"
 
     def get_context_from_path(self, path):
         context = self.tk.context_from_path(path)
@@ -36,3 +37,6 @@ class Tk(object):
             args["created_by"] = user
         new_publish = sgtk.util.register_publish(**args)
         return new_publish
+
+    def create_filesystem_structure(self, task_id, engine="tk-maya"):
+        self.tk.create_filesystem_structure("Task", task_id, engine=engine)

@@ -4,7 +4,7 @@ import miraCore
 from Filter import ButtonLineEdit
 from miraLibs.pyLibs import join_path
 from miraLibs.pipeLibs import pipeMira, get_current_project
-from miraLibs.sgLibs import Sg
+from miraLibs.dbLibs import db_api
 
 
 ENGINELIST = ["maya", "nuke", "houdini"]
@@ -174,7 +174,7 @@ class CommonForm(QtGui.QWidget):
         self.setup_ui()
         self.init()
         self.set_signals()
-        self.sg = Sg.Sg(self.project)
+        self.db = db_api.DbApi(self.project).db_obj
 
     def setup_ui(self):
         main_layout = QtGui.QVBoxLayout(self)
@@ -292,7 +292,7 @@ class CommonForm(QtGui.QWidget):
         arg_list = (entity_type, asset_type_or_sequence, asset_or_shot, step, task)
         if not all(arg_list):
             return
-        return self.sg.get_current_task(*arg_list)
+        return self.db.get_current_task(*arg_list)
 
     def init(self):
         projects = pipeMira.get_projects()
@@ -308,7 +308,7 @@ class CommonForm(QtGui.QWidget):
         self.third_widget.list_view.clicked.connect(self.show_task)
 
     def on_project_changed(self, project):
-        self.sg = Sg.Sg(project)
+        self.db = Sg.Sg(project)
         self.asset_check.setChecked(False)
         self.shot_check.setChecked(False)
         for widget in [self.first_widget, self.second_widget, self.third_widget, self.fourth_widget]:
@@ -330,7 +330,7 @@ class CommonForm(QtGui.QWidget):
             self.second_widget.set_group_name("Shot")
             self.second_widget.list_view.clear()
             # init list view
-            sequences = self.sg.get_sequence()
+            sequences = self.db.get_sequence()
             self.first_widget.set_model_data(sequences)
 
     def show_asset_or_shot(self, index):
@@ -338,11 +338,11 @@ class CommonForm(QtGui.QWidget):
             widget.list_view.clear()
         selected = index.data()
         if self.entity_type == "Asset":
-            assets = self.sg.get_all_assets(selected)
+            assets = self.db.get_all_assets(selected)
             asset_names = [asset["code"] for asset in assets]
             self.second_widget.set_model_data(asset_names)
         elif self.entity_type == "Shot":
-            shots = self.sg.get_all_shots_by_sequence(selected)
+            shots = self.db.get_all_shots_by_sequence(selected)
             shot_names = [shot["name"] for shot in shots]
             self.second_widget.set_model_data(shot_names)
 
@@ -352,7 +352,7 @@ class CommonForm(QtGui.QWidget):
         asset_or_shot = index.data()
         if not self.asset_type_or_sequence:
             return
-        steps = self.sg.get_step(self.entity_type, self.asset_type_or_sequence, asset_or_shot)
+        steps = self.db.get_step(self.entity_type, self.asset_type_or_sequence, asset_or_shot)
         step_names = list(set(steps))
         self.third_widget.set_model_data(step_names)
 
@@ -361,7 +361,7 @@ class CommonForm(QtGui.QWidget):
         step = index.data()
         if not all((self.asset_type_or_sequence, self.asset_or_shot)):
             return
-        tasks = self.sg.get_task(self.entity_type, self.asset_type_or_sequence, self.asset_or_shot, step)
+        tasks = self.db.get_task(self.entity_type, self.asset_type_or_sequence, self.asset_or_shot, step)
         if not tasks:
             return
         task_names = [task["content"] for task in tasks]
