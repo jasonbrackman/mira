@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-class St(object, project=None):
-    pass
+class St(object):
+    def __init__(self, project=None):
+        self.project = project

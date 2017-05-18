@@ -3,16 +3,16 @@ import os
 import logging
 from PySide import QtGui, QtCore
 import add_environ
-from asset_pool_libs.screen_shot.screen_shot import ThumbnailWidget
-from asset_pool_libs.get_conf_data import get_conf_data
-from asset_pool_libs.get_engine import get_engine
-from asset_pool_libs.start_file import start_file
-from asset_pool_libs.export_abc import AbcExporter
-from asset_pool_libs.export_texture import TexExporter
-from asset_pool_libs.export_shd import ShdExporter
+from asset_library_libs.screen_shot.screen_shot import ThumbnailWidget
+from asset_library_libs.get_conf_data import get_conf_data
+from asset_library_libs.get_engine import get_engine
+from asset_library_libs.start_file import start_file
+from asset_library_libs.export_abc import AbcExporter
+from asset_library_libs.export_texture import TexExporter
+from asset_library_libs.export_shd import ShdExporter
 
 
-logger = logging.getLogger("Asset pool output")
+logger = logging.getLogger("Asset library output")
 
 
 class ComboModel(QtCore.QAbstractListModel):
@@ -56,7 +56,7 @@ class Output(QtGui.QWidget):
         super(Output, self).__init__(parent)
         self.engine = get_engine()
         self.conf_data = get_conf_data()
-        self.asset_pool_dir = self.conf_data["asset_pool_dir"].format(engine=self.engine)
+        self.asset_library_dir = self.conf_data["asset_library_dir"].format(engine=self.engine)
         self.category_list = list()
         self.setup_ui()
         self.init()
@@ -129,8 +129,8 @@ class Output(QtGui.QWidget):
         self.name_le.textChanged.connect(self.show_path)
 
     def set_combo_view(self):
-        if os.path.isdir(self.asset_pool_dir):
-            self.category_list = os.listdir(self.asset_pool_dir)
+        if os.path.isdir(self.asset_library_dir):
+            self.category_list = os.listdir(self.asset_library_dir)
         self.category_model = ComboModel(self.category_list, self.category_cbox)
         self.category_cbox.setModel(self.category_model)
         self.category_view = self.category_cbox.view()
@@ -185,7 +185,7 @@ class Output(QtGui.QWidget):
         if not all((category, name)):
             QtGui.QMessageBox.warning(self, "warning", "Make sure category and name is right.")
             return
-        asset_dir = os.path.join(self.asset_pool_dir, category, name).replace("\\", "/")
+        asset_dir = os.path.join(self.asset_library_dir, category, name).replace("\\", "/")
         if os.path.isdir(asset_dir):
             message_box = QtGui.QMessageBox.warning(self, "warning",
                                                     "%s is an exist directory, Do you want to replace it?" % asset_dir,

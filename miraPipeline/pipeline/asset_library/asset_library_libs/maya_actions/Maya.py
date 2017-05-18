@@ -11,7 +11,7 @@ class Maya(object):
         self.shd_path = self.get_shd_path()
 
     def launch_folder(self):
-        from asset_pool_libs.start_file import start_file
+        from asset_library_libs.start_file import start_file
         start_file(self.asset_dir)
 
     def get_mdl_path(self):

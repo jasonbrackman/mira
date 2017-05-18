@@ -48,6 +48,6 @@ class DeepConfParser(object):
 
 
 if __name__ == "__main__":
-    path = r"E:\mira\miraScripts\pipeTools\asset_pool\conf\templates.yml"
+    path = r"E:\mira\miraScripts\pipeTools\asset_library\conf\templates.yml"
     dcp = DeepConfParser(path)
     print dcp.parse()

@@ -4,13 +4,13 @@ import shiboken
 from PySide import QtGui
 from input import Input
 from output import Output
-from asset_pool_libs.get_engine import get_engine
+from asset_library_libs.get_engine import get_engine
 
 
-class AssetPool(QtGui.QDialog):
+class Assetlibrary(QtGui.QDialog):
     def __init__(self, parent=None):
-        super(AssetPool, self).__init__(parent)
-        self.setObjectName("Asset Pool")
+        super(Assetlibrary, self).__init__(parent)
+        self.setObjectName("Asset library")
         self.resize(380, 600)
         self.setup_ui()
 
@@ -20,10 +20,10 @@ class AssetPool(QtGui.QDialog):
         tab_widget = QtGui.QTabWidget()
         tab_widget.setTabPosition(QtGui.QTabWidget.West)
 
-        input_pool = Input()
-        output_pool = Output()
-        tab_widget.addTab(input_pool, "Input")
-        tab_widget.addTab(output_pool, "Output")
+        input_library = Input()
+        output_library = Output()
+        tab_widget.addTab(input_library, "Input")
+        tab_widget.addTab(output_library, "Output")
 
         main_layout.addWidget(tab_widget)
 
@@ -31,7 +31,7 @@ class AssetPool(QtGui.QDialog):
 def create_dock(docked=True):
     import maya.OpenMayaUI as mui
     import maya.cmds as mc
-    dialog = AssetPool()
+    dialog = Assetlibrary()
     if docked:
         ptr = mui.MQtUtil.mainWindow()
         main_window = shiboken.wrapInstance(long(ptr), QtGui.QWidget)
@@ -45,7 +45,7 @@ def create_dock(docked=True):
             content=name,
             width=size.width(),
             height=size.height(),
-            label='Asset Pool')
+            label='Asset library')
         return dock
     else:
         dialog.show()

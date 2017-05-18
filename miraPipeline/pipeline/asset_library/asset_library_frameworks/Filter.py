@@ -2,7 +2,7 @@
 import os
 import sys
 from PySide import QtGui, QtCore
-from ..asset_pool_libs.get_icon_dir import get_icon_dir
+from ..asset_library_libs.get_icon_dir import get_icon_dir
 
 
 class ButtonLineEdit(QtGui.QLineEdit):

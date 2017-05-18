@@ -2,10 +2,10 @@
 import os
 from PySide import QtGui, QtCore
 import add_environ
-from asset_pool_libs.get_conf_data import get_conf_data
-from asset_pool_libs.get_engine import get_engine
-from asset_pool_frameworks.Filter import ButtonLineEdit
-from asset_pool_libs.get_icon_dir import get_icon_dir
+from asset_library_libs.get_conf_data import get_conf_data
+from asset_library_libs.get_engine import get_engine
+from asset_library_frameworks.Filter import ButtonLineEdit
+from asset_library_libs.get_icon_dir import get_icon_dir
 
 
 class AssetItem(object):
@@ -82,7 +82,7 @@ class CellWidget(QtGui.QWidget):
 
     def action(self):
         action_name = self.sender().name
-        cmd_str = "from asset_pool_libs.{engine}_actions import {name};reload({name});{name}.main(self.file_dir)"\
+        cmd_str = "from asset_library_libs.{engine}_actions import {name};reload({name});{name}.main(self.file_dir)"\
             .format(engine=self.engine, name=action_name)
         exec(cmd_str)
 
@@ -177,7 +177,7 @@ class Input(QtGui.QWidget):
         super(Input, self).__init__(parent)
         self.engine = get_engine()
         self.conf_data = get_conf_data()
-        self.asset_pool_dir = self.conf_data["asset_pool_dir"].format(engine=self.engine)
+        self.asset_library_dir = self.conf_data["asset_library_dir"].format(engine=self.engine)
         self.setup_ui()
         self.init()
         self.set_signals()
@@ -218,9 +218,9 @@ class Input(QtGui.QWidget):
         main_layout.addWidget(self.list_view)
 
     def init(self):
-        if not os.path.isdir(self.asset_pool_dir):
+        if not os.path.isdir(self.asset_library_dir):
             return
-        category_list = os.listdir(self.asset_pool_dir)
+        category_list = os.listdir(self.asset_library_dir)
         if not category_list:
             return
         category_model = ComboModel(category_list, self.category_cbox)
@@ -235,7 +235,7 @@ class Input(QtGui.QWidget):
         category = self.category_cbox.currentText()
         if not category:
             return
-        category_dir = os.path.join(self.asset_pool_dir, category).replace("\\", "/")
+        category_dir = os.path.join(self.asset_library_dir, category).replace("\\", "/")
         asset_names = os.listdir(category_dir)
         if not asset_names:
             return
