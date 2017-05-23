@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<nukeTools>
+    <tools name="pipeline" type="Nodes">
+        <submenu name="HUD"
+                 command="from miraPipeline.nuke.nuke_hud import create_hud;reload(create_hud);create_hud.create_hud()"
+                 type="command"/>
+        <submenu type="separator"/>
+    </tools>
+
+    <!--<tools name="scripts" type="Nuke">-->
+        <!--<submenu name="script editor"-->
+                 <!--command="script_editor"-->
+                 <!--shortcut="Alt+D"-->
+                 <!--type="command"/>-->
+        <!--<submenu type="separator"/>-->
+    <!--</tools>-->
+</nukeTools>
