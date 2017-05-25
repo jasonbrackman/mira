@@ -72,7 +72,6 @@ class NukePipeline(object):
                 elif sub_menu_type == "command":
                     name = sub_menu_attr.get("name")
                     command = sub_menu_attr.get("command")
-                    print command
                     shortcut = sub_menu_attr.get("shortcut")
                     menu.addCommand(name, command, shortcut)
                 else:
