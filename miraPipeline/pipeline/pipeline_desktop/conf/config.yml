@@ -1,0 +1,9 @@
+PA:
+  task_start:
+    name: "任务开始"
+    command: "python Z:/miraSG/miraPipeline/pipeline/task_start/task_start.py"
+    order: 1
+  task_publish:
+    name: "任务入库"
+    command: "python Z:/miraSG/miraPipeline/pipeline/task_publish/task_publish.py"
+    order: 2
