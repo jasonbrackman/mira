@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
+import sys
+sys.path.insert(0, "Z:/miraSG")
 from PySide import QtGui, QtCore
 from miraLibs.pipeLibs.get_task_name import get_task_name
 from miraFramework.task_common_form import CommonForm
@@ -89,7 +91,7 @@ class TaskStart(QtGui.QDialog):
     def do_start(self):
         if not self.work_file:
             return
-        publish_script_path = join_path.join_path2("__file__", "..", "start.py")
+        start_script_path = join_path.join_path2("__file__", "..", "start.py")
         obj = pipeFile.PathDetails.parse_path(self.work_file)
         task_name = get_task_name(obj)
         deadline_job_name = "start_%s" % task_name
@@ -97,12 +99,15 @@ class TaskStart(QtGui.QDialog):
         argv = self.work_file
         submitter = u'heshuai'
         tar_name = u'heshuai'
-        submit.submit_python_job(deadline_job_name, publish_script_path, argv, submitter, tar_name)
+        submit.submit_python_job(deadline_job_name, start_script_path, argv, submitter, tar_name)
 
 
-if __name__ == "__main__":
-    import sys
+def main():
     app = QtGui.QApplication(sys.argv)
     tm = TaskStart()
     tm.show()
     app.exec_()
+
+
+if __name__ == "__main__":
+    main()

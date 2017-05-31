@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
+import sys
+sys.path.insert(0, "Z:/miraSG")
 from PySide import QtGui, QtCore
 from miraLibs.pipeLibs.get_task_name import get_task_name
 from miraFramework.task_common_form import CommonForm
@@ -101,9 +103,12 @@ class TaskPublish(QtGui.QDialog):
         submit.submit_python_job(deadline_job_name, publish_script_path, argv, submitter, tar_name)
 
 
-if __name__ == "__main__":
-    import sys
+def main():
     app = QtGui.QApplication(sys.argv)
     tm = TaskPublish()
     tm.show()
     app.exec_()
+
+
+if __name__ == "__main__":
+    main()
