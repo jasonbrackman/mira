@@ -36,12 +36,13 @@ def get_asset_list():
             continue
         group_name = nodes[0]
         obj = pipeFile.PathDetails.parse_path(ref_file)
-        category = obj.category
+        step = obj.step
+        task = obj.task
         asset_type = obj.asset_type
         asset_type_short_name = obj.asset_type_short_name
         asset_name = obj.asset_name
         project = obj.project
-        image_path = pipeFile.get_asset_step_image_file(asset_type, asset_name, category, project)
+        image_path = pipeFile.get_asset_task_image_file(project, asset_type, asset_name, step, task)
         dst_path = os.path.dirname(ref_file)
         asset_list.append([group_name, image_path, dst_path, asset_type_short_name])
     return asset_list

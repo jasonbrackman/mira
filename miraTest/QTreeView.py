@@ -134,7 +134,7 @@ class UserDelegate(QtGui.QItemDelegate):
         if index.column() == 4:
             text_edit = QtGui.QTextEdit(parent)
             text_edit.setAutoFillBackground(True)
-            text_edit.setStyleSheet("background-color: #00FF00;")
+            # text_edit.setStyleSheet("background-color: #00FF00;")
             return text_edit
         else:
             return QtGui.QItemDelegate.createEditor(self, parent, option, index)
@@ -146,6 +146,9 @@ class UserDelegate(QtGui.QItemDelegate):
 
     def updateEditorGeometry(self, editor, option, index):
         editor.setGeometry(option.rect)
+
+    def sizeHint(self, option, index):
+        return QtCore.QSize(200, 100)
 
 
 class LeafFilterProxyModel(QtGui.QSortFilterProxyModel):
@@ -219,7 +222,7 @@ class TreeDialog(QtGui.QDialog):
             node = src_index.internalPointer()
             if node.node_type == "id":
                 for j in xrange(node.childCount()):
-                    child_index = self.model.index(j, 4, src_index)
+                    child_index = self.proxy_model.index(j, 4, parent_index)
                     self.tree_view.openPersistentEditor(child_index)
 
     def do_test(self, selected, deselected):

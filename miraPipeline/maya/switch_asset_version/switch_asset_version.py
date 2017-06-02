@@ -169,6 +169,8 @@ class AssetDelegate(QtGui.QItemDelegate):
             value = index.data()
             if value:
                 for i in os.listdir(value):
+                    if not os.path.splitext(i)[-1] in [".mb", ".ma"]:
+                        continue
                     path = os.path.join(value, i).replace("\\", "/")
                     item = QtGui.QListWidgetItem(path)
                     item.index = index
