@@ -14,24 +14,24 @@ def version_up():
     if not obj.is_local_file():
         print "This file is not a local file."
         return
-    next_version_file = obj.next_version_file
-    if os.path.isfile(next_version_file):
+    next_edition_file = obj.next_edition_file
+    if os.path.isfile(next_edition_file):
         ret = QtGui.QMessageBox.information(None, "Save As",
-                                            "%s \nalready exists.Do you want to replace it?" % next_version_file,
+                                            "%s \nalready exists.Do you want to replace it?" % next_edition_file,
                                             QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
         if ret.name == "Yes":
-            save_as.save_as(next_version_file)
+            save_as.save_as(next_edition_file)
         else:
             try:
-                new_version_file = get_new_version_by_dir.get_new_version_by_dir(os.path.dirname(next_version_file))
+                new_version_file = get_new_version_by_dir.get_new_version_by_dir(os.path.dirname(next_edition_file))
                 save_as.save_as(new_version_file[0])
             except:
                 mel.eval("SaveSceneAs;")
     else:
-        ret = QtGui.QMessageBox.information(None, "Version up", "Save as %s?" % next_version_file,
+        ret = QtGui.QMessageBox.information(None, "Version up", "Save as %s?" % next_edition_file,
                                             QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
         if ret.name == "Yes":
-            save_as.save_as(next_version_file)
+            save_as.save_as(next_edition_file)
 
 
 if __name__ == "__main__":

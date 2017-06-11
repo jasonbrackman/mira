@@ -3,13 +3,15 @@ import get_engine
 
 
 def get_scene_name():
+    file_name = None
     engine = get_engine.get_engine()
     if engine == "maya":
         import maya.cmds as mc
-        scene_name = mc.file(q=1, sn=1)
+        file_name = mc.file(q=1, sn=1)
     elif engine == "nuke":
         import nuke
-        scene_name = nuke.root().name()
-    else:
-        scene_name = None
-    return scene_name
+        file_name = nuke.root().name()
+    elif engine == "houdini":
+        import hou
+        file_name = hou.hipFile().path()
+    return file_name

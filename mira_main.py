@@ -91,7 +91,7 @@ def init_user_setup():
     init_render_setting()
     init_scene_break_down()
     add_system_python_path_env()
-    init_shotgun()
+    # init_shotgun()
     open_port()
     # remove_invalid_clipboard_data()
 

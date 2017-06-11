@@ -5,10 +5,10 @@ import sys
 import miraCore
 from PySide import QtGui
 from miraLibs.pyLibs import join_path
-from miraLibs.pipeLibs import pipeFile, pipeMira
+from miraLibs.pipeLibs import pipeFile
 from miraPipeline.pipeline.preflight import check_gui
 from miraLibs.pipeLibs.pipeMaya import screen_shot
-from miraLibs.mayaLibs import get_scene_name, get_maya_win, save_as
+from miraLibs.mayaLibs import get_maya_win, save_as
 from miraLibs.pipeLibs.copy import Copy
 from miraFramework.FileListWidget import FileListWidget
 
@@ -107,16 +107,6 @@ def qcpublish(step):
     exec(cmd_text)
 
 
-def is_local_file(path):
-    current_project = os.path.basename(path).split("_")[0]
-    local_dir = pipeMira.get_local_root_dir(current_project)
-    driver = os.path.splitdrive(path)[0]
-    if local_dir != driver:
-        return False
-    else:
-        return True
-
-
 def post_qcpublish(obj):
     from miraLibs.dbLibs import db_api
     from miraLibs.pipeLibs.pipeDb import task_from_db_path
@@ -134,17 +124,16 @@ def main():
                                                 QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
     if message_box.name == "No":
         return
-    # check is local file
-    scene_name = get_scene_name.get_scene_name()
-    if not is_local_file(scene_name):
-        QtGui.QMessageBox.warning(None, "Warning", "This file is not a local work file.\n Permission defined.")
-        return
-    # check if work file
     try:
-        obj = pipeFile.PathDetails.parse_path(scene_name)
+        obj = pipeFile.PathDetails.parse_path()
     except:
         logger.warning("Name Error.")
         return
+    # check is local file
+    if not obj.is_local_file():
+        QtGui.QMessageBox.warning(None, "Warning", "This file is not a local work file.\n Permission defined.")
+        return
+    # check if work file
     if not obj.is_working_file():
         QtGui.QMessageBox.warning(None, "Warning", "This file is not a work file.")
         return
