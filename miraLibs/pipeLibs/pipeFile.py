@@ -86,6 +86,8 @@ class PathDetails(object):
         return self.__is_local_file
 
     def get_path(self, format_area, local=False):
+        if not self.edition:
+            self.edition = "000"
         if self.entity_type == "Asset":
             format_str = "%s_asset_%s" % (self.engine, format_area)
             return get_task_file(self.project, self.asset_type, self.asset_name, self.step, self.task,

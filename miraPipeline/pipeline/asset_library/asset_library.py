@@ -3,6 +3,8 @@ import os
 import shiboken
 from PySide import QtGui
 from input import Input
+import output
+reload(output)
 from output import Output
 from asset_library_libs.get_engine import get_engine
 

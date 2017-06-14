@@ -29,8 +29,9 @@ class MayaTexExporter(object):
     def export(self):
         import maya.cmds as mc
         import maya.mel as mel
+        from maya_get_file_nodes import maya_get_file_nodes
         mel.eval("MLdeleteUnused;")
-        file_nodes = mc.ls(type="file")
+        file_nodes = maya_get_file_nodes()
         if not file_nodes:
             return
         textures = list()
@@ -40,6 +41,7 @@ class MayaTexExporter(object):
                 continue
             tex_real_path = self.maya_get_texture_real_path(texture)
             textures.extend(tex_real_path)
+        textures = list(set(textures))
         if not textures:
             return
         for texture in textures:

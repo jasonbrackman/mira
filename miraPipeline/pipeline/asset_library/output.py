@@ -158,6 +158,10 @@ class Output(QtGui.QWidget):
         self.shd_path_le.setText(shd_path)
         self.pic_path_le.setText(pic_path)
 
+    @property
+    def pixmap(self):
+        return self.screen_widget._get_thumbnail()
+
     def submit_mdl(self):
         mdl_path = str(self.mdl_path_le.text())
         ep = AbcExporter(mdl_path)
@@ -165,9 +169,8 @@ class Output(QtGui.QWidget):
 
     def submit_picture(self):
         pic_path = str(self.pic_path_le.text())
-        pix_map = self.screen_widget._get_thumbnail()
-        if pix_map:
-            pix_map.save(pic_path)
+        if self.pixmap:
+            self.pixmap.save(pic_path)
 
     def submit_tex(self):
         tex_dir = str(self.tex_dir_le.text())
@@ -176,10 +179,14 @@ class Output(QtGui.QWidget):
 
     def submit_shd(self):
         shd_path = str(self.shd_path_le.text())
-        se = ShdExporter(shd_path)
+        tex_dir = str(self.tex_dir_le.text())
+        se = ShdExporter(shd_path, tex_dir)
         se.export()
 
     def do_submit(self):
+        if not self.pixmap:
+            QtGui.QMessageBox.warning(None, "Warning", "Screen shot first please.")
+            return
         category = str(self.category_cbox.currentText())
         name = str(self.name_le.text())
         if not all((category, name)):
