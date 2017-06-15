@@ -5,7 +5,8 @@ import optparse
 import maya.cmds as mc
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.pipeLibs.pipeMaya import get_model_name
-from miraLibs.mayaLibs import export_gpu_cache, open_file, quit_maya, export_selected, delete_layer
+from miraLibs.mayaLibs import export_gpu_cache, open_file, quit_maya, \
+    export_selected, delete_layer, hierarchy_opt, import_gpu_cache, new_file, save_as
 from miraLibs.pyLibs import create_parent_dir
 
 
@@ -16,7 +17,6 @@ def main():
     # get paths
     obj = pipeFile.PathDetails.parse_path(file_path)
     publish_path = obj.publish_path
-    gpu_cache_path = obj.gpu_cache_path
     asset_type = obj.asset_type
     model_name = get_model_name.get_model_name()
     # export _MODEL group to publish path
@@ -24,14 +24,28 @@ def main():
     mc.select(model_name, r=1)
     export_selected.export_selected(publish_path)
     # export gpu cache
-    if asset_type in ["Environment"]:
+    if asset_type in ["Environment", "Prop"]:
+        # export gpu cache
+        gpu_cache_path = obj.gpu_cache_path
         create_parent_dir.create_parent_dir(gpu_cache_path)
         gpu_directory = os.path.dirname(gpu_cache_path)
         gpu_file_name = os.path.splitext(os.path.basename(gpu_cache_path))[0]
         logger.info("Exporting gpu cache...")
         export_gpu_cache.export_gpu_cache(model_name, gpu_directory, gpu_file_name, 1, 1)
         logger.info("Export gpu cache to %s" % gpu_cache_path)
-    logger.info("Add to data base.")
+        # generate a gpu mb file
+        gpu_wrap_path = obj.gpuwrap_path
+        new_file.new_file()
+        gpu_shape_name = "%s_%s_GPUShape" % (obj.asset_type_short_name, obj.asset_name)
+        gpu_name = "%s_%s_GPU" % (obj.asset_type_short_name, obj.asset_name)
+        import_gpu_cache.import_gpu_cache(gpu_shape_name, gpu_name, gpu_cache_path)
+        save_as.save_as(gpu_wrap_path)
+    if asset_type in ["Character", "Prop"]:
+        # write out topology
+        topology_path = obj.topology_path
+        model_name = get_model_name.get_model_name()
+        ho = hierarchy_opt.HierarchyOpt(model_name)
+        ho.write_out(topology_path)
     # quit maya
     quit_maya.quit_maya()
 

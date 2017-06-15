@@ -164,6 +164,10 @@ class PathDetails(object):
     def gpu_cache_path(self):
         return self.get_path("gpu", False)
 
+    @property
+    def gpu_wrap_path(self):
+        return self.get_path("gpuwrap", False)
+
 
 ########################################################################################################################
 # below is for get asset files

@@ -37,6 +37,7 @@ sct:
   maya_asset_video: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_video/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.mov"
   maya_asset_topology: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_topology/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.json"
   maya_asset_gpu: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_gpu/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.abc"
+  maya_asset_gpuwrap: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_gpuwrap/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.mb"
   maya_asset_other: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_other/v{version}"
 
   shot_template: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/{area}/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.{ext}"
@@ -70,6 +71,7 @@ Neema:
   maya_asset_video: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_video/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.mov"
   maya_asset_topology: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_topology/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.json"
   maya_asset_gpu: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_gpu/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.abc"
+  maya_asset_gpuwrap: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_gpuwrap/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.mb"
   maya_asset_other: "{primary}/{project}/assets/{asset_type}/{asset_name}/{step}/{task}/_other/v{version}"
 
   shot_template: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/{area}/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.{ext}"
