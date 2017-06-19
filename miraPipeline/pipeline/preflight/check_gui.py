@@ -357,14 +357,16 @@ class CheckGui(QtGui.QDialog):
 
 
 def main():
-    global cg
-    try:
-        cg.close()
-        cg.deleteLater()
-    except:pass
-    cg = CheckGui(get_parent_win.get_parent_win())
-    cg.show()
-    return cg
+    # global cg
+    # try:
+    #     cg.close()
+    #     cg.deleteLater()
+    # except:pass
+    # cg = CheckGui(get_parent_win.get_parent_win())
+    # cg.show()
+    # return cg
+    from miraLibs.qtLibs import render_ui
+    render_ui.render(CheckGui)
 
 
 def main_for_publish():

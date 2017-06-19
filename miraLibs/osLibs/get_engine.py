@@ -14,3 +14,7 @@ def get_engine():
     if "Photoshop" in app_name:
         app_name = "photoshop"
     return app_name
+
+
+if __name__ == "__main__":
+    print get_engine()
