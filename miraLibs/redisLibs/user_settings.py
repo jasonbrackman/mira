@@ -9,21 +9,23 @@ def init_next_user_id(conn):
 
 def add_user(conn, name, **kwargs):
     init_next_user_id(conn)
+    current_user_id = conn.get("user:%s:id" % name)
     pipe = conn.pipeline()
     end = time.time() + 5
     while time.time() < end:
         try:
             pipe.watch("next_user_id")
-            user_id = int(pipe.get("next_user_id"))
+            user_id = current_user_id if current_user_id else int(pipe.get("next_user_id"))
+            # setnx: if exist, return False
             is_exist = pipe.setnx("user:%s:id" % name, user_id)
-            if not is_exist:
-                return
             pipe.multi()
             pipe.setnx("user:%s:name" % user_id, name)
             if kwargs:
                 for key in kwargs:
-                    pipe.setnx("user:%s:%s" % (user_id, key), kwargs[key])
-            pipe.incr("next_user_id")
+                    pipe.set("user:%s:%s" % (user_id, key), kwargs[key])
+                    print "set user:%s:%s %s done" % (user_id, key, kwargs[key])
+            if is_exist:
+                pipe.incr("next_user_id")
             pipe.execute()
             print "%s create successful." % name
             return

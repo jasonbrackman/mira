@@ -2,7 +2,6 @@
 import socket
 import subprocess
 import sys
-
 import add_rule
 import miraLibs.osLibs.get_local_ip
 import ping

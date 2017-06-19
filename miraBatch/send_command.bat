@@ -1,1 +1,1 @@
-C:\Python27\python Z:/mira/miraScripts/pipeTools/port_operation/send_command.py
+C:\Python27\python Z:\mira\miraPipeline\pipeline\port_operation\send_command.py
