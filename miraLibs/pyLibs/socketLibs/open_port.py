@@ -2,14 +2,15 @@
 import socket
 import subprocess
 import sys
+
 import add_rule
+import miraLibs.osLibs.get_local_ip
 import ping
-import miraLibs.pyLibs.get_local_ip
 
 
 def open_port(port, host=None):
     if host is None:
-        host = miraLibs.pyLibs.get_local_ip.get_local_ip()
+        host = miraLibs.osLibs.get_local_ip.get_local_ip()
     add_rule.add_rule("mira", port)
     status = ping.ping(host, port, 0.1)
     if status:

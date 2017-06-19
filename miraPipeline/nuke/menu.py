@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
-script_dir = "Z:/miraSG"
+script_dir = "Z:/mira"
 if script_dir not in sys.path:
     sys.path.insert(0, script_dir)
 

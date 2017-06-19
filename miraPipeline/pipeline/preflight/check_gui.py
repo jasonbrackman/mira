@@ -191,7 +191,7 @@ class CheckGui(QtGui.QDialog):
     def setup_ui(self):
         main_layout = QtGui.QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        self.label = QtGui.QLabel("<font size=4><b>Current Context:</b></font>"
+        self.label = QtGui.QLabel("<font size=4><b>Current Step:</b></font>"
                                   "<font size=5 color=#ff8c00><b> %s</b></font>" % self.context)
         main_layout.addWidget(self.label)
         main_splitter = QtGui.QSplitter(QtCore.Qt.Vertical)

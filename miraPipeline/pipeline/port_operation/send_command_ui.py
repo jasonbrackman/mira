@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 import getpass
 import os
-from PySide import QtGui, QtCore
 from functools import partial
+
+from PySide import QtGui, QtCore
+
 import run_send_command
 from CommandOperation import CommandOperation
 from configure_command import ConfigureCommand
 from miraFramework.Filter import ButtonLineEdit
-from miraLibs.pyLibs import ConfParser, get_local_ip
+from miraLibs.osLibs import get_local_ip
+from miraLibs.pyLibs import ConfParser
 from miraLibs.pyLibs.socketLibs import ping_quick
 from miraLibs.redisLibs import user_settings, connect_redis, ping_redis
 
@@ -54,11 +57,12 @@ class RedisDialog(QtGui.QDialog):
 
 
 class UserItem(object):
-    def __init__(self, status="", name=None, host=None, port=None):
+    def __init__(self, status="", name=None, host=None, port=None, mac=None):
         self.status = status
         self.name = name
         self.host = host
         self.port = port
+        self.mac = mac
 
 
 class UserDelegate(QtGui.QItemDelegate):
@@ -76,7 +80,7 @@ class UserDelegate(QtGui.QItemDelegate):
     def setEditorData(self, editor, index):
         if not index.isValid:
             return
-        user_item_proxy_index = index.model().index(index.row(), 3)
+        user_item_proxy_index = index.model().index(index.row(), 4)
         user_item_index = index.model().mapToSource(user_item_proxy_index)
         user_item = user_item_index.data()
         if index.column() == 0:
@@ -99,13 +103,13 @@ class UserModel(QtCore.QAbstractTableModel):
     def __init__(self, arg=[], parent=None):
         super(UserModel, self).__init__(parent)
         self.arg = arg
-        self.header = ["status", "name", "ip", ""]
+        self.header = ["status", "name", "ip", "mac", ""]
 
     def rowCount(self, parent=QtCore.QModelIndex()):
         return len(self.arg)
 
     def columnCount(self, parent=QtCore.QModelIndex()):
-        return 4
+        return 5
 
     def data(self, index, role=QtCore.Qt.DisplayRole):
         if not index.isValid():
@@ -177,8 +181,8 @@ class SendCommandUI(QtGui.QMainWindow):
         user_info_layout = QtGui.QVBoxLayout(user_info_grp)
         filter_layout = QtGui.QHBoxLayout()
         self.filter_le = ButtonLineEdit()
-        self.user_counet_label = QtGui.QLabel()
-        filter_layout.addWidget(self.user_counet_label)
+        self.user_count_label = QtGui.QLabel()
+        filter_layout.addWidget(self.user_count_label)
         filter_layout.addStretch()
         filter_layout.addWidget(self.filter_le)
         self.user_info_view = QtGui.QTableView()
@@ -274,14 +278,15 @@ class SendCommandUI(QtGui.QMainWindow):
 
     def get_model_data(self):
         model_data = list()
-        user_info = user_settings.get_user_info(self.conn, ["name", "ip"])
+        user_info = user_settings.get_user_info(self.conn, ["name", "ip", "mac"])
         if user_info:
             for user in user_info:
                 name = user["name"]
                 host = user["ip"]
+                mac = user["mac"]
                 port = self.connection_port
-                user_item = UserItem("", name, host, port)
-                model_data.append(["", name, host, user_item])
+                user_item = UserItem("", name, host, port, mac)
+                model_data.append(["", name, host, mac, user_item])
         else:
             model_data = [[]]
         return model_data
@@ -292,7 +297,7 @@ class SendCommandUI(QtGui.QMainWindow):
         else:
             model_data = self.get_model_data()
         user_count = len(model_data)
-        self.user_counet_label.setText("User Count: <font size=5 color=#0000FF><b>%s</b></font>" % user_count)
+        self.user_count_label.setText("User Count: <font size=5 color=#0000FF><b>%s</b></font>" % user_count)
         if model_data == [[]]:
             model = QtGui.QStandardItemModel()
             self.user_info_view.setModel(model)
@@ -304,10 +309,10 @@ class SendCommandUI(QtGui.QMainWindow):
         self.proxy_model.setFilterKeyColumn(-1)
         self.user_info_view.setModel(self.proxy_model)
         self.user_info_view.setSortingEnabled(True)
-        self.user_info_view.hideColumn(3)
+        self.user_info_view.hideColumn(4)
         self.user_info_view.horizontalHeader().setStretchLastSection(True)
-        column_width_list = [20, 300, 300]
-        for column in range(3):
+        column_width_list = [20, 200, 200, 200]
+        for column in range(4):
             self.user_info_view.setColumnWidth(column, column_width_list[column])
 
     def set_delegate(self):
@@ -338,7 +343,7 @@ class SendCommandUI(QtGui.QMainWindow):
             proxy_indexes = self.user_info_view.selectedIndexes()
             rows = list(set([self.proxy_model.mapToSource(i).row() for i in proxy_indexes]))
         if rows:
-            items = [self.model.index(row, 3).data() for row in rows]
+            items = [self.model.index(row, 4).data() for row in rows]
         return items
 
     def send_command(self, whole):

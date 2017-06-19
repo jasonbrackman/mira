@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-sys.path.insert(0, "Z:/miraSG")
+sys.path.insert(0, "Z:/mira")
 from PySide import QtGui, QtCore
 from miraLibs.pipeLibs.get_task_name import get_task_name
 from miraFramework.task_common_form import CommonForm

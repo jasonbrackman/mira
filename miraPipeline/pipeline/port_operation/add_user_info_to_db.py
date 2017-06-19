@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import getpass
 import redis
+from miraLibs.osLibs import get_local_ip, get_mac_address
 from miraLibs.redisLibs import user_settings, get_redis_connection
-from miraLibs.pyLibs import get_local_ip
 
 
 def add_user_info_to_db():
@@ -14,7 +14,8 @@ def add_user_info_to_db():
         return
     user = getpass.getuser()
     ip = get_local_ip.get_local_ip()
-    user_settings.add_user(conn, user, ip=ip)
+    mac = get_mac_address.get_mac_address(ip)
+    user_settings.add_user(conn, user, ip=ip, mac=mac)
 
 
 if __name__ == "__main__":
