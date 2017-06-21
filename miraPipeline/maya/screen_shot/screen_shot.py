@@ -2,26 +2,28 @@
 import logging
 import os
 import shutil
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from miraLibs.pipeLibs import pipeFile
 from miraTools.screen_shot import screen_shot
 from miraLibs.mayaLibs import get_maya_win
 from miraLibs.pipeLibs.backup import backup
 
 
-class ScreenShot(QtGui.QDialog):
+class ScreenShot(QDialog):
     def __init__(self, parent=None):
         super(ScreenShot, self).__init__(parent)
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
         self.setWindowTitle("Screen Shot")
         self.resize(400, 300)
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         self.screen_shot_widget = screen_shot.ThumbnailWidget()
         main_layout.addWidget(self.screen_shot_widget)
-        btn_layout = QtGui.QHBoxLayout()
+        btn_layout = QHBoxLayout()
         btn_layout.addStretch()
-        self.save_btn = QtGui.QPushButton("Save")
-        self.cancel_btn = QtGui.QPushButton("Cancel")
+        self.save_btn = QPushButton("Save")
+        self.cancel_btn = QPushButton("Cancel")
         btn_layout.addWidget(self.save_btn)
         btn_layout.addWidget(self.cancel_btn)
         main_layout.addLayout(btn_layout)

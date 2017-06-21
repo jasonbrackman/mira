@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
-from PySide import QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 
 def get(content):
-    settings = QtCore.QSettings("Mira", "History")
+    settings = QSettings("Mira", "History")
     return settings.value(content)
 
 
 def set(key, value):
-    settings = QtCore.QSettings("Mira", "History")
+    settings = QSettings("Mira", "History")
     settings.setValue(key, value)

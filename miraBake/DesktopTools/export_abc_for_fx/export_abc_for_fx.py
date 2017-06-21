@@ -16,7 +16,9 @@ import re
 import subprocess
 # Third-party modules
 
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 # Studio modules
 
 # Local modules
@@ -62,10 +64,10 @@ def get_qss_path():
     return qss_path
 
 
-class RunCommandTread(QtCore.QThread):
-    progress_signal = QtCore.Signal(int)
-    info_signal = QtCore.Signal(basestring)
-    detail_signal = QtCore.Signal(basestring)
+class RunCommandTread(QThread):
+    progress_signal = Signal(int)
+    info_signal = Signal(basestring)
+    detail_signal = Signal(basestring)
 
     def __init__(self, command_list=None, parent=None):
         super(RunCommandTread, self).__init__(parent)
@@ -110,24 +112,24 @@ class RunCommandTread(QtCore.QThread):
             self.progress_signal.emit(value)
 
 
-class TextEditWidget(QtGui.QWidget):
+class TextEditWidget(QWidget):
     def __init__(self, title=None, parent=None):
         super(TextEditWidget, self).__init__(parent)
         self.title = title
-        main_layout = QtGui.QHBoxLayout(self)
+        main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        main_group = QtGui.QGroupBox()
+        main_group = QGroupBox()
         main_layout.addWidget(main_group)
         main_group.setTitle(self.title)
-        group_layout = QtGui.QHBoxLayout(main_group)
+        group_layout = QHBoxLayout(main_group)
         group_layout.setContentsMargins(5, 5, 5, 5)
-        self.text_edit = QtGui.QLineEdit()
+        self.text_edit = QLineEdit()
         self.text_edit.setPlaceholderText(u"输入格式:001_002,002_001-002_005,003_*")
         self.text_edit.selectAll()
         group_layout.addWidget(self.text_edit)
 
 
-class ExportAbcForFxUI(QtGui.QDialog):
+class ExportAbcForFxUI(QDialog):
     def __init__(self, parent=None):
         super(ExportAbcForFxUI, self).__init__(parent)
 
@@ -135,43 +137,43 @@ class ExportAbcForFxUI(QtGui.QDialog):
 
         self.resize(500, 500)
         self.setWindowTitle("Fx export abc tool")
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
-        self.setStyle(QtGui.QStyleFactory.create('plastique'))
+        self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
+        self.setStyle(QStyleFactory.create('plastique'))
         self.setStyleSheet(open(qss_path, 'r').read())
 
-        main_layout = QtGui.QVBoxLayout(self)
-        # main_layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
-        main_layout.setAlignment(QtCore.Qt.AlignTop)
+        main_layout = QVBoxLayout(self)
+        # main_layout.setSizeConstraint(QLayout.SetFixedSize)
+        main_layout.setAlignment(Qt.AlignTop)
 
-        project_layout = QtGui.QHBoxLayout()
-        project_label = QtGui.QLabel('Project')
+        project_layout = QHBoxLayout()
+        project_label = QLabel('Project')
         project_label.setFixedWidth(40)
-        self.project_cbox = QtGui.QComboBox()
+        self.project_cbox = QComboBox()
         project_layout.addWidget(project_label)
         project_layout.addWidget(self.project_cbox)
 
         self.lay_widget = TextEditWidget("lay", self)
         self.anim_widget = TextEditWidget("anim", self)
 
-        button_layout = QtGui.QHBoxLayout()
-        self.force_checkbox = QtGui.QCheckBox("force")
-        self.cancel_btn = QtGui.QPushButton('Cancel')
-        self.export_btn = QtGui.QPushButton('Export')
+        button_layout = QHBoxLayout()
+        self.force_checkbox = QCheckBox("force")
+        self.cancel_btn = QPushButton('Cancel')
+        self.export_btn = QPushButton('Export')
         button_layout.addWidget(self.force_checkbox)
         button_layout.addStretch()
         button_layout.addWidget(self.cancel_btn)
         button_layout.addWidget(self.export_btn)
 
-        progress_layout = QtGui.QHBoxLayout()
+        progress_layout = QHBoxLayout()
         progress_layout.setContentsMargins(0, 0, 0, 0)
-        self.progress_bar = QtGui.QProgressBar()
+        self.progress_bar = QProgressBar()
         self.progress_bar.setTextVisible(False)
         progress_layout.addWidget(self.progress_bar)
 
-        self.info_widget = QtGui.QTabWidget()
-        self.info_tb = QtGui.QTextBrowser()
-        self.has_export_tb = QtGui.QTextBrowser()
-        self.detail_tb = QtGui.QTextBrowser()
+        self.info_widget = QTabWidget()
+        self.info_tb = QTextBrowser()
+        self.has_export_tb = QTextBrowser()
+        self.detail_tb = QTextBrowser()
         self.info_widget.addTab(self.info_tb, "Information")
         self.info_widget.addTab(self.has_export_tb, "exported")
         self.info_widget.addTab(self.detail_tb, "Detail")
@@ -396,7 +398,7 @@ class ExportAbcForFx(ExportAbcForFxUI):
 
 
 def main():
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     eaf = ExportAbcForFx()
     eaf.show()
     app.exec_()

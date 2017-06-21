@@ -15,8 +15,10 @@ def render(widget_class):
         pb_ui.show()
     else:
         import sys
-        from PySide import QtGui
-        app = QtGui.QApplication(sys.argv)
+        from Qt.QtWidgets import *
+        from Qt.QtCore import *
+        from Qt.QtGui import *
+        app = QApplication(sys.argv)
         pb_ui = PipelineBaseUI(widget_class)
         pb_ui.show()
         sys.exit(app.exec_())

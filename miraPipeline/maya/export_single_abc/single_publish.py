@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as mc
 from miraLibs.pipeLibs.pipeMaya import get_asset_names, export_model_abc
 from miraLibs.mayaLibs import get_scene_name
@@ -8,43 +10,43 @@ import single_publish_ui
 reload(single_publish_ui)
 
 
-class PublishModel(QtCore.QAbstractTableModel):
+class PublishModel(QAbstractTableModel):
     def __init__(self, arg=[], headers=[], parent=None):
         super(PublishModel, self).__init__(parent)
         self.arg = arg
         self.headers = headers
 
-    def rowCount(self, parent=QtCore.QModelIndex()):
+    def rowCount(self, parent=QModelIndex()):
         return len(self.arg)
 
-    def columnCount(self, parent=QtCore.QModelIndex()):
+    def columnCount(self, parent=QModelIndex()):
         return 2
 
-    def data(self, index, role=QtCore.Qt.DisplayRole):
+    def data(self, index, role=Qt.DisplayRole):
         if not index.isValid():
             return
-        if role == QtCore.Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             row = index.row()
             column = index.column()
             return self.arg[row][column]
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
     def headerData(self, section, orientation, role):
-        if role == QtCore.Qt.DisplayRole:
-            if orientation == QtCore.Qt.Horizontal:
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
                 return self.headers[section]
 
 
-class PublishDelegate(QtGui.QItemDelegate):
-    clicked = QtCore.Signal(QtCore.QModelIndex)
+class PublishDelegate(QItemDelegate):
+    clicked = Signal(QModelIndex)
 
     def __init__(self, parent=None):
         super(PublishDelegate, self).__init__(parent)
 
     def createEditor(self, parent, option, index):
-        btn = QtGui.QPushButton("Publish", parent)
+        btn = QPushButton("Publish", parent)
         btn.index = index
         btn.clicked.connect(self.send_index)
         return btn
@@ -70,10 +72,10 @@ class SinglePublish(single_publish_ui.SinglePublishUI):
         self.table_view.setSortingEnabled(True)
         self.table_view.verticalHeader().hide()
         self.table_view.setAlternatingRowColors(True)
-        self.table_view.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        self.proxy_model = QtGui.QSortFilterProxyModel()
+        self.table_view.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.proxy_model = QSortFilterProxyModel()
         self.proxy_model.setDynamicSortFilter(True)
-        self.proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
         self.proxy_model.setFilterKeyColumn(0)
         self.table_view.setModel(self.proxy_model)
         headers = ["Assets", "Publish"]
@@ -134,10 +136,10 @@ class SinglePublish(single_publish_ui.SinglePublishUI):
         scene_name = get_scene_name.get_scene_name()
         try:
             export_model_abc.export_model_abc(scene_name, False, asset_name)
-            QtGui.QMessageBox.information(self, "Warming Tip", "Export abc done.")
+            QMessageBox.information(self, "Warming Tip", "Export abc done.")
         except Exception as e:
             print str(e)
-            QtGui.QMessageBox.critical(self, "Error Info", "Export abc fail.")
+            QMessageBox.critical(self, "Error Info", "Export abc fail.")
 
 
 def main():

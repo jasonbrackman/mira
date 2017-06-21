@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
-from PySide import QtGui
+from Qt.QtWidgets import *
 
 
 class MayaGlobals(object):
@@ -38,7 +38,7 @@ class MayaGlobals(object):
 
 
 def get_maya_globals():
-    maya_app = QtGui.qApp
+    maya_app = QApplication.instance()
     if not hasattr(maya_app, "globals"):
         maya_app.globals = MayaGlobals()
     return maya_app.globals

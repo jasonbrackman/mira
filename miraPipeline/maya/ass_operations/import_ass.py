@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 import functools
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as mc
 from miraLibs.mayaLibs import get_maya_win, create_group, add_namespace
 reload(add_namespace)
@@ -10,19 +12,19 @@ from miraLibs.pyLibs import join_path, get_children_file
 from miraLibs.pipeLibs.pipeMaya import import_ass
 
 
-class ImportAssDialog(QtGui.QDialog):
+class ImportAssDialog(QDialog):
     def __init__(self, parent=None):
         super(ImportAssDialog, self).__init__(parent)
         self.resize(500, 400)
         self.current_project = None
         self.setWindowTitle("Import Ass.")
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
 
-        grid_layout = QtGui.QGridLayout()
-        project_label = QtGui.QLabel("Project")
-        self.project_cbox = QtGui.QComboBox()
-        asset_label = QtGui.QLabel("Asset Name")
-        self.asset_cbox = QtGui.QComboBox()
+        grid_layout = QGridLayout()
+        project_label = QLabel("Project")
+        self.project_cbox = QComboBox()
+        asset_label = QLabel("Asset Name")
+        self.asset_cbox = QComboBox()
         grid_layout.addWidget(project_label, 0, 0, 1, 1)
         grid_layout.addWidget(self.project_cbox, 0, 1, 1, 5)
         grid_layout.addWidget(asset_label, 1, 0, 1, 1)
@@ -30,14 +32,14 @@ class ImportAssDialog(QtGui.QDialog):
         grid_layout.setColumnStretch(0, 0)
         grid_layout.setColumnStretch(1, 1)
 
-        self.file_list = QtGui.QListWidget()
-        self.file_list.setSelectionMode(QtGui.QListWidget.ExtendedSelection)
+        self.file_list = QListWidget()
+        self.file_list.setSelectionMode(QListWidget.ExtendedSelection)
         self.file_list.setSortingEnabled(True)
 
-        btn_layout = QtGui.QHBoxLayout()
-        self.import_all_btn = QtGui.QPushButton("Import All")
-        self.import_selected_btn = QtGui.QPushButton("Import Selected")
-        self.cancel_btn = QtGui.QPushButton("Cancel")
+        btn_layout = QHBoxLayout()
+        self.import_all_btn = QPushButton("Import All")
+        self.import_selected_btn = QPushButton("Import Selected")
+        self.cancel_btn = QPushButton("Cancel")
         btn_layout.addStretch()
         btn_layout.addWidget(self.import_selected_btn)
         btn_layout.addWidget(self.import_all_btn)
@@ -90,7 +92,7 @@ class ImportAssDialog(QtGui.QDialog):
             return
         ass_files = get_children_file.get_children_file(ass_dir, ".ass")
         for f in ass_files:
-            item = QtGui.QListWidgetItem(os.path.basename(f))
+            item = QListWidgetItem(os.path.basename(f))
             item.path = f
             self.file_list.addItem(item)
 
@@ -108,8 +110,8 @@ class ImportAssDialog(QtGui.QDialog):
         model_group = items[0].path.split("@")[1]
         if not mc.objExists("standin"):
             create_group.create_group("standin")
-        pd = QtGui.QProgressDialog("Ass Importing...", 'Cancel', 0, len(items))
-        pd.setWindowModality(QtCore.Qt.WindowModal)
+        pd = QProgressDialog("Ass Importing...", 'Cancel', 0, len(items))
+        pd.setWindowModality(Qt.WindowModal)
         pd.setMinimumWidth(350)
         pd.show()
         for index, item in enumerate(items):

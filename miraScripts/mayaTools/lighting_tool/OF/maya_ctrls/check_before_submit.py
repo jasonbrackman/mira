@@ -6,7 +6,9 @@
 
 import maya.cmds as mc
 import pymel.core as pm
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import os
 
 
@@ -46,7 +48,7 @@ def main():
         #message = '<font color=#FF0000 size=3><b> %s </font></b>' % message
         message += '\nDo you want to submit?'
         print message
-        ret = QtGui.QMessageBox.warning(None, 'Warning', message, 'Yes', 'No', 'Cancel')
+        ret = QMessageBox.warning(None, 'Warning', message, 'Yes', 'No', 'Cancel')
         if ret == 0:
             submit()
     else:

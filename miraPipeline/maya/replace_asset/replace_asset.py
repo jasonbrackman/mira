@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import ui
 reload(ui)
 import mayaOpt
@@ -8,7 +10,7 @@ from miraLibs.mayaLibs import get_maya_win
 from miraLibs.pipeLibs import pipeMira, get_current_project
 
 
-class ComboModel(QtCore.QAbstractListModel):
+class ComboModel(QAbstractListModel):
     def __init__(self, model_data=None, parent=None):
         super(ComboModel, self).__init__(parent)
         self.model_data = model_data
@@ -22,10 +24,10 @@ class ComboModel(QtCore.QAbstractListModel):
 
     def data(self, index, role):
         row = index.row()
-        if role == QtCore.Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             return self.model_data[row]
-        elif role == QtCore.Qt.SizeHintRole:
-            return QtCore.QSize(self.parent.width(), 25)
+        elif role == Qt.SizeHintRole:
+            return QSize(self.parent.width(), 25)
 
 
 class Node(object):
@@ -84,7 +86,7 @@ class AssetNode(Node):
         return "asset"
 
 
-class AssetTreeModel(QtCore.QAbstractItemModel):
+class AssetTreeModel(QAbstractItemModel):
     def __init__(self, root_node=None, parent=None):
         super(AssetTreeModel, self).__init__(parent)
         self.root_node = root_node
@@ -107,28 +109,28 @@ class AssetTreeModel(QtCore.QAbstractItemModel):
         if not index.isValid():
             return
         node = index.internalPointer()
-        if role == QtCore.Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             if index.column() == 0 and node.node_type == "asset_type":
                 return node.name
             if index.column() == 1 and node.node_type == "asset":
                 return node.name
             if index.column() == 3 and node.node_type == "asset":
                 return node.dst_path
-        elif role == QtCore.Qt.DecorationRole:
+        elif role == Qt.DecorationRole:
             if index.column() == 2 and node.node_type == "asset":
                 pix_map_path = node.thumbnail_path
-                pix_map = QtGui.QPixmap(pix_map_path)
-                scaled = pix_map.scaled(QtCore.QSize(100, 100), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+                pix_map = QPixmap(pix_map_path)
+                scaled = pix_map.scaled(QSize(100, 100), Qt.KeepAspectRatio, Qt.SmoothTransformation)
                 return scaled
-        elif role == QtCore.Qt.SizeHintRole:
+        elif role == Qt.SizeHintRole:
             if node.node_type == "asset_type":
-                return QtCore.QSize(20, 20)
+                return QSize(20, 20)
 
     def setData(self, index, value, role):
         if not index.isValid():
             return
         node = index.internalPointer()
-        if role == QtCore.Qt.EditRole:
+        if role == Qt.EditRole:
             if index.column() == 0:
                 node.name = value
                 return True
@@ -136,17 +138,17 @@ class AssetTreeModel(QtCore.QAbstractItemModel):
 
     def headerData(self, section, orientation, role):
         header_list = ["Asset Type", "Asset Name", "Thumbnail", "Destination Path"]
-        if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
+        if role == Qt.DisplayRole and orientation == Qt.Horizontal:
             return header_list[section]
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
     def parent(self, index):
         node = self.getNode(index)
         parent_node = node.parent()
         if parent_node == self.root_node:
-            return QtCore.QModelIndex()
+            return QModelIndex()
         return self.createIndex(parent_node.row(), 0, parent_node)
 
     def index(self, row, column, parent):
@@ -155,14 +157,14 @@ class AssetTreeModel(QtCore.QAbstractItemModel):
         if child_item:
             return self.createIndex(row, column, child_item)
         else:
-            return QtCore.QModelIndex()
+            return QModelIndex()
 
 
-class LeafFilterProxyModel(QtGui.QSortFilterProxyModel):
+class LeafFilterProxyModel(QSortFilterProxyModel):
     def __init__(self):
         super(LeafFilterProxyModel, self).__init__()
         self.setDynamicSortFilter(True)
-        self.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.setFilterCaseSensitivity(Qt.CaseInsensitive)
 
     def filterAcceptsRow(self, row_num, source_parent):
         if self.filter_accepts_row_itself(row_num, source_parent):
@@ -210,8 +212,8 @@ class ReplaceAsset(ui.ReplaceAssetUI):
         self.src_cbox.setCurrentIndex(self.src_cbox.count()+1)
         self.dst_cbox.setCurrentIndex(self.src_cbox.count()+1)
         self.tree_view.setSortingEnabled(True)
-        self.tree_view.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.tree_view.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+        self.tree_view.setFocusPolicy(Qt.NoFocus)
+        self.tree_view.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
     def set_signals(self):
         self.src_cbox.currentIndexChanged.connect(self.set_model)
@@ -227,7 +229,7 @@ class ReplaceAsset(ui.ReplaceAssetUI):
             return
         model_data = mayaOpt.get_asset_list(src_context, dst_context)
         if not model_data or src_context == dst_context:
-            model = QtGui.QStandardItemModel()
+            model = QStandardItemModel()
             self.tree_view.setModel(model)
             return
         asset_type_list = [asset_list[3] for asset_list in model_data]
@@ -283,8 +285,8 @@ class ReplaceAsset(ui.ReplaceAssetUI):
         selected = self.get_selected()
         if not selected:
             return
-        progress_dialog = QtGui.QProgressDialog('Replacing...', 'Cancel', 0, len(selected))
-        progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+        progress_dialog = QProgressDialog('Replacing...', 'Cancel', 0, len(selected))
+        progress_dialog.setWindowModality(Qt.WindowModal)
         progress_dialog.setMinimumWidth(400)
         progress_dialog.show()
         for index, sel in enumerate(selected):

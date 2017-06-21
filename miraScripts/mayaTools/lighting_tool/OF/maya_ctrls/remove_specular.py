@@ -5,7 +5,9 @@
 
 import pymel.core as pm
 import maya.cmds as mc
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 
 def undo(func):
@@ -82,7 +84,7 @@ def main():
                     except Exception, e:
                         print e
     else:
-        msg_box = QtGui.QMessageBox.information(None, 'Information', 'Nothing Selected')
+        msg_box = QMessageBox.information(None, 'Information', 'Nothing Selected')
 
 
 if __name__ == '__main__':

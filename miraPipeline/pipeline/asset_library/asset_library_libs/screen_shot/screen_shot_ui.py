@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import resource
 
 
@@ -8,43 +10,43 @@ class Ui_ThumbnailWidget(object):
         ThumbnailWidget.setObjectName("ThumbnailWidget")
         ThumbnailWidget.resize(347, 266)
         ThumbnailWidget.setStyleSheet("")
-        self.thumbnail = QtGui.QLabel(ThumbnailWidget)
-        self.thumbnail.setGeometry(QtCore.QRect(210, 190, 81, 61))
-        self.thumbnail.setMinimumSize(QtCore.QSize(0, 0))
-        self.thumbnail.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.thumbnail = QLabel(ThumbnailWidget)
+        self.thumbnail.setGeometry(QRect(210, 190, 81, 61))
+        self.thumbnail.setMinimumSize(QSize(0, 0))
+        self.thumbnail.setMaximumSize(QSize(16777215, 16777215))
         self.thumbnail.setStyleSheet("")
         self.thumbnail.setText("")
         self.thumbnail.setScaledContents(False)
-        self.thumbnail.setAlignment(QtCore.Qt.AlignCenter)
+        self.thumbnail.setAlignment(Qt.AlignCenter)
         self.thumbnail.setObjectName("thumbnail")
-        self.buttons_frame = QtGui.QFrame(ThumbnailWidget)
-        self.buttons_frame.setGeometry(QtCore.QRect(40, 30, 211, 191))
+        self.buttons_frame = QFrame(ThumbnailWidget)
+        self.buttons_frame.setGeometry(QRect(40, 30, 211, 191))
         self.buttons_frame.setStyleSheet("#buttons_frame {\n"
 "border-radius: 2px;\n"
 "background-color: rgba(0,0,0, 64);\n"
 "}")
-        self.buttons_frame.setFrameShape(QtGui.QFrame.NoFrame)
-        self.buttons_frame.setFrameShadow(QtGui.QFrame.Plain)
+        self.buttons_frame.setFrameShape(QFrame.NoFrame)
+        self.buttons_frame.setFrameShadow(QFrame.Plain)
         self.buttons_frame.setLineWidth(0)
         self.buttons_frame.setObjectName("buttons_frame")
-        self.verticalLayout_2 = QtGui.QVBoxLayout(self.buttons_frame)
+        self.verticalLayout_2 = QVBoxLayout(self.buttons_frame)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        spacerItem = QtGui.QSpacerItem(20, 52, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        spacerItem = QSpacerItem(20, 52, QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem)
-        self.horizontalLayout_2 = QtGui.QHBoxLayout()
+        self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        spacerItem1 = QtGui.QSpacerItem(20, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        spacerItem1 = QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem1)
-        self.camera_btn = QtGui.QPushButton(self.buttons_frame)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
+        self.camera_btn = QPushButton(self.buttons_frame)
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.camera_btn.sizePolicy().hasHeightForWidth())
         self.camera_btn.setSizePolicy(sizePolicy)
-        self.camera_btn.setMinimumSize(QtCore.QSize(64, 64))
-        self.camera_btn.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.camera_btn.setCursor(QtCore.Qt.PointingHandCursor)
+        self.camera_btn.setMinimumSize(QSize(64, 64))
+        self.camera_btn.setMaximumSize(QSize(16777215, 16777215))
+        self.camera_btn.setCursor(Qt.PointingHandCursor)
         self.camera_btn.setStyleSheet("#camera_btn {\n"
 "    background-color: rgba( 0, 0, 0, 0 );\n"
 "    image: url(:/images/camera.png);\n"
@@ -60,28 +62,30 @@ class Ui_ThumbnailWidget(object):
 "\n"
 "")
         self.camera_btn.setText("")
-        self.camera_btn.setIconSize(QtCore.QSize(64, 64))
+        self.camera_btn.setIconSize(QSize(64, 64))
         self.camera_btn.setFlat(True)
         self.camera_btn.setObjectName("camera_btn")
         self.horizontalLayout_2.addWidget(self.camera_btn)
-        spacerItem2 = QtGui.QSpacerItem(20, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        spacerItem2 = QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem2)
         self.horizontalLayout_2.setStretch(0, 1)
         self.horizontalLayout_2.setStretch(1, 2)
         self.horizontalLayout_2.setStretch(2, 1)
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
-        spacerItem3 = QtGui.QSpacerItem(20, 51, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        spacerItem3 = QSpacerItem(20, 51, QSizePolicy.Minimum, QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem3)
         self.verticalLayout_2.setStretch(0, 1)
         self.verticalLayout_2.setStretch(1, 2)
         self.verticalLayout_2.setStretch(2, 1)
 
         self.retranslateUi(ThumbnailWidget)
-        QtCore.QMetaObject.connectSlotsByName(ThumbnailWidget)
+        QMetaObject.connectSlotsByName(ThumbnailWidget)
 
     def retranslateUi(self, ThumbnailWidget):
-        ThumbnailWidget.setWindowTitle(QtGui.QApplication.translate("ThumbnailWidget", "Screen Shot", None, QtGui.QApplication.UnicodeUTF8))
-
+        try:
+            ThumbnailWidget.setWindowTitle(QApplication.translate("ThumbnailWidget", "Screen Shot", None, QApplication.UnicodeUTF8))
+        except:
+            ThumbnailWidget.setWindowTitle(QApplication.translate("ThumbnailWidget", "Screen Shot", None))
 
 if __name__ == "__main__":
     pass

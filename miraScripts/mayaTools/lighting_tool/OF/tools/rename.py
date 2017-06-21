@@ -1,6 +1,9 @@
 ﻿import os
 import re
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
+from Qt import __binding__
 import maya.cmds as mc
 
 
@@ -18,90 +21,103 @@ def undo(func):
     return _undo
     
     
-def get_maya_win():
+def get_maya_win(module="PySide"):
+    """
+    get a QMainWindow Object of maya main window
+    :param module (optional): string "PySide"(default) or "PyQt4"
+    :return main_window: QWidget or QMainWindow object
+    """
     import maya.OpenMayaUI as mui
-    main_window = None
-    ptr = mui.MQtUtil.mainWindow()
-    if 'PyQt4' in QtGui.__name__:
+    prt = mui.MQtUtil.mainWindow()
+    if module == "PyQt":
         import sip
-        main_window = sip.wrapinstance(long(ptr), QtCore.QObject)
-    if 'PySide' in QtGui.__name__:
-        import shiboken
-        main_window = shiboken.wrapInstance(long(ptr), QtCore.QObject)
+        from Qt.QtCore import *
+        main_window = sip.wrapinstance(long(prt), QObject)
+    elif module in ["PySide", "PyQt"]:
+        if __binding__ in ["PySide", "PyQt4"]:
+            import shiboken
+        elif __binding__ in ["PySide2", "PyQt5"]:
+            import shiboken2 as shiboken
+        from Qt.QtWidgets import *
+        main_window = shiboken.wrapInstance(long(prt), QWidget)
+    elif module == "mayaUI":
+        main_window = "MayaWindow"
+    else:
+        raise ValueError('param "module" must be "mayaUI" "PyQt4" or "PySide"')
     return main_window
     
 
-class Rename(QtGui.QDialog):
+class Rename(QDialog):
     def __init__(self, parent=None):
         super(Rename, self).__init__(parent)
         self.resize(500, 550)
         self.setObjectName('Rename')
         self.setWindowTitle('Rename')
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowMinimizeButtonHint)
         
         self.path = None
         
-        layout = QtGui.QVBoxLayout(self)
+        layout = QVBoxLayout(self)
         layout.setContentsMargins(5, 10, 5, 5)
-        layout_grp = QtGui.QGroupBox('System')
+        layout_grp = QGroupBox('System')
         layout_grp.setStyleSheet("QGroupBox{color:#00FF00;border: 1px solid #222222;"
                                           "padding-top:15px;border-radius:2px;font-size: 15px}")
         layout.addWidget(layout_grp)
-        main_layout = QtGui.QVBoxLayout(layout_grp)
-        file_layout = QtGui.QHBoxLayout()
-        file_label = QtGui.QLabel('File Path')
-        self.file_le = QtGui.QLineEdit()
+        main_layout = QVBoxLayout(layout_grp)
+        file_layout = QHBoxLayout()
+        file_label = QLabel('File Path')
+        self.file_le = QLineEdit()
         file_layout.addWidget(file_label)
         file_layout.addWidget(self.file_le)
         
-        self.lw = QtGui.QListWidget()
+        self.lw = QListWidget()
         self.lw.setSortingEnabled(True)
-        self.lw.setSelectionMode(QtGui.QListWidget.ExtendedSelection)
+        self.lw.setSelectionMode(QListWidget.ExtendedSelection)
 
-        bottom_layout = QtGui.QHBoxLayout()
+        bottom_layout = QHBoxLayout()
         
-        rename_layout = QtGui.QGridLayout()
-        src_label = QtGui.QLabel('Source Name')
-        src_label.setAlignment(QtCore.Qt.AlignRight)
-        self.src_le = QtGui.QLineEdit()
+        rename_layout = QGridLayout()
+        src_label = QLabel('Source Name')
+        src_label.setAlignment(Qt.AlignRight)
+        self.src_le = QLineEdit()
         
-        dst_label = QtGui.QLabel('Destination Name')
-        dst_label.setAlignment(QtCore.Qt.AlignRight)
-        self.dst_le = QtGui.QLineEdit()
+        dst_label = QLabel('Destination Name')
+        dst_label.setAlignment(Qt.AlignRight)
+        self.dst_le = QLineEdit()
         
         rename_layout.addWidget(src_label, 0, 0)
         rename_layout.addWidget(self.src_le, 0, 1)
         rename_layout.addWidget(dst_label, 1, 0)
         rename_layout.addWidget(self.dst_le, 1, 1)
         
-        rename_btn_layout = QtGui.QHBoxLayout()
-        rename_btn_layout.setAlignment(QtCore.Qt.AlignTop)
-        self.rename_btn = QtGui.QPushButton('Rename')
+        rename_btn_layout = QHBoxLayout()
+        rename_btn_layout.setAlignment(Qt.AlignTop)
+        self.rename_btn = QPushButton('Rename')
         self.rename_btn.setFixedHeight(50)
         rename_btn_layout.addWidget(self.rename_btn)
         
         bottom_layout.addLayout(rename_layout)
         bottom_layout.addLayout(rename_btn_layout)
         
-        add_grp = QtGui.QGroupBox('Maya')
+        add_grp = QGroupBox('Maya')
         add_grp.setStyleSheet("QGroupBox{color:#00FF00;border: 1px solid #222222;"
                                           "padding-top:15px;border-radius:2px;font-size: 15px}")
-        add_layout = QtGui.QHBoxLayout(add_grp)
+        add_layout = QHBoxLayout(add_grp)
         
-        maya_rename_layout = QtGui.QGridLayout()
-        maya_src_label = QtGui.QLabel('Source Name')
-        maya_src_label.setAlignment(QtCore.Qt.AlignRight)
-        self.maya_src_le = QtGui.QLineEdit()
-        maya_dst_label = QtGui.QLabel('Destination Name')
-        maya_dst_label.setAlignment(QtCore.Qt.AlignRight)
-        self.maya_dst_le = QtGui.QLineEdit()
+        maya_rename_layout = QGridLayout()
+        maya_src_label = QLabel('Source Name')
+        maya_src_label.setAlignment(Qt.AlignRight)
+        self.maya_src_le = QLineEdit()
+        maya_dst_label = QLabel('Destination Name')
+        maya_dst_label.setAlignment(Qt.AlignRight)
+        self.maya_dst_le = QLineEdit()
         maya_rename_layout.addWidget(maya_src_label, 0, 0)
         maya_rename_layout.addWidget(self.maya_src_le, 0, 1)
         maya_rename_layout.addWidget(maya_dst_label, 1, 0)
         maya_rename_layout.addWidget(self.maya_dst_le, 1, 1)
         add_layout.addLayout(maya_rename_layout)
         
-        self.maya_rename_btn = QtGui.QPushButton('Rename')
+        self.maya_rename_btn = QPushButton('Rename')
         self.maya_rename_btn.setFixedHeight(50)
         add_layout.addWidget(self.maya_rename_btn)
         
@@ -124,7 +140,7 @@ class Rename(QtGui.QDialog):
             self.lw.clear()
             for file in os.listdir(self.path):
                 file_name = file.replace('\\', '/')
-                item = QtGui.QListWidgetItem(file_name)
+                item = QListWidgetItem(file_name)
                 self.lw.addItem(item)
                 
     def do_rename(self):

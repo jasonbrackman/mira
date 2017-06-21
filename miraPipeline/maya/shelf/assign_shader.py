@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import pymel.core as pm
 import miraCore
 from miraLibs.pipeLibs.pipeMaya import get_asset_names, assign_shader, get_current_project
@@ -9,27 +11,27 @@ from miraLibs.pyLibs import join_path
 from miraLibs.pipeLibs.pipeDb import sql_api
 
 
-class PopDialog(QtGui.QDialog):
+class PopDialog(QDialog):
     def __init__(self, data_list=[], parent=None):
         super(PopDialog, self).__init__(parent)
         # data_list --->first argument: asset_name; second argument: not exist model list
         self.data_list = data_list
         self.resize(600, 300)
         self.setWindowTitle("Assign shader information")
-        main_layout = QtGui.QHBoxLayout(self)
+        main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(1, 0, 1, 0)
         self.create_table()
         main_layout.addWidget(self.info_table)
 
     def create_table(self):
-        self.info_table = QtGui.QTableWidget()
+        self.info_table = QTableWidget()
         self.info_table.verticalHeader().setVisible(False)
         self.info_table.setColumnCount(2)
         self.info_table.setRowCount(len(self.data_list))
         self.info_table.setHorizontalHeaderLabels(["Asset", "Not exist models"])
-        self.info_table.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+        self.info_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.info_table.horizontalHeader().setStretchLastSection(True)
-        self.info_table.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
+        self.info_table.setSelectionMode(QAbstractItemView.NoSelection)
         self.set_table_data()
         self.info_table.resizeColumnToContents(0)
 
@@ -39,25 +41,25 @@ class PopDialog(QtGui.QDialog):
         for index, data in enumerate(self.data_list):
             asset_name = data[0]
             not_exist_model_list = data[1]
-            asset_item = QtGui.QTableWidgetItem(asset_name)
+            asset_item = QTableWidgetItem(asset_name)
             self.info_table.setItem(index, 0, asset_item)
             if not_exist_model_list:
-                model_list_widget = QtGui.QListWidget()
+                model_list_widget = QListWidget()
                 model_list_widget.addItems(not_exist_model_list)
                 model_list_widget.itemDoubleClicked.connect(self.set_item_editable)
                 self.info_table.setCellWidget(index, 1, model_list_widget)
                 self.info_table.setRowHeight(index, 100)
             else:
-                model_item = QtGui.QTableWidgetItem(u"√")
-                model_item.setTextAlignment(QtCore.Qt.AlignCenter)
+                model_item = QTableWidgetItem(u"√")
+                model_item.setTextAlignment(Qt.AlignCenter)
                 self.info_table.setItem(index, 1, model_item)
 
     @staticmethod
     def set_item_editable(item):
-        item.setFlags(item.flags() | QtCore.Qt.ItemIsEditable)
+        item.setFlags(item.flags() | Qt.ItemIsEditable)
 
 
-class AssetTableModel(QtCore.QAbstractTableModel):
+class AssetTableModel(QAbstractTableModel):
     def __init__(self, arg=[], header=[], parent=None):
         super(AssetTableModel, self).__init__(parent)
         self.__arg = arg
@@ -85,17 +87,17 @@ class AssetTableModel(QtCore.QAbstractTableModel):
     def columnCount(self, parent):
         return len(self.__arg[0])
 
-    def data(self, index, role=QtCore.Qt.DisplayRole):
-        if role == QtCore.Qt.DisplayRole:
+    def data(self, index, role=Qt.DisplayRole):
+        if role == Qt.DisplayRole:
             row = index.row()
             column = index.column()
             return self.__arg[row][column]
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
-    def setData(self, index, value, role=QtCore.Qt.DisplayRole):
-        if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
+    def setData(self, index, value, role=Qt.DisplayRole):
+        if role == Qt.DisplayRole or role == Qt.EditRole:
             row = index.row()
             column = index.column()
             self.__arg[row][column] = value
@@ -104,24 +106,24 @@ class AssetTableModel(QtCore.QAbstractTableModel):
         return False
 
     def headerData(self, section, orientation, role):
-        if role == QtCore.Qt.DisplayRole:
-            if orientation == QtCore.Qt.Horizontal:
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
                 return self.__header[section]
 
 
-class ComboDelegate(QtGui.QItemDelegate):
+class ComboDelegate(QItemDelegate):
     def __init__(self, parent=None):
         super(ComboDelegate, self).__init__(parent)
 
     def createEditor(self, parent, option, index):
         if index.column() == 1:
-            combo = QtGui.QComboBox(parent)
+            combo = QComboBox(parent)
             combo.currentIndexChanged.connect(self.onCurrentIndexChanged)
             return combo
 
     def setEditorData(self, editor, index):
         editor.blockSignals(True)
-        value = index.model().data(index, QtCore.Qt.DisplayRole)
+        value = index.model().data(index, Qt.DisplayRole)
         if isinstance(value, list):
             editor.addItems(value)
             editor.setCurrentIndex(editor.findText("default"))
@@ -129,7 +131,7 @@ class ComboDelegate(QtGui.QItemDelegate):
 
     def setModelData(self, editor, model, index):
         value = editor.currentText()
-        model.setData(index, value, QtCore.Qt.DisplayRole)
+        model.setData(index, value, Qt.DisplayRole)
 
     def updateEditorGeometry(self, editor, option, index):
         editor.setGeometry(option.rect)
@@ -138,38 +140,38 @@ class ComboDelegate(QtGui.QItemDelegate):
         self.commitData.emit(self.sender())
 
 
-class AssignShader(QtGui.QDialog):
+class AssignShader(QDialog):
     def __init__(self, parent=None):
         super(AssignShader, self).__init__(parent)
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
         self.setWindowTitle("Assign Shader")
         self.resize(400, 350)
         current_project = get_current_project.get_current_project()
         self.__db = sql_api.SqlApi(current_project)
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(4, 4, 4, 4)
 
-        self.filter_layout = QtGui.QHBoxLayout()
+        self.filter_layout = QHBoxLayout()
         self.filter_le = ButtonLineEdit()
         self.filter_layout.addStretch()
         self.filter_layout.addWidget(self.filter_le)
-        self.update_btn = QtGui.QToolButton()
+        self.update_btn = QToolButton()
         icon_path = join_path.join_path2(miraCore.get_icons_dir(), "update.png")
-        self.update_btn.setIcon(QtGui.QIcon(icon_path))
+        self.update_btn.setIcon(QIcon(icon_path))
         self.update_btn.setStyleSheet("QToolButton{background:transparent;}"
                                       "QToolButton::hover{background:#00BFFF;border-color:#00BFFF;}")
         self.filter_layout.addWidget(self.update_btn)
 
-        self.table_view = QtGui.QTableView()
+        self.table_view = QTableView()
         self.table_view.verticalHeader().hide()
         self.table_view.horizontalHeader().setStretchLastSection(True)
         self.table_view.setSortingEnabled(True)
         self.table_view.setAlternatingRowColors(True)
-        self.table_view.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.table_view.setSelectionBehavior(QAbstractItemView.SelectRows)
 
-        self.btn_layout = QtGui.QHBoxLayout()
-        self.assign_shader_btn = QtGui.QPushButton("Assign Shader")
-        self.assign_lambert_btn = QtGui.QPushButton("Assign Lambert")
+        self.btn_layout = QHBoxLayout()
+        self.assign_shader_btn = QPushButton("Assign Shader")
+        self.assign_lambert_btn = QPushButton("Assign Lambert")
         self.btn_layout.addStretch()
         self.btn_layout.addWidget(self.assign_shader_btn)
         self.btn_layout.addWidget(self.assign_lambert_btn)
@@ -196,10 +198,10 @@ class AssignShader(QtGui.QDialog):
             shd_version = self.__db.getShadeVersion(arg_dict)
             model_data.append([asset, shd_version])
         self.model = AssetTableModel(model_data, headers)
-        self.proxy_model = QtGui.QSortFilterProxyModel()
+        self.proxy_model = QSortFilterProxyModel()
         self.proxy_model.setFilterKeyColumn(0)
         self.proxy_model.setDynamicSortFilter(True)
-        self.proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
         self.proxy_model.setSourceModel(self.model)
         self.filter_le.textChanged.connect(self.set_filter)
         self.table_view.setModel(self.proxy_model)
@@ -269,7 +271,7 @@ class AssignShader(QtGui.QDialog):
 
     @staticmethod
     def message_box(message):
-        QtGui.QMessageBox.information(None, "Warming Tip", message)
+        QMessageBox.information(None, "Warming Tip", message)
 
 
 def main():

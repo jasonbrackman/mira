@@ -1,27 +1,29 @@
 # -*- coding: utf-8 -*-
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 
-class EmailListModel(QtCore.QAbstractListModel):
+class EmailListModel(QAbstractListModel):
     def __init__(self, arg=[], box=None, parent=None):
         super(EmailListModel, self).__init__(parent)
         self.box = box
         self.arg = arg
         self.clicked_indexes = []
 
-    def rowCount(self, parent=QtCore.QModelIndex()):
+    def rowCount(self, parent=QModelIndex()):
         return len(self.arg)
 
-    def data(self, index, role=QtCore.Qt.DisplayRole):
+    def data(self, index, role=Qt.DisplayRole):
         row = index.row()
         email_item = self.arg[row]
-        if role == QtCore.Qt.ToolTipRole:
+        if role == Qt.ToolTipRole:
             return email_item.content.decode("utf-8")
-        if role == QtCore.Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             return "Title:   %s\nFrom: %s\nDate:  %s" % (email_item.title.decode("utf-8"), email_item.sender, email_item.send_time.decode("utf-8"))
         if self.box == "receiveBox":
-            if role == QtCore.Qt.FontRole:
-                font = QtGui.QFont()
+            if role == Qt.FontRole:
+                font = QFont()
                 if not int(email_item.isRead):
                     font.setBold(True)
                 else:
@@ -31,16 +33,16 @@ class EmailListModel(QtCore.QAbstractListModel):
                 return font
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
-    def insertRows(self, position, count, value, parent=QtCore.QModelIndex()):
+    def insertRows(self, position, count, value, parent=QModelIndex()):
         self.beginInsertRows(parent, position, position+count-1)
         for index, i in enumerate(value):
             self.arg.insert(position+index, i)
         self.endInsertRows()
         return True
 
-    def removeRows(self, position, count, parent=QtCore.QModelIndex()):
+    def removeRows(self, position, count, parent=QModelIndex()):
         self.beginRemoveRows(parent, position, position+count-1)
         for i in range(count):
             value = self.arg[position]
@@ -49,7 +51,7 @@ class EmailListModel(QtCore.QAbstractListModel):
         return True
 
     def setData(self, index, value, role):
-        if role == QtCore.Qt.FontRole:
+        if role == Qt.FontRole:
             if value:
                 role_font = self.data(index, role)
                 role_font.setBold(False)

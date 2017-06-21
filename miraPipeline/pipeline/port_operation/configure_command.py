@@ -1,20 +1,22 @@
 # -*- coding: utf-8 -*-
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 
-class ConfigureCommand(QtGui.QDialog):
+class ConfigureCommand(QDialog):
     def __init__(self, parent=None):
         super(ConfigureCommand, self).__init__(parent)
         self.resize(500, 100)
         self.result = None
-        main_layout = QtGui.QGridLayout(self)
-        name_label = QtGui.QLabel("Name")
-        self.name_le = QtGui.QLineEdit()
-        command_label = QtGui.QLabel("Command")
-        self.command_le = QtGui.QLineEdit()
-        btn_layout = QtGui.QHBoxLayout()
-        self.ok_btn = QtGui.QPushButton("OK")
-        self.cancel_btn = QtGui.QPushButton("Cancel")
+        main_layout = QGridLayout(self)
+        name_label = QLabel("Name")
+        self.name_le = QLineEdit()
+        command_label = QLabel("Command")
+        self.command_le = QLineEdit()
+        btn_layout = QHBoxLayout()
+        self.ok_btn = QPushButton("OK")
+        self.cancel_btn = QPushButton("Cancel")
         btn_layout.addStretch()
         btn_layout.addWidget(self.ok_btn)
         btn_layout.addWidget(self.cancel_btn)
@@ -44,7 +46,7 @@ class ConfigureCommand(QtGui.QDialog):
 
 def main():
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     sc = ConfigureCommand()
     sc.show()
     app.exec_()

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 
-class AddressBookModel(QtCore.QAbstractItemModel):
+class AddressBookModel(QAbstractItemModel):
     def __init__(self, root_node=None, parent=None):
         super(AddressBookModel, self).__init__(parent)
         self.root_node = root_node
@@ -25,7 +27,7 @@ class AddressBookModel(QtCore.QAbstractItemModel):
         if not index.isValid():
             return
         node = index.internalPointer()
-        if role == QtCore.Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             if index.column() == 0 and node.node_type == "group":
                 return node.name()
             if index.column() == 1 and node.node_type == "user":
@@ -35,7 +37,7 @@ class AddressBookModel(QtCore.QAbstractItemModel):
         if not index.isValid():
             return
         node = index.internalPointer()
-        if role == QtCore.Qt.EditRole:
+        if role == Qt.EditRole:
             if index.column() == 0:
                 node.setName(value)
                 return True
@@ -43,17 +45,17 @@ class AddressBookModel(QtCore.QAbstractItemModel):
 
     def headerData(self, section, orientation, role):
         header_list = ["group", "user"]
-        if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
+        if role == Qt.DisplayRole and orientation == Qt.Horizontal:
             return header_list[section]
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
     def parent(self, index):
         node = self.getNode(index)
         parent_node = node.parent()
         if parent_node == self.root_node:
-            return QtCore.QModelIndex()
+            return QModelIndex()
         return self.createIndex(parent_node.row(), 0, parent_node)
 
     def index(self, row, column, parent):
@@ -62,14 +64,14 @@ class AddressBookModel(QtCore.QAbstractItemModel):
         if child_item:
             return self.createIndex(row, column, child_item)
         else:
-            return QtCore.QModelIndex()
+            return QModelIndex()
 
 
-class LeafFilterProxyModel(QtGui.QSortFilterProxyModel):
+class LeafFilterProxyModel(QSortFilterProxyModel):
     def __init__(self):
         super(LeafFilterProxyModel, self).__init__()
         self.setDynamicSortFilter(True)
-        self.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.setFilterCaseSensitivity(Qt.CaseInsensitive)
         self.setFilterKeyColumn(-1)
 
     def filterAcceptsRow(self, row_num, source_parent):

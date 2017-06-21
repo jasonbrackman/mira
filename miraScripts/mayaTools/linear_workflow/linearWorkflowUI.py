@@ -14,7 +14,9 @@ import functools
 from decimal import Decimal
 
 # Third-party modules
-from PySide import QtCore, QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import pymel.core as pm
 import maya.cmds as cmds
 from pymel import versions
@@ -43,12 +45,12 @@ class ui(object):
     # get GroupBox from title
     def getGroupbox(self, title):
         if title not in self.grp_dict.keys():
-            groupbox = QtGui.QGroupBox(title)
-            groupbox.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
-            groupbox.setAlignment(QtCore.Qt.AlignTop| QtCore.Qt.AlignVCenter)
+            groupbox = QGroupBox(title)
+            groupbox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+            groupbox.setAlignment(Qt.AlignTop| Qt.AlignVCenter)
             self.grp_dict[title] = groupbox
 
-            groupbox.setLayout(QtGui.QVBoxLayout())
+            groupbox.setLayout(QVBoxLayout())
             return groupbox
 
         else:
@@ -93,20 +95,20 @@ class ui(object):
             groupbox_layout = groupbox.layout()
 
             # item - fix button/attr name/current value
-            fix_btn = QtGui.QPushButton('Fix')
+            fix_btn = QPushButton('Fix')
             fix_btn.setFixedWidth(self.fixbutton_width)
-            attr_label = QtGui.QLabel(attr_title)
+            attr_label = QLabel(attr_title)
             attr_label.setFixedWidth(self.label_width)
-            attr_label.setAlignment(QtCore.Qt.AlignRight| QtCore.Qt.AlignVCenter)
+            attr_label.setAlignment(Qt.AlignRight| Qt.AlignVCenter)
 
             if type(attr_default)==bool:
-                attr_ui_item = QtGui.QCheckBox()
+                attr_ui_item = QCheckBox()
             else:
-                attr_ui_item = QtGui.QLineEdit()
+                attr_ui_item = QLineEdit()
                 attr_ui_item.setFixedWidth(self.lineedit_width)
 
             # add items to groupbox layout
-            hbox = QtGui.QHBoxLayout()
+            hbox = QHBoxLayout()
             hbox.addWidget(fix_btn)
             hbox.addWidget(attr_label)
             hbox.addWidget(attr_ui_item)
@@ -130,7 +132,7 @@ class ui(object):
         for title in self.grp_dict.keys():
             groupbox = self.getGroupbox(title)
             groupbox_layout = groupbox.layout()
-            fixall_btn = QtGui.QPushButton('Fix All - %s'% title)
+            fixall_btn = QPushButton('Fix All - %s'% title)
 
             callback = functools.partial(self.fix_maya_attr_in_group, title)
             fixall_btn.clicked.connect(callback)
@@ -155,10 +157,10 @@ class ui(object):
 
             is_valid, maya_version = self.mayaVersionString()
 
-            label = QtGui.QLabel(maya_version)
-            statusLabel = QtGui.QLabel()
-            okIcon = self._parent.style().standardIcon(QtGui.QStyle.SP_DialogApplyButton)
-            notOkIcon = self._parent.style().standardIcon(QtGui.QStyle.SP_DialogCancelButton)
+            label = QLabel(maya_version)
+            statusLabel = QLabel()
+            okIcon = self._parent.style().standardIcon(QStyle.SP_DialogApplyButton)
+            notOkIcon = self._parent.style().standardIcon(QStyle.SP_DialogCancelButton)
             if is_valid:
                 label.setStyleSheet('QLabel {font:Bold}')
                 statusLabel.setPixmap(okIcon.pixmap(16))
@@ -166,7 +168,7 @@ class ui(object):
                 label.setStyleSheet('QLabel {font:Bold;color:#FF6600}')
                 statusLabel.setPixmap(notOkIcon.pixmap(16))
 
-            hbox = QtGui.QHBoxLayout()
+            hbox = QHBoxLayout()
             hbox.addWidget(statusLabel)
             hbox.addWidget(label)
             groupbox_layout.addLayout(hbox)
@@ -177,18 +179,18 @@ class ui(object):
         groupbox_layout = groupbox.layout()
 
         # item - fix button/attr name/current value
-        fix_btn = QtGui.QPushButton('Fix')
+        fix_btn = QPushButton('Fix')
         fix_btn.setFixedWidth(self.fixbutton_width)
         fix_btn.clicked.connect(self.set_render_view_option)
-        attr_label = QtGui.QLabel('Save Raw Image')
+        attr_label = QLabel('Save Raw Image')
         attr_label.setFixedWidth(self.label_width)
-        attr_label.setAlignment(QtCore.Qt.AlignRight| QtCore.Qt.AlignVCenter)
-        attr_ui_item = QtGui.QCheckBox()
+        attr_label.setAlignment(Qt.AlignRight| Qt.AlignVCenter)
+        attr_ui_item = QCheckBox()
 
         callback = functools.partial(self.set_render_view_option, attr_ui_item)
         attr_ui_item.stateChanged.connect(callback)
 
-        hbox = QtGui.QHBoxLayout()
+        hbox = QHBoxLayout()
         hbox.addWidget(fix_btn)
         hbox.addWidget(attr_label)
         hbox.addWidget(attr_ui_item)
@@ -219,11 +221,11 @@ class ui(object):
         fix_btn, attr_label, attr_ui_item = self.render_option_ui_items
         if value==0:    # save raw image
             attr_label.setStyleSheet('')
-            attr_ui_item.setCheckState(QtCore.Qt.Checked)
+            attr_ui_item.setCheckState(Qt.Checked)
             fix_btn.setEnabled(False)
         else:       #save color-managed image
             attr_label.setStyleSheet("QLabel { color : #FF6600;font: Bold }")
-            attr_ui_item.setCheckState(QtCore.Qt.Unchecked)
+            attr_ui_item.setCheckState(Qt.Unchecked)
             fix_btn.setEnabled(True)
 
     def groupbox_color_management(self):
@@ -245,18 +247,18 @@ class ui(object):
             groupbox_layout = groupbox.layout()
 
             # item - fix button/attr name/current value
-            attr_label = QtGui.QLabel(attr_title)
+            attr_label = QLabel(attr_title)
             attr_label.setFixedWidth(self.label_width)
-            attr_label.setAlignment(QtCore.Qt.AlignRight| QtCore.Qt.AlignVCenter)
+            attr_label.setAlignment(Qt.AlignRight| Qt.AlignVCenter)
 
             if type(attr_default)==bool:
-                attr_ui_item = QtGui.QCheckBox()
+                attr_ui_item = QCheckBox()
             else:
-                attr_ui_item = QtGui.QLineEdit()
+                attr_ui_item = QLineEdit()
                 attr_ui_item.setFixedWidth(150)
 
             # add items to groupbox layout
-            hbox = QtGui.QHBoxLayout()
+            hbox = QHBoxLayout()
             hbox.addWidget(attr_label)
             hbox.addWidget(attr_ui_item)
             groupbox_layout.addLayout(hbox)
@@ -273,7 +275,7 @@ class ui(object):
         groupbox = self.getGroupbox('Color Management Preferences')
         groupbox_layout = groupbox.layout()
 
-        fixall_btn = QtGui.QPushButton('Fix All - Color Management Preferences')
+        fixall_btn = QPushButton('Fix All - Color Management Preferences')
         fixall_btn.clicked.connect(self.set_color_management_attr)
 
         # colormanagement command not exists
@@ -328,14 +330,14 @@ class ui(object):
             elif label.text()=='Enable Color Pots':
                 value = cmds.colorManagementPrefs(q=True, colorManagePots=True)
 
-            if isinstance(ui_item, QtGui.QLineEdit):
+            if isinstance(ui_item, QLineEdit):
                 ui_item.setText(str(value))
                 ui_item.setReadOnly(True)
-            elif isinstance(ui_item, QtGui.QCheckBox):
+            elif isinstance(ui_item, QCheckBox):
                 if value:
-                    ui_item.setCheckState(QtCore.Qt.Checked)
+                    ui_item.setCheckState(Qt.Checked)
                 else:
-                    ui_item.setCheckState(QtCore.Qt.Unchecked)
+                    ui_item.setCheckState(Qt.Unchecked)
                 ui_item.setEnabled(False)
 
             if value!=default_value:
@@ -353,7 +355,7 @@ class ui(object):
         self.groupbox_render_view_option()
 
         # Main Vertical Box Layout
-        main_vbox = QtGui.QVBoxLayout()
+        main_vbox = QVBoxLayout()
 
 
         # Main Layout for groupbox
@@ -363,9 +365,9 @@ class ui(object):
             ['Arnold Texture', 'Arnold Filter', 'Arnold Log', 'Render View Option']
         ]
 
-        hbox_groupbox = QtGui.QHBoxLayout()
+        hbox_groupbox = QHBoxLayout()
         for title_order in groupbox_order:
-            vbox = QtGui.QVBoxLayout()
+            vbox = QVBoxLayout()
             for title in title_order:
                 groupbox = self.getGroupbox(title)
                 vbox.addWidget(groupbox)
@@ -374,7 +376,7 @@ class ui(object):
 
 
         # Fix-all Button
-        fixall_btn = QtGui.QPushButton('Fix All')
+        fixall_btn = QPushButton('Fix All')
         callback = functools.partial(self.fix_maya_attr_in_group, 'all')
         fixall_btn.clicked.connect(self.set_default_attr)
         fixall_btn.setFixedHeight(30)
@@ -407,13 +409,13 @@ class ui(object):
 
             # current attr_value
             # line_edit
-            if isinstance(attr_ui_item, QtGui.QLineEdit):
+            if isinstance(attr_ui_item, QLineEdit):
                 attr_ui_item.setText(str(attr_value))
                 # validator
                 if type(attr_value)==int:
-                    attr_ui_item.setValidator(QtGui.QIntValidator())
+                    attr_ui_item.setValidator(QIntValidator())
                 elif type(attr_value)==float:
-                    attr_ui_item.setValidator(QtGui.QDoubleValidator())
+                    attr_ui_item.setValidator(QDoubleValidator())
 
                 if type(attr_value)==str or type(attr_value)==unicode:
                     attr_ui_item.setReadOnly(True)
@@ -421,11 +423,11 @@ class ui(object):
                     attr_ui_item.setReadOnly(False)
 
             # checkbox
-            elif isinstance(attr_ui_item, QtGui.QCheckBox):
+            elif isinstance(attr_ui_item, QCheckBox):
                 if attr_value:
-                    attr_ui_item.setCheckState(QtCore.Qt.Checked)
+                    attr_ui_item.setCheckState(Qt.Checked)
                 else:
-                    attr_ui_item.setCheckState(QtCore.Qt.Unchecked)
+                    attr_ui_item.setCheckState(Qt.Unchecked)
 
             # button enable disable
             if attr_default==attr_value:
@@ -443,12 +445,12 @@ class ui(object):
         attr_name = args[1]
 
         value = None
-        if isinstance(ui_item, QtGui.QLineEdit):
+        if isinstance(ui_item, QLineEdit):
             try:
                 value = float(ui_item.text())
             except:
                 value = ui_item.text()
-        elif isinstance(ui_item, QtGui.QCheckBox):
+        elif isinstance(ui_item, QCheckBox):
             print ui_item.checkState()
             value = bool(ui_item.checkState())
 

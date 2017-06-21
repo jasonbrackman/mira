@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import sim_reference_in_ui
 reload(sim_reference_in_ui)
 from miraLibs.mayaLibs import create_reference, get_maya_win
@@ -14,9 +16,9 @@ class SimReferenceIn(sim_reference_in_ui.SimReferenceInUI):
         super(SimReferenceIn, self).__init__(parent)
         self.run_app = sys.executable
         # set table view model
-        self.model = QtGui.QFileSystemModel()
+        self.model = QFileSystemModel()
         self.tree_view.setModel(self.model)
-        self.tree_view.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+        self.tree_view.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.tree_view.hideColumn(1)
         self.tree_view.hideColumn(2)
         self.tree_view.hideColumn(3)
@@ -82,8 +84,8 @@ class SimReferenceIn(sim_reference_in_ui.SimReferenceInUI):
         if not paths:
             return
         if self.run_app.endswith("maya.exe"):
-            progress_dialog = QtGui.QProgressDialog('Reference in,Please wait......', 'Cancel', 0, len(paths))
-            progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+            progress_dialog = QProgressDialog('Reference in,Please wait......', 'Cancel', 0, len(paths))
+            progress_dialog.setWindowModality(Qt.WindowModal)
             progress_dialog.show()
             for index, path in enumerate(paths):
                 create_reference.create_reference(path)

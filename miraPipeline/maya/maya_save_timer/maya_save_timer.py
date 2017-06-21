@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-import PySide.QtCore as QtCore
-
+from Qt.QtWidgets import *
+from Qt.QtGui import *
+from Qt.QtCore import *
 import miraLibs.mayaLibs.MayaSaveTimer as MayaSaveTimer
 import miraLibs.mayaLibs.get_maya_globals as get_maya_globals
 import miraLibs.mayaLibs.get_maya_win as get_maya_win
 import MainUI
 
-Settings = QtCore.QSettings("OddOrange", "MayaSaveTimer")
+Settings = QSettings("OddOrange", "MayaSaveTimer")
 
 
 def maya_save_timer():

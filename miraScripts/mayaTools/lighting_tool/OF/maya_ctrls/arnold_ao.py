@@ -1,6 +1,8 @@
 __author__ = 'heshuai'
 import  pymel.core as pm
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import time
 
 
@@ -103,8 +105,8 @@ def main():
             ao_sg_node = create_ao_shader()[1]
         else:
             ao_sg_node = pm.PyNode('AO_SG')
-        progress_dialog = QtGui.QProgressDialog('<Total:%s>Assign materials,Please wait......' % len(sg_nodes), 'Cancel', 0, len(sg_nodes))
-        progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+        progress_dialog = QProgressDialog('<Total:%s>Assign materials,Please wait......' % len(sg_nodes), 'Cancel', 0, len(sg_nodes))
+        progress_dialog.setWindowModality(Qt.WindowModal)
         progress_dialog.show()
         value = 0
         start = time.time()

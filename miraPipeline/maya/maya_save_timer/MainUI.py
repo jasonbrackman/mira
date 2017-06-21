@@ -12,8 +12,9 @@
 import logging
 import os
 # Third-party modules
-import PySide.QtGui as QtGui
-import PySide.QtCore as QtCore
+from Qt.QtWidgets import *
+from Qt.QtGui import *
+from Qt.QtCore import *
 import pymel.core as pm
 
 # Studio modules
@@ -27,8 +28,8 @@ logging.basicConfig(filename=os.path.join(os.environ["TMP"], 'aas_repos_MainUI_l
                     level=logging.WARN, filemode='a', format='%(asctime)s - %(levelname)s: %(message)s')
 
 
-class MainUI(QtGui.QDialog):
-    closed = QtCore.Signal()
+class MainUI(QDialog):
+    closed = Signal()
 
     def __init__(self, duration=20, parent=None):
         super(MainUI, self).__init__(parent)
@@ -39,12 +40,12 @@ class MainUI(QtGui.QDialog):
         self._ui.time_label.setText(str(self.duration))
         self._ui.time_label_1.setText(str(self.duration))
 
-    @QtCore.Slot()
+    @Slot()
     def on_save_btn_clicked(self):
         logging.debug("default maya save.")
         pm.mel.eval("SaveScene")
 
-    @QtCore.Slot()
+    @Slot()
     def on_versionup_btn_clicked(self):
         logging.debug("aas version up save.")
         aas_save_as.aas_save_as()
@@ -57,7 +58,7 @@ class MainUI(QtGui.QDialog):
 
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     wgt = MainUI()
     wgt.show()
     app.exec_()

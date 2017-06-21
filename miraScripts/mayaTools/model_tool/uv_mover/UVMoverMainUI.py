@@ -12,8 +12,9 @@
 import logging
 import os
 # Third-party modules
-import PySide.QtGui as QtGui
-import PySide.QtCore as QtCore
+from Qt.QtWidgets import *
+from Qt.QtGui import *
+from Qt.QtCore import *
 import pymel.core as pm
 
 # Studio modules
@@ -28,7 +29,7 @@ logging.basicConfig(filename=os.path.join(os.environ["TMP"], 'aas_repos_UVMoverM
 logger = logging.getLogger(__name__)
 
 
-class UVMoverMainUI(QtGui.QDialog):
+class UVMoverMainUI(QDialog):
 
     def __init__(self, parent=None):
         super(UVMoverMainUI, self).__init__(parent)
@@ -59,13 +60,13 @@ class UVMoverMainUI(QtGui.QDialog):
         pm.polyEditUVShell(**direction_dict[btn_name])
 
     def keyPressEvent(self, event):
-        if event.key() == QtCore.Qt.Key_Up:
+        if event.key() == Qt.Key_Up:
             self._ui.up_btn.clicked.emit()
-        if event.key() == QtCore.Qt.Key_Left:
+        if event.key() == Qt.Key_Left:
             self._ui.left_btn.clicked.emit()
-        if event.key() == QtCore.Qt.Key_Right:
+        if event.key() == Qt.Key_Right:
             self._ui.right_btn.clicked.emit()
-        if event.key() == QtCore.Qt.Key_Down:
+        if event.key() == Qt.Key_Down:
             self._ui.down_btn.clicked.emit()
 
 

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from ..libs import get_icon_dir
 
 
@@ -17,17 +19,17 @@ BUTTON_STYLESHEET = "QPushButton{" \
                     "stop: 0 #c7eff5, stop: 0.5 #eafafc,stop: 1.0 #c7eff5);}"
 
 
-class EmailButton(QtGui.QPushButton):
+class EmailButton(QPushButton):
     def __init__(self, name=None, text=None, parent=None):
         super(EmailButton, self).__init__(parent)
         self.name = name
         self.text = " %s" % text
         icon_dir = get_icon_dir.get_icon_dir()
         icon_path = os.path.join(icon_dir, "%s.png" % self.name)
-        icon = QtGui.QIcon(icon_path)
+        icon = QIcon(icon_path)
         self.setIcon(icon)
         self.setText(self.text)
         self.setMinimumSize(80, 30)
-        self.setIconSize(QtCore.QSize(25, 25))
+        self.setIconSize(QSize(25, 25))
         self.setStyleSheet(BUTTON_STYLESHEET)
 

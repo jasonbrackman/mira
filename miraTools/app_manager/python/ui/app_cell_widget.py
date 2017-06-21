@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 import os
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from ..frameworks import frame_layout, app_button
 from ..libs import get_path_from_link, recent_operation
 
 
-class AppCellWidget(QtGui.QWidget):
-    delete_signal = QtCore.Signal(basestring)
+class AppCellWidget(QWidget):
+    delete_signal = Signal(basestring)
 
     def __init__(self, name=None, collapse=False, parent=None):
         super(AppCellWidget, self).__init__(parent)
@@ -20,9 +22,9 @@ class AppCellWidget(QtGui.QWidget):
         self.main_layout = frame_layout.FrameLayout(self.name, self.collapse, True, self)
         self.main_layout.set_btn.clicked.connect(self.set_name)
         self.main_layout.delete_btn.clicked.connect(self.delete_self)
-        self.app_grid_layout = QtGui.QGridLayout(self.main_layout.frame)
+        self.app_grid_layout = QGridLayout(self.main_layout.frame)
         self.app_grid_layout.setContentsMargins(0, 0, 0, 0)
-        self.app_grid_layout.setAlignment(QtCore.Qt.AlignTop)
+        self.app_grid_layout.setAlignment(Qt.AlignTop)
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
@@ -48,8 +50,8 @@ class AppCellWidget(QtGui.QWidget):
             if not (os.path.isfile(path) or os.path.isdir(path)):
                 continue
             default_name = os.path.splitext(os.path.basename(path))[0]
-            name, ok = QtGui.QInputDialog.getText(self, "App Name", "Please input an app name",
-                                                  QtGui.QLineEdit.Normal, default_name)
+            name, ok = QInputDialog.getText(self, "App Name", "Please input an app name",
+                                                  QLineEdit.Normal, default_name)
             if not ok:
                 continue
             app_names = [app.name for app in self.apps]
@@ -84,8 +86,8 @@ class AppCellWidget(QtGui.QWidget):
         recent_operation.save_to_recent(name, exe_path)
 
     def set_name(self):
-        text, ok = QtGui.QInputDialog.getText(self, "Group Name", "Please input a group name",
-                                              QtGui.QLineEdit.Normal, self.main_layout.collapse_btn.text())
+        text, ok = QInputDialog.getText(self, "Group Name", "Please input a group name",
+                                              QLineEdit.Normal, self.main_layout.collapse_btn.text())
         if text and ok:
             self.name = text.upper()
             self.main_layout.collapse_btn.setText(self.name)

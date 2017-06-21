@@ -11,19 +11,16 @@
 # Built-in modules
 
 # Third-party modules
-try:
-    import PyQt4.QtCore as QtCore
-    import PyQt4.QtGui as QtGui
-except ImportError:
-    import PySide.QtCore as QtCore
-    import PySide.QtGui as QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 # Studio modules
 
 # Local modules
 
 
-QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName("utf8"))
+QTextCodec.setCodecForTr(QTextCodec.codecForName("utf8"))
 
 
 def odd_progress_dialog(num, info="处理中..."):
@@ -33,8 +30,8 @@ def odd_progress_dialog(num, info="处理中..."):
     :param info: shown information
     :return: QProgressDialog
     """
-    progress_dialog = QtGui.QProgressDialog()
-    progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+    progress_dialog = QProgressDialog()
+    progress_dialog.setWindowModality(Qt.WindowModal)
     progress_dialog.setMinimumDuration(5)
     progress_dialog.setWindowTitle(progress_dialog.tr("请等待"))
     progress_dialog.setLabelText(progress_dialog.tr(info))
@@ -46,7 +43,7 @@ def odd_progress_dialog(num, info="处理中..."):
 if __name__ == "__main__":
     import sys
     import time
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     test_pd = odd_progress_dialog(100)
     for i in range(101):
         test_pd.setValue(i)

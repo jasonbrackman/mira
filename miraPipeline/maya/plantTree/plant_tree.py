@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from plant_tree_UI import plant_tree_UI
 from miraLibs.mayaLibs import get_maya_win
 from functools import partial
@@ -22,11 +24,11 @@ class PlanTree(plant_tree_UI):
 
     def set_tree_list(self):
         if not mc.objExists('standin'):
-            QtGui.QMessageBox.information(self,'error','no standin group,please check it')
+            QMessageBox.information(self,'error','no standin group,please check it')
             return
         tree_list = mc.listRelatives('standin',c=1)
         for i in tree_list:
-            item = QtGui.QListWidgetItem()
+            item = QListWidgetItem()
             item.setText(i)
             self.treeListWidget.addItem(item)
 
@@ -37,12 +39,12 @@ class PlanTree(plant_tree_UI):
 
     def add_ground_function(self):
         if not mc.ls(sl=1):
-            QtGui.QMessageBox.information(self, 'error', 'select a mesh first')
+            QMessageBox.information(self, 'error', 'select a mesh first')
             return
         ground_trans = mc.ls(sl=1,l=1)[0]
         ground_shape = mc.listRelatives(ground_trans, c=1, f=1)[0]
         if not mc.nodeType(ground_shape) == 'mesh':
-            QtGui.QMessageBox.information(self, 'error', 'this is not a mesh obj')
+            QMessageBox.information(self, 'error', 'this is not a mesh obj')
             return
         self.lineEdit_2.setText(ground_trans)
 

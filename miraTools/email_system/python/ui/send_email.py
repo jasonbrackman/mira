@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import socket
 import getpass
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from ..frameworks import text_edit
 from ..frameworks import filter_line_edit, email_button
 from .address_book_ui import address_book_tree_ui
@@ -10,30 +12,30 @@ from ..libs import get_redis_conn
 from ..libs import get_current_date
 
 
-class SendEmailUI(QtGui.QWidget):
+class SendEmailUI(QWidget):
 
     def __init__(self, parent=None):
         super(SendEmailUI, self).__init__(parent)
-        main_layout = QtGui.QHBoxLayout(self)
+        main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        main_group = QtGui.QGroupBox()
+        main_group = QGroupBox()
         main_layout.addWidget(main_group)
-        group_layout = QtGui.QHBoxLayout(main_group)
+        group_layout = QHBoxLayout(main_group)
         group_layout.setContentsMargins(5, 10, 5, 5)
-        main_splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
+        main_splitter = QSplitter(Qt.Horizontal)
         group_layout.addWidget(main_splitter)
-        left_widget = QtGui.QWidget()
+        left_widget = QWidget()
         main_splitter.addWidget(left_widget)
-        left_layout = QtGui.QGridLayout(left_widget)
+        left_layout = QGridLayout(left_widget)
         left_layout.setVerticalSpacing(20)
-        acceptor_label = QtGui.QLabel(u"收件人")
-        acceptor_label.setAlignment(QtCore.Qt.AlignRight)
-        self.acceptor_le = QtGui.QLineEdit()
-        title_label = QtGui.QLabel(u"主题")
-        title_label.setAlignment(QtCore.Qt.AlignRight)
-        self.title_le = QtGui.QLineEdit()
-        content_label = QtGui.QLabel(u"正文")
-        content_label.setAlignment(QtCore.Qt.AlignTop | QtCore.Qt.AlignRight)
+        acceptor_label = QLabel(u"收件人")
+        acceptor_label.setAlignment(Qt.AlignRight)
+        self.acceptor_le = QLineEdit()
+        title_label = QLabel(u"主题")
+        title_label.setAlignment(Qt.AlignRight)
+        self.title_le = QLineEdit()
+        content_label = QLabel(u"正文")
+        content_label.setAlignment(Qt.AlignTop | Qt.AlignRight)
         self.content_te = text_edit.TextEdit()
         left_layout.addWidget(acceptor_label, 0, 0, 1, 1)
         left_layout.addWidget(self.acceptor_le, 0, 1, 1, 20)
@@ -42,16 +44,16 @@ class SendEmailUI(QtGui.QWidget):
         left_layout.addWidget(content_label, 2, 0, 1, 1)
         left_layout.addWidget(self.content_te, 2, 1, 1, 20)
 
-        btn_layout = QtGui.QHBoxLayout()
+        btn_layout = QHBoxLayout()
         self.send_btn = email_button.EmailButton("write", u"发送")
         btn_layout.addStretch()
         btn_layout.addWidget(self.send_btn)
         left_layout.addLayout(btn_layout, 3, 0, 1, 21)
 
         # address layout
-        tab_widget = QtGui.QTabWidget()
-        address_widget = QtGui.QWidget()
-        address_layout = QtGui.QVBoxLayout(address_widget)
+        tab_widget = QTabWidget()
+        address_widget = QWidget()
+        address_layout = QVBoxLayout(address_widget)
         self.filter_le = filter_line_edit.FilterLineEdit()
         self.address_tree = address_book_tree_ui.AddressBookTreeView()
         address_layout.addWidget(self.filter_le)
@@ -98,13 +100,13 @@ class SendEmailUI(QtGui.QWidget):
     def do_send(self):
         acceptor_str = self.acceptor_le.text()
         if not acceptor_str:
-            QtGui.QMessageBox.information(self, "warming tip", "Please input at least one acceptor.")
+            QMessageBox.information(self, "warming tip", "Please input at least one acceptor.")
             return
         acceptors = acceptor_str.split(";")
         title = self.title_le.text().encode("utf-8")
         content = self.content_te.to_html()
         if not all((acceptors, title, content)):
-            QtGui.QMessageBox.information(self, "warming tip", "content missed.")
+            QMessageBox.information(self, "warming tip", "content missed.")
             return
         current_date = get_current_date.get_current_date()
         sender = getpass.getuser()
@@ -132,7 +134,7 @@ class SendEmailUI(QtGui.QWidget):
 
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     se = SendEmailUI()
     se.show()
     app.exec_()

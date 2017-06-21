@@ -5,7 +5,9 @@ import socket
 import sys
 import threading
 import getpass
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from python.ui import system_tray
 from python.ui import email_system_ui
 from python.libs import get_redis_conn, get_local_ip, redis_api
@@ -14,7 +16,7 @@ from python.libs import get_redis_conn, get_local_ip, redis_api
 class EmailSystem(object):
     def __init__(self):
         self.threads = list()
-        self.app = QtGui.QApplication(sys.argv)
+        self.app = QApplication(sys.argv)
         self.tray = system_tray.SystemTray(self.app)
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.host = get_local_ip.get_local_ip()
@@ -40,7 +42,7 @@ class EmailSystem(object):
                 sys.exit(0)
 
     def show_system_tray_icon(self):
-        QtGui.QApplication.setQuitOnLastWindowClosed(False)
+        QApplication.setQuitOnLastWindowClosed(False)
         self.tray.quit_action.triggered.connect(self.quit)
         self.tray.activated.connect(self.on_tray_double_clicked)
         self.tray.messageClicked.connect(self.show_email)
@@ -71,7 +73,7 @@ class EmailSystem(object):
         self.show_system_tray_icon()
 
     def on_tray_double_clicked(self, reason):
-        if reason == QtGui.QSystemTrayIcon.DoubleClick:
+        if reason == QSystemTrayIcon.DoubleClick:
             self.show_email()
 
     def show_email(self):

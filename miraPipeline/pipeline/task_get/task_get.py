@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 import logging
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import task_get_ui
 reload(task_get_ui)
 from miraLibs.dbLibs import db_api
@@ -103,7 +105,7 @@ class ShotNode(Node):
         return "shot"
 
 
-class AssetTreeModel(QtCore.QAbstractItemModel):
+class AssetTreeModel(QAbstractItemModel):
     def __init__(self, root_node=None, project=None, parent=None):
         super(AssetTreeModel, self).__init__(parent)
         self.root_node = root_node
@@ -127,7 +129,7 @@ class AssetTreeModel(QtCore.QAbstractItemModel):
         if not index.isValid():
             return
         node = index.internalPointer()
-        if role == QtCore.Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             if index.column() == 0 and node.node_type == "entity":
                 return node.name
             if index.column() == 0 and node.node_type in ["asset_type", "sequence"]:
@@ -139,7 +141,7 @@ class AssetTreeModel(QtCore.QAbstractItemModel):
                         "status:  %s\n"\
                         "priority: %s" % (node.name, node.step, node.task, node.status, node.priority)
                 return value
-        elif role == QtCore.Qt.DecorationRole:
+        elif role == Qt.DecorationRole:
             if index.column() == 1 and node.node_type in ["asset", "shot"]:
                 if node.node_type == "asset":
                     pix_map_path = pipeFile.get_asset_task_image_file(self.project, node.parent().name,
@@ -148,23 +150,23 @@ class AssetTreeModel(QtCore.QAbstractItemModel):
                     pix_map_path = pipeFile.get_shot_task_image_file(self.project, node.parent().name,
                                                                      node.name, node.step, node.task)
                 if os.path.isfile(pix_map_path):
-                    pix_map = QtGui.QPixmap(pix_map_path)
+                    pix_map = QPixmap(pix_map_path)
                 else:
-                    pix_map = QtGui.QPixmap(100, 100)
-                    pix_map.fill(QtGui.QColor("#111111"))
-                scaled = pix_map.scaled(QtCore.QSize(100, 90), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+                    pix_map = QPixmap(100, 100)
+                    pix_map.fill(QColor("#111111"))
+                scaled = pix_map.scaled(QSize(100, 90), Qt.KeepAspectRatio, Qt.SmoothTransformation)
                 return scaled
-        elif role == QtCore.Qt.SizeHintRole:
+        elif role == Qt.SizeHintRole:
             if node.node_type in ["entity", "asset_type", "sequence"]:
-                return QtCore.QSize(30, 20)
+                return QSize(30, 20)
             else:
-                return QtCore.QSize(100, 100)
+                return QSize(100, 100)
 
     def setData(self, index, value, role):
         if not index.isValid():
             return
         node = index.internalPointer()
-        if role == QtCore.Qt.EditRole:
+        if role == Qt.EditRole:
             if index.column() == 0:
                 node.name = value
                 return True
@@ -172,17 +174,17 @@ class AssetTreeModel(QtCore.QAbstractItemModel):
 
     # def headerData(self, section, orientation, role):
     #     header_list = ["entity", "Asset Type/Sequence", "Thumbnail", "Information"]
-    #     if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
+    #     if role == Qt.DisplayRole and orientation == Qt.Horizontal:
     #         return header_list[section]
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
     def parent(self, index):
         node = self.getNode(index)
         parent_node = node.parent()
         if parent_node == self.root_node:
-            return QtCore.QModelIndex()
+            return QModelIndex()
         return self.createIndex(parent_node.row(), 0, parent_node)
 
     def index(self, row, column, parent):
@@ -191,15 +193,15 @@ class AssetTreeModel(QtCore.QAbstractItemModel):
         if child_item:
             return self.createIndex(row, column, child_item)
         else:
-            return QtCore.QModelIndex()
+            return QModelIndex()
 
 
-class LeafFilterProxyModel(QtGui.QSortFilterProxyModel):
+class LeafFilterProxyModel(QSortFilterProxyModel):
     def __init__(self):
         super(LeafFilterProxyModel, self).__init__()
         self.setDynamicSortFilter(True)
-        self.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
-        self.setSortCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.setFilterCaseSensitivity(Qt.CaseInsensitive)
+        self.setSortCaseSensitivity(Qt.CaseInsensitive)
         self.setFilterKeyColumn(-1)
         self.final_checked = False
 
@@ -252,8 +254,8 @@ class TaskGet(task_get_ui.TaskGetUI):
 
     def init(self):
         self.task_view.setSortingEnabled(True)
-        self.task_view.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.task_view.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
+        self.task_view.setFocusPolicy(Qt.NoFocus)
+        self.task_view.setSelectionMode(QAbstractItemView.SingleSelection)
         self.task_view.header().hide()
         # init project
         projects = pipeMira.get_projects()
@@ -267,7 +269,7 @@ class TaskGet(task_get_ui.TaskGetUI):
             self.publish_file_widget.setStyleSheet("QTreeView:item{height: 30px;}")
             return
         qss_path = os.path.abspath(os.path.join(__file__, "..", "style.qss"))
-        self.setStyle(QtGui.QStyleFactory.create('plastique'))
+        self.setStyle(QStyleFactory.create('plastique'))
         self.setStyleSheet(open(qss_path, 'r').read())
 
     def set_signals(self):
@@ -312,7 +314,7 @@ class TaskGet(task_get_ui.TaskGetUI):
         self.root_node = Node("Task get")
         my_tasks = self.__db.get_my_tasks()
         if not my_tasks:
-            self.model = QtGui.QStandardItemModel()
+            self.model = QStandardItemModel()
             self.task_view.setModel(self.model)
             return
         entity_types = [task["entity"]["type"] for task in my_tasks]
@@ -407,7 +409,7 @@ class TaskGet(task_get_ui.TaskGetUI):
 
 def run_standalone():
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     tg = TaskGet()
     tg.show()
     app.exec_()

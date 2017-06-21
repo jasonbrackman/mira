@@ -1,22 +1,38 @@
 ﻿import maya.cmds as mc
 import maya.mel as mel
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
+from Qt import __binding__
 import sys
 import os
 
 
 class MayaUtility(object):
     @staticmethod
-    def get_maya_win():
+    def get_maya_win(module="PySide"):
+        """
+        get a QMainWindow Object of maya main window
+        :param module (optional): string "PySide"(default) or "PyQt4"
+        :return main_window: QWidget or QMainWindow object
+        """
         import maya.OpenMayaUI as mui
-        main_window = None
-        ptr = mui.MQtUtil.mainWindow()
-        if 'PyQt4' in QtGui.__name__:
+        prt = mui.MQtUtil.mainWindow()
+        if module == "PyQt":
             import sip
-            main_window = sip.wrapinstance(long(ptr), QtCore.QWidget)
-        elif 'PySide' in QtGui.__name__:
-            import shiboken
-            main_window = shiboken.wrapInstance(long(ptr), QtGui.QWidget)
+            from Qt.QtCore import *
+            main_window = sip.wrapinstance(long(prt), QObject)
+        elif module in ["PySide", "PyQt"]:
+            if __binding__ in ["PySide", "PyQt4"]:
+                import shiboken
+            elif __binding__ in ["PySide2", "PyQt5"]:
+                import shiboken2 as shiboken
+            from Qt.QtWidgets import *
+            main_window = shiboken.wrapInstance(long(prt), QWidget)
+        elif module == "mayaUI":
+            main_window = "MayaWindow"
+        else:
+            raise ValueError('param "module" must be "mayaUI" "PyQt4" or "PySide"')
         return main_window
 
     def get_os_type(self):
@@ -133,20 +149,20 @@ class MayaUtility(object):
         mc.file(file_name, unloadReference=1)
 
         
-class ReferenceTree(QtGui.QTreeView):
+class ReferenceTree(QTreeView):
 
     def __init__(self, parent=None):
         super(ReferenceTree, self).__init__(parent)
-        self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        self.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
-        self.setSelectionMode(QtGui.QTreeView.ExtendedSelection)
-        self.menu = QtGui.QMenu()
-        self.import_action = QtGui.QAction('import Objects From Reference', self)
-        self.remove_action = QtGui.QAction('Remove Reference', self)
-        self.select_action = QtGui.QAction('Select Polygon', self)
-        self.load_action = QtGui.QAction('Load Reference', self)
-        self.unload_action = QtGui.QAction('Unload Reference', self)
-        self.open_action = QtGui.QAction('Open Direction', self)
+        self.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setSelectionMode(QTreeView.ExtendedSelection)
+        self.menu = QMenu()
+        self.import_action = QAction('import Objects From Reference', self)
+        self.remove_action = QAction('Remove Reference', self)
+        self.select_action = QAction('Select Polygon', self)
+        self.load_action = QAction('Load Reference', self)
+        self.unload_action = QAction('Unload Reference', self)
+        self.open_action = QAction('Open Direction', self)
 
     def contextMenuEvent(self, event):
         self.menu.clear()
@@ -160,49 +176,49 @@ class ReferenceTree(QtGui.QTreeView):
         self.menu.addAction(self.unload_action)
         self.menu.addSeparator()
         self.menu.addAction(self.open_action)
-        self.menu.exec_(QtGui.QCursor.pos())
+        self.menu.exec_(QCursor.pos())
         event.accept()
 
 
-class ReferenceItem(QtGui.QStandardItem):
-    def __init__(self, text=None, color=QtCore.Qt.white, bold=False, font_size=10):
+class ReferenceItem(QStandardItem):
+    def __init__(self, text=None, color=Qt.white, bold=False, font_size=10):
         super(ReferenceItem, self).__init__()
         self.text = text
         self.setText(self.text)
         self.setForeground(color)
-        font = QtGui.QFont()
+        font = QFont()
         font.setPointSizeF(font_size)
         if bold:
-            font.setWeight(QtGui.QFont.Bold)
-        self.setData(font, QtCore.Qt.FontRole)
+            font.setWeight(QFont.Bold)
+        self.setData(font, Qt.FontRole)
         self.setEditable(False)
 
     def set_color(self, arg):
         self.setForeground(arg)
 
 
-class ReferenceView(QtGui.QDialog):
+class ReferenceView(QDialog):
     utility = MayaUtility()
 
     def __init__(self, parent=None):
         super(ReferenceView, self).__init__(parent)
         self.setObjectName('Reference Editor')
         self.setWindowTitle('Reference Editor')
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowCloseButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint)
         self.resize(600, 400)
 
-        main_layout = QtGui.QVBoxLayout(self)
-        main_layout.setAlignment(QtCore.Qt.AlignTop)
+        main_layout = QVBoxLayout(self)
+        main_layout.setAlignment(Qt.AlignTop)
         self.tree_view = ReferenceTree()
         self.tree_view.resizeColumnToContents(0)
         self.tree_view.resizeColumnToContents(1)
-        self.model = QtGui.QStandardItemModel()
+        self.model = QStandardItemModel()
 
-        button_layout = QtGui.QHBoxLayout()
-        self.refresh_btn = QtGui.QPushButton('Refresh')
-        self.select_btn = QtGui.QPushButton('Select Reference By Object')
-        self.remove_all_btn = QtGui.QPushButton('Remove All Unloaded Reference')
-        self.import_all_btn = QtGui.QPushButton('Import All Loaded Reference')
+        button_layout = QHBoxLayout()
+        self.refresh_btn = QPushButton('Refresh')
+        self.select_btn = QPushButton('Select Reference By Object')
+        self.remove_all_btn = QPushButton('Remove All Unloaded Reference')
+        self.import_all_btn = QPushButton('Import All Loaded Reference')
         button_layout.addWidget(self.refresh_btn)
         button_layout.addWidget(self.select_btn)
         button_layout.addWidget(self.remove_all_btn)
@@ -236,8 +252,8 @@ class ReferenceView(QtGui.QDialog):
             ref_file_item = ReferenceItem(ref_file_name)
             load_status = self.utility.check_loaded(ref)
             if not load_status:
-                ref_node_item.set_color(QtCore.Qt.red)
-                ref_file_item.set_color(QtCore.Qt.red)
+                ref_node_item.set_color(Qt.red)
+                ref_file_item.set_color(Qt.red)
             self.model.appendRow([ref_node_item, ref_file_item])
             child_ref = self.utility.get_child_ref(ref)
             if child_ref:
@@ -247,8 +263,8 @@ class ReferenceView(QtGui.QDialog):
                     child_file_item = ReferenceItem(child_file_name)
                     load_status = self.utility.check_loaded(child)
                     if not load_status:
-                        child_item.set_color(QtCore.Qt.red)
-                        child_file_item.set_color(QtCore.Qt.red)
+                        child_item.set_color(Qt.red)
+                        child_file_item.set_color(Qt.red)
                     ref_node_item.appendRow([child_item, child_file_item])
         self.tree_view.setModel(self.model)
         self.tree_view.expandAll()
@@ -314,7 +330,7 @@ class ReferenceView(QtGui.QDialog):
         self.set_model()
 
     def select_reference(self):
-        self.tree_view.selectionModel().select(QtGui.QItemSelection(), QtGui.QItemSelectionModel.Clear)
+        self.tree_view.selectionModel().select(QItemSelection(), QItemSelectionModel.Clear)
         ref_names = self.utility.get_ref_by_obj()
         if ref_names:
             for i in xrange(self.model.rowCount()):
@@ -322,12 +338,12 @@ class ReferenceView(QtGui.QDialog):
                 item = self.model.itemFromIndex(model_index)
                 if item.text in ref_names:
                     #self.tree_view.setCurrentIndex(model_index)
-                    self.tree_view.selectionModel().select(model_index, QtGui.QItemSelectionModel.Select)
+                    self.tree_view.selectionModel().select(model_index, QItemSelectionModel.Select)
                     model_index_1 = self.model.index(i, 1)
-                    self.tree_view.selectionModel().select(model_index_1, QtGui.QItemSelectionModel.Select)
+                    self.tree_view.selectionModel().select(model_index_1, QItemSelectionModel.Select)
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.RightButton:
+        if event.button() == Qt.RightButton:
             self.close()
 
 

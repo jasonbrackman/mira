@@ -11,7 +11,9 @@
 # Built-in modules
 import os
 import logging
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 # Third-party modules
 
 # Studio modules
@@ -31,10 +33,10 @@ def style_dec(widget_class):
             super(StyleClass, self).__init__(*args, **kwargs)
             qss_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "style.qss"))
             if os.path.isfile(qss_path):
-                self.setStyle(QtGui.QStyleFactory.create('plastique'))
+                self.setStyle(QStyleFactory.create('plastique'))
                 self.setStyleSheet(open(qss_path, 'r').read())
-            if isinstance(widget_class(), QtGui.QDialog):
-                self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
+            if isinstance(widget_class(), QDialog):
+                self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
     return StyleClass
 
 

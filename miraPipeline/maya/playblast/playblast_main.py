@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 import logging
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as mc
 from miraLibs.mayaLibs import get_maya_win, save_as
 from miraLibs.mayaLibs import get_scene_name
@@ -13,20 +15,20 @@ import playblast_shot
 OBJECT_NAME = "Playblast"
 
 
-class UploadMovie(QtGui.QDialog):
+class UploadMovie(QDialog):
     def __init__(self, parent=None):
         super(UploadMovie, self).__init__(parent)
         self.setObjectName(OBJECT_NAME)
         self.setWindowTitle("Playblast")
-        self.setWindowFlags(QtCore.Qt.Window)
+        self.setWindowFlags(Qt.Window)
         self.resize(400, 300)
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        label = QtGui.QLabel()
+        label = QLabel()
         label.setText("<font size=4><b>Write some commit below:</font></b>")
-        self.te = QtGui.QTextEdit()
-        btn_layout = QtGui.QHBoxLayout()
-        self.upload_btn = QtGui.QPushButton("Playblast")
+        self.te = QTextEdit()
+        btn_layout = QHBoxLayout()
+        self.upload_btn = QPushButton("Playblast")
         btn_layout.addStretch()
         btn_layout.addWidget(self.upload_btn)
         main_layout.addWidget(label)
@@ -38,7 +40,7 @@ class UploadMovie(QtGui.QDialog):
         description = self.te.toPlainText()
         result = upload_movie(description)
         if result:
-            QtGui.QMessageBox.information(None, "Warming Tip", "Upload done, congratulations.")
+            QMessageBox.information(None, "Warming Tip", "Upload done, congratulations.")
         self.close()
 
 
@@ -47,7 +49,7 @@ def upload_movie(description):
     # get scene name
     scene_name = get_scene_name.get_scene_name()
     if not scene_name:
-        QtGui.QMessageBox.warning(None, "Warning", "Save scene first")
+        QMessageBox.warning(None, "Warning", "Save scene first")
         return
     obj = pipeFile.PathDetails.parse_path(scene_name)
     project = obj.project

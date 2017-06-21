@@ -1,5 +1,7 @@
 ﻿import pymel.core as pm
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as mc
 import public_ctrls
 import os
@@ -207,40 +209,40 @@ def create_new_shadow_sg():
     return sg
 
 
-class RGBMaskWidget(QtGui.QDialog):
+class RGBMaskWidget(QDialog):
     def __init__(self, parent=None):
         super(RGBMaskWidget, self).__init__(parent)
         self.parent_dir = get_parent_dir()
         y_pos = public_ctrls.get_maya_main_win_pos()[1] + (public_ctrls.get_maya_main_win_size()[1])/4
         self.move(public_ctrls.get_maya_main_win_pos()[0], y_pos)
         self.setWindowTitle('mask')
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowMinimizeButtonHint)
         self.resize(500, 40)
-        rgb_layout = QtGui.QHBoxLayout(self)
-        frame = QtGui.QFrame()
-        frame.setFrameStyle(QtGui.QFrame.StyledPanel | QtGui.QFrame.Sunken)
+        rgb_layout = QHBoxLayout(self)
+        frame = QFrame()
+        frame.setFrameStyle(QFrame.StyledPanel | QFrame.Sunken)
         rgb_layout.addWidget(frame)
-        main_layout = QtGui.QVBoxLayout(frame)
-        self.info_label = QtGui.QLabel()
-        button_layout = QtGui.QHBoxLayout()
+        main_layout = QVBoxLayout(frame)
+        self.info_label = QLabel()
+        button_layout = QHBoxLayout()
         #button_layout.setSpacing(0)
         #button_layout.setContentsMargins(0, 0, 0, 0)
-        self.red_mask_btn = QtGui.QPushButton('R_ID')
+        self.red_mask_btn = QPushButton('R_ID')
         self.red_mask_btn.setStyleSheet('QPushButton{background:#FF0000}')
-        self.green_mask_btn = QtGui.QPushButton('G_ID')
+        self.green_mask_btn = QPushButton('G_ID')
         self.green_mask_btn.setStyleSheet('QPushButton{background:#00FF00}')
-        self.blue_mask_btn = QtGui.QPushButton('B_ID')
+        self.blue_mask_btn = QPushButton('B_ID')
         self.blue_mask_btn.setStyleSheet('QPushButton{background:#0000FF}')
-        self.black_mask_btn = QtGui.QPushButton('Matte')
+        self.black_mask_btn = QPushButton('Matte')
         self.black_mask_btn.setStyleSheet('QPushButton{background:#000000}')
-        self.shadow_btn = QtGui.QPushButton('Shadow')
+        self.shadow_btn = QPushButton('Shadow')
         self.shadow_btn.setStyleSheet('QPushButton{background:#AAAAAA}')
         button_layout.addWidget(self.red_mask_btn)
         button_layout.addWidget(self.green_mask_btn)
         button_layout.addWidget(self.blue_mask_btn)
         button_layout.addWidget(self.black_mask_btn)
         button_layout.addWidget(self.shadow_btn)
-        self.set_matte_check = QtGui.QCheckBox('Alpha')
+        self.set_matte_check = QCheckBox('Alpha')
         self.set_matte_check.setStyleSheet('QCheckBox::indicator:unchecked{border: 1px solid #555555;}')
         main_layout.addWidget(self.info_label)
         main_layout.addLayout(button_layout)
@@ -251,14 +253,14 @@ class RGBMaskWidget(QtGui.QDialog):
 
     def set_background(self):
         image_path = os.path.join(self.parent_dir, 'icons', 'background_icons', 'tx.png')
-        self.image = QtGui.QImage(image_path)
-        palette = QtGui.QPalette()
-        palette.setBrush(QtGui.QPalette.Background, QtGui.QBrush(self.image.scaled(self.size(), QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.SmoothTransformation)))
+        self.image = QImage(image_path)
+        palette = QPalette()
+        palette.setBrush(QPalette.Background, QBrush(self.image.scaled(self.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)))
         self.setPalette(palette)
 
     def resizeEvent(self, event):
-        palette = QtGui.QPalette()
-        palette.setBrush(QtGui.QPalette.Background, QtGui.QBrush(self.image.scaled(event.size(), QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.SmoothTransformation)))
+        palette = QPalette()
+        palette.setBrush(QPalette.Background, QBrush(self.image.scaled(event.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)))
         self.setPalette(palette)
 
     def set_label_text(self):
@@ -307,8 +309,8 @@ class RGBMaskWidget(QtGui.QDialog):
             else:
                 node = create_mask_shader(r, g, b, 0, name)
                 alpha = 0
-            progress_dialog = QtGui.QProgressDialog('Assign materials,Please wait......', 'Cancel', 0, len(all_meshes))
-            progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+            progress_dialog = QProgressDialog('Assign materials,Please wait......', 'Cancel', 0, len(all_meshes))
+            progress_dialog.setWindowModality(Qt.WindowModal)
             progress_dialog.show()
             value = 0
             for mesh in all_meshes:
@@ -373,8 +375,8 @@ class RGBMaskWidget(QtGui.QDialog):
         all_meshes = get_object_list()
         if all_meshes:
             node = create_shadow_shader()
-            progress_dialog = QtGui.QProgressDialog('<Total:%s>Assign materials,Please wait......' % len(all_meshes), 'Cancel', 0, len(all_meshes))
-            progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+            progress_dialog = QProgressDialog('<Total:%s>Assign materials,Please wait......' % len(all_meshes), 'Cancel', 0, len(all_meshes))
+            progress_dialog.setWindowModality(Qt.WindowModal)
             progress_dialog.show()
             value = 0
             for mesh in all_meshes:
@@ -409,7 +411,7 @@ class RGBMaskWidget(QtGui.QDialog):
             value += 1
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.RightButton:
+        if event.button() == Qt.RightButton:
             self.close()
 
 

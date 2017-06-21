@@ -1,6 +1,8 @@
 __author__ = 'heshuai'
 
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya_ctrls
 import public_ctrls
 from get_parent_dir import get_parent_dir
@@ -9,60 +11,60 @@ from functools import partial
 import pymel.core as pm
 
 
-class PolygonWidget(QtGui.QDialog):
+class PolygonWidget(QDialog):
     def __init__(self, parent=None):
         super(PolygonWidget, self).__init__(parent)
         self.parent_dir = get_parent_dir()
         # y_pos = public_ctrls.get_maya_main_win_pos()[1] + (public_ctrls.get_maya_main_win_size()[1])/4
         # self.move(public_ctrls.get_maya_main_win_pos()[0], y_pos)
         self.setWindowTitle('Set selected meshes Attribute')
-        main_layout = QtGui.QVBoxLayout(self)
-        frame = QtGui.QFrame()
+        main_layout = QVBoxLayout(self)
+        frame = QFrame()
         main_layout.addWidget(frame)
-        frame.setFrameStyle(QtGui.QFrame.StyledPanel | QtGui.QFrame.Sunken)
-        polygon_layout = QtGui.QGridLayout(frame)
+        frame.setFrameStyle(QFrame.StyledPanel | QFrame.Sunken)
+        polygon_layout = QGridLayout(frame)
         polygon_layout.setColumnMinimumWidth(2, 0)
-        opaque_label = QtGui.QLabel('Arnold Opaque')
-        self.opaque_on_button = QtGui.QPushButton('ON')
-        self.opaque_off_button = QtGui.QPushButton('OFF')
-        primary_label = QtGui.QLabel('Primary Visibility')
-        self.primary_on_button = QtGui.QPushButton('ON')
-        self.primary_off_button = QtGui.QPushButton('OFF')
-        self.cast_shadows_label = QtGui.QLabel('Cast Shadows')
-        self.cast_shadows_on_button = QtGui.QPushButton('ON')
-        self.cast_shadows_off_button = QtGui.QPushButton('OFF')
-        self.receive_shadows_label = QtGui.QLabel('Receive Shadows')
-        self.receive_shadows_on_button = QtGui.QPushButton('ON')
-        self.receive_shadows_off_button = QtGui.QPushButton('OFF')
-        separate1 = QtGui.QGroupBox('Arnold')
+        opaque_label = QLabel('Arnold Opaque')
+        self.opaque_on_button = QPushButton('ON')
+        self.opaque_off_button = QPushButton('OFF')
+        primary_label = QLabel('Primary Visibility')
+        self.primary_on_button = QPushButton('ON')
+        self.primary_off_button = QPushButton('OFF')
+        self.cast_shadows_label = QLabel('Cast Shadows')
+        self.cast_shadows_on_button = QPushButton('ON')
+        self.cast_shadows_off_button = QPushButton('OFF')
+        self.receive_shadows_label = QLabel('Receive Shadows')
+        self.receive_shadows_on_button = QPushButton('ON')
+        self.receive_shadows_off_button = QPushButton('OFF')
+        separate1 = QGroupBox('Arnold')
         separate1.setStyleSheet("QGroupBox{color:#32CD32;font-size: 20px}")
         separate1.setFlat(True)
-        sub_label = QtGui.QLabel('Arnold Subdivision')
-        self.sub_type_cbox = QtGui.QComboBox()
-        model = QtGui.QStandardItemModel(self.sub_type_cbox)
+        sub_label = QLabel('Arnold Subdivision')
+        self.sub_type_cbox = QComboBox()
+        model = QStandardItemModel(self.sub_type_cbox)
         for name in ['none', 'catclark', 'linear']:
-            item = QtGui.QStandardItem(name)
+            item = QStandardItem(name)
             model.appendRow(item)
         self.sub_type_cbox.setModel(model)
         self.sub_type_cbox.setCurrentIndex(1)
-        self.sub_value_line = QtGui.QLineEdit()
+        self.sub_value_line = QLineEdit()
         self.sub_value_line.setStyleSheet('QLineEdit{border: 1px solid #666666;border-radius: 3px;}')
         self.sub_value_line.setFixedWidth(70)
-        diffuse_label = QtGui.QLabel('Visible In Diffuse')
-        self.diffuse_on_btn = QtGui.QPushButton('ON')
-        self.diffuse_off_btn = QtGui.QPushButton('OFF')
-        glossy_label = QtGui.QLabel('Visible In Glossy')
-        self.glossy_on_btn = QtGui.QPushButton('ON')
-        self.glossy_off_btn = QtGui.QPushButton('OFF')
-        displace_height_label = QtGui.QLabel('Displacement Height')
-        self.displace_height_line = QtGui.QLineEdit()
+        diffuse_label = QLabel('Visible In Diffuse')
+        self.diffuse_on_btn = QPushButton('ON')
+        self.diffuse_off_btn = QPushButton('OFF')
+        glossy_label = QLabel('Visible In Glossy')
+        self.glossy_on_btn = QPushButton('ON')
+        self.glossy_off_btn = QPushButton('OFF')
+        displace_height_label = QLabel('Displacement Height')
+        self.displace_height_line = QLineEdit()
         self.displace_height_line.setStyleSheet('QLineEdit{border: 1px solid #666666;border-radius: 3px;}')
-        separate2 = QtGui.QGroupBox('Hair')
+        separate2 = QGroupBox('Hair')
         separate2.setStyleSheet("QGroupBox{color:#32CD32;font-size: 20px}")
         separate2.setFlat(True)
-        hair_primary_label = QtGui.QLabel('Primary Visibility')
-        self.hair_primary_on_btn = QtGui.QPushButton('ON')
-        self.hair_primary_off_btn = QtGui.QPushButton('OFF')
+        hair_primary_label = QLabel('Primary Visibility')
+        self.hair_primary_on_btn = QPushButton('ON')
+        self.hair_primary_off_btn = QPushButton('OFF')
         polygon_layout.addWidget(primary_label, 0, 0)
         polygon_layout.addWidget(self.primary_on_button, 0, 1)
         polygon_layout.addWidget(self.primary_off_button, 0, 2)
@@ -96,14 +98,14 @@ class PolygonWidget(QtGui.QDialog):
 
     def set_background(self):
         image_path = os.path.join(self.parent_dir, 'icons', 'background_icons', 'polygon.png')
-        self.image = QtGui.QImage(image_path)
-        palette = QtGui.QPalette()
-        palette.setBrush(QtGui.QPalette.Background, QtGui.QBrush(self.image.scaled(self.size(), QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.SmoothTransformation)))
+        self.image = QImage(image_path)
+        palette = QPalette()
+        palette.setBrush(QPalette.Background, QBrush(self.image.scaled(self.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)))
         self.setPalette(palette)
 
     def resizeEvent(self, event):
-        palette = QtGui.QPalette()
-        palette.setBrush(QtGui.QPalette.Background, QtGui.QBrush(self.image.scaled(event.size(), QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.SmoothTransformation)))
+        palette = QPalette()
+        palette.setBrush(QPalette.Background, QBrush(self.image.scaled(event.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)))
         self.setPalette(palette)
 
     def setSignals(self):
@@ -170,7 +172,7 @@ class PolygonWidget(QtGui.QDialog):
         maya_ctrls.set_displacement_height(int(value))
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.RightButton:
+        if event.button() == Qt.RightButton:
             self.close()
 
     def get_hairs_by_select(self):

@@ -7,7 +7,10 @@ import maya.cmds as mc
 import os
 import sys
 import pymel.core as pm
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
+from Qt import __binding__
 import maya_ctrls
 from maya_ctrls import clear_namespace
 import shutil
@@ -18,16 +21,29 @@ from public_ctrls import cpickle_operation
 NAME = 'abc export and import'
 
 
-def get_maya_win():
-    import maya.OpenMayaUI as mui
-    if 'PyQt4' in QtGui.__name__:
+def get_maya_win(module="mayaUI"):
+    """
+    get a QMainWindow Object of maya main window
+    :param module (optional): string "PySide"(default) or "PyQt4"
+    :return main_window: QWidget or QMainWindow object
+    """
+    prt = mui.MQtUtil.mainWindow()
+    if module == "PyQt":
         import sip
-        prt = mui.MQtUtil.mainWindow()
-        return sip.wrapinstance(long(prt), QtGui.QWidget)
-    elif 'PySide' in QtGui.__name__:
-        import shiboken
-        prt = mui.MQtUtil.mainWindow()
-        return shiboken.wrapInstance(long(prt), QtGui.QWidget)
+        from Qt.QtCore import *
+        main_window = sip.wrapinstance(long(prt), QObject)
+    elif module in ["PySide", "PyQt"]:
+        if __binding__ in ["PySide", "PyQt4"]:
+            import shiboken
+        elif __binding__ in ["PySide2", "PyQt5"]:
+            import shiboken2 as shiboken
+        from Qt.QtWidgets import *
+        main_window = shiboken.wrapInstance(long(prt), QWidget)
+    elif module == "mayaUI":
+        main_window = "MayaWindow"
+    else:
+        raise ValueError('param "module" must be "mayaUI" "PyQt4" or "PySide"')
+    return main_window
 
 
 def print_info(func):
@@ -47,7 +63,7 @@ def show_ui(cls):
     instance = cls()
     if mc.window(str(instance.objectName()), q=1, ex=1):
         mc.deleteUI(str(instance.objectName()))
-    ui = cls(get_maya_win())
+    ui = cls(get_maya_win("PySide"))
     ui.show()
 
 
@@ -188,52 +204,52 @@ def assign_material():
     print "[OF] info: assign materials successful"
 
 
-class Separator(QtGui.QWidget):
+class Separator(QWidget):
     def __init__(self, parent=None):
         super(Separator, self).__init__(parent)
-        separator_layout = QtGui.QHBoxLayout(self)
+        separator_layout = QHBoxLayout(self)
         separator_layout.setContentsMargins(0, 0, 0, 0)
-        separator_layout.setAlignment(QtCore.Qt.AlignBottom)
-        frame = QtGui.QFrame()
-        frame.setFrameStyle(QtGui.QFrame.HLine)
+        separator_layout.setAlignment(Qt.AlignBottom)
+        frame = QFrame()
+        frame.setFrameStyle(QFrame.HLine)
         frame.setStyleSheet('QFrame{color: #111111}')
         separator_layout.addWidget(frame)
 
 
-class AbcIE(QtGui.QDialog):
+class AbcIE(QDialog):
     def __init__(self, parent=None):
         super(AbcIE, self).__init__(parent)
         self.setObjectName(NAME)
         self.setWindowTitle(NAME)
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
         self.resize(350, 70)
 
         self.frame_range = get_frame_range()
 
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setSpacing(15)
 
-        file_layout = QtGui.QHBoxLayout()
-        file_label = QtGui.QLabel('abc path')
+        file_layout = QHBoxLayout()
+        file_label = QLabel('abc path')
         file_label.setFixedWidth(45)
-        self.abc_file_le = QtGui.QLineEdit()
-        self.abc_file_btn = QtGui.QToolButton()
-        icon = QtGui.QIcon()
-        icon.addPixmap(self.style().standardPixmap(QtGui.QStyle.SP_DirOpenIcon))
+        self.abc_file_le = QLineEdit()
+        self.abc_file_btn = QToolButton()
+        icon = QIcon()
+        icon.addPixmap(self.style().standardPixmap(QStyle.SP_DirOpenIcon))
         self.abc_file_btn.setIcon(icon)
         file_layout.addWidget(file_label)
         file_layout.addWidget(self.abc_file_le)
         file_layout.addWidget(self.abc_file_btn)
 
-        export_group = QtGui.QGroupBox('Export Settings')
-        export_layout = QtGui.QVBoxLayout(export_group)
+        export_group = QGroupBox('Export Settings')
+        export_layout = QVBoxLayout(export_group)
         export_layout.setSpacing(12)
 
-        check_layout = QtGui.QHBoxLayout()
+        check_layout = QHBoxLayout()
         check_layout.setContentsMargins(50, 0, 0, 0)
-        self.button_group = QtGui.QButtonGroup()
-        self.all_cbox = QtGui.QCheckBox('All')
-        self.selected_cbox = QtGui.QCheckBox('Selected')
+        self.button_group = QButtonGroup()
+        self.all_cbox = QCheckBox('All')
+        self.selected_cbox = QCheckBox('Selected')
         self.button_group.addButton(self.all_cbox)
         self.button_group.addButton(self.selected_cbox)
         check_layout.addWidget(self.all_cbox)
@@ -241,16 +257,16 @@ class AbcIE(QtGui.QDialog):
 
         separator = Separator()
 
-        frame_layout = QtGui.QHBoxLayout()
-        label = QtGui.QLabel('Frame Range')
-        self.start_le = QtGui.QLineEdit()
-        self.last_le = QtGui.QLineEdit()
+        frame_layout = QHBoxLayout()
+        label = QLabel('Frame Range')
+        self.start_le = QLineEdit()
+        self.last_le = QLineEdit()
         frame_layout.addWidget(label)
         frame_layout.addWidget(self.start_le)
         frame_layout.addWidget(self.last_le)
 
-        self.export_abc_btn = QtGui.QPushButton('Export Abc Cache')
-        self.import_abc_btn = QtGui.QPushButton('Import Abc Cache')
+        self.export_abc_btn = QPushButton('Export Abc Cache')
+        self.import_abc_btn = QPushButton('Import Abc Cache')
 
         export_layout.addLayout(check_layout)
         export_layout.addWidget(separator)
@@ -277,8 +293,8 @@ class AbcIE(QtGui.QDialog):
         self.import_abc_btn.clicked.connect(self.import_abc)
 
     def get_abc_path(self):
-        file_dialog = QtGui.QFileDialog()
-        file_dialog.setFileMode(QtGui.QFileDialog.AnyFile)
+        file_dialog = QFileDialog()
+        file_dialog.setFileMode(QFileDialog.AnyFile)
         init_dir = '/'
         if self.abc_file_le.text():
             init_dir = os.path.dirname(str(self.abc_file_le.text()))
@@ -330,7 +346,7 @@ class AbcIE(QtGui.QDialog):
             assign_material()
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.RightButton:
+        if event.button() == Qt.RightButton:
             self.close()
 
 

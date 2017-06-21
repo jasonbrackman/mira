@@ -16,7 +16,9 @@ import re
 import time
 
 # Third-party modules
-from PySide import QtCore, QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import pymel.core as pm
 import maya.cmds as cmds
 
@@ -36,18 +38,18 @@ def maya_main_window():
     import maya.OpenMayaUI as apiUI
     from shiboken import wrapInstance
     main_win_ptr = apiUI.MQtUtil.mainWindow()
-    return wrapInstance(long(main_win_ptr), QtGui.QWidget)
+    return wrapInstance(long(main_win_ptr), QWidget)
 
 
-class linearWorkflowDialog(QtGui.QDialog):
+class linearWorkflowDialog(QDialog):
 
     def __init__(self, parent=maya_main_window()):
     #def __init__(self, parent=None):
         super(linearWorkflowDialog, self).__init__(parent)
         self.setObjectName(WINDOW_NAME)
         self.setWindowTitle(WINDOW_NAME)
-        #self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowMinimizeButtonHint)
-        self.setWindowFlags(QtCore.Qt.Window)
+        #self.setWindowFlags(Qt.Dialog | Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Window)
         #self.setup_ui()
         self.checkRenderer()
         self.ui = linearWorkflowUI.ui(self)
@@ -59,7 +61,7 @@ class linearWorkflowDialog(QtGui.QDialog):
             try:
                 pm.loadPlugin('mtoa.mll')
             except:
-                QtGui.QMessageBox.information(self, 'Fail to Load Arnold Renderer', 'Fail to Load Arnold Renderer!!')
+                QMessageBox.information(self, 'Fail to Load Arnold Renderer', 'Fail to Load Arnold Renderer!!')
                 self.close()
             pm.PyNode("defaultRenderGlobals").currentRenderer.set('arnold')
 
@@ -70,7 +72,7 @@ class linearWorkflowDialog(QtGui.QDialog):
             pm.PyNode('defaultArnoldRenderOptions')
             pm.PyNode('defaultArnoldFilter')
         except:
-            QtGui.QMessageBox.information(self, 'Loading Arnold Renderer', 'Loading Arnold Done, \npress OK to \nLinear Workflow Check Tool')
+            QMessageBox.information(self, 'Loading Arnold Renderer', 'Loading Arnold Done, \npress OK to \nLinear Workflow Check Tool')
             self.close()
 
 
@@ -82,7 +84,7 @@ def maya_ui():
 
 
 def normal_ui():
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     ui = linearWorkflowDialog()
     #ui.show()
     sys.exit(app.exec_())

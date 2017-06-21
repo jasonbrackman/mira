@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 import os
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from . import app_cell_widget
 from ..libs import get_conf_path, conf_parser
 from ..frameworks.separator import Separator
 
 
-class AppWidget(QtGui.QWidget):
+class AppWidget(QWidget):
     def __init__(self, parent=None):
         super(AppWidget, self).__init__(parent)
         self.separators = list()
@@ -14,8 +16,8 @@ class AppWidget(QtGui.QWidget):
         self.init()
 
     def setup_ui(self):
-        self.app_layout = QtGui.QVBoxLayout(self)
-        self.app_layout.setAlignment(QtCore.Qt.AlignTop)
+        self.app_layout = QVBoxLayout(self)
+        self.app_layout.setAlignment(Qt.AlignTop)
         self.app_layout.setContentsMargins(0, 0, 0, 0)
 
     def insert_cell_widget(self, name, collapse, index):

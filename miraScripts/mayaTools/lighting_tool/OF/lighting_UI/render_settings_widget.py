@@ -1,7 +1,9 @@
 __author__ = 'heshuai'
 # -*- coding=UTF-8 -*-
 
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya_ctrls
 reload(maya_ctrls)
 from maya_ctrls import get_os_type
@@ -16,72 +18,72 @@ from get_parent_dir import get_parent_dir
 
 
 
-class RenderSettingsWidget(QtGui.QMainWindow):
+class RenderSettingsWidget(QMainWindow):
     def __init__(self, parent=None):
         super(RenderSettingsWidget, self).__init__(parent)
         self.setWindowTitle('Render Settings')
         ########
         self.parent_dir = get_parent_dir()
         self.os_type = get_os_type.get_os_type()
-        main_widget = QtGui.QWidget()
+        main_widget = QWidget()
         self.setCentralWidget(main_widget)
-        main_layout = QtGui.QHBoxLayout(main_widget)
-        frame = QtGui.QFrame()
-        frame.setFrameStyle(QtGui.QFrame.StyledPanel | QtGui.QFrame.Sunken)
+        main_layout = QHBoxLayout(main_widget)
+        frame = QFrame()
+        frame.setFrameStyle(QFrame.StyledPanel | QFrame.Sunken)
         main_layout.addWidget(frame)
-        render_settings_layout = QtGui.QVBoxLayout(frame)
-        render_settings_grp = QtGui.QGroupBox('Render Settings')
+        render_settings_layout = QVBoxLayout(frame)
+        render_settings_grp = QGroupBox('Render Settings')
         render_settings_grp.setStyleSheet("QGroupBox{color:#32CD32;border: 1px solid #A9A9A9;"
                                           "padding-top:15px;border-radius:2px;font-size: 15px}")
         render_settings_layout.addWidget(render_settings_grp)
-        render_setting_layout = QtGui.QVBoxLayout(render_settings_grp)
-        aov_grp = QtGui.QGroupBox('AOV')
+        render_setting_layout = QVBoxLayout(render_settings_grp)
+        aov_grp = QGroupBox('AOV')
         aov_grp.setStyleSheet("QGroupBox{color:#32CD32;border: 1px solid #A9A9A9;"
                               "padding-top:15px;border-radius:2px;font-size: 15px}")
         render_settings_layout.addWidget(aov_grp)
         ########project layout
-        project_layout = QtGui.QHBoxLayout()
-        project_label = QtGui.QLabel('Project:')
+        project_layout = QHBoxLayout()
+        project_label = QLabel('Project:')
         project_label.setFixedWidth(40)
-        self.project_cbox = QtGui.QComboBox()
-        self.project_check_btn = QtGui.QPushButton('check')
+        self.project_cbox = QComboBox()
+        self.project_check_btn = QPushButton('check')
         self.project_check_btn.setFixedWidth(40)
         project_layout.addWidget(project_label)
         project_layout.addWidget(self.project_cbox)
         project_layout.addWidget(self.project_check_btn)
         ########args layout
-        args_layout = QtGui.QHBoxLayout()
-        frame_range_label = QtGui.QLabel('Frame Range')
+        args_layout = QHBoxLayout()
+        frame_range_label = QLabel('Frame Range')
         frame_range_label.setFixedWidth(100)
-        self.first_frame_line = QtGui.QLineEdit()
-        self.last_frame_line = QtGui.QLineEdit()
+        self.first_frame_line = QLineEdit()
+        self.last_frame_line = QLineEdit()
         args_layout.addWidget(frame_range_label)
         args_layout.addWidget(self.first_frame_line)
         args_layout.addWidget(self.last_frame_line)
         ########camera layout
-        cam_layout = QtGui.QHBoxLayout()
-        cam_label = QtGui.QLabel('Render Camera')
+        cam_layout = QHBoxLayout()
+        cam_label = QLabel('Render Camera')
         cam_label.setFixedWidth(100)
-        self.cam_cbox = QtGui.QComboBox()
+        self.cam_cbox = QComboBox()
         self.cam_cbox.setFixedWidth(240)
         cam_layout.addWidget(cam_label)
         cam_layout.addWidget(self.cam_cbox)
         ########render setting button layout
-        render_settings_btn_layout = QtGui.QHBoxLayout()
-        self.test_render_btn = QtGui.QPushButton('Test Render Settings')
-        self.final_render_btn = QtGui.QPushButton('Final Render Settings')
+        render_settings_btn_layout = QHBoxLayout()
+        self.test_render_btn = QPushButton('Test Render Settings')
+        self.final_render_btn = QPushButton('Final Render Settings')
         render_settings_btn_layout.addWidget(self.test_render_btn)
         render_settings_btn_layout.addWidget(self.final_render_btn)
         ########aov_status_layout
-        aov_status_layout = QtGui.QHBoxLayout(aov_grp)
-        self.enable_aov_btn = QtGui.QPushButton('Enable AOVs')
-        self.disable_aov_btn = QtGui.QPushButton('Disable AOVs')
-        self.remove_layer_override_btn = QtGui.QPushButton('Remove Layer Override')
+        aov_status_layout = QHBoxLayout(aov_grp)
+        self.enable_aov_btn = QPushButton('Enable AOVs')
+        self.disable_aov_btn = QPushButton('Disable AOVs')
+        self.remove_layer_override_btn = QPushButton('Remove Layer Override')
         aov_status_layout.addWidget(self.remove_layer_override_btn)
         aov_status_layout.addWidget(self.enable_aov_btn)
         aov_status_layout.addWidget(self.disable_aov_btn)
         ########mask layer override button
-        self.mask_setting_btn = QtGui.QPushButton('Mask Layer Override')
+        self.mask_setting_btn = QPushButton('Mask Layer Override')
         ########total layout
         render_setting_layout.addLayout(project_layout)
         render_setting_layout.addLayout(args_layout)
@@ -96,18 +98,18 @@ class RenderSettingsWidget(QtGui.QMainWindow):
         self.set_signals()
 
     def create_action(self):
-        self.new_project_action = QtGui.QAction('New Project', self)
-        self.remove_project_menu = QtGui.QMenu('Remove Project', self)
+        self.new_project_action = QAction('New Project', self)
+        self.remove_project_menu = QMenu('Remove Project', self)
 
     def create_menu_bar(self):
-        menu_bar = QtGui.QMenuBar()
+        menu_bar = QMenuBar()
         self.setMenuBar(menu_bar)
         project_menu_bar = menu_bar.addMenu('project')
         project_menu_bar.addAction(self.new_project_action)
         project_menu_bar.addMenu(self.remove_project_menu)
 
     def create_status_bar(self):
-        self.status_bar = QtGui.QStatusBar()
+        self.status_bar = QStatusBar()
         self.setStatusBar(self.status_bar)
         self.status_bar.showMessage('Welcome to use...')
 
@@ -120,10 +122,10 @@ class RenderSettingsWidget(QtGui.QMainWindow):
         self.first_frame_line.setText(str(maya_ctrls.get_first_frame()))
         self.last_frame_line.setText(str(maya_ctrls.get_last_frame()))
         ########cameras
-        model = QtGui.QStandardItemModel(self.cam_cbox)
+        model = QStandardItemModel(self.cam_cbox)
         cameras = mc.ls(type='camera')
         for cam in cameras:
-            item = QtGui.QStandardItem(cam)
+            item = QStandardItem(cam)
             model.appendRow(item)
         self.cam_cbox.setModel(model)
         for cam in cameras:
@@ -153,7 +155,7 @@ class RenderSettingsWidget(QtGui.QMainWindow):
             if project_names:
                 for project_name in project_names:
                     self.project_cbox.addItem(project_name)
-                    self.project_action = QtGui.QAction(project_name, self)
+                    self.project_action = QAction(project_name, self)
                     self.project_action.triggered.connect(self.remove_project)
                     self.remove_project_menu.addAction(self.project_action)
                 self.project_cbox.setCurrentIndex(self.project_cbox.count()+1)
@@ -318,49 +320,49 @@ class RenderSettingsWidget(QtGui.QMainWindow):
         maya_ctrls.set_aov_enabled_adjust(0)
 
     def warm_tip(self, text):
-        message_box = QtGui.QMessageBox()
+        message_box = QMessageBox()
         message_box.setFixedWidth(300)
         message_box.setText('......Warm Tip......')
-        message_box.setIcon(QtGui.QMessageBox.Information)
+        message_box.setIcon(QMessageBox.Information)
         message_box.setInformativeText(text)
         message_box.exec_()
 
 
-class AttributeLayout(QtGui.QGridLayout):
+class AttributeLayout(QGridLayout):
     def __init__(self, name=None, attr_name=None, parent=None):
         super(AttributeLayout, self).__init__(parent)
         self.name = name
         self.attr_name = attr_name
-        self.label = QtGui.QLabel(self.name)
-        self.label.setAlignment(QtCore.Qt.AlignRight)
-        self.line = QtGui.QLineEdit()
+        self.label = QLabel(self.name)
+        self.label.setAlignment(Qt.AlignRight)
+        self.line = QLineEdit()
         self.addWidget(self.label, 0, 0)
         self.addWidget(self.line, 0, 1)
         self.setColumnMinimumWidth(0, 120)
         self.setColumnMinimumWidth(1, 180)
 
 
-class ProjectWidget(QtGui.QDialog):
+class ProjectWidget(QDialog):
     def __init__(self, parent=None):
         super(ProjectWidget, self).__init__(parent)
         self.setWindowTitle('Project')
         self.parent_dir = get_parent_dir()
-        main_layout = QtGui.QVBoxLayout(self)
-        project_layout = QtGui.QHBoxLayout()
-        project_label = QtGui.QLabel('Project Name')
+        main_layout = QVBoxLayout(self)
+        project_layout = QHBoxLayout()
+        project_label = QLabel('Project Name')
         project_label.setFixedWidth(80)
-        self.project_name_cbox = QtGui.QComboBox()
+        self.project_name_cbox = QComboBox()
         self.project_name_cbox.setEditable(True)
         project_layout.addWidget(project_label)
         project_layout.addWidget(self.project_name_cbox)
-        separate1 = QtGui.QGroupBox()
+        separate1 = QGroupBox()
         separate1.setFlat(True)
-        self.atrribute_layout = QtGui.QGridLayout()
-        separate2 = QtGui.QGroupBox()
+        self.atrribute_layout = QGridLayout()
+        separate2 = QGroupBox()
         separate2.setFlat(True)
-        button_layout = QtGui.QHBoxLayout()
-        self.accept_btn = QtGui.QPushButton('Accept')
-        self.cancel_btn = QtGui.QPushButton('Cancel')
+        button_layout = QHBoxLayout()
+        self.accept_btn = QPushButton('Accept')
+        self.cancel_btn = QPushButton('Cancel')
         button_layout.addWidget(self.accept_btn)
         button_layout.addWidget(self.cancel_btn)
         main_layout.addLayout(project_layout)
@@ -388,7 +390,7 @@ class ProjectWidget(QtGui.QDialog):
             attr_layout = AttributeLayout(attr[0], attr[1])
             self.atrribute_layout.addLayout(attr_layout, i, 0)
             i += 1
-        attr_separate = QtGui.QGroupBox('Ray Depth')
+        attr_separate = QGroupBox('Ray Depth')
         attr_separate.setFlat(True)
         self.atrribute_layout.addWidget(attr_separate, i, 0)
         i += 1
@@ -401,7 +403,7 @@ class ProjectWidget(QtGui.QDialog):
             attr_layout = AttributeLayout(attr[0], attr[1])
             self.atrribute_layout.addLayout(attr_layout, i, 0)
             i += 1
-        motion_blur_separate = QtGui.QGroupBox('Motion Blur')
+        motion_blur_separate = QGroupBox('Motion Blur')
         motion_blur_separate.setFlat(True)
         self.atrribute_layout.addWidget(motion_blur_separate, i, 0)
         i += 1
@@ -411,7 +413,7 @@ class ProjectWidget(QtGui.QDialog):
             attr_layout = AttributeLayout(attr[0], attr[1])
             self.atrribute_layout.addLayout(attr_layout, i, 0)
             i += 1
-        image_size_separae = QtGui.QGroupBox('Image Size')
+        image_size_separae = QGroupBox('Image Size')
         image_size_separae.setFlat(True)
         self.atrribute_layout.addWidget(image_size_separae, i, 0)
         i += 1
@@ -429,9 +431,9 @@ class ProjectWidget(QtGui.QDialog):
         if os.path.isfile(project_ini_path):
             project_names = cpickle_operation.get_cpickle_data(project_ini_path)
             if project_names:
-                model = QtGui.QStandardItemModel()
+                model = QStandardItemModel()
                 for project_name in project_names:
-                    item = QtGui.QStandardItem(project_name)
+                    item = QStandardItem(project_name)
                     model.appendRow(item)
                 self.project_name_cbox.setModel(model)
                 self.project_name_cbox.setCurrentIndex(self.project_name_cbox.count() + 1)
@@ -483,7 +485,7 @@ class ProjectWidget(QtGui.QDialog):
         self.close()
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.RightButton:
+        if event.button() == Qt.RightButton:
             self.close()
 
 

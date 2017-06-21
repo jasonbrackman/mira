@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import sys
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 
-class Panel(QtGui.QWidget):
+class Panel(QWidget):
     def __init__(self, parent=None):
         super(Panel, self).__init__(parent)
         self.resize(500, 500)
@@ -15,8 +17,8 @@ class Panel(QtGui.QWidget):
         super(Panel, self).paintEvent(event)
         if self.origin is None:
             return
-        painter = QtGui.QPainter(self)
-        pen = QtGui.QPen(QtGui.QColor(0, 0, 255))
+        painter = QPainter(self)
+        pen = QPen(QColor(0, 0, 255))
         painter.setPen(pen)
         for line in self.lines:
             painter.drawLine(line)
@@ -26,13 +28,13 @@ class Panel(QtGui.QWidget):
 
     def mouseMoveEvent(self, event):
         self.destination = event.pos()
-        line = QtCore.QLine(self.origin, self.destination)
+        line = QLine(self.origin, self.destination)
         self.lines.append(line)
         self.origin = self.destination
         self.update()
 
 
-app = QtGui.QApplication(sys.argv)
+app = QApplication(sys.argv)
 pane = Panel()
 pane.show()
 sys.exit(app.exec_())

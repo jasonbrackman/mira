@@ -1,5 +1,7 @@
 import subprocess
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import os
 import threading
 import re
@@ -47,20 +49,20 @@ def get_write_info(nuke_file):
 
         
 #--------------------------------GetNukePathWidget-------------------------------#
-class GetNukePathWidget(QtGui.QWidget):
+class GetNukePathWidget(QWidget):
     def __init__(self, parent=None):
         super(GetNukePathWidget, self).__init__(parent)
-        main_layout = QtGui.QHBoxLayout(self)
+        main_layout = QHBoxLayout(self)
         self.setFixedHeight(50)
-        label = QtGui.QLabel('Nuke Path')
+        label = QLabel('Nuke Path')
         label.setFixedWidth(60)
-        self.nuke_path_le = QtGui.QLineEdit()
-        self.btn = QtGui.QToolButton()
-        icon = QtGui.QIcon()
-        icon.addPixmap(self.style().standardPixmap(QtGui.QStyle.SP_DirOpenIcon))
+        self.nuke_path_le = QLineEdit()
+        self.btn = QToolButton()
+        icon = QIcon()
+        icon.addPixmap(self.style().standardPixmap(QStyle.SP_DirOpenIcon))
         self.btn.setIcon(icon)
         
-        self.render_btn = QtGui.QPushButton('Render...')
+        self.render_btn = QPushButton('Render...')
         
         main_layout.addWidget(label)
         main_layout.addWidget(self.nuke_path_le)
@@ -73,39 +75,39 @@ class GetNukePathWidget(QtGui.QWidget):
         self.btn.clicked.connect(self.get_nuke_path)
         
     def get_nuke_path(self):
-        file_dialog = QtGui.QFileDialog()
-        file_dialog.setFileMode(QtGui.QFileDialog.ExistingFile)
+        file_dialog = QFileDialog()
+        file_dialog.setFileMode(QFileDialog.ExistingFile)
         file_path = file_dialog.getOpenFileName(self, 'choose nuke path', '/',
                                                 "Nuke File(*.exe)")                                 
         self.nuke_path_le.setText(file_path[0])
         
 
 #-----------------------------------file  widget-----------------------------------#
-class AttrLayout(QtGui.QHBoxLayout):
+class AttrLayout(QHBoxLayout):
     def __init__(self, parent=None):
         super(AttrLayout, self).__init__(parent)
         
-        self.write_cb = QtGui.QCheckBox()
+        self.write_cb = QCheckBox()
         self.write_cb.setChecked(True)
-        self.frame_le = QtGui.QLineEdit()
+        self.frame_le = QLineEdit()
         self.frame_le.setFixedWidth(80)
-        self.dir_le = QtGui.QLineEdit() 
+        self.dir_le = QLineEdit()
         
         self.addWidget(self.write_cb)
         self.addWidget(self.frame_le)
         self.addWidget(self.dir_le)
         
         
-class NukeItem(QtGui.QListWidgetItem):
+class NukeItem(QListWidgetItem):
     def __init__(self, name=None, parent=None):
         super(NukeItem, self).__init__(parent)
         self.name = name
 
         self.setText(self.name)
-        self.widget = QtGui.QWidget()
-        self.layout = QtGui.QVBoxLayout(self.widget)
-        self.layout.setAlignment(QtCore.Qt.AlignTop)
-        self.info_browser = QtGui.QTextBrowser()
+        self.widget = QWidget()
+        self.layout = QVBoxLayout(self.widget)
+        self.layout.setAlignment(Qt.AlignTop)
+        self.info_browser = QTextBrowser()
         self.init_settings()
 
     def init_settings(self):
@@ -120,11 +122,11 @@ class NukeItem(QtGui.QListWidgetItem):
                 self.layout.addLayout(attr_layout)
                 
         
-class FileListWidget(QtGui.QListWidget):
+class FileListWidget(QListWidget):
     def __init__(self, parent=None):
         super(FileListWidget, self).__init__(parent)
         self.nuke_path = nuke_path
-        self.setSelectionMode(QtGui.QListWidget.ExtendedSelection)
+        self.setSelectionMode(QListWidget.ExtendedSelection)
         self.setSortingEnabled(True)
         self.setAcceptDrops(True)
         self.setSpacing(1)
@@ -173,59 +175,59 @@ class FileListWidget(QtGui.QListWidget):
             self.add_item(path)
             
 
-class FileWidget(QtGui.QWidget):
+class FileWidget(QWidget):
     def __init__(self, parent=None):
         super(FileWidget, self).__init__(parent)
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         #main_layout.setContentsMargins(0, 0, 0, 0)
         self.lw = FileListWidget()
         main_layout.addWidget(self.lw)
         
 
 #-----------------------------------attr  widget-----------------------------------#
-class AttrWidget(QtGui.QWidget):
+class AttrWidget(QWidget):
     def __init__(self, parent=None):
         super(AttrWidget, self).__init__(parent)
         self.setFixedHeight(120)
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         #main_layout.setContentsMargins(0, 0, 0, 0)
-        main_layout.setAlignment(QtCore.Qt.AlignTop)
+        main_layout.setAlignment(Qt.AlignTop)
         
-        scroll_area = QtGui.QScrollArea()
+        scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
-        scroll_area.setFocusPolicy(QtCore.Qt.NoFocus)
+        scroll_area.setFocusPolicy(Qt.NoFocus)
         
-        scroll_widget = QtGui.QWidget()
+        scroll_widget = QWidget()
         scroll_area.setWidget(scroll_widget)
         
-        self.layout_of_widget = QtGui.QStackedLayout(scroll_widget)
+        self.layout_of_widget = QStackedLayout(scroll_widget)
         
         main_layout.addWidget(scroll_area)
         
 
 #-----------------------------------attr  widget-----------------------------------#
-class InfoWidget(QtGui.QWidget):
+class InfoWidget(QWidget):
     def __init__(self, parent=None):
         super(InfoWidget, self).__init__(parent)
-        self.main_layout = QtGui.QVBoxLayout(self)
-        self.tab_widget = QtGui.QTabWidget()
+        self.main_layout = QVBoxLayout(self)
+        self.tab_widget = QTabWidget()
         self.main_layout.addWidget(self.tab_widget)
         
-        self.info_widget = QtGui.QStackedWidget()
+        self.info_widget = QStackedWidget()
         self.tab_widget.addTab(self.info_widget, 'stdout')
         
         
 #-----------------------------------main  widget-----------------------------------#
-class MainWidget(QtGui.QDialog):
+class MainWidget(QDialog):
     def __init__(self, parent=None):
         super(MainWidget, self).__init__(parent)
         self.setWindowTitle('Nuke Batch Render')
-        main_layout = QtGui.QHBoxLayout(self)
+        main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
         self.resize(700, 400)
         
-        main_splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
+        main_splitter = QSplitter(Qt.Horizontal)
 
         main_layout.addWidget(main_splitter)
         
@@ -237,7 +239,7 @@ class MainWidget(QtGui.QDialog):
         main_splitter.insertWidget(0, self.file_list_widget)
         main_splitter.setStretchFactor(0, 0)
         
-        right_splitter = QtGui.QSplitter(QtCore.Qt.Vertical, main_splitter)
+        right_splitter = QSplitter(Qt.Vertical, main_splitter)
         right_splitter.insertWidget(0, self.attr_widget)
         right_splitter.insertWidget(1, self.nuke_path_widget)
         right_splitter.insertWidget(2, self.info_widget)
@@ -260,12 +262,12 @@ class MainWidget(QtGui.QDialog):
         
 
 #-----------------------------------frame  widget-----------------------------------#
-class FrameWidget(QtGui.QFrame):
+class FrameWidget(QFrame):
     def __init__(self, parent=None):
         super(FrameWidget, self).__init__(parent)
-        self.main_layout = QtGui.QHBoxLayout(self)
+        self.main_layout = QHBoxLayout(self)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
-        self.setFrameStyle(QtGui.QFrame.Panel|QtGui.QFrame.Raised)    
+        self.setFrameStyle(QFrame.Panel|QFrame.Raised)
         
 
 fw = MainWidget()

@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import sys
 import threading
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from python.ui.app_manager import AppManager
 from python.ui.system_tray import SystemTray
 from python.libs import global_hot_keys
@@ -10,7 +12,7 @@ GlobalHotKeys = global_hot_keys.GlobalHotKeys
 
 class AppManagerApp(object):
     def __init__(self):
-        self.app = QtGui.QApplication(sys.argv)
+        self.app = QApplication(sys.argv)
         self.system_tray = SystemTray()
         self.set_signals()
 
@@ -20,7 +22,7 @@ class AppManagerApp(object):
         self.system_tray.activated.connect(self.show_app_manger)
 
     def show_app_manger(self, reason):
-        if reason == QtGui.QSystemTrayIcon.DoubleClick:
+        if reason == QSystemTrayIcon.DoubleClick:
             self.show_app_manager_ui()
 
     @staticmethod
@@ -38,7 +40,7 @@ class AppManagerApp(object):
         app_man.show()
 
     def show(self):
-        QtGui.QApplication.setQuitOnLastWindowClosed(False)
+        QApplication.setQuitOnLastWindowClosed(False)
         self.system_tray.show()
         self.show_app_manager_ui()
         GlobalHotKeys.listen()

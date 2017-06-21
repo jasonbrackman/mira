@@ -3,7 +3,9 @@ import os
 import re
 import sys
 import shutil
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import miraCore
 from miraLibs.pyLibs import join_path
 
@@ -120,8 +122,8 @@ def sequence_to_mov(file_dir, fps, output=None):
     lacked_frames = [str(lacked_frame).zfill(num_of_special) for lacked_frame in lacked_frames]
     if lacked_frames:
         message = "Lacked Frames: \n%s" % "\n".join(lacked_frames)
-        app = QtGui.QApplication(sys.argv)
-        QtGui.QMessageBox.critical(None, "Lack Frame error", message)
+        app = QApplication(sys.argv)
+        QMessageBox.critical(None, "Lack Frame error", message)
         app.exec_()
         return
     # get ffmpeg path

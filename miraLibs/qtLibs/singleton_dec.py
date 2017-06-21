@@ -40,10 +40,10 @@ if __name__ == "__main__":
     import sys
 
     @singleton_dec
-    class TestLabel(QtGui.QLabel):
+    class TestLabel(QLabel):
         pass
 
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     test1 = TestLabel("hello")
     test1.show()
     test2 = TestLabel("yes")

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from miraLibs.pipeLibs import pipeMira
 from miraLibs.pipeLibs.pipeDb import sql_api
 
@@ -8,21 +10,21 @@ class Selected(object):
     pass
 
 
-class MyGroup(QtGui.QGroupBox):
+class MyGroup(QGroupBox):
     def __init__(self, label_name=None, check_name=None, parent=None):
         super(MyGroup, self).__init__(parent)
         self.label_name = label_name
         self.check_name = check_name
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setSpacing(5)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        name_label = QtGui.QLabel()
+        name_label = QLabel()
         name_label.setText('<b>%s</b>' % self.label_name)
-        name_label.setAlignment(QtCore.Qt.AlignCenter)
-        self.check_box = QtGui.QCheckBox(self.check_name)
-        self.list_widget = QtGui.QListWidget()
+        name_label.setAlignment(Qt.AlignCenter)
+        self.check_box = QCheckBox(self.check_name)
+        self.list_widget = QListWidget()
         self.list_widget.setSortingEnabled(True)
-        self.list_widget.setSelectionMode(QtGui.QListWidget.ExtendedSelection)
+        self.list_widget.setSelectionMode(QListWidget.ExtendedSelection)
         main_layout.addWidget(name_label)
         main_layout.addWidget(self.check_box)
         main_layout.addWidget(self.list_widget)
@@ -35,13 +37,13 @@ class MyGroup(QtGui.QGroupBox):
             self.list_widget.setEnabled(True)
 
 
-class PipelineWidget(QtGui.QDialog):
-    play_clicked = QtCore.Signal(dict)
+class PipelineWidget(QDialog):
+    play_clicked = Signal(dict)
 
     def __init__(self, parent=None):
         super(PipelineWidget, self).__init__(parent)
         self.resize(600, 420)
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
         self.__projects = pipeMira.get_projects()
         self.current_project = pipeMira.get_current_project()
         self.__db = sql_api.SqlApi(self.current_project)
@@ -49,31 +51,31 @@ class PipelineWidget(QtGui.QDialog):
         self.__shot_context = pipeMira.get_shot_step()
         self.play_list = list()
 
-        main_layout = QtGui.QVBoxLayout(self)
-        project_layout = QtGui.QHBoxLayout()
-        project_label = QtGui.QLabel("Project")
-        self.project_cbox = QtGui.QComboBox()
+        main_layout = QVBoxLayout(self)
+        project_layout = QHBoxLayout()
+        project_label = QLabel("Project")
+        self.project_cbox = QComboBox()
         project_layout.addWidget(project_label)
         project_layout.addWidget(self.project_cbox)
         project_layout.setStretchFactor(project_label, 0)
         project_layout.setStretchFactor(self.project_cbox, 1)
 
-        list_layout = QtGui.QHBoxLayout()
+        list_layout = QHBoxLayout()
 
         self.sequence_group = MyGroup("sequence", "All Sequences", self)
         self.sequence_group.check_box.setEnabled(False)
-        self.sequence_group.list_widget.setSelectionMode(QtGui.QListWidget.SingleSelection)
+        self.sequence_group.list_widget.setSelectionMode(QListWidget.SingleSelection)
         self.shot_group = MyGroup("shot", "All Shots", self)
         self.context_group = MyGroup("context", "Newest", self)
-        self.context_group.list_widget.setSelectionMode(QtGui.QListWidget.SingleSelection)
+        self.context_group.list_widget.setSelectionMode(QListWidget.SingleSelection)
 
         list_layout.addWidget(self.sequence_group)
         list_layout.addWidget(self.shot_group)
         list_layout.addWidget(self.context_group)
 
-        btn_layout = QtGui.QHBoxLayout()
-        self.play_btn = QtGui.QPushButton("Play")
-        self.cancel_btn = QtGui.QPushButton("Cancel")
+        btn_layout = QHBoxLayout()
+        self.play_btn = QPushButton("Play")
+        self.cancel_btn = QPushButton("Cancel")
         btn_layout.addStretch()
         btn_layout.addWidget(self.play_btn)
         btn_layout.addWidget(self.cancel_btn)

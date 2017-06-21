@@ -1,47 +1,49 @@
 # -*- coding: utf-8 -*-
 import sys
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 
-class Panel(QtGui.QWidget):
+class Panel(QWidget):
     def __init__(self, parent=None):
         super(Panel, self).__init__(parent)
 
         self.resize(400, 400)
-        mouse_position = QtGui.QCursor().pos()
-        self.center = QtCore.QPoint(self.width()/2, self.height()/2)
+        mouse_position = QCursor().pos()
+        self.center = QPoint(self.width()/2, self.height()/2)
         self.move(mouse_position - self.center)
         self.setMouseTracking(True)
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.Popup)
-        self.setAttribute(QtCore.Qt.WA_QuitOnClose)
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.Popup)
+        self.setAttribute(Qt.WA_QuitOnClose)
 
         self.selected_item = None
         self.mouse_destination = self.center
-        self.layout = QtGui.QGridLayout()
-        self.layout.setAlignment(QtCore.Qt.AlignTop)
+        self.layout = QGridLayout()
+        self.layout.setAlignment(Qt.AlignTop)
 
         for i in xrange(3):
-            label = QtGui.QLabel(str(i))
+            label = QLabel(str(i))
             label.setFixedSize(100, 20)
-            label.setAlignment(QtCore.Qt.AlignCenter)
+            label.setAlignment(Qt.AlignCenter)
             label.setStyleSheet("background: #FF0000")
             self.layout.addWidget(label, 0, i)
         self.setLayout(self.layout)
 
     def paintEvent(self, event):
         super(Panel, self).paintEvent(event)
-        painter = QtGui.QPainter(self)
+        painter = QPainter(self)
         self.draw_line(painter)
-        pixmap = QtGui.QPixmap("E:/nuke.png")
-        painter.drawPixmap(QtCore.QPoint(self.width()/2-24, self.height()/2-24), pixmap)
+        pixmap = QPixmap("E:/nuke.png")
+        painter.drawPixmap(QPoint(self.width()/2-24, self.height()/2-24), pixmap)
 
     def draw_line(self, painter):
-        pen = QtGui.QPen(QtGui.QColor(0, 0, 0))
+        pen = QPen(QColor(0, 0, 0))
         painter.setPen(pen)
         pen.setWidth(2)
-        center = QtCore.QPoint(self.width()/2, self.height()/2)
+        center = QPoint(self.width()/2, self.height()/2)
         destionation = self.mouse_destination
-        self.line = QtGui.QPolygon([center, center + QtCore.QPoint(1, 0), destionation, destionation+QtCore.QPoint(-1, 0)])
+        self.line = QPolygon([center, center + QPoint(1, 0), destionation, destionation+QPoint(-1, 0)])
         painter.drawPolygon(self.line)
 
     def mouseMoveEvent(self, event):
@@ -56,7 +58,7 @@ class Panel(QtGui.QWidget):
                 widget.setStyleSheet("background: #FF0000")
 
 
-app = QtGui.QApplication(sys.argv)
+app = QApplication(sys.argv)
 pane = Panel()
 pane.show()
 sys.exit(app.exec_())

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from miraLibs.pipeLibs.get_task_name import get_task_name
 from miraFramework.task_common_form import CommonForm
 from miraLibs.pyLibs import Path, join_path
@@ -8,7 +10,7 @@ from miraLibs.pipeLibs import pipeFile
 from miraLibs.deadlineLibs import submit
 
 
-class TaskStart(QtGui.QDialog):
+class TaskStart(QDialog):
     def __init__(self, parent=None):
         super(TaskStart, self).__init__(parent)
         self.setup_ui()
@@ -16,25 +18,25 @@ class TaskStart(QtGui.QDialog):
         self.set_signals()
 
     def setup_ui(self):
-        self.setWindowFlags(QtCore.Qt.Window)
+        self.setWindowFlags(Qt.Window)
         self.setWindowTitle("Task Start")
         self.resize(800, 600)
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         self.common_widget = CommonForm()
-        bottom_layout = QtGui.QHBoxLayout()
-        self.path_le = QtGui.QLineEdit()
-        self.path_btn = QtGui.QToolButton()
-        icon = QtGui.QIcon()
-        icon.addPixmap(self.style().standardPixmap(QtGui.QStyle.SP_DirOpenIcon))
+        bottom_layout = QHBoxLayout()
+        self.path_le = QLineEdit()
+        self.path_btn = QToolButton()
+        icon = QIcon()
+        icon.addPixmap(self.style().standardPixmap(QStyle.SP_DirOpenIcon))
         self.path_btn.setIcon(icon)
         bottom_layout.addWidget(self.path_le)
         bottom_layout.addWidget(self.path_btn)
 
-        btn_layout = QtGui.QHBoxLayout()
-        self.task_status_check = QtGui.QCheckBox("Change task status to final")
+        btn_layout = QHBoxLayout()
+        self.task_status_check = QCheckBox("Change task status to final")
         self.task_status_check.setChecked(True)
-        self.start_btn = QtGui.QPushButton("Start")
+        self.start_btn = QPushButton("Start")
         btn_layout.addStretch()
         btn_layout.addWidget(self.start_btn)
 
@@ -44,7 +46,7 @@ class TaskStart(QtGui.QDialog):
 
     def set_style(self):
         qss_path = join_path.join_path2(os.path.dirname(__file__), "style.qss")
-        self.setStyle(QtGui.QStyleFactory.create('plastique'))
+        self.setStyle(QStyleFactory.create('plastique'))
         self.setStyleSheet(open(qss_path, 'r').read())
 
     def set_signals(self):
@@ -102,7 +104,7 @@ class TaskStart(QtGui.QDialog):
 
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     tm = TaskStart()
     tm.show()
     app.exec_()

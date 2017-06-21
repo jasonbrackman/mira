@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 import tempfile
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as mc
 import maya.mel as mel
 
@@ -69,8 +71,8 @@ def playblast_to_temp():
     return playblast_thumb(file_name)
 
 
-class Label(QtGui.QLabel):
-    clicked = QtCore.Signal()
+class Label(QLabel):
+    clicked = Signal()
 
     def __init__(self, parent=None):
         super(Label, self).__init__(parent)
@@ -82,7 +84,7 @@ class Label(QtGui.QLabel):
 
     def set_pixmap(self):
         self.file_path = playblast_to_temp()
-        pix_map = QtGui.QPixmap(self.file_path)
+        pix_map = QPixmap(self.file_path)
         self.setPixmap(pix_map)
 
 

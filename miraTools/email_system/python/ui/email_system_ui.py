@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 from functools import partial
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from . import send_email
 from .email_box import emial_box
 from ..frameworks import email_button
@@ -11,29 +13,29 @@ from ..libs import get_icon_dir
 def get_window_icon():
     icon_dir = get_icon_dir.get_icon_dir()
     icon_path = os.path.join(icon_dir, "email.png")
-    icon = QtGui.QIcon(icon_path)
+    icon = QIcon(icon_path)
     return icon
 
 
-class EmailSystemUI(QtGui.QMainWindow):
+class EmailSystemUI(QMainWindow):
     def __init__(self, parent=None):
         super(EmailSystemUI, self).__init__(parent)
         self.resize(1200, 800)
         self.setWindowTitle("Email")
         self.setWindowIcon(get_window_icon())
 
-        central_widget = QtGui.QWidget()
+        central_widget = QWidget()
         self.setCentralWidget(central_widget)
-        main_layout = QtGui.QHBoxLayout(central_widget)
+        main_layout = QHBoxLayout(central_widget)
         main_layout.setContentsMargins(0, 2, 0, 0)
-        main_group = QtGui.QGroupBox()
+        main_group = QGroupBox()
         main_layout.addWidget(main_group)
-        main_group_layout = QtGui.QHBoxLayout(main_group)
+        main_group_layout = QHBoxLayout(main_group)
 
-        btn_layout = QtGui.QVBoxLayout()
-        btn_group = QtGui.QGroupBox()
-        group_layout = QtGui.QVBoxLayout(btn_group)
-        group_layout.setAlignment(QtCore.Qt.AlignTop)
+        btn_layout = QVBoxLayout()
+        btn_group = QGroupBox()
+        group_layout = QVBoxLayout(btn_group)
+        group_layout.setAlignment(Qt.AlignTop)
         group_layout.setContentsMargins(2, 3, 2, 3)
         self.receive_btn = email_button.EmailButton("receive", u"收件箱")
         self.send_box_btn = email_button.EmailButton("has_send", u"已发送")
@@ -43,16 +45,16 @@ class EmailSystemUI(QtGui.QMainWindow):
         group_layout.addWidget(self.recycle_btn)
         btn_layout.addWidget(btn_group)
 
-        send_group = QtGui.QGroupBox()
-        send_layout = QtGui.QVBoxLayout(send_group)
+        send_group = QGroupBox()
+        send_layout = QVBoxLayout(send_group)
         send_layout.setContentsMargins(2, 3, 2, 3)
-        send_layout.setAlignment(QtCore.Qt.AlignTop)
+        send_layout.setAlignment(Qt.AlignTop)
         self.send_btn = email_button.EmailButton("write", u"写信")
         send_layout.addWidget(self.send_btn)
         btn_layout.addWidget(send_group)
         btn_layout.setStretch(1, 1)
 
-        self.display_layout = QtGui.QStackedLayout()
+        self.display_layout = QStackedLayout()
         self.send_email_widget = send_email.SendEmailUI()
         self.receive_box_widget = emial_box.EmailBox("receiveBox")
         self.send_box_widget = emial_box.EmailBox("sendBox")

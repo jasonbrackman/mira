@@ -3,7 +3,9 @@
 # description="""  """
 import pymel.core as pm
 import re
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import sys
 import public_ctrls
 from public_ctrls import warm_tip
@@ -123,25 +125,25 @@ def manu():
         print selected_objects[0]+'-------->'+selected_objects[1]
 
 
-class Cloth(QtGui.QDialog):
+class Cloth(QDialog):
     def __init__(self, parent=None):
         super(Cloth, self).__init__(parent)
         self.setWindowTitle('Cloth')
         y_pos = public_ctrls.get_maya_main_win_pos()[1] + (public_ctrls.get_maya_main_win_size()[1])/4
         self.move(public_ctrls.get_maya_main_win_pos()[0], y_pos)
-        main_layout = QtGui.QVBoxLayout(self)
-        auto_group = QtGui.QGroupBox('Auto')
+        main_layout = QVBoxLayout(self)
+        auto_group = QGroupBox('Auto')
         main_layout.addWidget(auto_group)
-        auto_layout = QtGui.QHBoxLayout(auto_group)
-        self.auto_main_btn = QtGui.QPushButton('Auto Main')
+        auto_layout = QHBoxLayout(auto_group)
+        self.auto_main_btn = QPushButton('Auto Main')
         self.auto_main_btn.setFixedWidth(230)
-        self.auto_assist_btn = QtGui.QPushButton('Auto assist')
+        self.auto_assist_btn = QPushButton('Auto assist')
         auto_layout.addWidget(self.auto_main_btn)
         auto_layout.addWidget(self.auto_assist_btn)
-        manu_group = QtGui.QGroupBox('Manu')
+        manu_group = QGroupBox('Manu')
         main_layout.addWidget(manu_group)
-        manu_layout = QtGui.QHBoxLayout(manu_group)
-        self.manu_btn = QtGui.QPushButton('manu')
+        manu_layout = QHBoxLayout(manu_group)
+        self.manu_btn = QPushButton('manu')
         manu_layout.addWidget(self.manu_btn)
         self.set_signals()
 
@@ -151,7 +153,7 @@ class Cloth(QtGui.QDialog):
         self.manu_btn.clicked.connect(manu)
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.RightButton:
+        if event.button() == Qt.RightButton:
             self.close()
 
 

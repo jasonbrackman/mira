@@ -1,32 +1,34 @@
 # -*- coding: utf-8 -*-
 import os
 import logging
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import pymel.core as pm
 from miraLibs.pyLibs import get_latest_version
 from miraLibs.mayaLibs import get_maya_win
 from miraLibs.pipeLibs.pipeMaya import lgt_assign_shader_deformed
 
 
-class ReferenceImageDelegate(QtGui.QItemDelegate):
+class ReferenceImageDelegate(QItemDelegate):
     def __init__(self, parent=None):
         super(ReferenceImageDelegate, self).__init__(parent)
 
     def createEditor(self, parent, option, index):
         if index.column() == 0:
-            label = QtGui.QLabel(parent)
+            label = QLabel(parent)
             return label
 
     def setEditorData(self, editor, index):
         model = index.model()
         data_index = model.index(index.row(), 4)
-        value = model.data(data_index, QtCore.Qt.DisplayRole).icon_path
+        value = model.data(data_index, Qt.DisplayRole).icon_path
         if value:
-            pix_map = QtGui.QPixmap(value)
+            pix_map = QPixmap(value)
             editor.setPixmap(pix_map)
 
 
-class ReferenceTableModel(QtCore.QAbstractTableModel):
+class ReferenceTableModel(QAbstractTableModel):
     def __init__(self, arg=[], parent=None):
         super(ReferenceTableModel, self).__init__(parent)
         self.arg = arg
@@ -40,21 +42,21 @@ class ReferenceTableModel(QtCore.QAbstractTableModel):
     def data(self, index, role):
         row = index.row()
         column = index.column()
-        if role == QtCore.Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             if column == 0:
                 return None
             return self.arg[row][column]
-        if role == QtCore.Qt.ToolTipRole:
+        if role == Qt.ToolTipRole:
             if column == 1:
                 ref_node = pm.PyNode(self.arg[row][column])
                 file_name = ref_node.referenceFile().path
                 return file_name
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
     def setData(self, index, value, role):
-        if role == QtCore.Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             row = index.row()
             column = index.column()
             if value:
@@ -72,67 +74,67 @@ class ReferenceItem(object):
         self.type = None
 
 
-class SceneBreakDown(QtGui.QDialog):
-    close_signal = QtCore.Signal()
+class SceneBreakDown(QDialog):
+    close_signal = Signal()
 
     def __init__(self, parent=None):
         super(SceneBreakDown, self).__init__(parent)
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
         self.setWindowTitle("Scene Break Down")
         self.resize(550, 650)
         self.icon_dir = os.path.join(os.path.dirname(__file__), "icons")
         self.green_icon_path = os.path.join(self.icon_dir, "green_bullet.png")
         self.red_icon_path = os.path.join(self.icon_dir, "red_bullet.png")
         # UI
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 2)
         # proxy filter
-        proxy_filter_layout = QtGui.QHBoxLayout()
-        self.proxy_filter_le = QtGui.QLineEdit()
+        proxy_filter_layout = QHBoxLayout()
+        self.proxy_filter_le = QLineEdit()
         proxy_filter_layout.addStretch()
         proxy_filter_layout.addWidget(self.proxy_filter_le)
         # -reference view
-        self.reference_view = QtGui.QTableView()
+        self.reference_view = QTableView()
         self.reference_view.horizontalHeader().setStretchLastSection(True)
-        self.reference_view.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
-        self.reference_view.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
-        self.reference_view.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.reference_view.setContextMenuPolicy(Qt.ActionsContextMenu)
+        self.reference_view.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.reference_view.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.reference_view.verticalHeader().hide()
         self.reference_view.horizontalHeader().hide()
-        self.show_in_file_system_action = QtGui.QAction("Show in File System", self)
+        self.show_in_file_system_action = QAction("Show in File System", self)
         self.reference_view.addAction(self.show_in_file_system_action)
         self.model = None
         self.proxy_model = None
         self.set_model()
         # -bottom layout
-        bottom_layout = QtGui.QHBoxLayout()
+        bottom_layout = QHBoxLayout()
         # --filter layout
-        filter_layout = QtGui.QHBoxLayout()
+        filter_layout = QHBoxLayout()
         filter_layout.setContentsMargins(0, 0, 0, 0)
-        filter_group = QtGui.QGroupBox()
+        filter_group = QGroupBox()
         filter_layout.addWidget(filter_group)
-        check_layout = QtGui.QHBoxLayout(filter_group)
+        check_layout = QHBoxLayout(filter_group)
         check_layout.setContentsMargins(3, 1, 0, 1)
-        filter_label = QtGui.QLabel("Filters")
-        self.check_btn_group = QtGui.QButtonGroup()
+        filter_label = QLabel("Filters")
+        self.check_btn_group = QButtonGroup()
         self.check_btn_group.setExclusive(False)
-        self.green_check = QtGui.QCheckBox()
+        self.green_check = QCheckBox()
         self.green_check.setChecked(True)
-        self.green_check.setIcon(QtGui.QIcon(self.green_icon_path))
-        self.red_check = QtGui.QCheckBox()
+        self.green_check.setIcon(QIcon(self.green_icon_path))
+        self.red_check = QCheckBox()
         self.red_check.setChecked(True)
-        self.red_check.setIcon(QtGui.QIcon(self.red_icon_path))
+        self.red_check.setIcon(QIcon(self.red_icon_path))
         check_layout.addWidget(filter_label)
         check_layout.addWidget(self.green_check)
         check_layout.addWidget(self.red_check)
         self.check_btn_group.addButton(self.green_check)
         self.check_btn_group.addButton(self.red_check)
         # --button layout
-        button_layout = QtGui.QHBoxLayout()
+        button_layout = QHBoxLayout()
         button_layout.setSpacing(2)
-        self.refresh_btn = QtGui.QPushButton("Refresh")
-        self.update_all_red_btn = QtGui.QPushButton("Update All Red")
-        self.update_selected_btn = QtGui.QPushButton("Update Selected")
+        self.refresh_btn = QPushButton("Refresh")
+        self.update_all_red_btn = QPushButton("Update All Red")
+        self.update_selected_btn = QPushButton("Update Selected")
         button_layout.addWidget(self.refresh_btn)
         button_layout.addWidget(self.update_all_red_btn)
         button_layout.addWidget(self.update_selected_btn)
@@ -155,14 +157,14 @@ class SceneBreakDown(QtGui.QDialog):
 
     def set_model(self):
         model_data = self.get_model_data()
-        self.proxy_model = QtGui.QSortFilterProxyModel()
+        self.proxy_model = QSortFilterProxyModel()
         if not model_data:
             return
         self.model = ReferenceTableModel(model_data)
         self.proxy_model.setSourceModel(self.model)
         self.proxy_model.setFilterKeyColumn(1)
         self.proxy_model.setDynamicSortFilter(True)
-        self.proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
         self.reference_view.setModel(self.proxy_model)
         self.reference_view.setSortingEnabled(True)
         # delegates
@@ -241,7 +243,7 @@ class SceneBreakDown(QtGui.QDialog):
     def filter(self, status_list):
         for i in xrange(self.model.rowCount(self)):
             model_index = self.model.index(i, 4)
-            item = self.model.data(model_index, QtCore.Qt.DisplayRole)
+            item = self.model.data(model_index, Qt.DisplayRole)
             if not status_list:
                 self.reference_view.hideRow(i)
             else:

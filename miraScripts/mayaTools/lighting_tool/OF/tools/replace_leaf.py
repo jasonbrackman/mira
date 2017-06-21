@@ -1,5 +1,7 @@
 
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as cmds
 import maya.mel as mel
 import re
@@ -10,7 +12,7 @@ import sip
 
 def get_maya_win():
     prt = mui.MQtUtil.mainWindow()
-    return sip.wrapinstance(long(prt), QtGui.QWidget)
+    return sip.wrapinstance(long(prt), QWidget)
 
 
 def cMuscleSurfAttach(objShape, edgeIdx1, edgeIdx2):
@@ -28,33 +30,33 @@ def cMuscleSurfAttach(objShape, edgeIdx1, edgeIdx2):
     return xform, node
 
 
-class ReplaceWidget(QtGui.QDialog):
+class ReplaceWidget(QDialog):
 
     def __init__(self, parent=None):
         super(ReplaceWidget, self).__init__(parent)
         self.setWindowTitle('Replace Leaf')
         self.resize(350, 50)
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         # -----------------------------delete group-----------------------------#
-        del_grp = QtGui.QGroupBox('Delete Edges')
-        del_layout = QtGui.QVBoxLayout(del_grp)
+        del_grp = QGroupBox('Delete Edges')
+        del_layout = QVBoxLayout(del_grp)
         self.get_del_edge_layout = GetDeleteEdges()
-        self.delete_edge_btn = QtGui.QPushButton('Delete Edges')
+        self.delete_edge_btn = QPushButton('Delete Edges')
         del_layout.addLayout(self.get_del_edge_layout)
         del_layout.addWidget(self.delete_edge_btn)
         # -----------------------------replace group-----------------------------#
-        replace_grp = QtGui.QGroupBox('Replace Plane')
-        replace_layout = QtGui.QVBoxLayout(replace_grp)
+        replace_grp = QGroupBox('Replace Plane')
+        replace_layout = QVBoxLayout(replace_grp)
         self.get_del_edge_layout_new = GetDeleteEdges()
         self.get_del_edge_layout_new.btn.setText('Get Two Edges')
-        self.replace_plane_btn = QtGui.QPushButton('Replace Plane')
+        self.replace_plane_btn = QPushButton('Replace Plane')
         replace_layout.addLayout(self.get_del_edge_layout_new)
         replace_layout.addWidget(self.replace_plane_btn)
         # -----------------------------Fix group---------------------------#
-        fix_grp = QtGui.QGroupBox()
-        fix_layout = QtGui.QHBoxLayout(fix_grp)
-        self.fix_btn = QtGui.QPushButton('Fix')
-        self.delete_btn = QtGui.QPushButton('Delete Locators')
+        fix_grp = QGroupBox()
+        fix_layout = QHBoxLayout(fix_grp)
+        self.fix_btn = QPushButton('Fix')
+        self.delete_btn = QPushButton('Delete Locators')
         fix_layout.addWidget(self.fix_btn)
         fix_layout.addWidget(self.delete_btn)
         # -----------------------------------------------------------------------#
@@ -92,9 +94,9 @@ class ReplaceWidget(QtGui.QDialog):
         all_string = str(self.get_del_edge_layout.line.text())
         old_obj_name = self.get_obj_name(all_string)
         if selected_objs:
-            progress_dialog = QtGui.QProgressDialog(
+            progress_dialog = QProgressDialog(
                 'Deleting Edges,Please wait......', 'Cancel', 0, len(selected_objs))
-            progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+            progress_dialog.setWindowModality(Qt.WindowModal)
             progress_dialog.show()
             value = 0
             for obj in selected_objs:
@@ -119,9 +121,9 @@ class ReplaceWidget(QtGui.QDialog):
         all_string = str(self.get_del_edge_layout_new.line.text())
         old_obj_name = self.get_obj_name(all_string)
         if selected_objs:
-            progress_dialog = QtGui.QProgressDialog(
+            progress_dialog = QProgressDialog(
                 'Deleting Edges,Please wait......', 'Cancel', 0, len(selected_objs))
-            progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+            progress_dialog.setWindowModality(Qt.WindowModal)
             progress_dialog.show()
             value = 0
             self.locator = []
@@ -161,12 +163,12 @@ class ReplaceWidget(QtGui.QDialog):
             cmds.delete(self.locator)
 
 
-class GetDeleteEdges(QtGui.QHBoxLayout):
+class GetDeleteEdges(QHBoxLayout):
 
     def __init__(self, parent=None):
         super(GetDeleteEdges, self).__init__(parent)
-        self.btn = QtGui.QPushButton('Get Delete Edges')
-        self.line = QtGui.QLineEdit()
+        self.btn = QPushButton('Get Delete Edges')
+        self.line = QLineEdit()
         self.addWidget(self.btn)
         self.addWidget(self.line)
         self.btn.clicked.connect(self.get_edges)

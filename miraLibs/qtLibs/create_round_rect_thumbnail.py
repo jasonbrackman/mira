@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 
 def create_round_rect_thumbnail(image_path, scale_width, scale_height, border_radius):
@@ -12,40 +14,40 @@ def create_round_rect_thumbnail(image_path, scale_width, scale_height, border_ra
     :return:
     """
     # get the 512 base image
-    base_image = QtGui.QPixmap(scale_width, scale_height)
-    base_image.fill(QtCore.Qt.transparent)
+    base_image = QPixmap(scale_width, scale_height)
+    base_image.fill(Qt.transparent)
     # now attempt to load the image
-    image = QtGui.QImage(image_path)
-    thumb = QtGui.QPixmap.fromImage(image)
+    image = QImage(image_path)
+    thumb = QPixmap.fromImage(image)
     # pixmap will be a null pixmap if load fails
     if not thumb.isNull():
         # scale it down to fit inside a frame of maximum 512x512
         thumb_scaled = thumb.scaled(scale_width,
                                     scale_height,
-                                    QtCore.Qt.KeepAspectRatioByExpanding, 
-                                    QtCore.Qt.SmoothTransformation)  
+                                    Qt.KeepAspectRatioByExpanding,
+                                    Qt.SmoothTransformation)
 
         # now composite the thumbnail on top of the base image
         # bottom align it to make it look nice
         thumb_img = thumb_scaled.toImage()
-        brush = QtGui.QBrush(thumb_img)
-        painter = QtGui.QPainter(base_image)
-        painter.setRenderHint(QtGui.QPainter.Antialiasing)
+        brush = QBrush(thumb_img)
+        painter = QPainter(base_image)
+        painter.setRenderHint(QPainter.Antialiasing)
         painter.setBrush(brush)
-        painter.setPen(QtCore.Qt.NoPen)
-        rect = QtCore.QRectF(0, 0, scale_width, scale_height)
+        painter.setPen(Qt.NoPen)
+        rect = QRectF(0, 0, scale_width, scale_height)
         painter.drawRoundRect(rect, border_radius, border_radius)             
         painter.end()
     
     return base_image
 
 
-class Widget(QtGui.QWidget):
+class Widget(QWidget):
     def __init__(self, parent=None):
         super(Widget, self).__init__(parent)
-        main_layout = QtGui.QHBoxLayout(self)
+        main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        self.label = QtGui.QLabel()
+        self.label = QLabel()
         main_layout.addWidget(self.label)
         self.draw()
         
@@ -56,7 +58,7 @@ class Widget(QtGui.QWidget):
 
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     w = Widget()
     w.show()
     sys.exit(app.exec_())

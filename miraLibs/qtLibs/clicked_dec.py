@@ -9,10 +9,9 @@
 # notes       :
 
 # Built-in modules
-try:
-    import PyQt4.QtCore as QtCore
-except ImportError:
-    import PySide.QtCore as QtCore
+from Qt.QtWidgets import *
+from Qt.QtGui import *
+from Qt.QtCore import *
 
 # Third-party modules
 
@@ -29,26 +28,26 @@ def clicked_dec(widget_class):
     """
 
     class ClickedClass(widget_class):
-        leftClicked = QtCore.pyqtSignal()
-        rightClicked = QtCore.pyqtSignal()
-        leftDoubleClicked = QtCore.pyqtSignal()
-        rightDoubleClicked = QtCore.pyqtSignal()
+        leftClicked = pyqtSignal()
+        rightClicked = pyqtSignal()
+        leftDoubleClicked = pyqtSignal()
+        rightDoubleClicked = pyqtSignal()
 
         def __init__(self, *args, **kwargs):
             super(ClickedClass, self).__init__(*args, **kwargs)
             self.wrapped = widget_class()
-            self.__timer = QtCore.QTimer()
+            self.__timer = QTimer()
             self.__timer.setInterval(250)
             self.__timer.setSingleShot(True)
             self.__timer.timeout.connect(self.timeout)
             self.__left_click_count = self.__right_click_count = 0
             
         def mousePressEvent(self, event):
-            if event.button() == QtCore.Qt.LeftButton:
+            if event.button() == Qt.LeftButton:
                 self.__left_click_count += 1
                 if not self.__timer.isActive():
                     self.__timer.start()
-            if event.button() == QtCore.Qt.RightButton:
+            if event.button() == Qt.RightButton:
                 self.__right_click_count += 1
                 if not self.__timer.isActive():
                     self.__timer.start()
@@ -73,7 +72,7 @@ if __name__ == "__main__":
     import PyQt4.QtGui as QtGui
 
     @clicked_dec
-    class TestLabel(QtGui.QLabel):
+    class TestLabel(QLabel):
         pass
 
     def print_left():
@@ -88,7 +87,7 @@ if __name__ == "__main__":
     def print_right_double():
         print "right double"
 
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     test = TestLabel("hello")
     test.leftClicked.connect(print_left)
     test.rightClicked.connect(print_right)

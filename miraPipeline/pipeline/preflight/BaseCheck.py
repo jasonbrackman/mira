@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 
 class RealBaseCheck(object):
@@ -28,7 +30,7 @@ class RealBaseCheck(object):
         pass
 
 
-class CheckProgress(QtGui.QProgressDialog):
+class CheckProgress(QProgressDialog):
     def __init__(self, parent=None):
         super(CheckProgress, self).__init__(parent)
         self.setRange(1, 100)
@@ -47,7 +49,7 @@ class BaseCheck(RealBaseCheck):
     def show(self):
         self.progress_dialog.setValue(30)
         self.progress_dialog.show()
-        app = QtGui.QApplication.instance()
+        app = QApplication.instance()
         app.processEvents()
 
     def close(self):

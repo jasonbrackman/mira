@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from camera_sequencer_UI import camera_sequencer_UI
 from miraLibs.mayaLibs import get_maya_win
 from miraLibs.pipeLibs.pipeDb import sql_api
@@ -18,7 +20,7 @@ class CameraSequencer(camera_sequencer_UI):
         self.setWindowTitle('Camera Sequencer')
         self.set_scene_name()
 
-        self.shotListWidget.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
+        self.shotListWidget.setSelectionMode(QAbstractItemView.NoSelection)
 
     def set_scene_name(self):
         full_scene_name = mc.file(q=True, sceneName=True)
@@ -30,7 +32,7 @@ class CameraSequencer(camera_sequencer_UI):
         self.sceneNameLineEdit.setText(scene_name)
         shot_list = sql_api.SqlApi(project_name).getShotListBySceneName({'assetScene':scene_name})
         for i in shot_list:
-            item = QtGui.QListWidgetItem()
+            item = QListWidgetItem()
             item.setText(scene_name+'_'+i)
             self.shotListWidget.addItem(item)
 
@@ -41,19 +43,19 @@ class CameraSequencer(camera_sequencer_UI):
 
     def create_multi_sequence(self):
         if not self.judge_scene_name():
-            QtGui.QMessageBox.information(self, 'error', 'please input a scene name')
+            QMessageBox.information(self, 'error', 'please input a scene name')
             return
         shot_list_count = self.shotListWidget.count()
         for i in range(shot_list_count):
             shot_name = self.shotListWidget.item(i).text()
             self.do_create_sequence(shot_name)
-        QtGui.QMessageBox.information(self, 'success', 'create complete')
+        QMessageBox.information(self, 'success', 'create complete')
 
     def do_create_sequence(self, shot_name):
         camera_name = 'cam_%s' % shot_name
         shot_name = 'shot_%s' % shot_name
         if mc.objExists(camera_name):
-            QtGui.QMessageBox.information(self, 'error', '%s exists' % camera_name)
+            QMessageBox.information(self, 'error', '%s exists' % camera_name)
             return
         new_cam = mc.camera()
         mc.setAttr(new_cam[1]+'.filmFit', 1)
@@ -68,9 +70,9 @@ class CameraSequencer(camera_sequencer_UI):
         return True
 
     def delete_all(self):
-        ask = QtGui.QMessageBox.information(self, 'Question', 'Are you sure delete all shot camera and shot ?', 
-                                            QtGui.QMessageBox.Yes | QtGui.QMessageBox.No, QtGui.QMessageBox.Yes)
-        if ask == QtGui.QMessageBox.Yes:
+        ask = QMessageBox.information(self, 'Question', 'Are you sure delete all shot camera and shot ?',
+                                            QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+        if ask == QMessageBox.Yes:
             if mc.listRelatives('camera', c=1):
                 for i in mc.listRelatives('camera', c=1):
                     mc.delete(i)

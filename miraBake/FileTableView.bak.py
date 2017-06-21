@@ -3,7 +3,9 @@ import sys
 import functools
 import tempfile
 import os
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from miraTools.video_player.utility.get_icon_dir import get_icon_dir
 from miraTools.video_player.utility.get_children_files import get_children_files
 from miraTools.video_player.utility.get_conf_data import get_ffmpeg_path, get_valid_ext
@@ -11,28 +13,28 @@ from miraTools.video_player.utility.FileMultiThread import FileMultiThread
 from miraTools.video_player.ToolWidget import ToolWidget
 
 
-class FileTableModel(QtCore.QAbstractTableModel):
+class FileTableModel(QAbstractTableModel):
     def __init__(self, arg=[[]], parent=None):
         super(FileTableModel, self).__init__(parent)
         self.arg = arg
 
-    def rowCount(self, parent=QtCore.QModelIndex()):
+    def rowCount(self, parent=QModelIndex()):
         return len(self.arg)
 
-    def columnCount(self, parent=QtCore.QModelIndex()):
+    def columnCount(self, parent=QModelIndex()):
         return len(self.arg[0])
 
-    def data(self, index, role=QtCore.Qt.ToolTipRole):
-        if role == QtCore.Qt.ToolTipRole:
+    def data(self, index, role=Qt.ToolTipRole):
+        if role == Qt.ToolTipRole:
             row = index.row()
             column = index.column()
             return self.arg[row][column]
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsEditable | Qt.ItemIsSelectable
 
     def setData(self, index, value, role):
-        if role == QtCore.Qt.ToolTipRole:
+        if role == Qt.ToolTipRole:
             row = index.row()
             column = index.column()
             if value:
@@ -41,7 +43,7 @@ class FileTableModel(QtCore.QAbstractTableModel):
             return True
         return False
 
-    def insertColumns(self, position, columns, value, parent=QtCore.QModelIndex()):
+    def insertColumns(self, position, columns, value, parent=QModelIndex()):
         rows = self.rowCount()
         self.beginInsertColumns(parent, position, position+columns-1)
         for row in xrange(rows):
@@ -51,7 +53,7 @@ class FileTableModel(QtCore.QAbstractTableModel):
         # self.columnsInserted.emit(parent, position, position+columns-1)
         return True
 
-    def removeColumns(self, position, columns, parent=QtCore.QModelIndex()):
+    def removeColumns(self, position, columns, parent=QModelIndex()):
         rows = self.rowCount()
         self.beginRemoveRows(parent, position, position+columns-1)
         for row in xrange(rows):
@@ -64,12 +66,12 @@ class FileTableModel(QtCore.QAbstractTableModel):
         return True
 
     # def headerData(self, section, orientation, role):
-    #     if role == QtCore.Qt.ToolTipRole:
-    #         if orientation == QtCore.Qt.Horizontal:
+    #     if role == Qt.ToolTipRole:
+    #         if orientation == Qt.Horizontal:
     #             return self.headers[section]
 
 
-class FileTableDelegate(QtGui.QItemDelegate):
+class FileTableDelegate(QItemDelegate):
     def __init__(self, parent=None):
         super(FileTableDelegate, self).__init__(parent)
 
@@ -78,7 +80,7 @@ class FileTableDelegate(QtGui.QItemDelegate):
         return file_widget
 
     def setEditorData(self, editor, index):
-        value = index.model().data(index, QtCore.Qt.ToolTipRole)
+        value = index.model().data(index, Qt.ToolTipRole)
         if value:
             editor.set_file_name(value)
 
@@ -86,20 +88,20 @@ class FileTableDelegate(QtGui.QItemDelegate):
         editor.setGeometry(option.rect)
 
 
-class FileWidget(QtGui.QWidget):
+class FileWidget(QWidget):
     def __init__(self, parent=None):
         super(FileWidget, self).__init__(parent)
         self.__threads = list()
         self.file_name = None
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        self.icon_label = QtGui.QLabel()
+        self.icon_label = QLabel()
         self.icon_label.setFixedSize(100, 56)
         self.icon_label.setStyleSheet("QLabel{background: #000000;}")
-        self.icon_label.setAlignment(QtCore.Qt.AlignCenter)
-        self.text_label = QtGui.QLabel()
+        self.icon_label.setAlignment(Qt.AlignCenter)
+        self.text_label = QLabel()
         self.text_label.setFixedWidth(self.icon_label.width())
-        self.text_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.text_label.setAlignment(Qt.AlignCenter)
         main_layout.addWidget(self.icon_label)
         main_layout.addWidget(self.text_label)
         self.show_in_view()
@@ -119,26 +121,26 @@ class FileWidget(QtGui.QWidget):
         if not icon_path:
             icon_path = os.path.join(icon_dir, "video.png")
         icon_path = icon_path.replace("\\", "/")
-        pixmap = QtGui.QPixmap(icon_path)
+        pixmap = QPixmap(icon_path)
         label_width = self.icon_label.width()
         label_height = self.icon_label.height()
         image_width = pixmap.width()
         image_height = pixmap.height()
         if image_width > image_height:
-            scaled = pixmap.scaled(QtCore.QSize(label_width, image_width/label_width*image_height),
-                                   QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+            scaled = pixmap.scaled(QSize(label_width, image_width/label_width*image_height),
+                                   Qt.KeepAspectRatio, Qt.SmoothTransformation)
         else:
-            scaled = pixmap.scaled(QtCore.QSize(label_height/label_height*image_width, label_height),
-                                   QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+            scaled = pixmap.scaled(QSize(label_height/label_height*image_width, label_height),
+                                   Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.icon_label.setPixmap(scaled)
 
     def set_text_label(self):
         prefix, ext = os.path.splitext(self.file_name)
         base_name = os.path.basename(prefix)
-        elided_font = QtGui.QFontMetrics(self.text_label.font())
-        text = elided_font.elidedText(base_name, QtCore.Qt.ElideMiddle, self.text_label.width())
+        elided_font = QFontMetrics(self.text_label.font())
+        text = elided_font.elidedText(base_name, Qt.ElideMiddle, self.text_label.width())
         self.text_label.setText(text)
-        self.text_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.text_label.setAlignment(Qt.AlignCenter)
 
     def show_video_thumbnail(self):
         if not os.path.isfile(self.file_name):
@@ -154,28 +156,28 @@ class FileWidget(QtGui.QWidget):
         return temp_path
 
 
-class FileTableView(QtGui.QWidget):
+class FileTableView(QWidget):
     def __init__(self, parent=None):
         super(FileTableView, self).__init__(parent)
         self.setAcceptDrops(True)
         self.model_data = list()
         self.model = FileTableModel()
         self.valid_ext = get_valid_ext()
-        main_layout = QtGui.QHBoxLayout(self)
+        main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        group_box = QtGui.QGroupBox()
+        group_box = QGroupBox()
         main_layout.addWidget(group_box)
-        group_layout = QtGui.QVBoxLayout(group_box)
+        group_layout = QVBoxLayout(group_box)
         group_layout.setContentsMargins(0, 0, 0, 0)
         self.tool_widget = ToolWidget()
-        self.table_view = QtGui.QTableView()
+        self.table_view = QTableView()
         self.table_view.setModel(self.model)
         self.table_view.verticalHeader().hide()
         self.table_view.horizontalHeader().hide()
-        self.table_view.setSelectionBehavior(QtGui.QAbstractItemView.SelectColumns)
-        self.remove_action = QtGui.QAction("remove", self)
-        self.add_action = QtGui.QAction("add", self)
-        self.table_view.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
+        self.table_view.setSelectionBehavior(QAbstractItemView.SelectColumns)
+        self.remove_action = QAction("remove", self)
+        self.add_action = QAction("add", self)
+        self.table_view.setContextMenuPolicy(Qt.ActionsContextMenu)
         self.table_view.addAction(self.remove_action)
         self.table_view.addAction(self.add_action)
         group_layout.addWidget(self.tool_widget)
@@ -265,7 +267,7 @@ class FileTableView(QtGui.QWidget):
             self.model.insertColumns(column_count, len(value), value)
 
     def on_add_btn_clicked(self):
-        file_list = QtGui.QFileDialog.getOpenFileNames(self, "choose directory", "",
+        file_list = QFileDialog.getOpenFileNames(self, "choose directory", "",
                                                        "video files(%s)" % (" *"+" *".join(self.valid_ext)))
         if not file_list[0]:
             return
@@ -276,7 +278,7 @@ class FileTableView(QtGui.QWidget):
             self.add_column(file_list)
 
     def on_insert_btn_clicked(self):
-        file_list = QtGui.QFileDialog.getOpenFileNames(self, "choose directory", "",
+        file_list = QFileDialog.getOpenFileNames(self, "choose directory", "",
                                                        "video files(%s)" % (" *"+" *".join(self.valid_ext)))
         if not file_list[0]:
             return
@@ -311,12 +313,12 @@ class FileTableView(QtGui.QWidget):
         self.add_column(need_added)
 
     def keyPressEvent(self, event):
-        if event.key() == QtCore.Qt.Key_Delete:
+        if event.key() == Qt.Key_Delete:
             self.remove_column()
 
 
 if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     widget = FileTableView()
     widget.set_table_view(["D:/kakak/sct_s001_c000_lay_v000.mov", r"D:/kakak/theJungleBook.mp4", "D:/kakak/sct_s001_c000_lay_v000.mov"])
     widget.show()

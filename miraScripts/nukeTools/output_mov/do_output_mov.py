@@ -5,7 +5,9 @@
 
 import os
 import sys
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 path = __file__
 nuke_path = r'C:\tools\Nuke9.0v3\Nuke9.0.exe'
@@ -14,8 +16,8 @@ fps_list = ['24', '25']
 
 
 def get_fps():
-    QtGui.QApplication(sys.argv)
-    ret_value = QtGui.QInputDialog.getItem(None, 'choose fps', 'Please choose fps...', fps_list)
+    QApplication(sys.argv)
+    ret_value = QInputDialog.getItem(None, 'choose fps', 'Please choose fps...', fps_list)
     value, ok = ret_value
     if ok:
         return value

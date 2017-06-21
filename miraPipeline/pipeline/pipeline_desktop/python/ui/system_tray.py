@@ -3,7 +3,9 @@ import os
 import sys
 import subprocess
 from functools import partial
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from ..libs import get_icon_dir
 from ..libs import get_department_of_user
 from ..libs import get_conf_data
@@ -21,7 +23,7 @@ class Action(object):
         self.command = command
 
 
-class SystemTray(QtGui.QSystemTrayIcon):
+class SystemTray(QSystemTrayIcon):
     def __init__(self, parent=None):
         super(SystemTray, self).__init__(parent)
         self.duration = 10000
@@ -35,7 +37,7 @@ class SystemTray(QtGui.QSystemTrayIcon):
     def set_icon(self, icon_path=None):
         if not icon_path:
             icon_path = get_tray_icon_path()
-        icon = QtGui.QIcon(icon_path)
+        icon = QIcon(icon_path)
         self.setIcon(icon)
 
     @staticmethod
@@ -59,7 +61,7 @@ class SystemTray(QtGui.QSystemTrayIcon):
         subprocess.Popen(cmd, shell=True)
 
     def create_tray_menu(self):
-        self.tray_menu = QtGui.QMenu()
+        self.tray_menu = QMenu()
         self.tray_menu.setMinimumWidth(150)
         self.tray_menu.setStyleSheet("QMenu{background-color: #FFFFFF;border: 0px solid;font-family: Trebuchet MS;"
                                      "border: 1px solid rgb(110, 110, 110);font-size: 13px;}"
@@ -69,11 +71,11 @@ class SystemTray(QtGui.QSystemTrayIcon):
         actions = self.get_actions()
         if actions:
             for each in actions:
-                action = QtGui.QAction(each.name, self)
+                action = QAction(each.name, self)
                 action.triggered.connect(partial(self.run_command, each.command))
                 self.tray_menu.addAction(action)
             self.tray_menu.addSeparator()
-        self.quit_action = QtGui.QAction("quit", self)
+        self.quit_action = QAction("quit", self)
         self.tray_menu.addAction(self.quit_action)
         self.quit_action.triggered.connect(self.quit)
         self.setContextMenu(self.tray_menu)
@@ -83,4 +85,4 @@ class SystemTray(QtGui.QSystemTrayIcon):
         sys.exit(0)
 
     def show_message(self, title="Warming Tip", msg=""):
-        self.showMessage(title, msg, QtGui.QSystemTrayIcon.Information, self.duration)
+        self.showMessage(title, msg, QSystemTrayIcon.Information, self.duration)

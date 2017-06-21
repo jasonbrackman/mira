@@ -11,12 +11,9 @@
 # Built-in modules
 
 # Third-party modules
-try:
-    import PyQt4.QtCore as QtCore
-    Signal = QtCore.pyqtSignal
-except ImportError:
-    import PySide.QtCore as QtCore
-    Signal = QtCore.Signal
+from Qt.QtWidgets import *
+from Qt.QtGui import *
+from Qt.QtCore import *
 
 # Studio modules
 
@@ -64,7 +61,7 @@ if __name__ == "__main__":
     import sys
 
     @drop_file_dec
-    class TestLabel(QtGui.QLabel):
+    class TestLabel(QLabel):
         pass
 
     def print_files(file_list):
@@ -73,7 +70,7 @@ if __name__ == "__main__":
             print unicode(f)
         print "="*20
 
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     test = TestLabel("hello")
     test.droped_in.connect(print_files)
     test.show()

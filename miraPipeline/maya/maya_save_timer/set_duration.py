@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 import logging
-import PySide.QtCore as QtCore
+from Qt.QtWidgets import *
+from Qt.QtGui import *
+from Qt.QtCore import *
 import miraLibs.mayaLibs.get_maya_globals as get_maya_globals
 
 logger = logging.getLogger(__name__)
 
 
-Settings = QtCore.QSettings("OddOrange", "MayaSaveTimer")
+Settings = QSettings("OddOrange", "MayaSaveTimer")
 
 
 def set_duration(value):

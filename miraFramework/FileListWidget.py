@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 import os
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 
-class FileListWidget(QtGui.QListWidget):
+class FileListWidget(QListWidget):
     def __init__(self, parent=None):
         super(FileListWidget, self).__init__(parent)
         self.setAcceptDrops(True)
         self.setSortingEnabled(True)
-        self.setSelectionMode(QtGui.QListWidget.ExtendedSelection)
-        self.setIconSize(QtCore.QSize(150, 150))
-        self.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.menu = QtGui.QMenu()
-        self.remove_action = QtGui.QAction("Remove", self)
+        self.setSelectionMode(QListWidget.ExtendedSelection)
+        self.setIconSize(QSize(150, 150))
+        self.setFocusPolicy(Qt.NoFocus)
+        self.menu = QMenu()
+        self.remove_action = QAction("Remove", self)
         self.set_signals()
 
     def set_signals(self):
@@ -54,11 +56,11 @@ class FileListWidget(QtGui.QListWidget):
         exists = self.all_items_text()
         if file_path in exists:
             return
-        file_info = QtCore.QFileInfo(file_path)
-        icon_provider = QtGui.QFileIconProvider()
+        file_info = QFileInfo(file_path)
+        icon_provider = QFileIconProvider()
         icon = icon_provider.icon(file_info)
-        item = QtGui.QListWidgetItem(file_path)
-        item.setSizeHint(QtCore.QSize(item.sizeHint().width(), 35))
+        item = QListWidgetItem(file_path)
+        item.setSizeHint(QSize(item.sizeHint().width(), 35))
         item.setIcon(icon)
         self.addItem(item)
 

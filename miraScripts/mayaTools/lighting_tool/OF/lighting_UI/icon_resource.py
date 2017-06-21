@@ -13,9 +13,9 @@ qt_resource_data = "\x00\x00\x0b6\x89PNG\x0d\x0a\x1a\x0a\x00\x00\x00\x0dIHDR\x00
 qt_resource_name = "\x00\x05\x00o\xa6S\x00i\x00c\x00o\x00n\x00s\x00\x11\x0e\xec]G\x00c\x00b\x00o\x00x\x00D\x00o\x00w\x00n\x00A\x00r\x00r\x00o\x00w\x00.\x00p\x00n\x00g"
 qt_resource_struct = "\x00\x00\x00\x00\x00\x02\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00\x00\x02\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x10\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00"
 def qInitResources():
-    QtCore.qRegisterResourceData(0x01, qt_resource_struct, qt_resource_name, qt_resource_data)
+    qRegisterResourceData(0x01, qt_resource_struct, qt_resource_name, qt_resource_data)
 
 def qCleanupResources():
-    QtCore.qUnregisterResourceData(0x01, qt_resource_struct, qt_resource_name, qt_resource_data)
+    qUnregisterResourceData(0x01, qt_resource_struct, qt_resource_name, qt_resource_data)
 
 qInitResources()

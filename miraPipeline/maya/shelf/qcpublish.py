@@ -3,7 +3,9 @@ import os
 import logging
 import sys
 import miraCore
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from miraLibs.pyLibs import join_path
 from miraLibs.pipeLibs import pipeFile
 from miraPipeline.pipeline.preflight import check_gui
@@ -18,7 +20,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-class OtherDialog(QtGui.QDialog):
+class OtherDialog(QDialog):
     def __init__(self, other_dir=None, parent=None):
         super(OtherDialog, self).__init__(parent)
         self.other_dir = other_dir
@@ -31,16 +33,16 @@ class OtherDialog(QtGui.QDialog):
     def setup_ui(self):
         self.resize(600, 400)
         self.setWindowTitle("Submit Others")
-        self.label = QtGui.QLabel()
+        self.label = QLabel()
         self.label.setText("<font size=4 color=#ff8c00><b>Drag files below:</b></font>")
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         self.file_list = FileListWidget()
-        submit_layout = QtGui.QHBoxLayout()
-        self.submit_btn = QtGui.QPushButton("Submit")
+        submit_layout = QHBoxLayout()
+        self.submit_btn = QPushButton("Submit")
         submit_layout.addStretch()
         submit_layout.addWidget(self.submit_btn)
-        self.progress_bar = QtGui.QProgressBar()
+        self.progress_bar = QProgressBar()
         self.progress_bar.setTextVisible(False)
         self.progress_bar.hide()
         main_layout.addWidget(self.label)
@@ -63,12 +65,12 @@ class OtherDialog(QtGui.QDialog):
         self.close()
 
 
-class ProgressDialog(QtGui.QProgressDialog):
+class ProgressDialog(QProgressDialog):
     def __init__(self, parent=None):
         super(ProgressDialog, self).__init__(parent)
         self.setRange(1, 100)
         self.setWindowTitle("QCPublish")
-        # self.setWindowModality(QtCore.Qt.WindowModal)
+        # self.setWindowModality(Qt.WindowModal)
         self.setMinimumWidth(600)
         self.canceled.connect(break_down)
 
@@ -120,8 +122,8 @@ def post_qcpublish(obj):
 
 
 def main():
-    message_box = QtGui.QMessageBox.information(None, "Warming Tip", "Do you want to publish this task.",
-                                                QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+    message_box = QMessageBox.information(None, "Warming Tip", "Do you want to publish this task.",
+                                                QMessageBox.Yes | QMessageBox.No)
     if message_box.name == "No":
         return
     try:
@@ -131,11 +133,11 @@ def main():
         return
     # check is local file
     if not obj.is_local_file():
-        QtGui.QMessageBox.warning(None, "Warning", "This file is not a local work file.\n Permission defined.")
+        QMessageBox.warning(None, "Warning", "This file is not a local work file.\n Permission defined.")
         return
     # check if work file
     if not obj.is_working_file():
-        QtGui.QMessageBox.warning(None, "Warning", "This file is not a work file.")
+        QMessageBox.warning(None, "Warning", "This file is not a work file.")
         return
     progress_dialog = ProgressDialog(maya_window)
     progress_dialog.show_up()
@@ -184,7 +186,7 @@ def main():
     logger.info("PostQCPublish successful.")
     # pop message
     progress_dialog.set_value(100)
-    QtGui.QMessageBox.information(maya_window, "Warming Tip", "QC publish successful.")
+    QMessageBox.information(maya_window, "Warming Tip", "QC publish successful.")
 
 
 if __name__ == "__main__":

@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 from get_engine import get_engine
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 
 class MayaAbcExpoter(object):
@@ -12,7 +14,7 @@ class MayaAbcExpoter(object):
         import maya.cmds as mc
         selected = mc.ls(sl=1)
         if not selected:
-            QtGui.QMessageBox.critical(None, "Error", "Nothing Selected.")
+            QMessageBox.critical(None, "Error", "Nothing Selected.")
             raise RuntimeError("Select something to export.")
         root = selected[0]
         tar_dir = os.path.dirname(self.abc_path)

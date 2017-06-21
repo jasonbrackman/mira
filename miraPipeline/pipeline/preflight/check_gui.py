@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 import logging
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from libs import get_context, get_context_conf_path, add_environ, \
     get_check_py_file, conf_parser, select_node, get_parent_win, get_icon_path
 
@@ -13,20 +15,20 @@ class ScriptError(RuntimeError):
     pass
 
 
-class ImageLabel(QtGui.QLabel):
+class ImageLabel(QLabel):
     def __init__(self, parent=None):
         super(ImageLabel, self).__init__(parent)
-        self.setAlignment(QtCore.Qt.AlignCenter)
+        self.setAlignment(Qt.AlignCenter)
         self.set_status("default")
 
     def set_status(self, status):
         icon_path = get_icon_path.get_icon_path(status)
-        pixmap = QtGui.QPixmap(icon_path)
+        pixmap = QPixmap(icon_path)
         pixmap = pixmap.scaled(20, 20)
         self.setPixmap(pixmap)
 
 
-class CheckButton(QtGui.QPushButton):
+class CheckButton(QPushButton):
     def __init__(self, name, module_name, description, ignorable, parent=None):
         super(CheckButton, self).__init__(parent)
         self.setMinimumWidth(200)
@@ -35,17 +37,17 @@ class CheckButton(QtGui.QPushButton):
         self.description = description
         self.ignorable = ignorable
         self.setText(self.name)
-        self.menu = QtGui.QMenu(self)
-        self.description_action = QtGui.QAction("Description...", self)
+        self.menu = QMenu(self)
+        self.description_action = QAction("Description...", self)
 
     def contextMenuEvent(self, event):
         self.menu.clear()
         self.menu.addAction(self.description_action)
-        self.menu.exec_(QtGui.QCursor.pos())
+        self.menu.exec_(QCursor.pos())
         event.accept()
 
 
-class FailDialog(QtGui.QDialog):
+class FailDialog(QDialog):
     def __init__(self, module_name, ignorable, can_auto, check_object, label, parent=None):
         super(FailDialog, self).__init__(parent)
         self.has_error = False
@@ -63,26 +65,26 @@ class FailDialog(QtGui.QDialog):
         self.set_signals()
 
     def setup_ui(self):
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(2, 2, 2, 2)
-        check_file_label = QtGui.QLabel("<font size=>Check file</font>")
-        self.check_file_le = QtGui.QLineEdit()
+        check_file_label = QLabel("<font size=>Check file</font>")
+        self.check_file_le = QLineEdit()
         self.check_file_le.setReadOnly(True)
-        error_info_label = QtGui.QLabel("<font size=4>Error information</font>")
-        self.error_info_text = QtGui.QTextEdit()
-        self.error_info_text.setFont(QtGui.QFont("Courier", 10))
+        error_info_label = QLabel("<font size=4>Error information</font>")
+        self.error_info_text = QTextEdit()
+        self.error_info_text.setFont(QFont("Courier", 10))
         self.error_info_text.setMaximumHeight(80)
         self.error_info_text.setReadOnly(True)
-        error_list_label = QtGui.QLabel("<font size=4>Error list</font>")
-        self.error_list_widget = QtGui.QListWidget()
+        error_list_label = QLabel("<font size=4>Error list</font>")
+        self.error_list_widget = QListWidget()
         self.error_list_widget.setSortingEnabled(True)
-        self.error_list_widget.setSelectionMode(QtGui.QListWidget.ExtendedSelection)
-        btn_layout = QtGui.QHBoxLayout()
-        self.ignore_btn = QtGui.QPushButton(u"Ignore忽略 I")
+        self.error_list_widget.setSelectionMode(QListWidget.ExtendedSelection)
+        btn_layout = QHBoxLayout()
+        self.ignore_btn = QPushButton(u"Ignore忽略 I")
         self.ignore_btn.setShortcut("I")
-        self.auto_btn = QtGui.QPushButton(u"Auto自动 A")
+        self.auto_btn = QPushButton(u"Auto自动 A")
         self.auto_btn.setShortcut("A")
-        self.manual_btn = QtGui.QPushButton(u"manual手动 M")
+        self.manual_btn = QPushButton(u"manual手动 M")
         self.manual_btn.setShortcut("M")
         btn_layout.addWidget(self.ignore_btn)
         btn_layout.addWidget(self.auto_btn)
@@ -132,7 +134,7 @@ class FailDialog(QtGui.QDialog):
                 self.error_list_widget.addItems(self.check_object.error_list)
         except Exception as e:
             logger.error(str(e))
-            QtGui.QMessageBox.critical(self, "Warming Tip", u"Script Error, Connect TD.脚本错误，联系TD")
+            QMessageBox.critical(self, "Warming Tip", u"Script Error, Connect TD.脚本错误，联系TD")
             self.auto_btn.setStyleSheet("background: #FF0000")
             self.do_manual()
         else:
@@ -175,45 +177,45 @@ class FailDialog(QtGui.QDialog):
         self.has_error = self.close_error
 
 
-class CheckGui(QtGui.QDialog):
+class CheckGui(QDialog):
     def __init__(self, parent=None):
         super(CheckGui, self).__init__(parent)
         add_environ.add_environ()
         self.setObjectName("PREFLIGHT")
         self.context = get_context.get_context()
         self.setWindowTitle("%s preflight" % self.context)
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
         self.resize(420, 600)
         self.setup_ui()
         self.set_signals()
         self.init_table_widget()
 
     def setup_ui(self):
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        self.label = QtGui.QLabel("<font size=4><b>Current Step:</b></font>"
+        self.label = QLabel("<font size=4><b>Current Step:</b></font>"
                                   "<font size=5 color=#ff8c00><b> %s</b></font>" % self.context)
         main_layout.addWidget(self.label)
-        main_splitter = QtGui.QSplitter(QtCore.Qt.Vertical)
+        main_splitter = QSplitter(Qt.Vertical)
         main_splitter.setAutoFillBackground(True)
         main_layout.addWidget(main_splitter)
 
-        self.table_widget = QtGui.QTableWidget()
-        self.table_widget.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.table_widget = QTableWidget()
+        self.table_widget.setFocusPolicy(Qt.NoFocus)
         main_splitter.insertWidget(0, self.table_widget)
 
-        bottom_widget = QtGui.QWidget()
+        bottom_widget = QWidget()
         main_splitter.insertWidget(1, bottom_widget)
-        bottom_layout = QtGui.QVBoxLayout(bottom_widget)
+        bottom_layout = QVBoxLayout(bottom_widget)
         bottom_layout.setContentsMargins(0, 0, 0, 0)
 
-        btn_layout = QtGui.QHBoxLayout()
-        self.check_all_btn = QtGui.QPushButton("Check All")
+        btn_layout = QHBoxLayout()
+        self.check_all_btn = QPushButton("Check All")
         btn_layout.addStretch()
         btn_layout.addWidget(self.check_all_btn)
-        self.text_browser = QtGui.QTextBrowser()
+        self.text_browser = QTextBrowser()
         self.text_browser.setReadOnly(True)
-        self.text_browser.setFont(QtGui.QFont("Courier", 10))
+        self.text_browser.setFont(QFont("Courier", 10))
 
         bottom_layout.addLayout(btn_layout)
         bottom_layout.addWidget(self.text_browser)
@@ -228,8 +230,8 @@ class CheckGui(QtGui.QDialog):
         self.table_widget .horizontalHeader().setStretchLastSection(True)
         self.table_widget.setColumnCount(3)
         self.table_widget.verticalHeader().setVisible(False)
-        self.table_widget.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
-        self.table_widget.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
+        self.table_widget.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.table_widget.setSelectionMode(QAbstractItemView.NoSelection)
         header_list = ["mandatory", "check options", "result"]
         self.table_widget.setHorizontalHeaderLabels(header_list)
         self.set_header_style()
@@ -243,16 +245,16 @@ class CheckGui(QtGui.QDialog):
         font_size = 10
         horizontal_header = self.table_widget.horizontalHeader()
         horizontal_header.setClickable(False)
-        font = QtGui.QFont()
+        font = QFont()
         font.setPointSizeF(font_size)
-        font.setWeight(QtGui.QFont.Bold)
+        font.setWeight(QFont.Bold)
         horizontal_header.setFont(font)
         horizontal_header.setStyleSheet("QHeaderView{color: #DDDDDD}")
 
     def set_cell_widget(self):
         conf_path = get_context_conf_path.get_context_conf_path()
         if (not conf_path) or (not os.path.isfile(conf_path)):
-            QtGui.QMessageBox.critical(self, "Critical", "This context has no configuration .yml file.")
+            QMessageBox.critical(self, "Critical", "This context has no configuration .yml file.")
             return
         cp = conf_parser.ConfParser(conf_path)
         conf_data = cp.parse().get()
@@ -260,7 +262,7 @@ class CheckGui(QtGui.QDialog):
         self.table_widget.setRowCount(len(check_options))
         for index, check_option in enumerate(check_options):
             # set column 1/ checkbox
-            check_cbox = QtGui.QCheckBox()
+            check_cbox = QCheckBox()
             check_cbox.setChecked(True)
             check_cbox.index = (index, 0)
             check_cbox.stateChanged.connect(self.set_option_checked)
@@ -320,7 +322,7 @@ class CheckGui(QtGui.QDialog):
             check_object.run()
         except Exception as e:
             label.set_status("fail")
-            QtGui.QMessageBox.critical(self, "Warming Tip", u"Script Error,Please connect TD.脚本错误，联系TD.")
+            QMessageBox.critical(self, "Warming Tip", u"Script Error,Please connect TD.脚本错误，联系TD.")
             raise ScriptError(str(e))
         else:
             can_auto = True if hasattr(check_object, "auto_solve") else False

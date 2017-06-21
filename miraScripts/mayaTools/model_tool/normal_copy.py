@@ -2,7 +2,9 @@
 
 import maya.cmds as mc
 import maya.mel as mel
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from miraLibs.mayaLibs import get_maya_win
 
 
@@ -19,7 +21,7 @@ class NormalCopy:
     def do_normal_copy(self):
         if not len(self.select_list) == 2:
             maya_win = get_maya_win.get_maya_win("PySide")
-            QtGui.QMessageBox.information(maya_win, 'error', 'select two objects ,please')
+            QMessageBox.information(maya_win, 'error', 'select two objects ,please')
             return
         src_obj = self.select_list[0]
         tar_obj = self.select_list[1]

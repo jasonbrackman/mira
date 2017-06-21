@@ -17,7 +17,9 @@ import re
 # Third-party modules
 
 # Studio modules
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 # Local modules
 import add_environ
 from sg_utils import get_tk_object
@@ -197,98 +199,98 @@ class ShotgunUtility(object):
             self.sg.download_attachment(attachment=latest_version['sg_uploaded_movie'], file_path=path)
 
 
-class DownloadCategoryFilesUI(QtGui.QDialog):
+class DownloadCategoryFilesUI(QDialog):
     def __init__(self, parent=None):
         super(DownloadCategoryFilesUI, self).__init__(parent)
 
         self.setWindowTitle('Export art task latest version')
         self.resize(400, 100)
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
         qss_path = get_qss_path.get_qss_path()
-        self.setStyle(QtGui.QStyleFactory.create('plastique'))
+        self.setStyle(QStyleFactory.create('plastique'))
         self.setStyleSheet(open(qss_path, 'r').read())
 
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
 
-        company_label = QtGui.QLabel('Company')
+        company_label = QLabel('Company')
         company_label.setFixedWidth(65)
-        self.company_cbox = QtGui.QComboBox()
+        self.company_cbox = QComboBox()
         self.company_cbox.setEditable(True)
-        self.add_company_btn = QtGui.QPushButton('New')
+        self.add_company_btn = QPushButton('New')
         self.add_company_btn.setFixedWidth(40)
 
-        company_layout = QtGui.QHBoxLayout()
+        company_layout = QHBoxLayout()
         company_layout.addWidget(company_label)
         company_layout.addWidget(self.company_cbox)
         company_layout.addWidget(self.add_company_btn)
 
-        project_layout = QtGui.QHBoxLayout()
-        project_label = QtGui.QLabel('Project')
+        project_layout = QHBoxLayout()
+        project_label = QLabel('Project')
         project_label.setFixedWidth(65)
-        self.project_cbox = QtGui.QComboBox()
+        self.project_cbox = QComboBox()
         self.project_cbox.setEditable(True)
         project_layout.addWidget(project_label)
         project_layout.addWidget(self.project_cbox)
 
-        sequence_layout = QtGui.QHBoxLayout()
-        sequence_label = QtGui.QLabel('Sequence')
+        sequence_layout = QHBoxLayout()
+        sequence_label = QLabel('Sequence')
         sequence_label.setFixedWidth(65)
-        self.sequence_cbox = QtGui.QComboBox()
+        self.sequence_cbox = QComboBox()
         self.sequence_cbox.setEditable(True)
         sequence_layout.addWidget(sequence_label)
         sequence_layout.addWidget(self.sequence_cbox)
 
-        shot_asset_layout = QtGui.QHBoxLayout()
-        shot_asset_label = QtGui.QLabel("Asset/Shot")
+        shot_asset_layout = QHBoxLayout()
+        shot_asset_label = QLabel("Asset/Shot")
         shot_asset_label.setFixedWidth(65)
         shot_asset_layout.addWidget(shot_asset_label)
-        self.shot_asset_btn_grp = QtGui.QButtonGroup()
+        self.shot_asset_btn_grp = QButtonGroup()
         for i in kind_dict:
-            shot_asset_check_box = QtGui.QCheckBox(i)
+            shot_asset_check_box = QCheckBox(i)
             self.shot_asset_btn_grp.addButton(shot_asset_check_box)
             if i == "Asset":
                 shot_asset_check_box.setChecked(True)
             shot_asset_layout.addWidget(shot_asset_check_box)
 
-        self.attribute_layout = QtGui.QStackedLayout()
-        asset_widget = QtGui.QWidget()
-        asset_layout = QtGui.QVBoxLayout(asset_widget)
+        self.attribute_layout = QStackedLayout()
+        asset_widget = QWidget()
+        asset_layout = QVBoxLayout(asset_widget)
         # asset type layout
-        asset_type_layout = QtGui.QHBoxLayout()
-        asset_type_label = QtGui.QLabel("asset type")
+        asset_type_layout = QHBoxLayout()
+        asset_type_label = QLabel("asset type")
         asset_type_label.setFixedWidth(65)
         asset_type_layout.addWidget(asset_type_label)
-        self.asset_type_btn_grp = QtGui.QButtonGroup()
+        self.asset_type_btn_grp = QButtonGroup()
         self.asset_type_btn_grp.setExclusive(False)
         for i in kind_dict["Asset"]["type"]:
-            asset_type_check_box = QtGui.QCheckBox(i)
+            asset_type_check_box = QCheckBox(i)
             self.asset_type_btn_grp.addButton(asset_type_check_box)
             asset_type_layout.addWidget(asset_type_check_box)
         # asset_type_layout.addStretch()
 
         # asset task type layout
-        asset_task_type_layout = QtGui.QHBoxLayout()
-        asset_task_type_label = QtGui.QLabel("task type")
+        asset_task_type_layout = QHBoxLayout()
+        asset_task_type_label = QLabel("task type")
         asset_task_type_label.setFixedWidth(65)
         asset_task_type_layout.addWidget(asset_task_type_label)
-        self.asset_task_type_btn_grp = QtGui.QButtonGroup()
+        self.asset_task_type_btn_grp = QButtonGroup()
         self.asset_task_type_btn_grp.setExclusive(False)
         for i in kind_dict['Asset']["task_type"]:
-            asset_task_type_check_box = QtGui.QCheckBox(i)
+            asset_task_type_check_box = QCheckBox(i)
             self.asset_task_type_btn_grp.addButton(asset_task_type_check_box)
             asset_task_type_layout.addWidget(asset_task_type_check_box)
         asset_layout.addLayout(asset_type_layout)
         asset_layout.addLayout(asset_task_type_layout)
 
-        shot_widget = QtGui.QWidget()
-        shot_layout = QtGui.QVBoxLayout(shot_widget)
-        shot_task_type_layout = QtGui.QHBoxLayout()
-        shot_task_type_label = QtGui.QLabel("task type")
+        shot_widget = QWidget()
+        shot_layout = QVBoxLayout(shot_widget)
+        shot_task_type_layout = QHBoxLayout()
+        shot_task_type_label = QLabel("task type")
         shot_task_type_layout.addWidget(shot_task_type_label)
-        self.shot_task_type_btn_grp = QtGui.QButtonGroup()
+        self.shot_task_type_btn_grp = QButtonGroup()
         self.shot_task_type_btn_grp.setExclusive(False)
         for i in kind_dict["Shot"]["task_type"]:
-            shot_type_check_box = QtGui.QCheckBox(i)
+            shot_type_check_box = QCheckBox(i)
             self.shot_task_type_btn_grp.addButton(shot_type_check_box)
             shot_task_type_layout.addWidget(shot_type_check_box)
         shot_layout.addLayout(shot_task_type_layout)
@@ -296,28 +298,28 @@ class DownloadCategoryFilesUI(QtGui.QDialog):
         self.attribute_layout.addWidget(asset_widget)
         self.attribute_layout.addWidget(shot_widget)
 
-        download_type_layout = QtGui.QHBoxLayout()
-        download_type_label = QtGui.QLabel('download type')
+        download_type_layout = QHBoxLayout()
+        download_type_label = QLabel('download type')
         download_type_layout.addWidget(download_type_label)
-        self.download_type_btn_grp = QtGui.QButtonGroup()
+        self.download_type_btn_grp = QButtonGroup()
         self.download_type_btn_grp.setExclusive(False)
         for i in download_type_list:
-            download_check_box = QtGui.QCheckBox(i)
+            download_check_box = QCheckBox(i)
             self.download_type_btn_grp.addButton(download_check_box)
             download_type_layout.addWidget(download_check_box)
 
-        separator_layout = QtGui.QHBoxLayout()
+        separator_layout = QHBoxLayout()
         separator_layout.setContentsMargins(0, 10, 0, 0)
-        separator_layout.setAlignment(QtCore.Qt.AlignVCenter)
-        frame = QtGui.QFrame()
-        frame.setFrameStyle(QtGui.QFrame.HLine)
+        separator_layout.setAlignment(Qt.AlignVCenter)
+        frame = QFrame()
+        frame.setFrameStyle(QFrame.HLine)
         frame.setStyleSheet('QFrame{color: #111111}')
         separator_layout.addWidget(frame)
 
-        button_layout = QtGui.QHBoxLayout()
+        button_layout = QHBoxLayout()
         button_layout.addStretch()
-        self.cancel_btn = QtGui.QPushButton('Cancel')
-        self.export_btn = QtGui.QPushButton('Export')
+        self.cancel_btn = QPushButton('Cancel')
+        self.export_btn = QPushButton('Export')
         button_layout.addWidget(self.cancel_btn)
         button_layout.addWidget(self.export_btn)
 
@@ -376,7 +378,7 @@ class DownloadCategoryFiles(DownloadCategoryFilesUI):
         self.company_cbox.addItems(all_companies)
 
     def add_new_company(self):
-        text = QtGui.QInputDialog.getText(None, 'Input a company', 'Please input a new company name')
+        text = QInputDialog.getText(None, 'Input a company', 'Please input a new company name')
         if not text:
             return
         new_company_dir = os.path.join(root_path, text[0])
@@ -461,8 +463,8 @@ class DownloadCategoryFiles(DownloadCategoryFilesUI):
             print "[AAS] info: %s has no choose task" % current_sequence
             return
         # progress dialog
-        progress_dialog = QtGui.QProgressDialog('Downloading...Please wait - -', 'Cancel', 0, len(tasks))
-        progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+        progress_dialog = QProgressDialog('Downloading...Please wait - -', 'Cancel', 0, len(tasks))
+        progress_dialog.setWindowModality(Qt.WindowModal)
         progress_dialog.show()
         value = 0
         for task in tasks:
@@ -482,7 +484,7 @@ class DownloadCategoryFiles(DownloadCategoryFilesUI):
 
 
 def main():
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     ea = DownloadCategoryFiles()
     ea.show()
     app.exec_()

@@ -3,7 +3,9 @@ import re
 import os
 import sys
 import tempfile
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import VideoPlayerUI
 from utility.get_children_files import get_children_files
 from utility.get_conf_data import get_valid_ext
@@ -19,7 +21,7 @@ class VideoPlayer(VideoPlayerUI.VideoPlayerUI):
 
     def set_style_sheet(self):
         qss_path = os.path.join(os.path.dirname(__file__), "style.qss")
-        self.setStyle(QtGui.QStyleFactory.create('plastique'))
+        self.setStyle(QStyleFactory.create('plastique'))
         with open(qss_path, "r") as f:
             self.setStyleSheet(f.read())
 
@@ -40,7 +42,7 @@ class VideoPlayer(VideoPlayerUI.VideoPlayerUI):
         sys.exit(0)
 
     def set_frame_ratio(self):
-        value, ok = QtGui.QInputDialog.getInteger(self, "Set Frame Ratio", "Frame Ratio:", self.frame_ratio)
+        value, ok = QInputDialog.getInteger(self, "Set Frame Ratio", "Frame Ratio:", self.frame_ratio)
         if ok:
             self.frame_ratio = value
             self.video.set_frame_ratio(value)
@@ -158,13 +160,13 @@ class VideoPlayer(VideoPlayerUI.VideoPlayerUI):
         event.accept()
 
     def keyPressEvent(self, event):
-        if event.modifiers() == QtCore.Qt.ControlModifier:
-            if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:
+        if event.modifiers() == Qt.ControlModifier:
+            if event.key() == Qt.Key_Return or event.key() == Qt.Key_Enter:
                 self.video.set_full_screen(True)
 
 
 if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     vp = VideoPlayer()
     vp.show()
     app.exec_()

@@ -1,29 +1,31 @@
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 
 
-class GpuModel(QtCore.QAbstractTableModel):
+class GpuModel(QAbstractTableModel):
     def __init__(self, arg=[], headers=[], parent=None):
         super(GpuModel, self).__init__(parent)
         self.arg = arg
         self.headers = headers
 
-    def rowCount(self, parent=QtCore.QModelIndex()):
+    def rowCount(self, parent=QModelIndex()):
         return len(self.arg)
 
-    def columnCount(self, parent=QtCore.QModelIndex()):
+    def columnCount(self, parent=QModelIndex()):
         return 2
 
-    def data(self, index, role=QtCore.Qt.DisplayRole):
+    def data(self, index, role=Qt.DisplayRole):
         if not index.isValid():
             return
-        if role == QtCore.Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             row = index.row()
             column = index.column()
             return self.arg[row][column]
 
-    def setData(self, index, value, role=QtCore.Qt.DisplayRole):
-        if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
+    def setData(self, index, value, role=Qt.DisplayRole):
+        if role == Qt.DisplayRole or role == Qt.EditRole:
             row = index.row()
             column = index.column()
             self.arg[row][column] = value
@@ -32,21 +34,21 @@ class GpuModel(QtCore.QAbstractTableModel):
         return False
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
     def headerData(self, section, orientation, role):
-        if role == QtCore.Qt.DisplayRole:
-            if orientation == QtCore.Qt.Horizontal:
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
                 return self.headers[section]
 
 
-class ComboDelegate(QtGui.QItemDelegate):
+class ComboDelegate(QItemDelegate):
     def __init__(self, parent=None):
         super(ComboDelegate, self).__init__(parent)
 
     def createEditor(self, parent, option, index):
         if index.column() == 1:
-            combo = QtGui.QComboBox(parent)
+            combo = QComboBox(parent)
             combo.addItems(["mdl", "shd"])
             combo.currentIndexChanged.connect(self.onCurrentIndexChanged)
             return combo
@@ -54,7 +56,7 @@ class ComboDelegate(QtGui.QItemDelegate):
     def setModelData(self, editor, model, index):
         value = editor.currentText()
         source_index = model.mapToSource(index)
-        model.sourceModel().setData(source_index, value, QtCore.Qt.DisplayRole)
+        model.sourceModel().setData(source_index, value, Qt.DisplayRole)
 
     def updateEditorGeometry(self, editor, option, index):
         editor.setGeometry(option.rect)
@@ -63,22 +65,22 @@ class ComboDelegate(QtGui.QItemDelegate):
         self.commitData.emit(self.sender())
         
         
-class GpuToMdlUI(QtGui.QDialog):
+class GpuToMdlUI(QDialog):
     def __init__(self, parent=None):
         super(GpuToMdlUI, self).__init__(parent)
         self.resize(400, 300)
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 1, 0, 1)
         # filter layout
-        filter_layout = QtGui.QHBoxLayout()
+        filter_layout = QHBoxLayout()
         filter_layout.addStretch()
-        self.filter_le = QtGui.QLineEdit()
+        self.filter_le = QLineEdit()
         filter_layout.addWidget(self.filter_le)
         # table view
-        self.table_view = QtGui.QTableView()
+        self.table_view = QTableView()
         # button layout
-        button_layout = QtGui.QHBoxLayout()
-        self.print_btn = QtGui.QPushButton("print")
+        button_layout = QHBoxLayout()
+        self.print_btn = QPushButton("print")
         button_layout.addStretch()
         button_layout.addWidget(self.print_btn)
         main_layout.addLayout(filter_layout)
@@ -94,11 +96,11 @@ class GpuToMdlUI(QtGui.QDialog):
         self.table_view.setSortingEnabled(True)
         self.table_view.verticalHeader().hide()
         self.table_view.setAlternatingRowColors(True)
-        self.table_view.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        self.table_view.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
-        self.proxy_model = QtGui.QSortFilterProxyModel()
+        self.table_view.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.table_view.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.proxy_model = QSortFilterProxyModel()
         self.proxy_model.setDynamicSortFilter(True)
-        self.proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
         self.proxy_model.setFilterKeyColumn(0)
         self.table_view.setModel(self.proxy_model)
         headers = ["name", "mdl/shd"]
@@ -141,7 +143,7 @@ class GpuToMdlUI(QtGui.QDialog):
         
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     hh = GpuToMdlUI()
     hh.show()
     app.exec_()

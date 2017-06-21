@@ -3,7 +3,9 @@ import getpass
 import os
 import subprocess
 import sys
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import task_start_ui
 import miraCore
 from miraLibs.pipeLibs import pipeMira, pipeFile, get_logger, pipeHistory
@@ -13,7 +15,7 @@ from miraLibs.pipeLibs.pipeMaya import get_current_project
 from miraLibs.pipeLibs.pipeDb import create_filesystem_structure
 
 
-class RunCommandThread(QtCore.QThread):
+class RunCommandThread(QThread):
 
     def __init__(self, command=None, callback=None, file_name=None, logger=None, parent=None):
         super(RunCommandThread, self).__init__(parent)
@@ -68,7 +70,7 @@ class TaskManager(task_start_ui.TaskStartUI):
 
     def set_style(self):
         qss_path = join_path.join_path2(os.path.dirname(__file__), "style.qss")
-        self.setStyle(QtGui.QStyleFactory.create('plastique'))
+        self.setStyle(QStyleFactory.create('plastique'))
         self.setStyleSheet(open(qss_path, 'r').read())
 
     def init(self):
@@ -210,7 +212,7 @@ class TaskManager(task_start_ui.TaskStartUI):
         start_file_name = "%s_start.py" % step
         start_file = join_path.join_path2(start_dir, start_file_name)
         if not os.path.isfile(start_file):
-            QtGui.QMessageBox.warning(self, "Warning", "%s is not an exist file." % start_file)
+            QMessageBox.warning(self, "Warning", "%s is not an exist file." % start_file)
             return
         cmd = "%s -command \"python \\\"file_name='%s';execfile('%s')\\\"\"" % (
             self.__mayabatch, file_name, start_file)
@@ -235,8 +237,8 @@ class TaskManager(task_start_ui.TaskStartUI):
             message_info = "%s \n is an exist file,Do you want to overwrite it?" % origin_work_file
         else:
             message_info = "Do you want to publish this task?\n%s" % origin_work_file
-        message_box = QtGui.QMessageBox.information(self, "Warming Tip", message_info,
-                                                    QtGui.QMessageBox.Yes | QtGui.QMessageBox.Cancel)
+        message_box = QMessageBox.information(self, "Warming Tip", message_info,
+                                                    QMessageBox.Yes | QMessageBox.Cancel)
         if message_box.name == "Yes":
             self.create_origin_file(origin_work_file)
 
@@ -249,10 +251,10 @@ class TaskManager(task_start_ui.TaskStartUI):
         if task_finished:
             self.post_publish(file_name)
             self.progress_shutdown()
-            QtGui.QMessageBox.information(self, "Warming Tip", "Task create successful.")
+            QMessageBox.information(self, "Warming Tip", "Task create successful.")
         else:
             self.progress_shutdown()
-            QtGui.QMessageBox.critical(self, "Warming Tip", "Task create fail...")
+            QMessageBox.critical(self, "Warming Tip", "Task create fail...")
 
     def post_publish(self, file_name):
         user_info = None
@@ -302,7 +304,7 @@ class TaskManager(task_start_ui.TaskStartUI):
 
 
 if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     tm = TaskManager()
     tm.show()
     app.exec_()

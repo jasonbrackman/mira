@@ -4,10 +4,10 @@
 # description="""  """
 
 import maya.cmds as mc
-try:
-    from PySide import QtGui, QtCore
-except:
-    from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
+from Qt import __bindig__
 import maya.mel as mel
 from public_ctrls import undo
     
@@ -81,28 +81,42 @@ def merge_same_shader():
             break
 
 
-def get_maya_win():
+def get_maya_win(module="PySide"):
+    """
+    get a QMainWindow Object of maya main window
+    :param module (optional): string "PySide"(default) or "PyQt4"
+    :return main_window: QWidget or QMainWindow object
+    """
     import maya.OpenMayaUI as mui
-    if 'PyQt4' in QtGui.__name__:
+    prt = mui.MQtUtil.mainWindow()
+    if module == "PyQt":
         import sip
-        prt = mui.MQtUtil.mainWindow()
-        return sip.wrapinstance(long(prt), QtGui.QWidget)
-    elif 'PySide' in QtGui.__name__:
-        import shiboken
-        prt = mui.MQtUtil.mainWindow()
-        return shiboken.wrapInstance(long(prt), QtGui.QWidget)
+        from Qt.QtCore import *
+        main_window = sip.wrapinstance(long(prt), QObject)
+    elif module in ["PySide", "PyQt"]:
+        if __binding__ in ["PySide", "PyQt4"]:
+            import shiboken
+        elif __binding__ in ["PySide2", "PyQt5"]:
+            import shiboken2 as shiboken
+        from Qt.QtWidgets import *
+        main_window = shiboken.wrapInstance(long(prt), QWidget)
+    elif module == "mayaUI":
+        main_window = "MayaWindow"
+    else:
+        raise ValueError('param "module" must be "mayaUI" "PyQt4" or "PySide"')
+    return main_window
 
             
-class MergeSameShader(QtGui.QDialog):
+class MergeSameShader(QDialog):
     def __init__(self, parent=None):
         super(MergeSameShader, self).__init__(parent)
         self.setObjectName('Merge Same Shaders')
         self.setWindowTitle('Merge Same Shaders')
         self.resize(300, 70)
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowCloseButtonHint)
-        main_layout = QtGui.QVBoxLayout(self)
-        self.merge_btn = QtGui.QPushButton('Merge Same Shaders')
-        self.delete_btn = QtGui.QPushButton('Delete Unused Nodes')
+        self.setWindowFlags(Qt.Dialog | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint)
+        main_layout = QVBoxLayout(self)
+        self.merge_btn = QPushButton('Merge Same Shaders')
+        self.delete_btn = QPushButton('Delete Unused Nodes')
         main_layout.addWidget(self.merge_btn)
         main_layout.addWidget(self.delete_btn)
         self.set_signals()

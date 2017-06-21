@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from miraLibs.pipeLibs.pipeDb import get_members
 from miraLibs.pyLibs import yml_operation, join_path
 from miraLibs.pipeLibs.pipeDb import sql_api
@@ -8,23 +10,23 @@ from miraLibs.pipeLibs.pipeDb import sql_api
 QSS_PATH = join_path.join_path2(os.path.dirname(__file__), "style.qss")
 
 
-class QcerListWidget(QtGui.QListWidget):
-    drop = QtCore.Signal()
+class QcerListWidget(QListWidget):
+    drop = Signal()
 
     def __init__(self, parent=None):
         super(QcerListWidget, self).__init__(parent)
         self.setAcceptDrops(True)
         self.setSortingEnabled(True)
-        self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
-        self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_context_menu)
-        self.remove_action = QtGui.QAction("remove", self)
+        self.remove_action = QAction("remove", self)
         self.remove_action.triggered.connect(self.remove_selected_item)
         self.drop.connect(self.drop_in)
 
     def show_context_menu(self, pos):
         global_pos = self.mapToGlobal(pos)
-        menu = QtGui.QMenu()
+        menu = QMenu()
         menu.addAction(self.remove_action)
         menu.exec_(global_pos)
 
@@ -36,7 +38,7 @@ class QcerListWidget(QtGui.QListWidget):
         if not text_list:
             return
         for text in text_list:
-            item = QtGui.QListWidgetItem(text)
+            item = QListWidgetItem(text)
             self.addItem(item)
 
     def remove_selected_item(self):
@@ -61,7 +63,7 @@ class QcerListWidget(QtGui.QListWidget):
         self.add_items(items_text)
 
 
-class QcerConfig(QtGui.QMainWindow):
+class QcerConfig(QMainWindow):
     def __init__(self, project=None, parent=None):
         super(QcerConfig, self).__init__(parent)
         self.resize(550, 500)
@@ -74,41 +76,41 @@ class QcerConfig(QtGui.QMainWindow):
         self.set_style()
 
     def setup_ui(self):
-        central_widget = QtGui.QWidget()
+        central_widget = QWidget()
         self.setCentralWidget(central_widget)
-        main_layout = QtGui.QVBoxLayout(central_widget)
+        main_layout = QVBoxLayout(central_widget)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        user_layout = QtGui.QHBoxLayout()
-        self.group_list = QtGui.QListWidget()
-        self.group_member_list = QtGui.QListWidget()
+        user_layout = QHBoxLayout()
+        self.group_list = QListWidget()
+        self.group_member_list = QListWidget()
         self.group_member_list.setDragEnabled(True)
-        self.group_member_list.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
-        space_label = QtGui.QLabel("===>")
+        self.group_member_list.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        space_label = QLabel("===>")
 
-        config_layout = QtGui.QVBoxLayout()
-        self.context_combo = QtGui.QComboBox()
-        table_group = QtGui.QGroupBox()
-        group_layout = QtGui.QVBoxLayout(table_group)
+        config_layout = QVBoxLayout()
+        self.context_combo = QComboBox()
+        table_group = QGroupBox()
+        group_layout = QVBoxLayout(table_group)
         group_layout.setContentsMargins(0, 0, 0, 0)
-        self.qcer_table = QtGui.QTableWidget()
+        self.qcer_table = QTableWidget()
         group_layout.addWidget(self.qcer_table)
         self.qcer_table.setColumnCount(2)
         self.qcer_table.horizontalHeader().setDefaultSectionSize(50)
         self.qcer_table.horizontalHeader().setClickable(False)
         self.qcer_table.horizontalHeader().setStretchLastSection(True)
-        self.qcer_table.horizontalHeader().setResizeMode(QtGui.QHeaderView.ResizeToContents)
+        self.qcer_table.horizontalHeader().setResizeMode(QHeaderView.ResizeToContents)
         self.qcer_table.setHorizontalHeaderLabels(["step", "QCer"])
         self.qcer_table.verticalHeader().setVisible(False)
-        self.qcer_table.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
-        self.qcer_table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.qcer_table.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.qcer_table.setSelectionBehavior(QAbstractItemView.SelectRows)
         config_layout.addWidget(self.context_combo)
 
-        config_btn_layout = QtGui.QHBoxLayout()
-        self.add_btn = QtGui.QToolButton()
+        config_btn_layout = QHBoxLayout()
+        self.add_btn = QToolButton()
         self.add_btn.setText("+")
-        self.remove_btn = QtGui.QToolButton()
+        self.remove_btn = QToolButton()
         self.remove_btn.setText("-")
-        self.save_btn = QtGui.QPushButton("Save")
+        self.save_btn = QPushButton("Save")
         config_btn_layout.addStretch()
         config_btn_layout.addWidget(self.add_btn)
         config_btn_layout.addWidget(self.remove_btn)
@@ -126,15 +128,15 @@ class QcerConfig(QtGui.QMainWindow):
         user_layout.setStretch(2, 0.5)
         user_layout.setStretch(3, 3)
 
-        buttom_layout = QtGui.QHBoxLayout()
-        self.config_btn = QtGui.QPushButton("Config")
+        buttom_layout = QHBoxLayout()
+        self.config_btn = QPushButton("Config")
         buttom_layout.addWidget(self.config_btn)
 
         main_layout.addLayout(user_layout)
         main_layout.addLayout(buttom_layout)
 
     def set_style(self):
-        self.setStyle(QtGui.QStyleFactory.create('plastique'))
+        self.setStyle(QStyleFactory.create('plastique'))
         self.setStyleSheet(open(QSS_PATH, 'r').read())
 
     @staticmethod
@@ -156,7 +158,7 @@ class QcerConfig(QtGui.QMainWindow):
     def init_group_list(self):
         res_dict = self.get_member_dict()
         for group in res_dict:
-            item = QtGui.QListWidgetItem(group)
+            item = QListWidgetItem(group)
             item.group_members = res_dict[group]
             self.group_list.addItem(item)
 
@@ -171,9 +173,9 @@ class QcerConfig(QtGui.QMainWindow):
         conf_path = os.path.join(os.path.dirname(__file__), "context.yml")
         context_data = yml_operation.get_yaml_data(conf_path)
         contexts = context_data["contexts"].split(",")
-        self.context_model = QtGui.QStandardItemModel()
+        self.context_model = QStandardItemModel()
         for context in contexts:
-            item = QtGui.QStandardItem(context)
+            item = QStandardItem(context)
             item.qcer = self.get_context_qcer(context)
             self.context_model.appendRow(item)
         self.context_combo.setModel(self.context_model)
@@ -192,7 +194,7 @@ class QcerConfig(QtGui.QMainWindow):
         self.group_member_list.addItems(item.group_members)
 
     def add_table_row(self, row, step='', step_qcer=[]):
-        step_item = QtGui.QTableWidgetItem(step)
+        step_item = QTableWidgetItem(step)
         self.qcer_table.setItem(row, 0, step_item)
         qcer_widget = QcerListWidget()
         qcer_widget.add_items(step_qcer)
@@ -247,14 +249,14 @@ class QcerConfig(QtGui.QMainWindow):
                 context = str(item.text())
                 final_config_data[context] = item.qcer
             self.db.addQCConfig(str(final_config_data).replace("'", '"'))
-            QtGui.QMessageBox.information(self, "warming tip", "Config done.")
+            QMessageBox.information(self, "warming tip", "Config done.")
         except Exception as e:
-            QtGui.QMessageBox.critical(self, "Error", "Config fail: %s" % str(e))
+            QMessageBox.critical(self, "Error", "Config fail: %s" % str(e))
 
 
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     qc = QcerConfig("sct")
     qc.show()
     app.exec_()

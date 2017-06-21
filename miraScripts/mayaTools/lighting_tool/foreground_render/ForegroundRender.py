@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 import shutil
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as mc
 import maya.mel as mel
 from miraLibs.pyLibs import get_range_data
@@ -86,21 +88,21 @@ class Maya(object):
         shutil.copyfile(temp_path, frame_path)
 
 
-class SetFrameWidget(QtGui.QWidget):
+class SetFrameWidget(QWidget):
     def __init__(self, parent=None):
         super(SetFrameWidget, self).__init__(parent)
         self.maya = Maya()
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        self.btn_group = QtGui.QButtonGroup(self)
+        self.btn_group = QButtonGroup(self)
         self.btn_group.setExclusive(True)
-        check_layout = QtGui.QHBoxLayout()
-        self.maya_check = QtGui.QCheckBox("Maya")
-        self.custom_check = QtGui.QCheckBox("Custom")
+        check_layout = QHBoxLayout()
+        self.maya_check = QCheckBox("Maya")
+        self.custom_check = QCheckBox("Custom")
         for check in [self.maya_check, self.custom_check]:
             check_layout.addWidget(check)
             self.btn_group.addButton(check)
-        self.frame_te = QtGui.QTextEdit()
+        self.frame_te = QTextEdit()
         main_layout.addLayout(check_layout)
         main_layout.addWidget(self.frame_te)
         self.init()
@@ -124,29 +126,29 @@ class SetFrameWidget(QtGui.QWidget):
         self.frame_te.setText(value)
 
 
-class RenderModel(QtCore.QAbstractTableModel):
+class RenderModel(QAbstractTableModel):
     def __init__(self, arg=[], header=[], parent=None):
         super(RenderModel, self).__init__(parent)
         self.arg = arg
         self.header = header
 
-    def rowCount(self, parent=QtCore.QModelIndex()):
+    def rowCount(self, parent=QModelIndex()):
         return len(self.arg)
 
-    def columnCount(self, parent=QtCore.QModelIndex()):
+    def columnCount(self, parent=QModelIndex()):
         return 6
 
-    def data(self, index, role=QtCore.Qt.DisplayRole):
-        if role == QtCore.Qt.DisplayRole:
+    def data(self, index, role=Qt.DisplayRole):
+        if role == Qt.DisplayRole:
             row = index.row()
             column = index.column()
             return self.arg[row][column]
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
-    def setData(self, index, value, role=QtCore.Qt.DisplayRole):
-        if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
+    def setData(self, index, value, role=Qt.DisplayRole):
+        if role == Qt.DisplayRole or role == Qt.EditRole:
             row = index.row()
             column = index.column()
             self.arg[row][column] = value
@@ -155,16 +157,16 @@ class RenderModel(QtCore.QAbstractTableModel):
         return False
 
     def headerData(self, section, orientation, role):
-        if role == QtCore.Qt.DisplayRole:
-            if orientation == QtCore.Qt.Horizontal:
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
                 return self.header[section]
 
 
-class RenderDelegate(QtGui.QItemDelegate):
-    mandatory_signal = QtCore.Signal(list)
-    camera_signal = QtCore.Signal(list)
-    frame_signal = QtCore.Signal(list)
-    model_signal = QtCore.Signal(list)
+class RenderDelegate(QItemDelegate):
+    mandatory_signal = Signal(list)
+    camera_signal = Signal(list)
+    frame_signal = Signal(list)
+    model_signal = Signal(list)
 
     def __init__(self, parent=None):
         super(RenderDelegate, self).__init__(parent)
@@ -172,11 +174,11 @@ class RenderDelegate(QtGui.QItemDelegate):
 
     def createEditor(self, parent, option, index):
         if index.column() == 0:
-            editor = QtGui.QCheckBox(parent)
+            editor = QCheckBox(parent)
             editor.index = index
             editor.stateChanged.connect(self.emit_mandatory_signal)
         elif index.column() == 2:
-            editor = QtGui.QComboBox(parent)
+            editor = QComboBox(parent)
             editor.index = index
             cameras = self.maya.get_camera()
             editor.addItems(cameras)
@@ -228,26 +230,26 @@ class RenderDelegate(QtGui.QItemDelegate):
         self.model_signal.emit([self.sender().index, btn])
 
 
-class ForegroundRender(QtGui.QDialog):
+class ForegroundRender(QDialog):
     def __init__(self, parent=None):
         super(ForegroundRender, self).__init__(parent)
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
         self.resize(600, 300)
         self.setWindowTitle("ForegroundRender")
         self.maya = Maya()
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 3)
-        self.table_view = QtGui.QTableView()
+        self.table_view = QTableView()
         self.table_view.verticalHeader().hide()
         self.table_view.setAlternatingRowColors(True)
-        self.table_view.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        self.table_view.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
-        btn_layout = QtGui.QHBoxLayout()
-        self.tip_label = QtGui.QLabel()
+        self.table_view.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.table_view.setSelectionMode(QAbstractItemView.NoSelection)
+        btn_layout = QHBoxLayout()
+        self.tip_label = QLabel()
         self.tip_label.setText(u'<font color="#FF9c20">[Tip]: frame设置格式：1-20,25,30,35-40</font>')
-        self.tip_label.setAlignment(QtCore.Qt.AlignLeft)
-        self.render_btn = QtGui.QPushButton("Render")
-        self.shut_down_check = QtGui.QCheckBox("shutdown after render completed.")
+        self.tip_label.setAlignment(Qt.AlignLeft)
+        self.render_btn = QPushButton("Render")
+        self.shut_down_check = QCheckBox("shutdown after render completed.")
         self.shut_down_check.setChecked(False)
         btn_layout.addWidget(self.tip_label)
         btn_layout.addStretch()
@@ -300,7 +302,7 @@ class ForegroundRender(QtGui.QDialog):
 
     def set_progress_bar(self):
         for i in xrange(self.data_model.rowCount()):
-            progress_bar = QtGui.QProgressBar()
+            progress_bar = QProgressBar()
             self.table_view.setIndexWidget(self.data_model.index(i, 4), progress_bar)
 
     def set_signals(self):

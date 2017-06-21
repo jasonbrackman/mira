@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from PySide.phonon import Phonon
 from utility.convert_msec import convert_msec
 from utility.get_icon_dir import get_icon_dir
@@ -20,46 +22,46 @@ slider_style_sheet = "QSlider::groove:horizontal{border: 1px solid #165708;" \
                      "height: 10px;border-radius: 2px;}"
 
 
-class PlayerButton(QtGui.QToolButton):
+class PlayerButton(QToolButton):
     def __init__(self, name=None, parent=None):
         super(PlayerButton, self).__init__(parent)
         self.__name = name
         # self.setStyleSheet("QToolButton{background-color:transparent;}")
         self.__icon_dir = get_icon_dir()
         icon_path = os.path.join(self.__icon_dir, "%s.png" % self.__name)
-        self.setIcon(QtGui.QIcon(icon_path))
+        self.setIcon(QIcon(icon_path))
 
     def set_to_pause(self):
-        self.setIcon(QtGui.QIcon(os.path.join(self.__icon_dir, "pause.png")))
+        self.setIcon(QIcon(os.path.join(self.__icon_dir, "pause.png")))
 
     def set_to_play(self):
-        self.setIcon(QtGui.QIcon(os.path.join(self.__icon_dir, "play.png")))
+        self.setIcon(QIcon(os.path.join(self.__icon_dir, "play.png")))
 
 
-class VolumeWidget(QtGui.QDialog):
+class VolumeWidget(QDialog):
     def __init__(self, parent=None):
         super(VolumeWidget, self).__init__(parent)
         self.setMaximumWidth(15)
-        self.setWindowFlags(QtCore.Qt.SplashScreen)
+        self.setWindowFlags(Qt.SplashScreen)
         self.setWindowOpacity(0.8)
         self.setMouseTracking(True)
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setSpacing(0)
         main_layout.setContentsMargins(0, 0, 0, 0)
         self.silence_btn = PlayerButton("volume_on", self)
         self.volume_slider = Phonon.VolumeSlider()
         self.volume_slider.setMuteVisible(False)
         self.volume_slider.setFixedHeight(200)
-        self.volume_slider.setOrientation(QtCore.Qt.Vertical)
-        self.volume_slider.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
+        self.volume_slider.setOrientation(Qt.Vertical)
+        self.volume_slider.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         main_layout.addWidget(self.silence_btn)
         main_layout.addWidget(self.volume_slider)
 
 
 class VideoWidget(Phonon.VideoWidget):
-    clicked = QtCore.Signal()
-    doubleClicked = QtCore.Signal()
-    drop = QtCore.Signal(list)
+    clicked = Signal()
+    doubleClicked = Signal()
+    drop = Signal(list)
 
     def __init__(self, parent=None):
         super(VideoWidget, self).__init__(parent)
@@ -67,7 +69,7 @@ class VideoWidget(Phonon.VideoWidget):
         self.valid_ext = get_valid_ext()
 
     def mouseDoubleClickEvent(self, event):
-        if event.buttons() == QtCore.Qt.LeftButton:
+        if event.buttons() == Qt.LeftButton:
             if self.isFullScreen():
                 self.exitFullScreen()
             else:
@@ -75,13 +77,13 @@ class VideoWidget(Phonon.VideoWidget):
             self.doubleClicked.emit()
 
     def keyPressEvent(self, event):
-        if event.key() == QtCore.Qt.Key_Escape:
+        if event.key() == Qt.Key_Escape:
             self.exitFullScreen()
-        if event.key() == QtCore.Qt.Key_Space:
+        if event.key() == Qt.Key_Space:
             self.clicked.emit()
 
     def mousePressEvent(self, event):
-        if event.buttons() == QtCore.Qt.LeftButton:
+        if event.buttons() == Qt.LeftButton:
             self.clicked.emit()
 
     def dragEnterEvent(self, event):
@@ -106,7 +108,7 @@ class VideoWidget(Phonon.VideoWidget):
         self.drop.emit(files)
 
 
-class VideoUI(QtGui.QWidget):
+class VideoUI(QWidget):
     def __init__(self, parent=None):
         super(VideoUI, self).__init__(parent)
         self.__icon_dir = get_icon_dir()
@@ -116,7 +118,7 @@ class VideoUI(QtGui.QWidget):
         self.__loop_status = None
         self.__icon_dir = get_icon_dir()
         self.resize(500, 300)
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(3, 3, 3, 3)
         main_layout.setSpacing(0)
         self.player = Phonon.MediaObject(self)
@@ -130,16 +132,16 @@ class VideoUI(QtGui.QWidget):
         Phonon.createPath(self.player, self.video_widget)
         self.seek_slider = Phonon.SeekSlider(self.player, self)
         self.seek_slider.setStyleSheet(slider_style_sheet)
-        self.seek_slider.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
+        self.seek_slider.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.volume_widget = VolumeWidget(self)
         self.volume_widget.volume_slider.setAudioOutput(self.audio_output)
 
-        btn_layout = QtGui.QHBoxLayout()
+        btn_layout = QHBoxLayout()
         btn_layout.setContentsMargins(0, 0, 0, 0)
         btn_layout.setSpacing(2)
-        self.time_label = QtGui.QLabel("00:00:00")
+        self.time_label = QLabel("00:00:00")
         # self.time_label.setStyleSheet("QLabel{background-color: transparent; color: #AAAAAA}")
-        self.total_time_label = QtGui.QLabel("00:00:00")
+        self.total_time_label = QLabel("00:00:00")
         # self.total_time_label.setStyleSheet("QLabel{background-color: transparent; color: #AAAAAA}")
         self.stop_btn = PlayerButton("stop", self)
         self.back_btn = PlayerButton("back", self)
@@ -160,10 +162,10 @@ class VideoUI(QtGui.QWidget):
         btn_layout.addWidget(self.loop_btn)
         btn_layout.addWidget(self.volume_btn)
 
-        self.loop_menu = QtGui.QMenu()
-        self.single_loop_action = QtGui.QAction("Single Loop Play", self)
-        self.list_loop_action = QtGui.QAction("List Loop Play", self)
-        self.sequential_play_action = QtGui.QAction("Sequential Play", self)
+        self.loop_menu = QMenu()
+        self.single_loop_action = QAction("Single Loop Play", self)
+        self.list_loop_action = QAction("List Loop Play", self)
+        self.sequential_play_action = QAction("Sequential Play", self)
         self.loop_menu.addAction(self.sequential_play_action)
         self.loop_menu.addAction(self.single_loop_action)
         self.loop_menu.addAction(self.list_loop_action)
@@ -175,8 +177,8 @@ class VideoUI(QtGui.QWidget):
         self.set_frame_ratio()
         self.loop_none()
 
-        self.silence_icon = QtGui.QIcon(os.path.join(self.__icon_dir, "volume_off.png"))
-        self.no_silence_icon = QtGui.QIcon(os.path.join(self.__icon_dir, "volume_on.png"))
+        self.silence_icon = QIcon(os.path.join(self.__icon_dir, "volume_off.png"))
+        self.no_silence_icon = QIcon(os.path.join(self.__icon_dir, "volume_on.png"))
 
     def set_signals(self):
         self.play_btn.clicked.connect(self.switch_play_state)
@@ -306,19 +308,19 @@ class VideoUI(QtGui.QWidget):
             self.volume_widget.hide()
 
     # def set_background(self):
-    #     self.image = QtGui.QImage()
+    #     self.image = QImage()
     #     self.image.load(r'D:/picture/bg.jpg')
     #     self.setAutoFillBackground(True)
-    #     palette = QtGui.QPalette()
-    #     palette.setBrush(QtGui.QPalette.Background, QtGui.QBrush(
+    #     palette = QPalette()
+    #     palette.setBrush(QPalette.Background, QBrush(
     #         self.image.scaled(self.width(), self.height(),
-    #                           QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.SmoothTransformation)))
+    #                           Qt.IgnoreAspectRatio, Qt.SmoothTransformation)))
     #     self.setPalette(palette)
     #
     # def resizeEvent(self, event):
-    #     palette = QtGui.QPalette()
-    #     palette.setBrush(QtGui.QPalette.Background, QtGui.QBrush(
-    #         self.image.scaled(event.size(), QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.SmoothTransformation)))
+    #     palette = QPalette()
+    #     palette.setBrush(QPalette.Background, QBrush(
+    #         self.image.scaled(event.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)))
     #     self.setPalette(palette)
 
     def set_full_screen(self, value=True):
@@ -362,16 +364,16 @@ class VideoUI(QtGui.QWidget):
 
     def loop_list(self):
         self.__loop_status = "list"
-        self.single_loop_action.setIcon(QtGui.QIcon(""))
-        self.sequential_play_action.setIcon(QtGui.QIcon(""))
-        self.list_loop_action.setIcon(QtGui.QIcon(os.path.join(self.__icon_dir, "selected.png")))
+        self.single_loop_action.setIcon(QIcon(""))
+        self.sequential_play_action.setIcon(QIcon(""))
+        self.list_loop_action.setIcon(QIcon(os.path.join(self.__icon_dir, "selected.png")))
         self.player.prefinishMarkReached.connect(self.set_loop)
 
     def loop_single(self):
         self.__loop_status = "single"
-        self.list_loop_action.setIcon(QtGui.QIcon(""))
-        self.sequential_play_action.setIcon(QtGui.QIcon(""))
-        self.single_loop_action.setIcon(QtGui.QIcon(os.path.join(self.__icon_dir, "selected.png")))
+        self.list_loop_action.setIcon(QIcon(""))
+        self.sequential_play_action.setIcon(QIcon(""))
+        self.single_loop_action.setIcon(QIcon(os.path.join(self.__icon_dir, "selected.png")))
         current_source = self.player.currentSource()
         if not current_source.fileName():
             return
@@ -397,6 +399,6 @@ class VideoUI(QtGui.QWidget):
 
     def loop_none(self):
         self.__loop_status = None
-        self.single_loop_action.setIcon(QtGui.QIcon(""))
-        self.list_loop_action.setIcon(QtGui.QIcon(""))
-        self.sequential_play_action.setIcon(QtGui.QIcon(os.path.join(self.__icon_dir, "selected.png")))
+        self.single_loop_action.setIcon(QIcon(""))
+        self.list_loop_action.setIcon(QIcon(""))
+        self.sequential_play_action.setIcon(QIcon(os.path.join(self.__icon_dir, "selected.png")))

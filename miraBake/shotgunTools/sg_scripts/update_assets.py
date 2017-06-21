@@ -10,7 +10,9 @@
 
 # Built-in modules
 import sys
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 # Third-party modules
 
@@ -92,31 +94,31 @@ class ShotgunUtilities(object):
         print '[AAS info]: update sequence successful'
 
 
-class UpdateAssets(QtGui.QDialog):
+class UpdateAssets(QDialog):
     shotgun_utils = ShotgunUtilities()
 
     def __init__(self, parent=None):
         super(UpdateAssets, self).__init__(parent)
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
         self.setWindowTitle('Update Assets')
         self.resize(300, 100)
-        main_layout = QtGui.QVBoxLayout(self)
-        project_label = QtGui.QLabel('Project Name')
+        main_layout = QVBoxLayout(self)
+        project_label = QLabel('Project Name')
         project_label.setFixedWidth(90)
-        project_label.setAlignment(QtCore.Qt.AlignRight)
-        self.project_cbox = QtGui.QComboBox()
+        project_label.setAlignment(Qt.AlignRight)
+        self.project_cbox = QComboBox()
         self.project_cbox.setEditable(True)
-        sequence_label = QtGui.QLabel('Sequence name')
-        sequence_label.setAlignment(QtCore.Qt.AlignRight)
+        sequence_label = QLabel('Sequence name')
+        sequence_label.setAlignment(Qt.AlignRight)
         sequence_label.setFixedWidth(90)
-        self.sequence_cbox = QtGui.QComboBox()
+        self.sequence_cbox = QComboBox()
         self.sequence_cbox.setEditable(True)
-        self.update_btn = QtGui.QPushButton('Update Assets')
+        self.update_btn = QPushButton('Update Assets')
 
-        project_layout = QtGui.QHBoxLayout()
+        project_layout = QHBoxLayout()
         project_layout.addWidget(project_label)
         project_layout.addWidget(self.project_cbox)
-        sequence_layout = QtGui.QHBoxLayout()
+        sequence_layout = QHBoxLayout()
         sequence_layout.addWidget(sequence_label)
         sequence_layout.addWidget(self.sequence_cbox)
         main_layout.addLayout(project_layout)
@@ -145,11 +147,11 @@ class UpdateAssets(QtGui.QDialog):
         project_name = str(self.project_cbox.currentText())
         sequence_name = str(self.sequence_cbox.currentText())
         self.shotgun_utils.update_assets(project_name, sequence_name)
-        QtGui.QMessageBox.information(None, 'Information', 'Update Successful')
+        QMessageBox.information(None, 'Information', 'Update Successful')
 
 
 def main():
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     ua = UpdateAssets()
     ua.show()
     app.exec_()

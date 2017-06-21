@@ -1,10 +1,11 @@
 __author__ = 'heshuai'
 
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import os
 import functools
 import xml.dom.minidom
-
 # local modules
 import add_environ
 import maya_ctrls
@@ -14,15 +15,15 @@ reload(public_ctrls)
 from get_parent_dir import get_parent_dir
 
 
-class MainUI(QtGui.QMainWindow):
+class MainUI(QMainWindow):
 
     def __init__(self, parent=None):
         super(MainUI, self).__init__(parent)
         self.setWindowTitle('Lighting Tools')
         self.setWindowOpacity(0.7)
         self.setMouseTracking(True)
-        self.setWindowFlags(QtCore.Qt.SplashScreen)
-        # self.setAttribute(QtCore.Qt.WA_TranslucentBackground, True)
+        self.setWindowFlags(Qt.SplashScreen)
+        # self.setAttribute(Qt.WA_TranslucentBackground, True)
         self.resize(645, 40)
         self.parent_dir = get_parent_dir()
         self.UI_status = 1
@@ -39,16 +40,16 @@ class MainUI(QtGui.QMainWindow):
     def set_background(self):
         image_path = os.path.join(
             self.parent_dir, 'icons', 'background_icons', 'main.png')
-        self.image = QtGui.QImage(image_path)
-        palette = QtGui.QPalette()
-        palette.setBrush(QtGui.QPalette.Background, QtGui.QBrush(self.image.scaled(
-            self.size(), QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.SmoothTransformation)))
+        self.image = QImage(image_path)
+        palette = QPalette()
+        palette.setBrush(QPalette.Background, QBrush(self.image.scaled(
+            self.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)))
         self.setPalette(palette)
 
     def resizeEvent(self, event):
-        palette = QtGui.QPalette()
-        palette.setBrush(QtGui.QPalette.Background, QtGui.QBrush(self.image.scaled(
-            event.size(), QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.SmoothTransformation)))
+        palette = QPalette()
+        palette.setBrush(QPalette.Background, QBrush(self.image.scaled(
+            event.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)))
         self.setPalette(palette)
 
     def get_conf_xml_path(self):
@@ -100,12 +101,12 @@ class MainUI(QtGui.QMainWindow):
                 self.parent_dir, 'help.docx'))
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == Qt.LeftButton:
             self.dragPositon = event.globalPos() - self.frameGeometry().topLeft()
             event.accept()
 
     def mouseMoveEvent(self, event):
-        if event.buttons() == QtCore.Qt.LeftButton:
+        if event.buttons() == Qt.LeftButton:
             self.move(event.globalPos() - self.dragPositon)
             event.accept()
 
@@ -134,14 +135,14 @@ class MainUI(QtGui.QMainWindow):
         self.follow_maya_win()
 
 
-class Action(QtGui.QAction):
+class Action(QAction):
 
     def __init__(self, name=None, parent=None):
         super(Action, self).__init__(parent)
         parent_dir = get_parent_dir()
         icon_path = os.path.join(
             parent_dir, 'icons', 'main_icons', name+'.png')
-        self.setIcon(QtGui.QIcon(icon_path))
+        self.setIcon(QIcon(icon_path))
         self.setText(name)
 
 

@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import sys
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from python.ui import system_tray
 
 
 def main():
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     tray = system_tray.SystemTray()
     tray.show()
     tray.show_message("Hey,welcome here.\n\nAny questions,connect TD,Thank you! ")

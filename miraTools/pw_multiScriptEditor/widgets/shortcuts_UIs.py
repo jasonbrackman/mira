@@ -7,36 +7,38 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PySide import QtCore, QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(573, 391)
-        self.verticalLayout = QtGui.QVBoxLayout(Dialog)
+        self.verticalLayout = QVBoxLayout(Dialog)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.table = QtGui.QTableWidget(Dialog)
+        self.table = QTableWidget(Dialog)
         self.table.setObjectName("table")
         self.table.setColumnCount(0)
         self.table.setRowCount(0)
         self.verticalLayout.addWidget(self.table)
-        self.label = QtGui.QLabel(Dialog)
-        font = QtGui.QFont()
+        self.label = QLabel(Dialog)
+        font = QFont()
         font.setPointSize(12)
         font.setWeight(75)
         font.setItalic(False)
         font.setBold(True)
         self.label.setFont(font)
-        self.label.setFrameShape(QtGui.QFrame.NoFrame)
-        self.label.setTextFormat(QtCore.Qt.AutoText)
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setFrameShape(QFrame.NoFrame)
+        self.label.setTextFormat(Qt.AutoText)
+        self.label.setAlignment(Qt.AlignCenter)
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
 
         self.retranslateUi(Dialog)
-        QtCore.QMetaObject.connectSlotsByName(Dialog)
+        QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Shortcuts list", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("Dialog", "Shortcut list hot found!!!", None, QtGui.QApplication.UnicodeUTF8))
+        Dialog.setWindowTitle(QApplication.translate("Dialog", "Shortcuts list", None, QApplication.UnicodeUTF8))
+        self.label.setText(QApplication.translate("Dialog", "Shortcut list hot found!!!", None, QApplication.UnicodeUTF8))
 

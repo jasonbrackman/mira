@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as mc
 import ui
 from get_icon import get_icon
@@ -55,7 +57,7 @@ class Maya(object):
         return mc.referenceQuery(group_name, referenceNode=1)
 
 
-class AssetTableModel(QtCore.QAbstractTableModel):
+class AssetTableModel(QAbstractTableModel):
     def __init__(self, arg=[], parent=None):
         super(AssetTableModel, self).__init__(parent)
         self.arg = arg
@@ -66,32 +68,32 @@ class AssetTableModel(QtCore.QAbstractTableModel):
     def columnCount(self, parent):
         return 4
 
-    def data(self, index, role=QtCore.Qt.DisplayRole):
+    def data(self, index, role=Qt.DisplayRole):
         row = index.row()
         column = index.column()
-        if role == QtCore.Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             if column == 1:
                 return self.arg[row].name
             if column == 3:
                 return self.arg[row].rig_path
-        elif role == QtCore.Qt.DecorationRole:
+        elif role == Qt.DecorationRole:
             if column == 2:
-                pix_map = QtGui.QPixmap(self.arg[row].thumbnail)
-                scaled = pix_map.scaled(QtCore.QSize(90, 90), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+                pix_map = QPixmap(self.arg[row].thumbnail)
+                scaled = pix_map.scaled(QSize(90, 90), Qt.KeepAspectRatio, Qt.SmoothTransformation)
                 return scaled
             if column == 0:
                 is_rig = self.arg[row].is_rig
                 if is_rig:
-                    pix_map = QtGui.QPixmap(get_icon(True))
+                    pix_map = QPixmap(get_icon(True))
                 else:
-                    pix_map = QtGui.QPixmap(get_icon(False))
+                    pix_map = QPixmap(get_icon(False))
                 return pix_map
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
-    def setData(self, index, value, role=QtCore.Qt.DisplayRole):
-        if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
+    def setData(self, index, value, role=Qt.DisplayRole):
+        if role == Qt.DisplayRole or role == Qt.EditRole:
             row = index.row()
             column = index.column()
             self.arg[row][column] = value
@@ -101,8 +103,8 @@ class AssetTableModel(QtCore.QAbstractTableModel):
 
     def headerData(self, section, orientation, role):
         header_data = ["is_rig", "Assets", "Thumbnail", "rig_path", ""]
-        if role == QtCore.Qt.DisplayRole:
-            if orientation == QtCore.Qt.Horizontal:
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
                 return header_data[section]
 
 
@@ -129,7 +131,7 @@ class ReplaceRigReference(ui.ReplaceUI):
         self.set_table_view()
         self.green_check.setChecked(True)
         self.red_check.setChecked(True)
-        for row in xrange(self.model.rowCount(QtCore.QModelIndex)):
+        for row in xrange(self.model.rowCount(QModelIndex)):
             self.table_view.showRow(row)
 
     def set_model(self):
@@ -137,17 +139,17 @@ class ReplaceRigReference(ui.ReplaceUI):
         if not model_data:
             return
         self.model = AssetTableModel(model_data)
-        self.proxy_model = QtGui.QSortFilterProxyModel()
+        self.proxy_model = QSortFilterProxyModel()
         self.proxy_model.setFilterKeyColumn(1)
         self.proxy_model.setDynamicSortFilter(True)
-        self.proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
         self.proxy_model.setSourceModel(self.model)
         self.filter_le.textChanged.connect(self.set_filter)
         self.table_view.setModel(self.proxy_model)
         self.set_table_view()
 
     def set_table_view(self):
-        self.table_view.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.table_view.setFocusPolicy(Qt.NoFocus)
         self.table_view.horizontalHeader().setStretchLastSection(True)
         self.table_view.resizeRowsToContents()
         self.table_view.resizeColumnToContents(1)
@@ -163,7 +165,7 @@ class ReplaceRigReference(ui.ReplaceUI):
             check_status.append(True)
         if self.red_check.isChecked():
             check_status.append(False)
-        for row in xrange(self.model.rowCount(QtCore.QModelIndex)):
+        for row in xrange(self.model.rowCount(QModelIndex)):
             item = self.model.arg[row]
             is_rig = item.is_rig
             if is_rig not in check_status:

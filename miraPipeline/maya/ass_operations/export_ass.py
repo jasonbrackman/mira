@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as mc
 from miraLibs.pipeLibs import pipeFile, pipeMira
 from miraLibs.pyLibs import join_path
@@ -18,8 +20,8 @@ def get_proxy_dir():
 def export_ass():
     proxy_dir = get_proxy_dir()
     meshes = mc.ls(type="mesh", long=1)
-    progress_dialog = QtGui.QProgressDialog("Ass Exporting...", 'Cancel', 0, len(meshes))
-    progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+    progress_dialog = QProgressDialog("Ass Exporting...", 'Cancel', 0, len(meshes))
+    progress_dialog.setWindowModality(Qt.WindowModal)
     progress_dialog.setMinimumWidth(350)
     progress_dialog.show()
     for index, mesh in enumerate(meshes):

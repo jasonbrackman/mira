@@ -11,7 +11,9 @@
 # Built-in modules
 import os
 import logging
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import sys
 # Third-party modules
 
@@ -99,31 +101,31 @@ class ShotgunUtility(object):
             self.sg.download_attachment(attachment=version['sg_uploaded_movie'], file_path=path)
 
 
-class DownloadShotLatestVersionUI(QtGui.QDialog):
+class DownloadShotLatestVersionUI(QDialog):
     def __init__(self, parent=None):
         super(DownloadShotLatestVersionUI, self).__init__(parent)
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
 
         qss_path = get_qss_path()
 
         self.setWindowTitle('Download Shot Latest Version')
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
         self.resize(350, 100)
-        self.setStyle(QtGui.QStyleFactory.create('plastique'))
+        self.setStyle(QStyleFactory.create('plastique'))
         self.setStyleSheet(open(qss_path, 'r').read())
 
-        arg_layout = QtGui.QGridLayout()
-        project_label = QtGui.QLabel('Project')
+        arg_layout = QGridLayout()
+        project_label = QLabel('Project')
         project_label.setFixedWidth(50)
-        project_label.setAlignment(QtCore.Qt.AlignRight)
-        self.project_cbox = QtGui.QComboBox()
-        sequence_label = QtGui.QLabel('Sequence')
-        sequence_label.setAlignment(QtCore.Qt.AlignRight)
-        self.sequence_cbox = QtGui.QComboBox()
+        project_label.setAlignment(Qt.AlignRight)
+        self.project_cbox = QComboBox()
+        sequence_label = QLabel('Sequence')
+        sequence_label.setAlignment(Qt.AlignRight)
+        self.sequence_cbox = QComboBox()
         self.sequence_cbox.setEditable(True)
-        step_label = QtGui.QLabel('Step')
-        step_label.setAlignment(QtCore.Qt.AlignRight)
-        self.step_cbox = QtGui.QComboBox()
+        step_label = QLabel('Step')
+        step_label.setAlignment(Qt.AlignRight)
+        self.step_cbox = QComboBox()
 
         arg_layout.addWidget(project_label, 0, 0, 1, 1)
         arg_layout.addWidget(self.project_cbox, 0, 1, 1, 3)
@@ -132,9 +134,9 @@ class DownloadShotLatestVersionUI(QtGui.QDialog):
         arg_layout.addWidget(step_label, 2, 0, 1, 1)
         arg_layout.addWidget(self.step_cbox, 2, 1, 1, 3)
 
-        btn_layout = QtGui.QHBoxLayout()
-        self.cancel_btn = QtGui.QPushButton('Cancel')
-        self.create_btn = QtGui.QPushButton('Download')
+        btn_layout = QHBoxLayout()
+        self.cancel_btn = QPushButton('Cancel')
+        self.create_btn = QPushButton('Download')
         btn_layout.addStretch()
         btn_layout.addWidget(self.cancel_btn)
         btn_layout.addWidget(self.create_btn)
@@ -194,8 +196,8 @@ class DownloadShotLatestVersion(DownloadShotLatestVersionUI):
         if not os.path.isdir(download_sequence_path):
             os.makedirs(download_sequence_path)
         all_shots = self.sg_util.get_all_shots_by_sequence(project_name, sequence_name)
-        progress_dialog = QtGui.QProgressDialog('Downloading...Please wait - -', 'Cancel', 0, len(all_shots))
-        progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+        progress_dialog = QProgressDialog('Downloading...Please wait - -', 'Cancel', 0, len(all_shots))
+        progress_dialog.setWindowModality(Qt.WindowModal)
         progress_dialog.show()
         value = 0
         for shot in all_shots:
@@ -219,7 +221,7 @@ class DownloadShotLatestVersion(DownloadShotLatestVersionUI):
 
 
 def main():
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     dslv = DownloadShotLatestVersion()
     dslv.show()
     app.exec_()

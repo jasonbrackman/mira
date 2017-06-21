@@ -2,23 +2,25 @@
 import os
 import shutil
 import getpass
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from ..libs import get_icon_path
 from ..libs.conf_parser import ConfParser
 from ..libs import get_conf_path
 
 
-class UserDisplay(QtGui.QWidget):
+class UserDisplay(QWidget):
     def __init__(self, parent=None):
         super(UserDisplay, self).__init__(parent)
         self.setFixedHeight(36)
         self.setup_ui()
-        self.menu = QtGui.QMenu(self)
-        self.set_user_picture_action = QtGui.QAction("User Picture(.png)", self)
-        self.add_tool_action = QtGui.QAction("Add Tools", self)
-        self.insert_tool_action = QtGui.QAction("Insert Tools", self)
-        self.collapse_all_action = QtGui.QAction("Collapse All/Expand All", self)
-        self.reset_action = QtGui.QAction("Reset", self)
+        self.menu = QMenu(self)
+        self.set_user_picture_action = QAction("User Picture(.png)", self)
+        self.add_tool_action = QAction("Add Tools", self)
+        self.insert_tool_action = QAction("Insert Tools", self)
+        self.collapse_all_action = QAction("Collapse All/Expand All", self)
+        self.reset_action = QAction("Reset", self)
 
         self.set_menu_btn_icon()
         self.set_user_icon()
@@ -26,13 +28,13 @@ class UserDisplay(QtGui.QWidget):
         self.set_signals()
 
     def setup_ui(self):
-        main_layout = QtGui.QHBoxLayout(self)
+        main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 10, 0)
-        self.icon_label = QtGui.QLabel()
+        self.icon_label = QLabel()
         self.icon_label.setFixedSize(35, 35)
-        self.text_label = QtGui.QLabel()
-        self.text_label.setAlignment(QtCore.Qt.AlignCenter)
-        self.menu_btn = QtGui.QToolButton()
+        self.text_label = QLabel()
+        self.text_label.setAlignment(Qt.AlignCenter)
+        self.menu_btn = QToolButton()
         self.menu_btn.setStyleSheet("background-color: #555555; border:0px solid;border-radius: 2px;")
         main_layout.addStretch()
         main_layout.addWidget(self.icon_label)
@@ -50,17 +52,17 @@ class UserDisplay(QtGui.QWidget):
         return user_icon_conf_path
 
     def set_user_pixmap(self, pixmap_path):
-        pixmap = QtGui.QPixmap(pixmap_path)
+        pixmap = QPixmap(pixmap_path)
         label_width = self.icon_label.width()
         label_height = self.icon_label.height()
         image_width = pixmap.width()
         image_height = pixmap.height()
         if image_width > image_height:
-            scaled = pixmap.scaled(QtCore.QSize(label_width, image_width/label_width*image_height), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+            scaled = pixmap.scaled(QSize(label_width, image_width/label_width*image_height), Qt.KeepAspectRatio, Qt.SmoothTransformation)
         else:
-            scaled = pixmap.scaled(QtCore.QSize(label_height/label_height*image_width, label_height), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+            scaled = pixmap.scaled(QSize(label_height/label_height*image_width, label_height), Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.icon_label.setPixmap(scaled)
-        self.icon_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.icon_label.setAlignment(Qt.AlignCenter)
 
     def set_user_icon(self):
         user_icon_conf_path = self.get_user_icon_conf_path()
@@ -81,7 +83,7 @@ class UserDisplay(QtGui.QWidget):
 
     def set_menu_btn_icon(self):
         arrow_path = get_icon_path.get_icon_path("arrow_drop_down.png")
-        self.menu_btn.setIcon(QtGui.QIcon(arrow_path))
+        self.menu_btn.setIcon(QIcon(arrow_path))
 
     def create_menu(self):
         self.menu.clear()
@@ -90,10 +92,10 @@ class UserDisplay(QtGui.QWidget):
         self.menu.addAction(self.insert_tool_action)
         self.menu.addAction(self.collapse_all_action)
         self.menu.addAction(self.reset_action)
-        self.menu.exec_(QtGui.QCursor.pos())
+        self.menu.exec_(QCursor.pos())
 
     def set_user_picture(self):
-        path, _filter = QtGui.QFileDialog.getOpenFileName(self, "User Picture", "", "Image Files (*.png)")
+        path, _filter = QFileDialog.getOpenFileName(self, "User Picture", "", "Image Files (*.png)")
         if not path:
             return
         conf_dir = os.path.dirname(get_conf_path.get_app_conf_dir())

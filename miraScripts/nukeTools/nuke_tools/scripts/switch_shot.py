@@ -9,7 +9,9 @@
 # notes       :
 
 # Built-in modules
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import os
 import getpass
 import re
@@ -167,34 +169,34 @@ class Nuke(object):
         nuke.message(message)
 
 
-class ReplaceReadNodeView(QtGui.QDialog):
+class ReplaceReadNodeView(QDialog):
     def __init__(self, parent=None):
         super(ReplaceReadNodeView, self).__init__(parent)
         self.setWindowTitle('Replace Read Node')
         self.resize(550, 120)
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
 
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(5, 15, 5, 10)
 
-        file_path_layout = QtGui.QHBoxLayout()
-        file_path_label = QtGui.QLabel('The File Path')
-        file_path_label.setAlignment(QtCore.Qt.AlignVCenter)
+        file_path_layout = QHBoxLayout()
+        file_path_label = QLabel('The File Path')
+        file_path_label.setAlignment(Qt.AlignVCenter)
         file_path_label.setFixedWidth(80)
-        file_path_label.setAlignment(QtCore.Qt.AlignRight)
-        self.file_path_cbox = QtGui.QComboBox()
+        file_path_label.setAlignment(Qt.AlignRight)
+        self.file_path_cbox = QComboBox()
         self.file_path_cbox.setEditable(True)
-        self.file_path_btn = QtGui.QToolButton()
-        icon = QtGui.QIcon()
-        icon.addPixmap(self.style().standardPixmap(QtGui.QStyle.SP_DirOpenIcon))
+        self.file_path_btn = QToolButton()
+        icon = QIcon()
+        icon.addPixmap(self.style().standardPixmap(QStyle.SP_DirOpenIcon))
         self.file_path_btn.setIcon(icon)
-        separator_label = QtGui.QLabel('Sep:')
+        separator_label = QLabel('Sep:')
         separator_label.setFixedWidth(30)
-        self.separator_cbox = QtGui.QComboBox()
+        self.separator_cbox = QComboBox()
         self.separator_cbox.setFixedWidth(30)
         for separator in ['.', '_']:
             self.separator_cbox.addItem(separator)
-        self.import_btn = QtGui.QPushButton('Import')
+        self.import_btn = QPushButton('Import')
         self.import_btn.setFixedWidth(75)
 
         file_path_layout.addWidget(file_path_label)
@@ -204,40 +206,40 @@ class ReplaceReadNodeView(QtGui.QDialog):
         file_path_layout.addWidget(self.separator_cbox)
         file_path_layout.addWidget(self.import_btn)
 
-        replace_grp = QtGui.QGroupBox('Replace')
-        replace_layout = QtGui.QHBoxLayout(replace_grp)
+        replace_grp = QGroupBox('Replace')
+        replace_layout = QHBoxLayout(replace_grp)
         replace_layout.setContentsMargins(10, 15, 10, 15)
-        shot_attr_layout = QtGui.QVBoxLayout()
+        shot_attr_layout = QVBoxLayout()
         shot_attr_layout.setSpacing(20)
-        current_shot_layout = QtGui.QHBoxLayout()
+        current_shot_layout = QHBoxLayout()
         current_shot_layout.setSpacing(3)
-        current_shot_label = QtGui.QLabel('Current scene/shot no.')
+        current_shot_label = QLabel('Current scene/shot no.')
         current_shot_label.setFixedWidth(130)
-        current_shot_label.setAlignment(QtCore.Qt.AlignRight)
-        self.current_shot_cbox = QtGui.QComboBox()
+        current_shot_label.setAlignment(Qt.AlignRight)
+        self.current_shot_cbox = QComboBox()
         self.current_shot_cbox.setEditable(True)
         current_shot_layout.addWidget(current_shot_label)
         current_shot_layout.addWidget(self.current_shot_cbox)
-        new_shot_layout = QtGui.QHBoxLayout()
+        new_shot_layout = QHBoxLayout()
         new_shot_layout.setSpacing(3)
-        new_shot_label = QtGui.QLabel('New scene/shot no.')
+        new_shot_label = QLabel('New scene/shot no.')
         new_shot_label.setFixedWidth(130)
-        new_shot_label.setAlignment(QtCore.Qt.AlignRight)
-        self.new_shot_le = QtGui.QLineEdit()
+        new_shot_label.setAlignment(Qt.AlignRight)
+        self.new_shot_le = QLineEdit()
         new_shot_layout.addWidget(new_shot_label)
         new_shot_layout.addWidget(self.new_shot_le)
 
         shot_attr_layout.addLayout(current_shot_layout)
         shot_attr_layout.addLayout(new_shot_layout)
 
-        self.replace_btn = QtGui.QPushButton('Replace')
+        self.replace_btn = QPushButton('Replace')
         self.replace_btn.setFixedSize(75, 62)
 
         replace_layout.addLayout(shot_attr_layout)
         replace_layout.addWidget(self.replace_btn)
 
-        button_layout = QtGui.QHBoxLayout()
-        self.replace_and_import_btn = QtGui.QPushButton('Replace And Import')
+        button_layout = QHBoxLayout()
+        self.replace_and_import_btn = QPushButton('Replace And Import')
         button_layout.addStretch()
         button_layout.addWidget(self.replace_and_import_btn)
         main_layout.addLayout(file_path_layout)
@@ -276,8 +278,8 @@ class ReplaceReadNode(ReplaceReadNodeView):
         self.replace_and_import_btn.clicked.connect(self.replace_and_import)
 
     def choose_file_path(self):
-        file_dialog = QtGui.QFileDialog()
-        file_dialog.setFileMode(QtGui.QFileDialog.ExistingFile)
+        file_dialog = QFileDialog()
+        file_dialog.setFileMode(QFileDialog.ExistingFile)
         current_text = self.file_path_cbox.currentText()
         if current_text:
             caption = os.path.dirname(current_text)
@@ -350,7 +352,7 @@ class ReplaceReadNode(ReplaceReadNodeView):
 
 
 def main():
-    app = QtGui.qApp
+    app = QApplication.instance()
     global rrn
     try:
         rrn.close()

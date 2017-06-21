@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from ...frameworks import text_edit, filter_line_edit
 
 
@@ -13,48 +15,48 @@ LIST_VIEW_STYLE = "QListView::item:selected " \
                   "QListView{outline: none;}"
 
 
-class EmailUI(QtGui.QWidget):
+class EmailUI(QWidget):
     def __init__(self, parent=None):
         super(EmailUI, self).__init__(parent)
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
 
-        self.box_label = QtGui.QLabel()
+        self.box_label = QLabel()
         self.box_label.setFixedHeight(30)
         main_layout.addWidget(self.box_label)
 
-        email_group = QtGui.QGroupBox()
+        email_group = QGroupBox()
         main_layout.addWidget(email_group)
-        group_layout = QtGui.QHBoxLayout(email_group)
-        main_splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
+        group_layout = QHBoxLayout(email_group)
+        main_splitter = QSplitter(Qt.Horizontal)
         group_layout.addWidget(main_splitter)
 
-        left_widget = QtGui.QWidget()
-        left_layout = QtGui.QVBoxLayout(left_widget)
+        left_widget = QWidget()
+        left_layout = QVBoxLayout(left_widget)
         left_layout.setContentsMargins(0, 0, 0, 0)
         self.filter_le = filter_line_edit.FilterLineEdit()
-        self.email_list_view = QtGui.QListView()
+        self.email_list_view = QListView()
         self.email_list_view.setSpacing(4)
         self.email_list_view.setStyleSheet(LIST_VIEW_STYLE)
-        self.delete_action = QtGui.QAction("Delete", self)
-        self.email_list_view.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
-        self.email_list_view.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.delete_action = QAction("Delete", self)
+        self.email_list_view.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.email_list_view.setContextMenuPolicy(Qt.CustomContextMenu)
         self.email_list_view.customContextMenuRequested.connect(self.show_context_menu)
         left_layout.addWidget(self.filter_le)
         left_layout.addWidget(self.email_list_view)
         main_splitter.addWidget(left_widget)
 
-        right_widget = QtGui.QWidget()
-        content_layout = QtGui.QVBoxLayout(right_widget)
+        right_widget = QWidget()
+        content_layout = QVBoxLayout(right_widget)
         content_layout.setContentsMargins(0, 0, 0, 0)
-        self.title_label = QtGui.QLabel()
+        self.title_label = QLabel()
         self.title_label.setFixedHeight(20)
 
-        separator_layout = QtGui.QHBoxLayout()
+        separator_layout = QHBoxLayout()
         separator_layout.setContentsMargins(0, 2, 0, 0)
-        separator_layout.setAlignment(QtCore.Qt.AlignBottom)
-        frame = QtGui.QFrame()
-        frame.setFrameStyle(QtGui.QFrame.HLine)
+        separator_layout.setAlignment(Qt.AlignBottom)
+        frame = QFrame()
+        frame.setFrameStyle(QFrame.HLine)
         frame.setStyleSheet('QFrame{color: #111111}')
         separator_layout.addWidget(frame)
 
@@ -70,6 +72,6 @@ class EmailUI(QtGui.QWidget):
 
     def show_context_menu(self, pos):
         global_pos = self.email_list_view.mapToGlobal(pos)
-        menu = QtGui.QMenu()
+        menu = QMenu()
         menu.addAction(self.delete_action)
         menu.exec_(global_pos)

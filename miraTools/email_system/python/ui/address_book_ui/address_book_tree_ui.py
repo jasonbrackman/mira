@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from . import address_book_model
 from ...libs import get_conf_data
 
@@ -61,13 +63,13 @@ class UserNode(Node):
         return "user"
 
 
-class AddressBookTreeView(QtGui.QTreeView):
+class AddressBookTreeView(QTreeView):
     def __init__(self, parent=None):
         super(AddressBookTreeView, self).__init__(parent)
         self.user_data_dict = get_user_data()
         self.set_model()
         self.setSortingEnabled(True)
-        self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+        self.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
     def set_model(self):
         self.root_node = Node("address")

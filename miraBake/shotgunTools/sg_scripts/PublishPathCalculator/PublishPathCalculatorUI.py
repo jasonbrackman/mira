@@ -8,13 +8,17 @@
 # usage       :
 # notes       :
 
-from PySide import QtGui
-from PySide import QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 #import win32clipboard
 #import win32con  
 from PublishPathCalculator import PublishPathCalculator
 
-class PublishPathcalculatorUI(QtGui.QDialog):
+class PublishPathcalculatorUI(QDialog):
 
     def __init__(self, parent=None):
         super(PublishPathcalculatorUI, self).__init__(parent)
@@ -22,32 +26,32 @@ class PublishPathcalculatorUI(QtGui.QDialog):
         self.path_calculator = PublishPathCalculator()
 
         self.setWindowTitle("Publish Path calculateor")
-        self.main_layout = QtGui.QVBoxLayout(self)
+        self.main_layout = QVBoxLayout(self)
         
-        self.up_layout = QtGui.QHBoxLayout(self)
+        self.up_layout = QHBoxLayout(self)
         self.main_layout.addLayout(self.up_layout)
-        # ´´½¨ÊäÈë¿ò
-        self.asset_name_line = QtGui.QLineEdit()
+        # ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        self.asset_name_line = QLineEdit()
         self.asset_name_line.setPlaceholderText("Type asset name here...")
         self.up_layout.addWidget(self.asset_name_line)
-        # ´´½¨task type combo
-        self.task_type_combo = QtGui.QComboBox()
+        # ï¿½ï¿½ï¿½ï¿½task type combo
+        self.task_type_combo = QComboBox()
         self.task_type_combo.addItems(["mdl","art","rig"])
         self.up_layout.addWidget(self.task_type_combo)
-        # ´´½¨½á¹û¿ò
-        self.result_line = QtGui.QLineEdit()
+        # ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        self.result_line = QLineEdit()
         self.result_line.setPlaceholderText("Result will be shown here...")
         #self.result_line.setEnabled(False)
         self.main_layout.addWidget(self.result_line)
-        # ´´½¨°´Å¥
-        self.calculate_button = QtGui.QPushButton()
+        # ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¥
+        self.calculate_button = QPushButton()
         self.calculate_button.setText("calculate and Copy")
         self.main_layout.addWidget(self.calculate_button)
         
-        # Á¬½Ó°´Å¥¹¦ÄÜ
+        # ï¿½ï¿½ï¿½Ó°ï¿½Å¥ï¿½ï¿½ï¿½ï¿½
         self.calculate_button.clicked.connect(self.on_calculate_button_clicked)
         
-        # ÉèÖÃ¿í¶È
+        # ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½
         self.resize(500,100)
     
     def on_calculate_button_clicked(self):
@@ -67,7 +71,7 @@ class PublishPathcalculatorUI(QtGui.QDialog):
         
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     app.setStyle("cleanlooks")
     ui = PublishPathcalculatorUI()
     ui.show()

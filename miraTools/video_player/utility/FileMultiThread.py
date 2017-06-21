@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
-from PySide import QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 
-class FileMultiThread(QtCore.QThread):
-    thread_finished = QtCore.Signal()
+class FileMultiThread(QThread):
+    thread_finished = Signal()
 
     def __init__(self, cmd=None, parent=None):
         super(FileMultiThread, self).__init__(parent)

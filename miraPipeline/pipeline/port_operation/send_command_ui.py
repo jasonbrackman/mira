@@ -3,7 +3,9 @@ import getpass
 import os
 from functools import partial
 
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 import run_send_command
 from CommandOperation import CommandOperation
@@ -23,21 +25,21 @@ RED_ICON = os.path.join(ICON_DIR, "red_bullet.png").replace("\\", "/")
 UPDATE_ICON = os.path.join(ICON_DIR, "update.png").replace("\\", "/")
 
 
-class RedisDialog(QtGui.QDialog):
+class RedisDialog(QDialog):
     def __init__(self, parent=None):
         super(RedisDialog, self).__init__(parent)
         self.result = None
         self.resize(250, 100)
         self.setWindowTitle("Redis settings")
-        main_layout = QtGui.QGridLayout(self)
-        server_label = QtGui.QLabel("Server")
-        port_label = QtGui.QLabel("Port")
-        self.server_le = QtGui.QLineEdit()
+        main_layout = QGridLayout(self)
+        server_label = QLabel("Server")
+        port_label = QLabel("Port")
+        self.server_le = QLineEdit()
         self.server_le.setText(REDIS_HOST)
-        self.port_le = QtGui.QLineEdit()
+        self.port_le = QLineEdit()
         self.port_le.setText(str(REDIS_PORT))
-        self.ok_btn = QtGui.QPushButton("OK")
-        self.cancel_btn = QtGui.QPushButton("Cancel")
+        self.ok_btn = QPushButton("OK")
+        self.cancel_btn = QPushButton("Cancel")
         main_layout.addWidget(server_label, 0, 0, 1, 1)
         main_layout.addWidget(self.server_le, 0, 1, 1, 4)
         main_layout.addWidget(port_label, 1, 0, 1, 1)
@@ -65,7 +67,7 @@ class UserItem(object):
         self.mac = mac
 
 
-class UserDelegate(QtGui.QItemDelegate):
+class UserDelegate(QItemDelegate):
     def __init__(self, parent=None):
         super(UserDelegate, self).__init__(parent)
 
@@ -73,7 +75,7 @@ class UserDelegate(QtGui.QItemDelegate):
         if not index.isValid:
             return
         if index.column() == 0:
-            editor = QtGui.QLabel(parent)
+            editor = QLabel(parent)
             editor.index = index
             return editor
 
@@ -90,7 +92,7 @@ class UserDelegate(QtGui.QItemDelegate):
                 pix_map_path = GREEN_ICON
             else:
                 pix_map_path = RED_ICON
-            pixmap = QtGui.QPixmap(pix_map_path)
+            pixmap = QPixmap(pix_map_path)
             editor.setPixmap(pixmap)
 
     def updateEditorGeometry(self, editor, option, index):
@@ -99,33 +101,33 @@ class UserDelegate(QtGui.QItemDelegate):
         editor.setGeometry(option.rect)
 
 
-class UserModel(QtCore.QAbstractTableModel):
+class UserModel(QAbstractTableModel):
     def __init__(self, arg=[], parent=None):
         super(UserModel, self).__init__(parent)
         self.arg = arg
         self.header = ["status", "name", "ip", "mac", ""]
 
-    def rowCount(self, parent=QtCore.QModelIndex()):
+    def rowCount(self, parent=QModelIndex()):
         return len(self.arg)
 
-    def columnCount(self, parent=QtCore.QModelIndex()):
+    def columnCount(self, parent=QModelIndex()):
         return 5
 
-    def data(self, index, role=QtCore.Qt.DisplayRole):
+    def data(self, index, role=Qt.DisplayRole):
         if not index.isValid():
             return
-        if role == QtCore.Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             row = index.row()
             column = index.column()
             return self.arg[row][column]
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
-    def setData(self, index, value, role=QtCore.Qt.DisplayRole):
+    def setData(self, index, value, role=Qt.DisplayRole):
         if not index.isValid():
             return
-        if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
+        if role == Qt.DisplayRole or role == Qt.EditRole:
             row = index.row()
             column = index.column()
             self.arg[row][column] = value
@@ -134,19 +136,19 @@ class UserModel(QtCore.QAbstractTableModel):
         return False
 
     def headerData(self, section, orientation, role):
-        if role == QtCore.Qt.DisplayRole:
-            if orientation == QtCore.Qt.Horizontal:
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
                 return self.header[section]
 
 
-class SendCommandUI(QtGui.QMainWindow):
+class SendCommandUI(QMainWindow):
     def __init__(self, parent=None):
         super(SendCommandUI, self).__init__(parent)
         self.setWindowTitle("Send Command")
-        central_widget = QtGui.QWidget()
+        central_widget = QWidget()
         self.setCentralWidget(central_widget)
         self.resize(700, 500)
-        main_layout = QtGui.QVBoxLayout(central_widget)
+        main_layout = QVBoxLayout(central_widget)
         main_layout.setContentsMargins(2, 3, 2, 3)
         main_layout.addLayout(self.create_status_layout())
         main_layout.addWidget(self.create_user_info_group())
@@ -163,12 +165,12 @@ class SendCommandUI(QtGui.QMainWindow):
         self.refresh()
 
     def create_status_layout(self):
-        status_layout = QtGui.QHBoxLayout()
-        status_label = QtGui.QLabel()
+        status_layout = QHBoxLayout()
+        status_label = QLabel()
         status_label.setText("<font color=#FF9c20>Redis connection status:</font>")
-        self.status_view = QtGui.QLabel()
-        self.refresh_btn = QtGui.QToolButton()
-        self.refresh_btn.setIcon(QtGui.QIcon(UPDATE_ICON))
+        self.status_view = QLabel()
+        self.refresh_btn = QToolButton()
+        self.refresh_btn.setIcon(QIcon(UPDATE_ICON))
         self.refresh_btn.setStyleSheet("background: transparent;")
         status_layout.addStretch()
         status_layout.addWidget(status_label)
@@ -177,27 +179,27 @@ class SendCommandUI(QtGui.QMainWindow):
         return status_layout
 
     def create_user_info_group(self):
-        user_info_grp = QtGui.QGroupBox("User Info")
-        user_info_layout = QtGui.QVBoxLayout(user_info_grp)
-        filter_layout = QtGui.QHBoxLayout()
+        user_info_grp = QGroupBox("User Info")
+        user_info_layout = QVBoxLayout(user_info_grp)
+        filter_layout = QHBoxLayout()
         self.filter_le = ButtonLineEdit()
-        self.user_count_label = QtGui.QLabel()
+        self.user_count_label = QLabel()
         filter_layout.addWidget(self.user_count_label)
         filter_layout.addStretch()
         filter_layout.addWidget(self.filter_le)
-        self.user_info_view = QtGui.QTableView()
+        self.user_info_view = QTableView()
         self.user_info_view.verticalHeader().hide()
         self.user_info_view.setAlternatingRowColors(True)
-        self.user_info_view.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        self.user_info_view.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+        self.user_info_view.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.user_info_view.setSelectionMode(QAbstractItemView.ExtendedSelection)
         user_info_layout.addLayout(filter_layout)
         user_info_layout.addWidget(self.user_info_view)
         return user_info_grp
 
     def create_command_layout(self):
-        command_layout = QtGui.QHBoxLayout()
-        command_label = QtGui.QLabel("Command")
-        self.command_combo = QtGui.QComboBox()
+        command_layout = QHBoxLayout()
+        command_label = QLabel("Command")
+        self.command_combo = QComboBox()
         command_layout.addWidget(command_label)
         command_layout.addWidget(self.command_combo)
         command_layout.setStretchFactor(command_label, 1)
@@ -205,10 +207,10 @@ class SendCommandUI(QtGui.QMainWindow):
         return command_layout
 
     def create_button_layout(self):
-        btn_layout = QtGui.QHBoxLayout()
-        self.test_btn = QtGui.QPushButton("Local Test")
-        self.send_selected_btn = QtGui.QPushButton("Send To Selected")
-        self.send_all_btn = QtGui.QPushButton("Send To All")
+        btn_layout = QHBoxLayout()
+        self.test_btn = QPushButton("Local Test")
+        self.send_selected_btn = QPushButton("Send To Selected")
+        self.send_all_btn = QPushButton("Send To All")
         btn_layout.addStretch()
         btn_layout.addWidget(self.test_btn)
         btn_layout.addWidget(self.send_selected_btn)
@@ -216,12 +218,12 @@ class SendCommandUI(QtGui.QMainWindow):
         return btn_layout
 
     def create_action(self):
-        self.set_redis_action = QtGui.QAction("Redis Server", self)
-        self.set_port_action = QtGui.QAction("Connection Port", self)
-        self.configure_command_action = QtGui.QAction("Configure Command", self)
+        self.set_redis_action = QAction("Redis Server", self)
+        self.set_port_action = QAction("Connection Port", self)
+        self.configure_command_action = QAction("Configure Command", self)
 
     def create_menu(self):
-        self.file_menu = QtGui.QMenu("File", self)
+        self.file_menu = QMenu("File", self)
         self.file_menu.addAction(self.set_redis_action)
         self.file_menu.addAction(self.set_port_action)
         self.file_menu.addAction(self.configure_command_action)
@@ -247,7 +249,7 @@ class SendCommandUI(QtGui.QMainWindow):
         self.refresh()
 
     def set_port(self):
-        input_port = QtGui.QInputDialog.getInteger(self, "Connection Port", "Please Input Port", self.connection_port)
+        input_port = QInputDialog.getInteger(self, "Connection Port", "Please Input Port", self.connection_port)
         if input_port[1]:
             self.connection_port = input_port[0]
 
@@ -265,9 +267,9 @@ class SendCommandUI(QtGui.QMainWindow):
         self.conn = connect_redis.connect_redis(self.redis_host, self.redis_port)
         self.conn_status = ping_redis.ping_redis(self.conn)
         if self.conn_status:
-            pix_map = QtGui.QPixmap(GREEN_ICON)
+            pix_map = QPixmap(GREEN_ICON)
         else:
-            pix_map = QtGui.QPixmap(RED_ICON)
+            pix_map = QPixmap(RED_ICON)
         self.status_view.setPixmap(pix_map)
 
     def init_commands(self):
@@ -299,11 +301,11 @@ class SendCommandUI(QtGui.QMainWindow):
         user_count = len(model_data)
         self.user_count_label.setText("User Count: <font size=5 color=#0000FF><b>%s</b></font>" % user_count)
         if model_data == [[]]:
-            model = QtGui.QStandardItemModel()
+            model = QStandardItemModel()
             self.user_info_view.setModel(model)
             return
         self.model = UserModel(model_data, self.user_info_view)
-        self.proxy_model = QtGui.QSortFilterProxyModel()
+        self.proxy_model = QSortFilterProxyModel()
         self.filter_le.textChanged.connect(self.set_filter)
         self.proxy_model.setSourceModel(self.model)
         self.proxy_model.setFilterKeyColumn(-1)
@@ -370,13 +372,13 @@ class SendCommandUI(QtGui.QMainWindow):
         if ping_quick.ping_quick(local_ip, self.connection_port, 0.1):
             run_send_command.send_user_command(user, self.connection_port, command)
         else:
-            QtGui.QMessageBox.critical(None, "warming Tip",
+            QMessageBox.critical(None, "warming Tip",
                                        "Can't make connection %s %s" % (local_ip, self.connection_port))
 
 
 def main():
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     sc = SendCommandUI()
     sc.show()
     app.exec_()

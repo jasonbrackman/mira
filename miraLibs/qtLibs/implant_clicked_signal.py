@@ -33,7 +33,7 @@ def implant_clicked_signal(obj, cmd, button="left"):
     if button not in ["left", "right", "doubleLeft", "doubleRight"]:
         raise ValueError('param "button" must be one of "left","right","doubleLeft","doubleRight"')
 
-    timer = QtCore.QTimer()
+    timer = QTimer()
     timer.setInterval(250)
     timer.setSingleShot(True)
 
@@ -65,11 +65,11 @@ def implant_clicked_signal(obj, cmd, button="left"):
         """
         global left_click_count, right_click_count
 
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == Qt.LeftButton:
             left_click_count += 1
             if not timer.isActive():
                 timer.start()
-        if event.button() == QtCore.Qt.RightButton:
+        if event.button() == Qt.RightButton:
             right_click_count += 1
             if not timer.isActive():
                 timer.start()

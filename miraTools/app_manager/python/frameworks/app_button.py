@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 import os
 from functools import partial
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from ..libs.start_file import start_file
 from ..libs.get_app_icon import get_app_icon
 
 
-class AppButton(QtGui.QToolButton):
+class AppButton(QToolButton):
     def __init__(self, name=None, exe_path=None, parent=None, can_rename=True):
         super(AppButton, self).__init__(parent)
         self.name = name
@@ -16,20 +18,20 @@ class AppButton(QtGui.QToolButton):
         self.setMaximumHeight(55)
         self.setMaximumWidth(180)
         self.setStyleSheet("QToolButton{background: transparent; border-radius: 5px;}")
-        self.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
+        self.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
         icon = get_app_icon(self.exe_path)
         self.setIcon(icon)
-        self.setIconSize(QtCore.QSize(100, 100))
+        self.setIconSize(QSize(100, 100))
         self.set_text()
-        self.menu = QtGui.QMenu(self)
-        self.remove_action = QtGui.QAction("Remove", self)
-        self.rename_action = QtGui.QAction("Rename", self)
-        self.launch_action = QtGui.QAction("Launch folder", self)
+        self.menu = QMenu(self)
+        self.remove_action = QAction("Remove", self)
+        self.rename_action = QAction("Rename", self)
+        self.launch_action = QAction("Launch folder", self)
         self.set_signals()
 
     def set_text(self):
-        elidfont = QtGui.QFontMetrics(self.font())
-        text = elidfont.elidedText(self.name, QtCore.Qt.ElideRight, self.width())
+        elidfont = QFontMetrics(self.font())
+        text = elidfont.elidedText(self.name, Qt.ElideRight, self.width())
         self.setText(text)
 
     def set_signals(self):
@@ -44,15 +46,15 @@ class AppButton(QtGui.QToolButton):
             self.menu.addAction(self.rename_action)
         self.menu.addAction(self.remove_action)
         self.menu.addAction(self.launch_action)
-        self.menu.exec_(QtGui.QCursor.pos())
+        self.menu.exec_(QCursor.pos())
         event.accept()
 
     def remove_self(self):
         self.deleteLater()
 
     def rename_self(self):
-        name, ok = QtGui.QInputDialog.getText(self, "App Name", "Please input an app name",
-                                              QtGui.QLineEdit.Normal, self.name)
+        name, ok = QInputDialog.getText(self, "App Name", "Please input an app name",
+                                              QLineEdit.Normal, self.name)
         if name and ok:
             self.name = name
             self.set_text()
@@ -62,4 +64,4 @@ class AppButton(QtGui.QToolButton):
         if os.path.isdir(exe_dir):
             start_file(exe_dir)
         else:
-            QtGui.QMessageBox.warning(None, "warning", "%s is not an exist directory." % exe_dir)
+            QMessageBox.warning(None, "warning", "%s is not an exist directory." % exe_dir)

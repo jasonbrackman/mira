@@ -2,7 +2,9 @@
 # __author__ = "heshuai"
 # description="""  """
 
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import pymel.core as pm
 import maya.OpenMayaUI as mui
 import sip
@@ -10,7 +12,7 @@ import sip
 
 def get_maya_win():
     prt = mui.MQtUtil.mainWindow()
-    return sip.wrapinstance(long(prt), QtGui.QWidget)
+    return sip.wrapinstance(long(prt), QWidget)
 
 
 def create_image_plane():
@@ -26,66 +28,66 @@ def connect(camera):
     image_plane_shape.message >> camera.imagePlane[0]
 
 
-class ImagePlane(QtGui.QDialog):
+class ImagePlane(QDialog):
     def __init__(self, parent=None):
         super(ImagePlane, self).__init__(parent)
         self.setWindowTitle('Create Image Plane')
         self.resize(400, 100)
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(2, 2, 2, 2)
-        main_frame = QtGui.QFrame()
+        main_frame = QFrame()
         main_layout.addWidget(main_frame)
-        main_frame.setFrameStyle(QtGui.QFrame.Panel | QtGui.QFrame.Raised)
-        layout_of_frame = QtGui.QVBoxLayout(main_frame)
+        main_frame.setFrameStyle(QFrame.Panel | QFrame.Raised)
+        layout_of_frame = QVBoxLayout(main_frame)
         #--------------------image   layout -----------------------#
-        image_layout = QtGui.QHBoxLayout()
-        image_label = QtGui.QLabel('Image Name')
+        image_layout = QHBoxLayout()
+        image_label = QLabel('Image Name')
         image_label.setFixedWidth(65)
-        image_label.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        self.image_le = QtGui.QLineEdit()
-        self.image_btn = QtGui.QToolButton()
-        icon = QtGui.QIcon()
-        icon.addPixmap(self.style().standardPixmap(QtGui.QStyle.SP_DirOpenIcon))
+        image_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.image_le = QLineEdit()
+        self.image_btn = QToolButton()
+        icon = QIcon()
+        icon.addPixmap(self.style().standardPixmap(QStyle.SP_DirOpenIcon))
         self.image_btn.setIcon(icon)
         image_layout.addWidget(image_label)
         image_layout.addWidget(self.image_le)
         image_layout.addWidget(self.image_btn)
         #--------------------      Alpha     -----------------------#
-        alpha_layout = QtGui.QHBoxLayout()
-        alpha_label = QtGui.QLabel('Alpha Gain')
+        alpha_layout = QHBoxLayout()
+        alpha_label = QLabel('Alpha Gain')
         alpha_label.setFixedWidth(65)
-        alpha_label.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        self.alpha_le = QtGui.QLineEdit()
+        alpha_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.alpha_le = QLineEdit()
         self.alpha_le.setFixedWidth(65)
-        self.alpha_slider = QtGui.QSlider(QtCore.Qt.Horizontal)
+        self.alpha_slider = QSlider(Qt.Horizontal)
         self.alpha_slider.setMinimum(0)
         self.alpha_slider.setMaximum(1)
         alpha_layout.addWidget(alpha_label)
         alpha_layout.addWidget(self.alpha_le)
         alpha_layout.addWidget(self.alpha_slider)
         #---------------------------depth-------------------------------#
-        depth_layout = QtGui.QHBoxLayout()
-        depth_label = QtGui.QLabel('Depth')
-        depth_label.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        depth_layout = QHBoxLayout()
+        depth_label = QLabel('Depth')
+        depth_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         depth_label.setFixedWidth(65)
-        self.depth_le = QtGui.QLineEdit()
+        self.depth_le = QLineEdit()
         self.depth_le.setFixedWidth(80)
         depth_layout.addWidget(depth_label)
         depth_layout.addWidget(self.depth_le)
         depth_layout.addStretch()
         #---------------------------separator layout-------------------------------#
-        separator_layout = QtGui.QHBoxLayout()
+        separator_layout = QHBoxLayout()
         separator_layout.setContentsMargins(0, 10, 0, 0)
-        separator_layout.setAlignment(QtCore.Qt.AlignBottom)
-        frame = QtGui.QFrame()
-        frame.setFrameStyle(QtGui.QFrame.HLine)
+        separator_layout.setAlignment(Qt.AlignBottom)
+        frame = QFrame()
+        frame.setFrameStyle(QFrame.HLine)
         frame.setStyleSheet('QFrame{color: #111111}')
         separator_layout.addWidget(frame)
         #---------------------------create layout-------------------------------#
-        create_layout = QtGui.QHBoxLayout()
-        self.camera_btn = QtGui.QPushButton('Select Camera')
-        self.camera_le = QtGui.QLineEdit()
-        self.create_btn = QtGui.QPushButton('Create')
+        create_layout = QHBoxLayout()
+        self.camera_btn = QPushButton('Select Camera')
+        self.camera_le = QLineEdit()
+        self.create_btn = QPushButton('Create')
         create_layout.addWidget(self.camera_btn)
         create_layout.addWidget(self.camera_le)
         create_layout.addWidget(self.create_btn)
@@ -120,8 +122,8 @@ class ImagePlane(QtGui.QDialog):
             self.depth_le.setText('1000')
 
     def get_image_path(self):
-        file_dialog = QtGui.QFileDialog()
-        file_dialog.setFileMode(QtGui.QFileDialog.ExistingFile)
+        file_dialog = QFileDialog()
+        file_dialog.setFileMode(QFileDialog.ExistingFile)
         file_path = file_dialog.getOpenFileName(self, 'choose the image file', '/',
                                                 "Image Files (*.png *.jpg *.bmp *.hdr *.tga *.exr *.tx)")
         self.image_le.setText(file_path)
@@ -165,7 +167,7 @@ class ImagePlane(QtGui.QDialog):
         except:pass
     
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.RightButton:
+        if event.button() == Qt.RightButton:
             self.close()
 
 def main():

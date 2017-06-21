@@ -1,32 +1,34 @@
 # -*- coding: utf-8 -*-
 import os
 import subprocess
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from miraLibs.pipeLibs import pipeMira, pipeFile
 reload(pipeFile)
 from miraLibs.sgLibs import Sg
 
 
-class ListWidget(QtGui.QListWidget):
+class ListWidget(QListWidget):
     def __init__(self, removable=False, parent=None):
         super(ListWidget, self).__init__(parent)
         self.removable = removable
-        self.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.setFocusPolicy(Qt.NoFocus)
         self.setSortingEnabled(True)
-        self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+        self.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.init()
 
     def init(self):
         if self.removable:
-            self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+            self.setContextMenuPolicy(Qt.CustomContextMenu)
             self.customContextMenuRequested.connect(self.show_step_menu)
 
     def show_step_menu(self, pos):
         global_pos = self.mapToGlobal(pos)
-        menu = QtGui.QMenu(self)
-        remove_action = QtGui.QAction("Remove", self)
+        menu = QMenu(self)
+        remove_action = QAction("Remove", self)
         remove_action.triggered.connect(self.remove_selection)
-        remove_all_action = QtGui.QAction("Remove All", self)
+        remove_all_action = QAction("Remove All", self)
         remove_all_action.triggered.connect(self.remove_all)
         menu.addAction(remove_action)
         menu.addAction(remove_all_action)
@@ -50,18 +52,18 @@ class ListWidget(QtGui.QListWidget):
         super(ListWidget, self).mousePressEvent(event)
 
 
-class MyGroup(QtGui.QGroupBox):
+class MyGroup(QGroupBox):
     def __init__(self, label_name=None, check_name=None, parent=None):
         super(MyGroup, self).__init__(parent)
         self.label_name = label_name
         self.check_name = check_name
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setSpacing(5)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        name_label = QtGui.QLabel()
+        name_label = QLabel()
         name_label.setText('<b>%s</b>' % self.label_name)
-        name_label.setAlignment(QtCore.Qt.AlignCenter)
-        self.check_box = QtGui.QCheckBox(self.check_name)
+        name_label.setAlignment(Qt.AlignCenter)
+        self.check_box = QCheckBox(self.check_name)
         self.list_widget = ListWidget(False, self)
         main_layout.addWidget(name_label)
         main_layout.addWidget(self.check_box)
@@ -76,50 +78,50 @@ class MyGroup(QtGui.QGroupBox):
         self.list_widget.clearSelection()
 
 
-class ShotReview(QtGui.QDialog):
+class ShotReview(QDialog):
     def __init__(self, parent=None):
         super(ShotReview, self).__init__(parent)
         self.resize(800, 730)
         self.setWindowTitle("Shot Review")
-        self.setWindowFlags(QtCore.Qt.Window)
+        self.setWindowFlags(Qt.Window)
         self.__projects = pipeMira.get_projects()
         self.current_project = pipeMira.get_current_project()
         self.__sg = Sg.Sg(self.current_project)
         self.__shot_step = pipeMira.get_shot_step()
         self.play_list = list()
 
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        project_layout = QtGui.QHBoxLayout()
-        project_label = QtGui.QLabel("Project")
-        self.project_cbox = QtGui.QComboBox()
+        project_layout = QHBoxLayout()
+        project_label = QLabel("Project")
+        self.project_cbox = QComboBox()
         project_layout.addWidget(project_label)
         project_layout.addWidget(self.project_cbox)
         project_layout.setStretchFactor(project_label, 0)
         project_layout.setStretchFactor(self.project_cbox, 1)
 
-        list_layout = QtGui.QHBoxLayout()
+        list_layout = QHBoxLayout()
 
         self.sequence_group = MyGroup("sequence", "All Sequences", self)
         self.sequence_group.check_box.setEnabled(False)
-        self.sequence_group.list_widget.setSelectionMode(QtGui.QListWidget.SingleSelection)
+        self.sequence_group.list_widget.setSelectionMode(QListWidget.SingleSelection)
         self.shot_group = MyGroup("shot", "All Shots", self)
         self.step_group = MyGroup("step", "Latest", self)
-        self.step_group.list_widget.setSelectionMode(QtGui.QListWidget.SingleSelection)
+        self.step_group.list_widget.setSelectionMode(QListWidget.SingleSelection)
 
         list_layout.addWidget(self.sequence_group)
         list_layout.addWidget(self.shot_group)
         list_layout.addWidget(self.step_group)
 
-        btn_layout = QtGui.QHBoxLayout()
-        self.add_to_playlist_btn = QtGui.QPushButton("Add to playlist")
+        btn_layout = QHBoxLayout()
+        self.add_to_playlist_btn = QPushButton("Add to playlist")
         btn_layout.addStretch()
         btn_layout.addWidget(self.add_to_playlist_btn)
 
         self.play_list = ListWidget(True, self)
 
-        play_layout = QtGui.QHBoxLayout()
-        self.play_btn = QtGui.QPushButton("Play")
+        play_layout = QHBoxLayout()
+        self.play_btn = QPushButton("Play")
         play_layout.addStretch()
         play_layout.addWidget(self.play_btn)
 
@@ -137,7 +139,7 @@ class ShotReview(QtGui.QDialog):
     def set_style(self):
         qss_path = os.path.abspath(os.path.join(__file__, "..", "style.qss"))
         qss_path = qss_path.replace("\\", "/")
-        self.setStyle(QtGui.QStyleFactory.create('plastique'))
+        self.setStyle(QStyleFactory.create('plastique'))
         self.setStyleSheet(open(qss_path, 'r').read())
 
     def init_project(self):
@@ -235,7 +237,7 @@ class ShotReview(QtGui.QDialog):
 
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     sr = ShotReview()
     sr.show()
     app.exec_()

@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 import logging
-import PySide.QtGui as QtGui
-import PySide.QtCore as QtCore
+from Qt.QtWidgets import *
+from Qt.QtGui import *
+from Qt.QtCore import *
 import set_duration
 import reset_dialog
 reload(reset_dialog)         # reload UI file
 
-Settings = QtCore.QSettings("OddOrange", "MayaSaveTimer")
+Settings = QSettings("OddOrange", "MayaSaveTimer")
 
 
-class ResetUI(QtGui.QDialog):
+class ResetUI(QDialog):
 
     def __init__(self, parent=None):
         super(ResetUI, self).__init__(parent)
@@ -26,7 +27,7 @@ class ResetUI(QtGui.QDialog):
         # set default
         self._ui.duration_spin.setValue(duration)
 
-    @QtCore.Slot()
+    @Slot()
     def on_ok_btn_clicked(self):
         duration = int(self._ui.duration_spin.text())
         logging.debug("new duration is %s minutes." % duration)

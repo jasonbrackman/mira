@@ -1,4 +1,6 @@
-﻿from PySide import QtGui, QtCore
+﻿from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as cmds
 from public_ctrls import get_maya_win
 
@@ -71,34 +73,34 @@ def set_render_camera(camera):
     cmds.setAttr(camera+'.renderable', 1)
     
         
-class SplitScreen(QtGui.QDialog):
+class SplitScreen(QDialog):
     def __init__(self, parent=None):
         super(SplitScreen, self).__init__(parent)
         self.resize(350, 150)
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
         self.setWindowTitle('Split Screen')
         self.setObjectName('Split Screen')
-        main_layout = QtGui.QVBoxLayout(self)
-        self.cbox = QtGui.QComboBox()
-        self.label = QtGui.QLabel()
+        main_layout = QVBoxLayout(self)
+        self.cbox = QComboBox()
+        self.label = QLabel()
         
-        num_layout = QtGui.QHBoxLayout()
-        num_label = QtGui.QLabel('Split Number(N)')
-        self.le = QtGui.QLineEdit()
+        num_layout = QHBoxLayout()
+        num_label = QLabel('Split Number(N)')
+        self.le = QLineEdit()
         num_layout.addWidget(num_label)
         num_layout.addWidget(self.le)
         
-        btn_layout = QtGui.QHBoxLayout()
-        self.ok_btn = QtGui.QPushButton('OK')
-        self.cancel_btn = QtGui.QPushButton('Cancel')
+        btn_layout = QHBoxLayout()
+        self.ok_btn = QPushButton('OK')
+        self.cancel_btn = QPushButton('Cancel')
         btn_layout.addWidget(self.ok_btn)
         btn_layout.addWidget(self.cancel_btn)
         
-        frame_layout = QtGui.QHBoxLayout()
-        start_label = QtGui.QLabel('Start Frame')
-        self.start_le = QtGui.QLineEdit()
-        end_label = QtGui.QLabel('End Frame')
-        self.end_le = QtGui.QLineEdit()
+        frame_layout = QHBoxLayout()
+        start_label = QLabel('Start Frame')
+        self.start_le = QLineEdit()
+        end_label = QLabel('End Frame')
+        self.end_le = QLineEdit()
         self.end_le.setEnabled(False)
         frame_layout.addWidget(start_label)
         frame_layout.addWidget(self.start_le)

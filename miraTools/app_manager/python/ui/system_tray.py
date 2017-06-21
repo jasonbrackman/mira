@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import sys
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from ..libs import get_icon_path
 
 
-class SystemTray(QtGui.QSystemTrayIcon):
+class SystemTray(QSystemTrayIcon):
     def __init__(self, parent=None):
         super(SystemTray, self).__init__(parent)
         self.setToolTip("APP Manager")
@@ -15,12 +17,12 @@ class SystemTray(QtGui.QSystemTrayIcon):
     def set_icon(self, icon_path=None):
         if not icon_path:
             icon_path = get_icon_path.get_icon_path("app.png")
-        icon = QtGui.QIcon(icon_path)
+        icon = QIcon(icon_path)
         self.setIcon(icon)
 
     def create_actions(self):
         """
-        button = QtGui.QPushButton()
+        button = QPushButton()
         palette = self.button.palette()
         role = self.button.backgroundRole() #choose whatever you like
         palette.setColor(role, QColor('red'))
@@ -28,11 +30,11 @@ class SystemTray(QtGui.QSystemTrayIcon):
         self.button.setAutoFillBackground(True)
         :return:
         """
-        self.quit_action = QtGui.QAction("quit", self)
-        self.show_action = QtGui.QAction("show", self)
+        self.quit_action = QAction("quit", self)
+        self.show_action = QAction("show", self)
 
     def create_tray_menu(self):
-        self.tray_menu = QtGui.QMenu()
+        self.tray_menu = QMenu()
         self.tray_menu.addAction(self.show_action)
         self.tray_menu.addAction(self.quit_action)
         self.setContextMenu(self.tray_menu)

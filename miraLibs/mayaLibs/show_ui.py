@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 try:
-    from PySide import QtGui
+    from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 except:
     from PyQt4 import QtGui
 import maya.cmds as mc
@@ -24,7 +26,7 @@ def delete_last(widget_class):
                     mc.deleteUI(object_name)
                 else:
                     break
-            model = QtGui.__name__.split(".")[0]
+            model = __name__.split(".")[0]
             ui = cls(get_maya_win.get_maya_win(model), *args, **kwargs)
             ui.show()
     return WrapperClass

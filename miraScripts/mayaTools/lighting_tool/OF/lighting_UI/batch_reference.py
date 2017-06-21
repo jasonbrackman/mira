@@ -1,5 +1,7 @@
 ﻿
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as mc
 import maya.OpenMayaUI as mui
 import sip
@@ -8,7 +10,7 @@ import os
 
 def get_maya_win():
     prt = mui.MQtUtil.mainWindow()
-    return sip.wrapinstance(long(prt), QtGui.QWidget)
+    return sip.wrapinstance(long(prt), QWidget)
 
 
 def reference_file(maya_file):
@@ -16,47 +18,47 @@ def reference_file(maya_file):
     mc.file(maya_file, r=1, namespace=namespace, shd=("displayLayers", "shadingNetworks"))
     
 
-class BatchReference(QtGui.QDialog):
+class BatchReference(QDialog):
     def __init__(self, parent=None):
         super(BatchReference, self).__init__(parent)
         self.setWindowTitle('Batch Reference')
         self.resize(380, 350)
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(2, 2, 2, 2)
-        main_frame = QtGui.QFrame()
+        main_frame = QFrame()
         main_layout.addWidget(main_frame)
-        main_frame.setFrameStyle(QtGui.QFrame.Panel | QtGui.QFrame.Raised)
-        layout_of_frame = QtGui.QVBoxLayout(main_frame)
+        main_frame.setFrameStyle(QFrame.Panel | QFrame.Raised)
+        layout_of_frame = QVBoxLayout(main_frame)
         self.file_path = None
         #----------------------------file layout--------------------------------#
-        file_layout = QtGui.QHBoxLayout()
-        file_label = QtGui.QLabel('file Directory')
+        file_layout = QHBoxLayout()
+        file_label = QLabel('file Directory')
         file_label.setFixedWidth(65)
-        file_label.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        self.file_le = QtGui.QLineEdit()
-        self.file_btn = QtGui.QToolButton()
-        icon = QtGui.QIcon()
-        icon.addPixmap(self.style().standardPixmap(QtGui.QStyle.SP_DirOpenIcon))
+        file_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.file_le = QLineEdit()
+        self.file_btn = QToolButton()
+        icon = QIcon()
+        icon.addPixmap(self.style().standardPixmap(QStyle.SP_DirOpenIcon))
         self.file_btn.setIcon(icon)
         file_layout.addWidget(file_label)
         file_layout.addWidget(self.file_le)
         file_layout.addWidget(self.file_btn)
         #----------------------------list widget--------------------------------#
-        self.lw = QtGui.QListWidget()
-        self.lw.setSelectionMode(QtGui.QListWidget.ExtendedSelection)
+        self.lw = QListWidget()
+        self.lw.setSelectionMode(QListWidget.ExtendedSelection)
         self.lw.setSortingEnabled(True)
         self.lw.setSpacing(1)
         #---------------------------separator layout-------------------------------#
-        separator_layout = QtGui.QHBoxLayout()
+        separator_layout = QHBoxLayout()
         separator_layout.setContentsMargins(0, 10, 0, 0)
-        separator_layout.setAlignment(QtCore.Qt.AlignBottom)
-        frame = QtGui.QFrame()
-        frame.setFrameStyle(QtGui.QFrame.HLine)
+        separator_layout.setAlignment(Qt.AlignBottom)
+        frame = QFrame()
+        frame.setFrameStyle(QFrame.HLine)
         frame.setStyleSheet('QFrame{color: #111111}')
         separator_layout.addWidget(frame)
         #---------------------------separator layout-------------------------------#
-        ref_layout = QtGui.QHBoxLayout()
-        self.ref_btn = QtGui.QPushButton('Reference')
+        ref_layout = QHBoxLayout()
+        self.ref_btn = QPushButton('Reference')
         ref_layout.addStretch()
         ref_layout.addWidget(self.ref_btn)
         #----------------------------------------------------------------------------#
@@ -73,9 +75,9 @@ class BatchReference(QtGui.QDialog):
         self.ref_btn.clicked.connect(self.do_reference)
         
     def get_file_dir(self):
-        file_dialog = QtGui.QFileDialog()
-        file_dialog.setFileMode(QtGui.QFileDialog.Directory)
-        self.file_path = file_dialog.getExistingDirectory(self, 'choose the image file', '/', QtGui.QFileDialog.DontUseSheet)
+        file_dialog = QFileDialog()
+        file_dialog.setFileMode(QFileDialog.Directory)
+        self.file_path = file_dialog.getExistingDirectory(self, 'choose the image file', '/', QFileDialog.DontUseSheet)
         self.file_le.setText(self.file_path)
 
     def add_item(self, dir):
@@ -84,9 +86,9 @@ class BatchReference(QtGui.QDialog):
             for file in os.listdir(dir):
                 if os.path.isfile(os.path.join(dir, file)):
                     if os.path.splitext(file)[-1] in ['.ma', '.mb']:
-                        item = QtGui.QListWidgetItem(file)
-                        file_info = QtCore.QFileInfo(os.path.join(dir, file))
-                        icon_provider = QtGui.QFileIconProvider()
+                        item = QListWidgetItem(file)
+                        file_info = QFileInfo(os.path.join(dir, file))
+                        icon_provider = QFileIconProvider()
                         icon = icon_provider.icon(file_info)
                         item.setIcon(icon)
                         self.lw.addItem(item)

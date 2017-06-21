@@ -1,4 +1,6 @@
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import threading
 import os
 import sys
@@ -51,34 +53,34 @@ def transform_texture(texture_list):
         print "[OF] info:%s has been transformed" % texture
 
     
-class ConvertTx(QtGui.QDialog):
+class ConvertTx(QDialog):
     def __init__(self, parent=None):
         super(ConvertTx, self).__init__(parent)
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         self.setWindowTitle('Convert to TX')
-        self.setWindowIcon(QtGui.QIcon(os.path.join(path, 'icon.ico')))
+        self.setWindowIcon(QIcon(os.path.join(path, 'icon.ico')))
         self.setStyleSheet(open(qss_path, 'r').read())
         self.resize(500, 300)
         #---------------------------------------------------------#
-        label_layout = QtGui.QHBoxLayout()
-        label = QtGui.QLabel()
+        label_layout = QHBoxLayout()
+        label = QLabel()
         label.setText('<font color="#00FF00" size=4><b>Convert these files to (.tx)</b> </font>')
-        self.update_btn = QtGui.QToolButton()
-        self.update_btn.setIcon(QtGui.QIcon(os.path.join(path, 'update.png')))
+        self.update_btn = QToolButton()
+        self.update_btn.setIcon(QIcon(os.path.join(path, 'update.png')))
         self.update_btn.setStyleSheet('QToolButton{background-color: transparent}')
         label_layout.addWidget(label)
         label_layout.addWidget(self.update_btn)
         #---------------------------------------------------------#
         self.list_widget = DropListWidget()
         #---------------------------------------------------------#
-        button_layout = QtGui.QHBoxLayout()
-        self.clear_btn = QtGui.QPushButton('Clear')
-        self.remove_btn = QtGui.QPushButton('Remove')
-        self.dis_select_btn = QtGui.QPushButton('Diselect')
-        self.spin_box = QtGui.QSpinBox()
+        button_layout = QHBoxLayout()
+        self.clear_btn = QPushButton('Clear')
+        self.remove_btn = QPushButton('Remove')
+        self.dis_select_btn = QPushButton('Diselect')
+        self.spin_box = QSpinBox()
         self.spin_box.setStyleSheet('QSpinBox{background-color:#222222}')
         self.spin_box.setRange(1, 10)
-        self.transform_btn = QtGui.QPushButton('Transform')
+        self.transform_btn = QPushButton('Transform')
         button_layout.addStretch()
         button_layout.addWidget(self.clear_btn)
         button_layout.addWidget(self.remove_btn)
@@ -102,20 +104,20 @@ class ConvertTx(QtGui.QDialog):
         
     def set_background(self):
         image_path = os.path.join(path, 'tx.png')
-        self.image = QtGui.QImage(image_path)
-        palette = QtGui.QPalette()
-        palette.setBrush(QtGui.QPalette.Background, 
-                        QtGui.QBrush(self.image.scaled(self.size(),
-                                                       QtCore.Qt.IgnoreAspectRatio, 
-                                                       QtCore.Qt.SmoothTransformation)))
+        self.image = QImage(image_path)
+        palette = QPalette()
+        palette.setBrush(QPalette.Background,
+                        QBrush(self.image.scaled(self.size(),
+                                                       Qt.IgnoreAspectRatio,
+                                                       Qt.SmoothTransformation)))
         self.setPalette(palette)
 
     def resizeEvent(self, event):
-        palette = QtGui.QPalette()
-        palette.setBrush(QtGui.QPalette.Background, 
-                         QtGui.QBrush(self.image.scaled(event.size(), 
-                                                        QtCore.Qt.IgnoreAspectRatio, 
-                                                        QtCore.Qt.SmoothTransformation)))
+        palette = QPalette()
+        palette.setBrush(QPalette.Background,
+                         QBrush(self.image.scaled(event.size(),
+                                                        Qt.IgnoreAspectRatio,
+                                                        Qt.SmoothTransformation)))
         self.setPalette(palette)
         
     def do_clear(self):
@@ -153,14 +155,14 @@ class ConvertTx(QtGui.QDialog):
                 self.list_widget.takeItem(self.list_widget.row(selected_item))
                 
     def  mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.RightButton:
+        if event.button() == Qt.RightButton:
             self.close()
         
 
-class DropListWidget(QtGui.QListWidget):
+class DropListWidget(QListWidget):
     def __init__(self, parent=None):
         super(DropListWidget, self).__init__(parent)
-        self.setSelectionMode(QtGui.QListWidget.ExtendedSelection)
+        self.setSelectionMode(QListWidget.ExtendedSelection)
         self.setSortingEnabled(True)
         self.setSpacing(1)
         self.setAcceptDrops(True)
@@ -207,13 +209,13 @@ class DropListWidget(QtGui.QListWidget):
                 else:
                     all_files.extend(files)
         for file in all_files:
-            item = QtGui.QListWidgetItem(file)
-            item.setIcon(QtGui.QIcon(file))
+            item = QListWidgetItem(file)
+            item.setIcon(QIcon(file))
             self.addItem(item)
                     
 
 def main():
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     ct = ConvertTx()
     ct.show()
     app.exec_()

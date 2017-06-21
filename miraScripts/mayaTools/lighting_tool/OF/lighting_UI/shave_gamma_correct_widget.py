@@ -6,14 +6,16 @@
 #Modified   :
 #Note       :
 import pymel.core as pm
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as cmds
 import public_ctrls
 
 windowObject = 'ShaveHair Gamma Correction'
 
 
-class ShaveGammaCorrection(QtGui.QDialog):
+class ShaveGammaCorrection(QDialog):
     def __init__(self, parent=None):
         super(ShaveGammaCorrection, self).__init__(parent)
         y_pos = public_ctrls.get_maya_main_win_pos()[1] + (public_ctrls.get_maya_main_win_size()[1])/4
@@ -21,10 +23,10 @@ class ShaveGammaCorrection(QtGui.QDialog):
         self.setObjectName(windowObject)
         self.setWindowTitle(windowObject)
         self.resize(300, 50)
-        main_layout = QtGui.QVBoxLayout(self)
-        self.status_label = QtGui.QLabel()
-        self.correct_btn = QtGui.QPushButton('Correct')
-        self.recover_btn = QtGui.QPushButton('Recover')
+        main_layout = QVBoxLayout(self)
+        self.status_label = QLabel()
+        self.correct_btn = QPushButton('Correct')
+        self.recover_btn = QPushButton('Recover')
         main_layout.addWidget(self.status_label)
         main_layout.addWidget(self.correct_btn)
         main_layout.addWidget(self.recover_btn)

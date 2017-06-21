@@ -3,7 +3,7 @@
 
 # Third-party modules
 import logging
-import PySide.QtCore as QtCore
+from Qt.QtCore import *
 import maya.OpenMaya as OpenMaya
 
 SecPerMin = 60
@@ -56,7 +56,7 @@ class MayaSaveTimer(object):
         self.start()
 
     def start(self):
-        self.__timer = QtCore.QTimer()
+        self.__timer = QTimer()
         self.__timer.setSingleShot(True)
         self.__timer.timeout.connect(self.__trigger)
         self.__timer.start(self.__duration_msec)

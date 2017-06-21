@@ -1,19 +1,23 @@
 import os, sys, re
 
-from PySide import QtGui
-from PySide import QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 from pw_multiScriptEditor import scriptEditor
 reload(scriptEditor)
 
-q3dsmax = QtGui.QApplication.instance()
+q3dsmax = QApplication.instance()
 
-class MaxDialogEvents(QtCore.QObject):
+class MaxDialogEvents(QObject):
     def eventFilter(self, obj, event):
         import MaxPlus
-        if event.type() == QtCore.QEvent.WindowActivate:
+        if event.type() == QEvent.WindowActivate:
             MaxPlus.CUI.DisableAccelerators()
-        elif event.type() == QtCore.QEvent.WindowDeactivate:
+        elif event.type() == QEvent.WindowDeactivate:
             MaxPlus.CUI.EnableAccelerators()
 
         return False

@@ -1,7 +1,9 @@
 # coding:utf-8
 __author__ = 'heshuai'
 
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as mc
 import os
 import public_ctrls
@@ -25,7 +27,7 @@ def get_os_type():
     return os_type
 
 
-class TxWidget(QtGui.QDialog):
+class TxWidget(QDialog):
     def __init__(self, parent=None):
         super(TxWidget, self).__init__(parent)
         # y_pos = public_ctrls.get_maya_main_win_pos()[1] + (public_ctrls.get_maya_main_win_size()[1])/4
@@ -33,30 +35,30 @@ class TxWidget(QtGui.QDialog):
         self.setWindowTitle('.tx textures')
         self.parent_dir = get_parent_dir()
         self.resize(500, 300)
-        self.main_layout = QtGui.QVBoxLayout(self)
-        label_layout = QtGui.QHBoxLayout()
-        self.label = QtGui.QLabel()
+        self.main_layout = QVBoxLayout(self)
+        label_layout = QHBoxLayout()
+        self.label = QLabel()
         self.label.setText('<font color="#00FF00" size=4><b>Textures</b> </font>')
-        self.update_btn = QtGui.QToolButton()
-        self.update_btn.setIcon(QtGui.QIcon(os.path.join(self.parent_dir, 'icons/button_icons/update.png')))
+        self.update_btn = QToolButton()
+        self.update_btn.setIcon(QIcon(os.path.join(self.parent_dir, 'icons/button_icons/update.png')))
         self.update_btn.setStyleSheet('QToolButton{background: transparent}')
         label_layout.addWidget(self.label)
         label_layout.addWidget(self.update_btn)
-        self.list_widget = QtGui.QListWidget()
-        self.list_widget.setSelectionMode(QtGui.QListWidget.ExtendedSelection)
+        self.list_widget = QListWidget()
+        self.list_widget.setSelectionMode(QListWidget.ExtendedSelection)
         self.list_widget.setSortingEnabled(True)
         self.list_widget.setSpacing(1)
-        btn_layout = QtGui.QHBoxLayout()
-        check_layout = QtGui.QHBoxLayout()
-        self.check_grp = QtGui.QButtonGroup(check_layout)
+        btn_layout = QHBoxLayout()
+        check_layout = QHBoxLayout()
+        self.check_grp = QButtonGroup(check_layout)
         for i in ['To .tx', 'To jpg/tiff']:
-            self.check_btn = QtGui.QCheckBox(i)
+            self.check_btn = QCheckBox(i)
             self.check_btn.toggled.connect(self.switch_widget)
             check_layout.addWidget(self.check_btn)
             self.check_grp.addButton(self.check_btn)
-        self.dis_select_all_btn = QtGui.QPushButton('Diselect All')
+        self.dis_select_all_btn = QPushButton('Diselect All')
         self.dis_select_all_btn.setStyleSheet('QPushButton{color:#CCCCCC; background-color: #222222}')
-        self.transform_btn = QtGui.QPushButton('Transform')
+        self.transform_btn = QPushButton('Transform')
         self.transform_btn.setStyleSheet('QPushButton{color:#CCCCCC; background-color: #222222}')
         btn_layout.addLayout(check_layout)
         btn_layout.addStretch()
@@ -83,8 +85,8 @@ class TxWidget(QtGui.QDialog):
             #if os.path.splitext(file_texture_name)[-1] != '.tx':
             tx_file_texture = os.path.splitext(file_texture_name)[0] + '.tx'
             if not os.path.isfile(tx_file_texture):
-                item = QtGui.QListWidgetItem(file_texture_name)
-                item.setIcon(QtGui.QIcon(os.path.join(self.parent_dir, 'icons', 'button_icons', 'textureItem.png')))
+                item = QListWidgetItem(file_texture_name)
+                item.setIcon(QIcon(os.path.join(self.parent_dir, 'icons', 'button_icons', 'textureItem.png')))
                 self.list_widget.addItem(item)
 
     def init_other_widget(self):
@@ -94,8 +96,8 @@ class TxWidget(QtGui.QDialog):
         all_textures = list(set(all_textures))
         for file_texture_name in all_textures:
             if os.path.splitext(file_texture_name)[-1] == '.tx':
-                item = QtGui.QListWidgetItem(file_texture_name)
-                item.setIcon(QtGui.QIcon(os.path.join(self.parent_dir, 'icons', 'button_icons', 'textureItem.png')))
+                item = QListWidgetItem(file_texture_name)
+                item.setIcon(QIcon(os.path.join(self.parent_dir, 'icons', 'button_icons', 'textureItem.png')))
                 self.list_widget.addItem(item)
 
     def switch_widget(self):
@@ -108,14 +110,14 @@ class TxWidget(QtGui.QDialog):
 
     def set_background(self):
         image_path = os.path.join(self.parent_dir, 'icons', 'background_icons', 'tx.png')
-        self.image = QtGui.QImage(image_path)
-        palette = QtGui.QPalette()
-        palette.setBrush(QtGui.QPalette.Background, QtGui.QBrush(self.image.scaled(self.size(), QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.SmoothTransformation)))
+        self.image = QImage(image_path)
+        palette = QPalette()
+        palette.setBrush(QPalette.Background, QBrush(self.image.scaled(self.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)))
         self.setPalette(palette)
 
     def resizeEvent(self, event):
-        palette = QtGui.QPalette()
-        palette.setBrush(QtGui.QPalette.Background, QtGui.QBrush(self.image.scaled(event.size(), QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.SmoothTransformation)))
+        palette = QPalette()
+        palette.setBrush(QPalette.Background, QBrush(self.image.scaled(event.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)))
         self.setPalette(palette)
 
     def set_signals(self):
@@ -307,7 +309,7 @@ class TxWidget(QtGui.QDialog):
             self.transform_to_other()
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.RightButton:
+        if event.button() == Qt.RightButton:
             self.close()
 
     def update(self):

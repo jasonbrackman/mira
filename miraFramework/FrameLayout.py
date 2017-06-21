@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 
-class FrameLayout(QtGui.QGridLayout):
+class FrameLayout(QGridLayout):
     def __init__(self, button_text=None, collapse_status=None, parent=None):
         super(FrameLayout, self).__init__(parent)
         self.button_text = button_text
@@ -11,16 +13,16 @@ class FrameLayout(QtGui.QGridLayout):
 
         self.setSpacing(0)
 
-        self.tool_btn = QtGui.QToolButton()
+        self.tool_btn = QToolButton()
         self.tool_btn.setFixedWidth(parent.width())
         self.tool_btn.setText(self.button_text)
-        self.tool_btn.setIconSize(QtCore.QSize(6, 6))
-        self.tool_btn.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
+        self.tool_btn.setIconSize(QSize(6, 6))
+        self.tool_btn.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
         self.tool_btn.setStyleSheet("QToolButton {background-color: #666666}")
 
-        self.frame = QtGui.QFrame()
+        self.frame = QFrame()
         self.frame.setFixedWidth(parent.width())
-        self.frame.setFrameStyle(QtGui.QFrame.Panel | QtGui.QFrame.Plain)
+        self.frame.setFrameStyle(QFrame.Panel | QFrame.Plain)
 
         self.addWidget(self.tool_btn, 0, 0)
         self.addWidget(self.frame, 1, 0)
@@ -29,10 +31,10 @@ class FrameLayout(QtGui.QGridLayout):
 
     def init_settings(self):
         if self.collapse_status:
-            self.tool_btn.setArrowType(QtCore.Qt.RightArrow)
+            self.tool_btn.setArrowType(Qt.RightArrow)
             self.frame.setHidden(True)
         else:
-            self.tool_btn.setArrowType(QtCore.Qt.DownArrow)
+            self.tool_btn.setArrowType(Qt.DownArrow)
             self.frame.setHidden(False)
 
     def set_signals(self):

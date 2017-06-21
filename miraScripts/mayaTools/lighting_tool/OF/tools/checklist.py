@@ -1,7 +1,9 @@
 ﻿# -*- coding：utf-8 -*-
 # __author__ = "heshuai"
 # description="""  """
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as mc
 import maya.OpenMayaUI as mui
 import sip
@@ -9,14 +11,14 @@ import sip
 checklist_object = u'渲染提交农场之前检查的事项'
 
 
-class CheckList(QtGui.QDialog):
+class CheckList(QDialog):
     def __init__(self, parent=None):
         super(CheckList, self).__init__(parent)
         self.setObjectName(checklist_object)
         self.setWindowTitle(checklist_object)
         self.resize(1040, 400)
-        main_layout = QtGui.QVBoxLayout(self)
-        farm_label = QtGui.QLabel(u'<font size=4 color="#fd8288"><b>渲染提交<font size=4 color="#00FF00"><b>农场<font size=4 color="#fd8288"><b>之前检查的事项')
+        main_layout = QVBoxLayout(self)
+        farm_label = QLabel(u'<font size=4 color="#fd8288"><b>渲染提交<font size=4 color="#00FF00"><b>农场<font size=4 color="#fd8288"><b>之前检查的事项')
         farm_text_edit = InfoText()
         farm_text_edit.setFixedHeight(220)
         farm_text_edit.setText(u'01. 是否跟动画、场景整合视频一致，是否有穿帮问题，摄像机是否正确\n'
@@ -30,7 +32,7 @@ class CheckList(QtGui.QDialog):
                                u'09. 提交农场渲染前请检查帧数、帧率、尺寸、摄像机的选择是否正确、采样是否是渲染最终质量的参数，motion、AOV、细分、置换是否开启\n'
                                u'10. 角色渲染问题：运动重叠中的角色分开渲染，不得加遮罩，有穿插的出mask\n'
                                u'11. Daily单帧的时候，如果镜头的里的动态比较大，多渲几帧进行daily，确保灯光在不同角度都适用')
-        comp_label = QtGui.QLabel(u'<font size=4 color="#fd8288"><b>渲染提交<font size=4 color="#00FF00"><b>后期<font size=4 color="#fd8288"><b>之前检查的事项')    
+        comp_label = QLabel(u'<font size=4 color="#fd8288"><b>渲染提交<font size=4 color="#00FF00"><b>后期<font size=4 color="#fd8288"><b>之前检查的事项')
         comp_text_edit = InfoText()
         comp_text_edit.setFixedHeight(200)
         comp_text_edit.setText(u'01. 必须出light_check让TS、supervisor daily通过\n'
@@ -50,7 +52,7 @@ class CheckList(QtGui.QDialog):
         main_layout.addWidget(comp_text_edit)
         
 
-class InfoText(QtGui.QTextEdit):
+class InfoText(QTextEdit):
     def __init__(self, parent=None):
         super(InfoText, self).__init__(parent)
         self.setEnabled(False)
@@ -59,7 +61,7 @@ class InfoText(QtGui.QTextEdit):
         
 def get_maya_win():
     prt = mui.MQtUtil.mainWindow()
-    return sip.wrapinstance(long(prt), QtGui.QWidget)
+    return sip.wrapinstance(long(prt), QWidget)
     
 
 def run():

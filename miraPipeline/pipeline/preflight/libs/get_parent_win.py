@@ -1,18 +1,28 @@
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
+from Qt import __binding__
 import get_engine
 
 
 def get_maya_win(module="mayaUI"):
-    import maya.OpenMayaUI as mui
+    """
+    get a QMainWindow Object of maya main window
+    :param module (optional): string "PySide"(default) or "PyQt4"
+    :return main_window: QWidget or QMainWindow object
+    """
     prt = mui.MQtUtil.mainWindow()
-    if module == "PyQt4":
+    if module == "PyQt":
         import sip
-        import PyQt4.QtCore as QtCore
-        main_window = sip.wrapinstance(long(prt), QtCore.QObject)
-    elif module == "PySide":
-        import shiboken
-        import PySide.QtGui as QtGui
-        main_window = shiboken.wrapInstance(long(prt), QtGui.QWidget)
+        from Qt.QtCore import *
+        main_window = sip.wrapinstance(long(prt), QObject)
+    elif module in ["PySide", "PyQt"]:
+        if __binding__ == ["PySide", "PyQt4"]:
+            import shiboken
+        elif __binding__ == ["PySide2", "PyQt5"]:
+            import shiboken2 as shiboken
+        from Qt.QtWidgets import *
+        main_window = shiboken.wrapInstance(long(prt), QWidget)
     elif module == "mayaUI":
         main_window = "MayaWindow"
     else:
@@ -21,7 +31,7 @@ def get_maya_win(module="mayaUI"):
 
 
 def get_nuke_win():
-    app = QtGui.qApp
+    app = QApplication.instance()
     nuke_win = app.activeWindow()
     return nuke_win
 

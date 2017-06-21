@@ -2,7 +2,9 @@
 import time
 import threading
 import getpass
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from ...libs import redis_api
 from . import email_ui
 from . import email_model
@@ -29,9 +31,9 @@ class EmailBox(email_ui.EmailUI):
 
     def set_model(self):
         self.email_model_data = redis_api.get_receive_emails(self.conn, self.user, self.box)
-        self.proxy_model = QtGui.QSortFilterProxyModel()
+        self.proxy_model = QSortFilterProxyModel()
         self.proxy_model.setDynamicSortFilter(True)
-        self.proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
         if not self.email_model_data:
             return
         self.model = email_model.EmailListModel(self.email_model_data, self.box, self)

@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 import os
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from .user_display import UserDisplay
 from .app_widget import AppWidget
 from .recent_app import RecentApp
@@ -11,7 +13,7 @@ from ..libs import conf_parser, get_icon_path
 from ..libs import get_conf_path, remove_dir, start_file, recent_operation
 
 
-class PopupDialog(QtGui.QDialog):
+class PopupDialog(QDialog):
     def __init__(self, parent=None):
         super(PopupDialog, self).__init__(parent)
         self.setWindowTitle("Insert Group")
@@ -21,21 +23,21 @@ class PopupDialog(QtGui.QDialog):
         self.set_signals()
 
     def setup_ui(self):
-        main_layout = QtGui.QVBoxLayout(self)
-        value_layout = QtGui.QGridLayout()
-        index_label = QtGui.QLabel("Row")
-        self.index_spin = QtGui.QSpinBox()
+        main_layout = QVBoxLayout(self)
+        value_layout = QGridLayout()
+        index_label = QLabel("Row")
+        self.index_spin = QSpinBox()
         self.index_spin.setRange(1, 500)
         self.index_spin.setValue(1)
-        name_label = QtGui.QLabel("Name")
-        self.name_le = QtGui.QLineEdit()
+        name_label = QLabel("Name")
+        self.name_le = QLineEdit()
         value_layout.addWidget(index_label, 0, 0)
         value_layout.addWidget(self.index_spin, 0, 1)
         value_layout.addWidget(name_label, 1, 0)
         value_layout.addWidget(self.name_le, 1, 1)
-        btn_layout = QtGui.QHBoxLayout()
-        self.ok_btn = QtGui.QPushButton("OK")
-        self.cancel_btn = QtGui.QPushButton("Cancel")
+        btn_layout = QHBoxLayout()
+        self.ok_btn = QPushButton("OK")
+        self.cancel_btn = QPushButton("Cancel")
         btn_layout.addStretch()
         btn_layout.addWidget(self.ok_btn)
         btn_layout.addWidget(self.cancel_btn)
@@ -59,13 +61,13 @@ class PopupDialog(QtGui.QDialog):
         self.deleteLater()
 
 
-class AppManager(QtGui.QDialog):
+class AppManager(QDialog):
     def __init__(self, parent=None):
         super(AppManager, self).__init__(parent)
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
         self.setWindowTitle("APP Manager")
         icon = get_icon_path.get_icon_path("app.png")
-        self.setWindowIcon(QtGui.QIcon(icon))
+        self.setWindowIcon(QIcon(icon))
         self.setup_ui()
         self.init_size()
         self.init_opacity()
@@ -75,8 +77,8 @@ class AppManager(QtGui.QDialog):
         self.collapse_status = True
 
     def setup_ui(self):
-        main_layout = QtGui.QVBoxLayout(self)
-        main_layout.setAlignment(QtCore.Qt.AlignTop)
+        main_layout = QVBoxLayout(self)
+        main_layout.setAlignment(Qt.AlignTop)
         main_layout.setContentsMargins(0, 10, 0, 0)
         self.user_display_widget = UserDisplay(self)
         main_layout.addWidget(self.user_display_widget)
@@ -88,25 +90,25 @@ class AppManager(QtGui.QDialog):
         sep1 = Separator()
         main_layout.addWidget(sep1)
         # scroll area
-        scroll_area = QtGui.QScrollArea()
+        scroll_area = QScrollArea()
         scroll_area.setObjectName("scroll")
         scroll_area.setStyleSheet("#scroll{border: 0px solid;}")
         scroll_area.setWidgetResizable(True)
-        scroll_area.setFocusPolicy(QtCore.Qt.NoFocus)
-        scroll_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        scroll_area.setFocusPolicy(Qt.NoFocus)
+        scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         main_layout.addWidget(scroll_area)
         # scroll widget
-        scroll_widget = QtGui.QWidget()
+        scroll_widget = QWidget()
         scroll_area.setWidget(scroll_widget)
-        scroll_layout = QtGui.QVBoxLayout(scroll_widget)
+        scroll_layout = QVBoxLayout(scroll_widget)
         scroll_layout.setContentsMargins(5, 0, 5, 5)
-        scroll_layout.setAlignment(QtCore.Qt.AlignTop)
+        scroll_layout.setAlignment(Qt.AlignTop)
         self.recent_app_widget = RecentApp(self)
         self.app_widget = AppWidget(self)
         scroll_layout.addWidget(self.recent_app_widget)
         scroll_layout.addWidget(self.app_widget)
         # slider
-        self.slider = QtGui.QSlider(QtCore.Qt.Horizontal)
+        self.slider = QSlider(Qt.Horizontal)
         self.slider.setRange(0, 100)
         self.slider.setPageStep(5)
         self.slider.setValue(100)
@@ -142,7 +144,7 @@ class AppManager(QtGui.QDialog):
         self.search_le.set_completer(app_names)
 
     def set_style(self):
-        self.setStyle(QtGui.QStyleFactory.create('plastique'))
+        self.setStyle(QStyleFactory.create('plastique'))
         qss_path = os.path.abspath(os.path.join(__file__, "..", "style.qss"))
         self.setStyleSheet(open(qss_path, 'r').read())
 
@@ -163,7 +165,7 @@ class AppManager(QtGui.QDialog):
                 break
 
     def add_tool_group(self):
-        name, ok = QtGui.QInputDialog.getText(self, "Group Name", "Please input a group name")
+        name, ok = QInputDialog.getText(self, "Group Name", "Please input a group name")
         if not ok:
             return
         if name and ok:
@@ -180,8 +182,8 @@ class AppManager(QtGui.QDialog):
             self.app_widget.insert_cell_widget(name, False, index)
 
     def reset(self):
-        msg_box = QtGui.QMessageBox.information(self, "Warming Tip", "Do you really want to reset?",
-                                                QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+        msg_box = QMessageBox.information(self, "Warming Tip", "Do you really want to reset?",
+                                                QMessageBox.Yes | QMessageBox.No)
         if msg_box.name == "No":
             return
         self.close()
@@ -238,7 +240,7 @@ class AppManager(QtGui.QDialog):
         cp.parse().set(new_data)
 
     def move_to_corner(self):
-        screen = QtGui.QDesktopWidget().screenGeometry()
+        screen = QDesktopWidget().screenGeometry()
         size = self.geometry()
         self.move((screen.width()-size.width())-15, (screen.height()-size.height()-80))
 

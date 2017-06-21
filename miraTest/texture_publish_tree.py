@@ -2,7 +2,9 @@
 import copy
 import os
 import pymel.core as pm
-from PySide import QtCore, QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from ui_elements.loadui import loadUiType
 from pixoMaya.base import getMayaWindow
 import pixoLibs.pixoFileTools as pft
@@ -181,7 +183,7 @@ class TexturePublishToolGUI(form, base):
     def __init__(self, parent=None):
         super(TexturePublishToolGUI, self).__init__(parent)
         self.setupUi(self)
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowMinimizeButtonHint | QtCore.Qt.WindowCloseButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint)
         self.setWindowTitle("Texture Publish tool")
         # list all texture nodes
         self.root_node = None
@@ -195,17 +197,17 @@ class TexturePublishToolGUI(form, base):
         # contextMenu
         self.data_view.addAction(self.EditSelectedChanelsAction)
         # proxy Model
-        self._proxyModel = QtGui.QSortFilterProxyModel()
+        self._proxyModel = QSortFilterProxyModel()
         self._proxyModel.setSourceModel(self._model)
         self._proxyModel.setDynamicSortFilter(True)
-        self._proxyModel.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self._proxyModel.setFilterCaseSensitivity(Qt.CaseInsensitive)
         self.data_view.setModel(self._proxyModel)
         self.data_view.setSortingEnabled(True)
 
         # default configs
         self.data_view.resizeColumnToContents(0)
-        self.data_view.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)     # select rows
-        self.data_view.setSelectionMode(QtGui.QTreeView.ExtendedSelection)
+        self.data_view.setSelectionBehavior(QAbstractItemView.SelectRows)     # select rows
+        self.data_view.setSelectionMode(QTreeView.ExtendedSelection)
         # self.data_view.expandAll()
         # show button delegate
         self.show_button_delegate()
@@ -249,25 +251,25 @@ class TexturePublishToolGUI(form, base):
         run_maya()
         self.deleteLater()
 
-    @QtCore.Slot()
+    @Slot()
     def batch_edit_chanels(self):
         # get selected rows
         proxy_indexs = self.data_view.selectedIndexes()
         selected_rows = list(set([self._proxyModel.mapToSource(i).row() for i in proxy_indexs]))
         # pop a dialog
-        value, ok = QtGui.QInputDialog.getText(self, "Edit Chanel", "Enter a Chanel name:", QtGui.QLineEdit.Normal, "")
+        value, ok = QInputDialog.getText(self, "Edit Chanel", "Enter a Chanel name:", QLineEdit.Normal, "")
         if ok:
             # set all
             for row in selected_rows:
                 current_index = self._model.index(row, 1, self.root_node)
-                self._model.setData(current_index, value, QtCore.Qt.EditRole)
+                self._model.setData(current_index, value, Qt.EditRole)
 
-    @QtCore.Slot()
+    @Slot()
     def publish_all(self):
         print self._model.all_data      # todo: publish all function should be here
 
 
-class TextureTreeModel(QtCore.QAbstractItemModel):
+class TextureTreeModel(QAbstractItemModel):
     def __init__(self, root, parent=None):
         super(TextureTreeModel, self).__init__(parent)
         self._root_node = root
@@ -286,7 +288,7 @@ class TextureTreeModel(QtCore.QAbstractItemModel):
         if not index.isValid():
             return None
         node = index.internalPointer()
-        if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
+        if role == Qt.DisplayRole or role == Qt.EditRole:
             if index.column() == 0:
                 return node.name
             if index.column() == 1 and node.node_type == "texture":
@@ -301,7 +303,7 @@ class TextureTreeModel(QtCore.QAbstractItemModel):
         if not index.isValid():
             return False
         node = index.internalPointer()
-        if role == QtCore.Qt.EditRole:
+        if role == Qt.EditRole:
             if index.column() == 1 and node.node_type == "texture":
                 node.chanel = value
                 return True
@@ -309,21 +311,21 @@ class TextureTreeModel(QtCore.QAbstractItemModel):
 
     def headerData(self, section, orientation, role):
         header_labels = ["File Path", "Chanel", "UDIMs", "Publish"]
-        if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
+        if role == Qt.DisplayRole and orientation == Qt.Horizontal:
             return header_labels[section]
 
     def flags(self, index):
-        flags = QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        flags = Qt.ItemIsEnabled | Qt.ItemIsSelectable
         node = index.internalPointer()
         if index.column() == 1 and node.node_type == "texture":
-            flags = flags | QtCore.Qt.ItemIsEditable
+            flags = flags | Qt.ItemIsEditable
         return flags
 
     def parent(self, index):
         node = index.internalPointer()
         parent_node = node.parent
         if parent_node == self._root_node:
-            return QtCore.QModelIndex()
+            return QModelIndex()
         return self.createIndex(parent_node.row, 0, parent_node)
 
     def index(self, row, column, parent):
@@ -335,36 +337,36 @@ class TextureTreeModel(QtCore.QAbstractItemModel):
         if child_item:
             return self.createIndex(row, column, child_item)
         else:
-            return QtCore.QModelIndex()
+            return QModelIndex()
 
 
-class ChanelEditDelegate(QtGui.QItemDelegate):
+class ChanelEditDelegate(QItemDelegate):
     def __init__(self, parent=None):
         super(ChanelEditDelegate, self).__init__(parent)
 
     def createEditor(self, parent, option, index):
         if index.column() == 1:
-            line_edit = QtGui.QLineEdit(parent)
+            line_edit = QLineEdit(parent)
             return line_edit
 
     def setEditorData(self, editor, index):
-        value = index.model().data(index, QtCore.Qt.EditRole)
+        value = index.model().data(index, Qt.EditRole)
         editor.setText(value)
 
     def setModelData(self, editor, model, index):
         value = editor.text()
-        model.setData(index, value, QtCore.Qt.EditRole)
+        model.setData(index, value, Qt.EditRole)
 
     def updateEditorGeometry(self, editor, option, index):
         editor.setGeometry(option.rect)
 
 
-class PublishButtonDelegate(QtGui.QItemDelegate):
+class PublishButtonDelegate(QItemDelegate):
     def __init__(self, parent=None):
         super(PublishButtonDelegate, self).__init__(parent)
 
     def createEditor(self, parent, option, index):
-        pub_button = QtGui.QPushButton(parent)
+        pub_button = QPushButton(parent)
         pub_button.setText("Publish")
         src_index = index.model().mapToSource(index)
         pub_button.node = src_index.internalPointer()

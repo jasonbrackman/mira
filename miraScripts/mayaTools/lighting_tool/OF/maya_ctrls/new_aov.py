@@ -1,4 +1,7 @@
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
+from Qt import __binding__
 import maya.OpenMayaUI as mui
 import mtoa.aovs as aovs
 import maya.cmds as mc
@@ -28,14 +31,29 @@ class Utils(object):
     MASK_PATTERN2 = re.compile(r'.*:?(mask\d+)_\w+')
 
     @staticmethod
-    def get_maya_win():
-        ptr = mui.MQtUtil.mainWindow()
-        if 'PyQt4' in QtGui.__name__:
+    def get_maya_win(module="PySide"):
+        """
+        get a QMainWindow Object of maya main window
+        :param module (optional): string "PySide"(default) or "PyQt4"
+        :return main_window: QWidget or QMainWindow object
+        """
+        import maya.OpenMayaUI as mui
+        prt = mui.MQtUtil.mainWindow()
+        if module == "PyQt":
             import sip
-            main_window = sip.wrapinstance(long(ptr), QtCore.QObject)
-        if 'PySide' in QtGui.__name__:
-            import shiboken
-            main_window = shiboken.wrapInstance(long(ptr), QtCore.QObject)
+            from Qt.QtCore import *
+            main_window = sip.wrapinstance(long(prt), QObject)
+        elif module in ["PySide", "PyQt"]:
+            if __binding__ in ["PySide", "PyQt4"]:
+                import shiboken
+            elif __binding__ in ["PySide2", "PyQt5"]:
+                import shiboken2 as shiboken
+            from Qt.QtWidgets import *
+            main_window = shiboken.wrapInstance(long(prt), QWidget)
+        elif module == "mayaUI":
+            main_window = "MayaWindow"
+        else:
+            raise ValueError('param "module" must be "mayaUI" "PyQt4" or "PySide"')
         return main_window
 
     @staticmethod
@@ -153,9 +171,9 @@ class Utils(object):
         sg_nodes = cls.get_sg_node_of_selected()
         if sg_nodes:
             shader = cls.create_shader(args[1])
-            progress_dialog = QtGui.QProgressDialog('<Total: %s>build aov...,Please wait......' % len(sg_nodes),
+            progress_dialog = QProgressDialog('<Total: %s>build aov...,Please wait......' % len(sg_nodes),
                                                     'Cancel', 0, len(sg_nodes))
-            progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+            progress_dialog.setWindowModality(Qt.WindowModal)
             progress_dialog.show()
             value = 0
             for i in sg_nodes:
@@ -243,9 +261,9 @@ class Utils(object):
     def connect_common_shader(cls, name):
         sg_nodes = cls.get_sg_node_of_opacity()
         if sg_nodes:
-            progress_dialog = QtGui.QProgressDialog('<Total: %s>build aov...,Please wait......' % len(sg_nodes),
+            progress_dialog = QProgressDialog('<Total: %s>build aov...,Please wait......' % len(sg_nodes),
                                                     'Cancel', 0, len(sg_nodes))
-            progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+            progress_dialog.setWindowModality(Qt.WindowModal)
             progress_dialog.show()
             value = 0
             for i in sg_nodes:
@@ -352,9 +370,9 @@ class Utils(object):
         sg_nodes = pm.ls(type='shadingEngine')
         if len(sg_nodes) > 200:
             sg_nodes = sg_nodes[:200]
-        progress_dialog = QtGui.QProgressDialog('<Total: %s>build aov...,Please wait......' % len(sg_nodes),
+        progress_dialog = QProgressDialog('<Total: %s>build aov...,Please wait......' % len(sg_nodes),
                                                 'Cancel', 0, len(sg_nodes))
-        progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+        progress_dialog.setWindowModality(Qt.WindowModal)
         progress_dialog.show()
         value = 0
         for se in sg_nodes:
@@ -397,13 +415,13 @@ class Utils(object):
         cls.init_connect_default_shader()
 
 
-class ColorButton(QtGui.QPushButton):
-    kick = QtCore.Signal(list)
+class ColorButton(QPushButton):
+    kick = Signal(list)
 
     def __init__(self, text=None, parent=None):
         super(ColorButton, self).__init__(parent)
         self.text = text
-        self.menu = QtGui.QMenu()
+        self.menu = QMenu()
         self.action = None
         self.setFixedHeight(30)
         self.setText(self.text)
@@ -414,10 +432,10 @@ class ColorButton(QtGui.QPushButton):
         self.menu.clear()
         for aov in [aov for aov in Utils.get_aov_name_lists() if aov.startswith('mask')
                     or aov.startswith('rim')]:
-            self.action = QtGui.QAction(aov, self)
+            self.action = QAction(aov, self)
             self.action.triggered.connect(self.connect_aov)
             self.menu.addAction(self.action)
-        self.menu.exec_(QtGui.QCursor.pos())
+        self.menu.exec_(QCursor.pos())
 
     def connect_aov(self):
         aov_name = str(self.sender().text())
@@ -447,32 +465,32 @@ class ColorButton(QtGui.QPushButton):
                     self.kick.emit([0, '//[OF] error: Nothing Selected'])
 
 
-class CommonAovButton(QtGui.QPushButton):
-    kick = QtCore.Signal(str)
+class CommonAovButton(QPushButton):
+    kick = Signal(str)
 
     def __init__(self, text=None, parent=None):
         super(CommonAovButton, self).__init__(parent)
         self.text = text
         self.setText(self.text)
         self.pressed.connect(self.create_common_aov_menu)
-        self.create_menu = QtGui.QMenu()
-        self.attr_menu = QtGui.QMenu()
+        self.create_menu = QMenu()
+        self.attr_menu = QMenu()
 
     def create_common_aov_menu(self):
         self.create_menu.clear()
         for aov in ['AO']:
-            action = QtGui.QAction(aov, self)
+            action = QAction(aov, self)
             action.triggered.connect(self.create_common_aov)
             self.create_menu.addAction(action)
-        self.create_menu.exec_(QtGui.QCursor.pos())
+        self.create_menu.exec_(QCursor.pos())
 
     def contextMenuEvent(self, event):
         self.attr_menu.clear()
         for attr in ['Set AO samples']:
-            action = QtGui.QAction(attr, self)
+            action = QAction(attr, self)
             action.triggered.connect(self.set_attr)
             self.attr_menu.addAction(action)
-        self.attr_menu.exec_(QtGui.QCursor.pos())
+        self.attr_menu.exec_(QCursor.pos())
 
     def create_common_aov(self):
         Utils.create_common_aov(str(self.sender().text()))
@@ -505,43 +523,43 @@ class CommonAovButton(QtGui.QPushButton):
         self.kick.emit("[OF] info: set AO samples %s" % value)
 
 
-class View(QtGui.QDialog):
+class View(QDialog):
     def __init__(self, parent=None):
         super(View, self).__init__(parent)
         self.resize(510, 100)
         self.setWindowTitle('AOV Settings')
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowMinimizeButtonHint)
         
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 2)
         main_layout.setSpacing(0)
         
-        display_frame = QtGui.QFrame()
-        display_frame.setFrameStyle(QtGui.QFrame.Panel | QtGui.QFrame.Raised)
-        layout_of_frame = QtGui.QHBoxLayout(display_frame)
+        display_frame = QFrame()
+        display_frame.setFrameStyle(QFrame.Panel | QFrame.Raised)
+        layout_of_frame = QHBoxLayout(display_frame)
         layout_of_frame.setContentsMargins(0, 0, 0, 0)
-        self.display_label = QtGui.QLabel()
+        self.display_label = QLabel()
         self.display_label.setFixedHeight(35)
-        self.check_box = QtGui.QCheckBox('Hair')
+        self.check_box = QCheckBox('Hair')
         self.check_box.setChecked(False)
         layout_of_frame.addWidget(self.display_label)
         layout_of_frame.addStretch()
         layout_of_frame.addWidget(self.check_box)
         
-        create_frame = QtGui.QFrame()
-        create_frame.setFrameStyle(QtGui.QFrame.Panel | QtGui.QFrame.Raised)
-        create_layout = QtGui.QHBoxLayout(create_frame)
+        create_frame = QFrame()
+        create_frame.setFrameStyle(QFrame.Panel | QFrame.Raised)
+        create_layout = QHBoxLayout(create_frame)
         create_layout.setContentsMargins(0, 0, 0, 0)
         create_layout.setSpacing(1)
-        self.create_mask_aov_btn = QtGui.QPushButton('Mask AOV')
+        self.create_mask_aov_btn = QPushButton('Mask AOV')
         self.create_mask_aov_btn.setFixedHeight(30)
-        self.create_rim_aov_btn = QtGui.QPushButton('Rim AOV')
+        self.create_rim_aov_btn = QPushButton('Rim AOV')
         self.create_rim_aov_btn.setFixedHeight(30)
         self.create_common_aov_btn = CommonAovButton('Common AOV')
         self.create_common_aov_btn.setFixedHeight(30)
-        self.create_custom_aov_btn = QtGui.QPushButton('Custom AOV')
+        self.create_custom_aov_btn = QPushButton('Custom AOV')
         self.create_custom_aov_btn.setFixedHeight(30)
-        self.rebuild_aov_btn = QtGui.QPushButton('Rebuild AOV')
+        self.rebuild_aov_btn = QPushButton('Rebuild AOV')
         self.rebuild_aov_btn.setFixedHeight(30)
         create_layout.addWidget(self.create_mask_aov_btn)
         create_layout.addWidget(self.create_rim_aov_btn)
@@ -549,13 +567,13 @@ class View(QtGui.QDialog):
         create_layout.addWidget(self.create_custom_aov_btn)
         create_layout.addWidget(self.rebuild_aov_btn)
         
-        separator_btn = QtGui.QPushButton()
+        separator_btn = QPushButton()
         separator_btn.setFixedHeight(8)
         separator_btn.setEnabled(False)
         
-        button_frame = QtGui.QFrame()
-        button_frame.setFrameStyle(QtGui.QFrame.Panel | QtGui.QFrame.Raised)
-        self.color_btn_layout = QtGui.QHBoxLayout(button_frame)
+        button_frame = QFrame()
+        button_frame.setFrameStyle(QFrame.Panel | QFrame.Raised)
+        self.color_btn_layout = QHBoxLayout(button_frame)
         self.color_btn_layout.setContentsMargins(0, 0, 0, 0)
         self.color_btn_layout.setSpacing(1)
         
@@ -629,7 +647,7 @@ class AovSettings(View):
     @classmethod
     def show_ui(cls):
         if Utils.current_render() != 'arnold':
-            QtGui.QMessageBox.information(None, 'Information', 'Current renderer is not arnold')
+            QMessageBox.information(None, 'Information', 'Current renderer is not arnold')
         else:
             if mc.window(window_name, q=1, exists=1):
                 mc.deleteUI(window_name)

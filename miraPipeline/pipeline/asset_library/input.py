@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import add_environ
 from asset_library_libs.get_conf_data import get_conf_data
 from asset_library_libs.get_engine import get_engine
@@ -14,7 +16,7 @@ class AssetItem(object):
         self.path = path
 
 
-class ComboModel(QtCore.QAbstractListModel):
+class ComboModel(QAbstractListModel):
     def __init__(self, model_data=None, parent=None):
         super(ComboModel, self).__init__(parent)
         self.model_data = model_data
@@ -28,13 +30,13 @@ class ComboModel(QtCore.QAbstractListModel):
 
     def data(self, index, role):
         row = index.row()
-        if role == QtCore.Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             return self.model_data[row]
-        elif role == QtCore.Qt.SizeHintRole:
-            return QtCore.QSize(self.parent.width(), 25)
+        elif role == Qt.SizeHintRole:
+            return QSize(self.parent.width(), 25)
 
 
-class CellWidget(QtGui.QWidget):
+class CellWidget(QWidget):
     def __init__(self, parent=None):
         super(CellWidget, self).__init__(parent)
         self.engine = get_engine()
@@ -44,32 +46,32 @@ class CellWidget(QtGui.QWidget):
         self.setup_ui()
 
     def setup_ui(self):
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
-        self.icon_label = QtGui.QLabel()
+        self.icon_label = QLabel()
         self.icon_label.setFixedSize(160, 160)
         self.icon_label.setStyleSheet("QLabel{background: #000000;}")
-        self.icon_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.icon_label.setAlignment(Qt.AlignCenter)
 
-        btn_layout = QtGui.QHBoxLayout()
+        btn_layout = QHBoxLayout()
         btn_layout.setContentsMargins(0, 0, 0, 0)
         for option in self.conf_data[self.engine]["actions"]:
-            btn = QtGui.QToolButton(self)
+            btn = QToolButton(self)
             btn.name = option
             btn.setToolTip(option)
-            icon = QtGui.QIcon(os.path.join(self.icon_dir, "%s.png" % option))
+            icon = QIcon(os.path.join(self.icon_dir, "%s.png" % option))
             btn.setIcon(icon)
             btn.setFixedSize(20, 20)
-            btn.setIconSize(QtCore.QSize(18, 18))
+            btn.setIconSize(QSize(18, 18))
             btn.clicked.connect(self.action)
             btn.setStyleSheet("QToolButton{background:transparent;border: 0px;}"
                               "QToolButton::hover{background:#00BFFF;}")
             btn_layout.addWidget(btn)
         btn_layout.setSpacing(0)
-        btn_layout.setAlignment(QtCore.Qt.AlignLeft)
+        btn_layout.setAlignment(Qt.AlignLeft)
 
-        self.name_label = QtGui.QLabel()
+        self.name_label = QLabel()
         self.name_label.setStyleSheet("background: transparent;")
 
         main_layout.addWidget(self.icon_label)
@@ -90,23 +92,23 @@ class CellWidget(QtGui.QWidget):
         name = os.path.basename(self.file_dir)
         icon_path = os.path.join(self.file_dir, "%s.png" % name)
         icon_path = icon_path.replace("\\", "/")
-        pixmap = QtGui.QPixmap(icon_path)
+        pixmap = QPixmap(icon_path)
         label_width = self.icon_label.width()
         label_height = self.icon_label.height()
         image_width = pixmap.width()
         image_height = pixmap.height()
         if image_width > image_height:
-            scaled = pixmap.scaled(QtCore.QSize(label_width, image_width/label_width*image_height),
-                                   QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+            scaled = pixmap.scaled(QSize(label_width, image_width/label_width*image_height),
+                                   Qt.KeepAspectRatio, Qt.SmoothTransformation)
         else:
-            scaled = pixmap.scaled(QtCore.QSize(label_height/label_height*image_width, label_height),
-                                   QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+            scaled = pixmap.scaled(QSize(label_height/label_height*image_width, label_height),
+                                   Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.icon_label.setPixmap(scaled)
 
     def set_name_label(self):
         base_name = os.path.basename(self.file_dir)
-        elided_font = QtGui.QFontMetrics(self.name_label.font())
-        text = elided_font.elidedText(base_name, QtCore.Qt.ElideMiddle, self.name_label.width())
+        elided_font = QFontMetrics(self.name_label.font())
+        text = elided_font.elidedText(base_name, Qt.ElideMiddle, self.name_label.width())
         self.name_label.setText("<font size=4 color=#FFFFFF><b>%s</b></font>" % text)
 
     def show_in_view(self):
@@ -114,7 +116,7 @@ class CellWidget(QtGui.QWidget):
         self.set_name_label()
 
 
-class AssetDelegate(QtGui.QItemDelegate):
+class AssetDelegate(QItemDelegate):
     def __init__(self, parent=None):
         super(AssetDelegate, self).__init__(parent)
 
@@ -123,40 +125,40 @@ class AssetDelegate(QtGui.QItemDelegate):
         return cell_widget
 
     def setEditorData(self, editor, index):
-        item = index.model().data(index, QtCore.Qt.DisplayRole)
+        item = index.model().data(index, Qt.DisplayRole)
         if item:
             editor.set_file_dir(item.path)
 
     def sizeHint(self, option, index):
-        return QtCore.QSize(160, 200)
+        return QSize(160, 200)
 
 
-class AssetModel(QtCore.QAbstractListModel):
+class AssetModel(QAbstractListModel):
     def __init__(self, arg=[], parent=None):
         super(AssetModel, self).__init__(parent)
         self.arg = arg
 
-    def rowCount(self, parent=QtCore.QModelIndex()):
+    def rowCount(self, parent=QModelIndex()):
         return len(self.arg)
 
-    def columnCount(self, parent=QtCore.QModelIndex()):
+    def columnCount(self, parent=QModelIndex()):
         return 2
 
-    def data(self, index, role=QtCore.Qt.DisplayRole):
-        if role == QtCore.Qt.DisplayRole:
+    def data(self, index, role=Qt.DisplayRole):
+        if role == Qt.DisplayRole:
             row = index.row()
             return self.arg[row]
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEnabled
+        return Qt.ItemIsEnabled
 
 
-class AssetFilterProxyModel(QtGui.QSortFilterProxyModel):
+class AssetFilterProxyModel(QSortFilterProxyModel):
     def __init__(self, parent=None):
         super(AssetFilterProxyModel, self).__init__(parent)
-        self.name_regexp = QtCore.QRegExp()
-        self.name_regexp.setCaseSensitivity(QtCore.Qt.CaseInsensitive)
-        self.name_regexp.setPatternSyntax(QtCore.QRegExp.RegExp)
+        self.name_regexp = QRegExp()
+        self.name_regexp.setCaseSensitivity(Qt.CaseInsensitive)
+        self.name_regexp.setPatternSyntax(QRegExp.RegExp)
 
     def filterAcceptsRow(self, source_row, source_parent):
         name_index = self.sourceModel().index(source_row, 0, source_parent)
@@ -172,7 +174,7 @@ class AssetFilterProxyModel(QtGui.QSortFilterProxyModel):
         self.invalidateFilter()
 
 
-class Input(QtGui.QWidget):
+class Input(QWidget):
     def __init__(self, parent=None):
         super(Input, self).__init__(parent)
         self.engine = get_engine()
@@ -183,33 +185,33 @@ class Input(QtGui.QWidget):
         self.set_signals()
 
     def setup_ui(self):
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        category_layout = QtGui.QHBoxLayout()
-        category_label = QtGui.QLabel("Category")
+        category_layout = QHBoxLayout()
+        category_label = QLabel("Category")
         category_label.setFixedWidth(50)
-        self.category_cbox = QtGui.QComboBox()
+        self.category_cbox = QComboBox()
         category_layout.addWidget(category_label)
         category_layout.addWidget(self.category_cbox)
 
-        filter_layout = QtGui.QHBoxLayout()
+        filter_layout = QHBoxLayout()
         self.filter_le = ButtonLineEdit()
         self.filter_le.setPlaceholderText("Search...")
-        self.update_btn = QtGui.QToolButton()
+        self.update_btn = QToolButton()
         icon_path = os.path.join(get_icon_dir(), "update.png").replace("\\", "/")
-        self.update_btn.setIcon(QtGui.QIcon(icon_path))
+        self.update_btn.setIcon(QIcon(icon_path))
         self.update_btn.setStyleSheet("QToolButton{background:transparent;border: 0px;}"
                                       "QToolButton::hover{background:#757575;}")
         filter_layout.addStretch()
         filter_layout.addWidget(self.filter_le)
         filter_layout.addWidget(self.update_btn)
 
-        self.list_view = QtGui.QListView()
-        self.list_view.setViewMode(QtGui.QListView.IconMode)
-        self.list_view.setResizeMode(QtGui.QListView.Adjust)
-        self.list_view.setFlow(QtGui.QListView.LeftToRight)
-        self.list_view.setMovement(QtGui.QListView.Static)
-        self.list_view.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.list_view = QListView()
+        self.list_view.setViewMode(QListView.IconMode)
+        self.list_view.setResizeMode(QListView.Adjust)
+        self.list_view.setFlow(QListView.LeftToRight)
+        self.list_view.setMovement(QListView.Static)
+        self.list_view.setFocusPolicy(Qt.NoFocus)
         self.list_view.setWrapping(True)
         self.list_view.setSpacing(15)
 
@@ -244,7 +246,7 @@ class Input(QtGui.QWidget):
         self.model = AssetModel(model_data)
         self.proxy_model = AssetFilterProxyModel(self)
         self.proxy_model.setDynamicSortFilter(True)
-        self.proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
         self.proxy_model.setSourceModel(self.model)
         self.filter_le.textChanged.connect(self.set_filter)
         self.list_view.setModel(self.proxy_model)

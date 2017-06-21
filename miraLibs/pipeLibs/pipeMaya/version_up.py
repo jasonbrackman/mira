@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.mel as mel
 from miraLibs.mayaLibs import save_as
 from miraLibs.pipeLibs import pipeFile
@@ -16,9 +18,9 @@ def version_up():
         return
     next_edition_file = obj.next_edition_file
     if os.path.isfile(next_edition_file):
-        ret = QtGui.QMessageBox.information(None, "Save As",
+        ret = QMessageBox.information(None, "Save As",
                                             "%s \nalready exists.Do you want to replace it?" % next_edition_file,
-                                            QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
+                                            QMessageBox.Yes, QMessageBox.No)
         if ret.name == "Yes":
             save_as.save_as(next_edition_file)
         else:
@@ -28,8 +30,8 @@ def version_up():
             except:
                 mel.eval("SaveSceneAs;")
     else:
-        ret = QtGui.QMessageBox.information(None, "Version up", "Save as %s?" % next_edition_file,
-                                            QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
+        ret = QMessageBox.information(None, "Version up", "Save as %s?" % next_edition_file,
+                                            QMessageBox.Yes, QMessageBox.No)
         if ret.name == "Yes":
             save_as.save_as(next_edition_file)
 

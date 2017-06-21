@@ -1,5 +1,7 @@
 ﻿import logging
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as mc
 import maya.mel as mel
 from miraLibs.mayaLibs import get_maya_win
@@ -35,7 +37,7 @@ class MayaUtility(object):
         return cameras
 
 
-class FRenderView(QtGui.QDialog):
+class FRenderView(QDialog):
     utility = MayaUtility()
 
     def __init__(self, parent=None):
@@ -43,18 +45,18 @@ class FRenderView(QtGui.QDialog):
         self.setObjectName('Foreground Render')
         self.setWindowTitle('Foreground Render')
         self.resize(400, 200)
-        self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+        self.setWindowFlags(Qt.WindowStaysOnTopHint)
         self.setModal(False)
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowMinimizeButtonHint)
 
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setSpacing(12)
 
-        check_layout = QtGui.QHBoxLayout()
-        self.check_grp = QtGui.QButtonGroup(check_layout)
+        check_layout = QHBoxLayout()
+        self.check_grp = QButtonGroup(check_layout)
 
-        self.current_check = QtGui.QCheckBox('Current Render Layer')
-        self.all_check = QtGui.QCheckBox('All Renderable Layers')
+        self.current_check = QCheckBox('Current Render Layer')
+        self.all_check = QCheckBox('All Renderable Layers')
 
         check_layout.addWidget(self.current_check)
         check_layout.addWidget(self.all_check)
@@ -62,25 +64,25 @@ class FRenderView(QtGui.QDialog):
         self.check_grp.addButton(self.current_check)
         self.check_grp.addButton(self.all_check)
 
-        separator_layout = QtGui.QHBoxLayout()
+        separator_layout = QHBoxLayout()
         separator_layout.setContentsMargins(0, 0, 0, 0)
-        separator_layout.setAlignment(QtCore.Qt.AlignVCenter)
-        frame = QtGui.QFrame()
-        frame.setFrameStyle(QtGui.QFrame.HLine)
+        separator_layout.setAlignment(Qt.AlignVCenter)
+        frame = QFrame()
+        frame.setFrameStyle(QFrame.HLine)
         frame.setStyleSheet('QFrame{color: #111111}')
         separator_layout.addWidget(frame)
 
-        cam_layout = QtGui.QHBoxLayout()
-        cam_label = QtGui.QLabel('Render Camera')
+        cam_layout = QHBoxLayout()
+        cam_label = QLabel('Render Camera')
         cam_label.setFixedWidth(80)
-        self.cam_cb = QtGui.QComboBox()
+        self.cam_cb = QComboBox()
         cam_layout.addWidget(cam_label)
         cam_layout.addWidget(self.cam_cb)
 
-        self.frame_te = QtGui.QTextEdit()
+        self.frame_te = QTextEdit()
 
-        self.render_layout = QtGui.QHBoxLayout()
-        self.render_btn = QtGui.QPushButton('Render')
+        self.render_layout = QHBoxLayout()
+        self.render_btn = QPushButton('Render')
         self.render_layout.addStretch()
         self.render_layout.addWidget(self.render_btn)
 

@@ -1,41 +1,43 @@
 # -*- coding: utf-8 -*-
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from miraFramework.Filter import ButtonLineEdit
 import miraCore
 from miraLibs.pyLibs import join_path
 
 
-class ReplaceAssetUI(QtGui.QDialog):
+class ReplaceAssetUI(QDialog):
     def __init__(self, parent=None):
         super(ReplaceAssetUI, self).__init__(parent)
         self.resize(1000, 600)
         self.setObjectName("Replace Asset")
         self.setup_ui()
-        self.setWindowFlags(QtCore.Qt.Window)
+        self.setWindowFlags(Qt.Window)
 
     def setup_ui(self):
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 2, 0, 0)
-        top_layout = QtGui.QHBoxLayout()
+        top_layout = QHBoxLayout()
 
-        convert_layout = QtGui.QHBoxLayout()
-        convert_label = QtGui.QLabel("Convert")
-        self.src_cbox = QtGui.QComboBox()
-        to_label = QtGui.QLabel("=========>")
-        self.dst_cbox = QtGui.QComboBox()
+        convert_layout = QHBoxLayout()
+        convert_label = QLabel("Convert")
+        self.src_cbox = QComboBox()
+        to_label = QLabel("=========>")
+        self.dst_cbox = QComboBox()
         convert_layout.addWidget(convert_label)
         convert_layout.addWidget(self.src_cbox)
         convert_layout.addWidget(to_label)
         convert_layout.addWidget(self.dst_cbox)
 
-        self.select_check = QtGui.QCheckBox("Select in Maya")
+        self.select_check = QCheckBox("Select in Maya")
         self.select_check.setChecked(True)
 
         self.filter_le = ButtonLineEdit()
         self.filter_le.setPlaceholderText("Search...")
-        self.update_btn = QtGui.QToolButton()
+        self.update_btn = QToolButton()
         icon_path = join_path.join_path2(miraCore.get_icons_dir(), "update.png")
-        self.update_btn.setIcon(QtGui.QIcon(icon_path))
+        self.update_btn.setIcon(QIcon(icon_path))
         self.update_btn.setStyleSheet("QToolButton{background:transparent;border: 0px;}"
                                       "QToolButton::hover{background:#AAAAAA;}")
 
@@ -45,10 +47,10 @@ class ReplaceAssetUI(QtGui.QDialog):
         top_layout.addWidget(self.filter_le)
         top_layout.addWidget(self.update_btn)
 
-        self.tree_view = QtGui.QTreeView()
+        self.tree_view = QTreeView()
 
-        btn_layout = QtGui.QHBoxLayout()
-        self.replace_btn = QtGui.QPushButton("Replace")
+        btn_layout = QHBoxLayout()
+        self.replace_btn = QPushButton("Replace")
         self.replace_btn.setFixedHeight(30)
         btn_layout.addWidget(self.replace_btn)
 
@@ -59,7 +61,7 @@ class ReplaceAssetUI(QtGui.QDialog):
 
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     rau = ReplaceAssetUI()
     rau.show()
     app.exec_()

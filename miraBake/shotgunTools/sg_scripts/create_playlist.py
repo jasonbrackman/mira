@@ -12,7 +12,9 @@
 import time
 import sys
 import os
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 # Third-party modules
 
@@ -74,7 +76,7 @@ class ShotgunUtility(object):
             return latest_version
 
     def message(self, information_text):
-        QtGui.QMessageBox.information(None, 'Information', information_text)
+        QMessageBox.information(None, 'Information', information_text)
 
     def get_all_versions(self, project_name, sequence_name, step):
         # get all shots by sequence
@@ -136,34 +138,34 @@ class ShotgunUtility(object):
         self.sg.update(playlist['type'], playlist['id'], data)
 
 
-class CreatePlaylistUI(QtGui.QDialog):
+class CreatePlaylistUI(QDialog):
     def __init__(self, parent=None):
         super(CreatePlaylistUI, self).__init__(parent)
 
         qss_path = get_qss_path()
-        self.setStyle(QtGui.QStyleFactory.create('plastique'))
+        self.setStyle(QStyleFactory.create('plastique'))
         self.setStyleSheet(open(qss_path, 'r').read())
         self.setWindowTitle('Create Playlist')
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
         self.resize(350, 100)
 
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
 
-        arg_layout = QtGui.QGridLayout()
-        project_label = QtGui.QLabel('Project')
+        arg_layout = QGridLayout()
+        project_label = QLabel('Project')
         project_label.setFixedWidth(50)
-        project_label.setAlignment(QtCore.Qt.AlignRight)
-        self.project_cbox = QtGui.QComboBox()
-        sequence_label = QtGui.QLabel('Sequence')
-        sequence_label.setAlignment(QtCore.Qt.AlignRight)
-        self.sequence_cbox = QtGui.QComboBox()
+        project_label.setAlignment(Qt.AlignRight)
+        self.project_cbox = QComboBox()
+        sequence_label = QLabel('Sequence')
+        sequence_label.setAlignment(Qt.AlignRight)
+        self.sequence_cbox = QComboBox()
         self.sequence_cbox.setEditable(True)
-        step_label = QtGui.QLabel('Step')
-        step_label.setAlignment(QtCore.Qt.AlignRight)
-        self.step_cbox = QtGui.QComboBox()
-        part_label = QtGui.QLabel('Part Name')
-        part_label.setAlignment(QtCore.Qt.AlignRight)
-        self.part_le = QtGui.QLineEdit()
+        step_label = QLabel('Step')
+        step_label.setAlignment(Qt.AlignRight)
+        self.step_cbox = QComboBox()
+        part_label = QLabel('Part Name')
+        part_label.setAlignment(Qt.AlignRight)
+        self.part_le = QLineEdit()
         arg_layout.addWidget(project_label, 0, 0, 1, 1)
         arg_layout.addWidget(self.project_cbox, 0, 1, 1, 3)
         arg_layout.addWidget(sequence_label, 1, 0, 1, 1)
@@ -173,9 +175,9 @@ class CreatePlaylistUI(QtGui.QDialog):
         arg_layout.addWidget(part_label, 3, 0, 1, 1)
         arg_layout.addWidget(self.part_le, 3, 1, 1, 3)
 
-        btn_layout = QtGui.QHBoxLayout()
-        self.cancel_btn = QtGui.QPushButton('Cancel')
-        self.create_btn = QtGui.QPushButton('Create Playlist')
+        btn_layout = QHBoxLayout()
+        self.cancel_btn = QPushButton('Cancel')
+        self.create_btn = QPushButton('Create Playlist')
         btn_layout.addStretch()
         btn_layout.addWidget(self.cancel_btn)
         btn_layout.addWidget(self.create_btn)
@@ -260,7 +262,7 @@ class CreatePlaylist(CreatePlaylistUI):
 
 
 def main():
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     cp = CreatePlaylist()
     cp.show()
     app.exec_()

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as mc
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.pipeLibs.backup import backup
@@ -49,19 +51,19 @@ class Maya(object):
         logger.info("Create pre animation file: %s" % anim_file)
 
 
-class PublishSingleLay(QtGui.QDialog):
+class PublishSingleLay(QDialog):
     def __init__(self, parent=None):
         super(PublishSingleLay, self).__init__(parent)
         self.setWindowTitle("Publish Single Lay Shot")
         self.setObjectName("Publish Single Lay Shot")
         self.resize(400, 250)
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 3, 0, 5)
-        self.shot_lw = QtGui.QListWidget()
+        self.shot_lw = QListWidget()
         self.shot_lw.setSortingEnabled(True)
-        btn_layout = QtGui.QHBoxLayout()
-        self.publish_btn = QtGui.QPushButton("publish")
-        self.close_btn = QtGui.QPushButton("close")
+        btn_layout = QHBoxLayout()
+        self.publish_btn = QPushButton("publish")
+        self.close_btn = QPushButton("close")
         btn_layout.addStretch()
         btn_layout.addWidget(self.publish_btn)
         btn_layout.addWidget(self.close_btn)

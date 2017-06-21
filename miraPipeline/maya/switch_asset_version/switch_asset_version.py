@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import ui
 reload(ui)
 import mayaOpt
@@ -64,7 +66,7 @@ class AssetNode(Node):
         return "asset"
 
 
-class AssetTreeModel(QtCore.QAbstractItemModel):
+class AssetTreeModel(QAbstractItemModel):
     def __init__(self, root_node=None, parent=None):
         super(AssetTreeModel, self).__init__(parent)
         self.root_node = root_node
@@ -87,28 +89,28 @@ class AssetTreeModel(QtCore.QAbstractItemModel):
         if not index.isValid():
             return
         node = index.internalPointer()
-        if role == QtCore.Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             if index.column() == 0 and node.node_type == "asset_type":
                 return node.name
             if index.column() == 1 and node.node_type == "asset":
                 return node.name
             if index.column() == 3 and node.node_type == "asset":
                 return node.dst_path
-        elif role == QtCore.Qt.DecorationRole:
+        elif role == Qt.DecorationRole:
             if index.column() == 2 and node.node_type == "asset":
                 pix_map_path = node.thumbnail_path
-                pix_map = QtGui.QPixmap(pix_map_path)
-                scaled = pix_map.scaled(QtCore.QSize(100, 100), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+                pix_map = QPixmap(pix_map_path)
+                scaled = pix_map.scaled(QSize(100, 100), Qt.KeepAspectRatio, Qt.SmoothTransformation)
                 return scaled
-        elif role == QtCore.Qt.SizeHintRole:
+        elif role == Qt.SizeHintRole:
             if node.node_type == "asset_type":
-                return QtCore.QSize(20, 20)
+                return QSize(20, 20)
 
     def setData(self, index, value, role):
         if not index.isValid():
             return
         node = index.internalPointer()
-        if role == QtCore.Qt.EditRole:
+        if role == Qt.EditRole:
             if index.column() == 0:
                 node.name = value
                 return True
@@ -116,17 +118,17 @@ class AssetTreeModel(QtCore.QAbstractItemModel):
 
     def headerData(self, section, orientation, role):
         header_list = ["Asset Type", "Asset Name", "Thumbnail", "Destination Path"]
-        if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
+        if role == Qt.DisplayRole and orientation == Qt.Horizontal:
             return header_list[section]
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
     def parent(self, index):
         node = self.getNode(index)
         parent_node = node.parent()
         if parent_node == self.root_node:
-            return QtCore.QModelIndex()
+            return QModelIndex()
         return self.createIndex(parent_node.row(), 0, parent_node)
 
     def index(self, row, column, parent):
@@ -135,10 +137,10 @@ class AssetTreeModel(QtCore.QAbstractItemModel):
         if child_item:
             return self.createIndex(row, column, child_item)
         else:
-            return QtCore.QModelIndex()
+            return QModelIndex()
 
 
-class ListWidget(QtGui.QListWidget):
+class ListWidget(QListWidget):
     def __init__(self, parent=None):
         super(ListWidget, self).__init__(parent)
 
@@ -147,8 +149,8 @@ class ListWidget(QtGui.QListWidget):
         super(ListWidget, self).mousePressEvent(event)
 
 
-class AssetDelegate(QtGui.QItemDelegate):
-    double_clicked_signal = QtCore.Signal(QtGui.QListWidgetItem)
+class AssetDelegate(QItemDelegate):
+    double_clicked_signal = Signal(QListWidgetItem)
 
     def __init__(self, parent=None):
         super(AssetDelegate, self).__init__(parent)
@@ -157,12 +159,12 @@ class AssetDelegate(QtGui.QItemDelegate):
         if index.column() == 3:
             list_widget = ListWidget(parent)
             list_widget.setMaximumHeight(100)
-            list_widget.setFocusPolicy(QtCore.Qt.NoFocus)
+            list_widget.setFocusPolicy(Qt.NoFocus)
             list_widget.setAutoFillBackground(True)
             list_widget.itemDoubleClicked.connect(self.emit_double_clicked)
             return list_widget
         else:
-            return QtGui.QItemDelegate.createEditor(self, parent, option, index)
+            return QItemDelegate.createEditor(self, parent, option, index)
 
     def setEditorData(self, editor, index):
         if index.column() == 3:
@@ -172,20 +174,20 @@ class AssetDelegate(QtGui.QItemDelegate):
                     if not os.path.splitext(i)[-1] in [".mb", ".ma"]:
                         continue
                     path = os.path.join(value, i).replace("\\", "/")
-                    item = QtGui.QListWidgetItem(path)
+                    item = QListWidgetItem(path)
                     item.index = index
                     editor.addItem(item)
         else:
-            QtGui.QItemDelegate.setEditorData(self, editor, index)
+            QItemDelegate.setEditorData(self, editor, index)
 
     def updateEditorGeometry(self, editor, option, index):
         if index.column() == 3:
             editor.setGeometry(option.rect)
         else:
-            QtGui.QItemDelegate.updateEditorGeometry(self, editor, option, index)
+            QItemDelegate.updateEditorGeometry(self, editor, option, index)
 
     def sizeHint(self, option, index):
-        return QtCore.QSize(160, 10)
+        return QSize(160, 10)
 
     def emit_double_clicked(self, item):
         self.double_clicked_signal.emit(item)
@@ -200,8 +202,8 @@ class ReplaceAsset(ui.ReplaceAssetUI):
 
     def init(self):
         self.tree_view.setSortingEnabled(True)
-        self.tree_view.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.tree_view.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+        self.tree_view.setFocusPolicy(Qt.NoFocus)
+        self.tree_view.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
     def set_signals(self):
         self.update_btn.clicked.connect(self.do_refresh)
@@ -218,7 +220,7 @@ class ReplaceAsset(ui.ReplaceAssetUI):
         self.root_node = Node("Asset Switch")
         model_data = mayaOpt.get_asset_list()
         if not model_data:
-            model = QtGui.QStandardItemModel()
+            model = QStandardItemModel()
             self.tree_view.setModel(model)
             return
         asset_type_list = [asset_list[3] for asset_list in model_data]

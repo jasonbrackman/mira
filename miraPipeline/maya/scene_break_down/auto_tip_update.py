@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
-from PySide import QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import pymel.core as pm
 import scene_break_down
 from miraLibs.mayaLibs import MayaTimer, get_maya_globals, get_maya_win
 from miraLibs.pyLibs import get_latest_version
 
 
-Settings = QtCore.QSettings("Mira", "SceneBreakDownTimer")
+Settings = QSettings("Mira", "SceneBreakDownTimer")
 
 
 def has_update():

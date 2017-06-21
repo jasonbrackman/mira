@@ -3,7 +3,9 @@
 # description="""  """
 
 
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as mc
 import pymel.core as pm
 import public_ctrls
@@ -11,7 +13,7 @@ import os
 from get_parent_dir import get_parent_dir
 
 
-class AssignHairShader(QtGui.QDialog):
+class AssignHairShader(QDialog):
     def __init__(self, parent=None):
         super(AssignHairShader, self).__init__(parent)
         # y_pos = public_ctrls.get_maya_main_win_pos()[1] + (public_ctrls.get_maya_main_win_size()[1])/4
@@ -19,26 +21,26 @@ class AssignHairShader(QtGui.QDialog):
         self.setWindowTitle('Assign Hair Shader')
         self.parent_dir = get_parent_dir()
         self.resize(500, 300)
-        main_layout = QtGui.QVBoxLayout(self)
-        label_layout = QtGui.QHBoxLayout()
-        label = QtGui.QLabel()
+        main_layout = QVBoxLayout(self)
+        label_layout = QHBoxLayout()
+        label = QLabel()
         label.setText('<font color="#00FF00" size=4><b>These hairs has no shader</b> </font>')
-        self.update_btn = QtGui.QToolButton()
-        self.update_btn.setIcon(QtGui.QIcon(os.path.join(self.parent_dir, 'icons', 'button_icons', 'update.png')))
+        self.update_btn = QToolButton()
+        self.update_btn.setIcon(QIcon(os.path.join(self.parent_dir, 'icons', 'button_icons', 'update.png')))
         self.update_btn.setStyleSheet('QToolButton{background: transparent}')
         label_layout.addWidget(label)
         label_layout.addWidget(self.update_btn)
-        self.list_widget = QtGui.QListWidget()
-        self.list_widget.setSelectionMode(QtGui.QListWidget.ExtendedSelection)
+        self.list_widget = QListWidget()
+        self.list_widget.setSelectionMode(QListWidget.ExtendedSelection)
         self.list_widget.setSortingEnabled(True)
         self.list_widget.setSpacing(1)
-        button_layout = QtGui.QHBoxLayout()
-        self.check_box = QtGui.QCheckBox('Maya')
-        self.diselect_all_btn = QtGui.QPushButton('Diselect All')
+        button_layout = QHBoxLayout()
+        self.check_box = QCheckBox('Maya')
+        self.diselect_all_btn = QPushButton('Diselect All')
         self.diselect_all_btn.setStyleSheet('QPushButton{color:#CCCCCC; background-color: #222222}')
-        self.select_shader_btn = QtGui.QPushButton('Select Shader')
+        self.select_shader_btn = QPushButton('Select Shader')
         self.select_shader_btn.setStyleSheet('QPushButton{color:#CCCCCC; background-color: #222222}')
-        self.assign_btn = QtGui.QPushButton('Assign')
+        self.assign_btn = QPushButton('Assign')
         self.assign_btn.setStyleSheet('QPushButton{color:#CCCCCC; background-color: #222222}')
         button_layout.addWidget(self.check_box)
         button_layout.addStretch()
@@ -56,8 +58,8 @@ class AssignHairShader(QtGui.QDialog):
         all_shave_hair = mc.ls(type='shaveHair') + mc.ls(type='hairSystem')
         no_shader_hair = [hair for hair in all_shave_hair if not pm.PyNode(hair).aiHairShader.connections()]
         for hair in no_shader_hair:
-            item = QtGui.QListWidgetItem(hair)
-            item.setIcon(QtGui.QIcon(os.path.join(self.parent_dir, 'icons/main_icons', 'shaveShader.png')))
+            item = QListWidgetItem(hair)
+            item.setIcon(QIcon(os.path.join(self.parent_dir, 'icons/main_icons', 'shaveShader.png')))
             self.list_widget.addItem(item)
 
     def set_signals(self):
@@ -69,14 +71,14 @@ class AssignHairShader(QtGui.QDialog):
 
     def set_background(self):
         image_path = os.path.join(self.parent_dir, 'icons', 'background_icons', 'tx.png')
-        self.image = QtGui.QImage(image_path)
-        palette = QtGui.QPalette()
-        palette.setBrush(QtGui.QPalette.Background, QtGui.QBrush(self.image.scaled(self.size(), QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.SmoothTransformation)))
+        self.image = QImage(image_path)
+        palette = QPalette()
+        palette.setBrush(QPalette.Background, QBrush(self.image.scaled(self.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)))
         self.setPalette(palette)
 
     def resizeEvent(self, event):
-        palette = QtGui.QPalette()
-        palette.setBrush(QtGui.QPalette.Background, QtGui.QBrush(self.image.scaled(event.size(), QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.SmoothTransformation)))
+        palette = QPalette()
+        palette.setBrush(QPalette.Background, QBrush(self.image.scaled(event.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)))
         self.setPalette(palette)
 
     def set_select(self):
@@ -137,7 +139,7 @@ class AssignHairShader(QtGui.QDialog):
         self.update()
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.RightButton:
+        if event.button() == Qt.RightButton:
             self.close()
 
 

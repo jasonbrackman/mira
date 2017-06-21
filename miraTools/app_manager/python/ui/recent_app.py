@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import os
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from ..libs import get_conf_path, conf_parser, recent_operation
 from ..frameworks import frame_layout, app_button
 
 
-class RecentApp(QtGui.QWidget):
+class RecentApp(QWidget):
     def __init__(self, parent=None):
         super(RecentApp, self).__init__(parent)
         self.setMinimumHeight(110)
@@ -15,8 +17,8 @@ class RecentApp(QtGui.QWidget):
 
     def setup_ui(self):
         main_layout = frame_layout.FrameLayout("RECENT", False, False, self)
-        self.app_layout = QtGui.QHBoxLayout(main_layout.frame)
-        self.app_layout.setAlignment(QtCore.Qt.AlignLeft)
+        self.app_layout = QHBoxLayout(main_layout.frame)
+        self.app_layout.setAlignment(Qt.AlignLeft)
         self.app_layout.setContentsMargins(5, 0, 0, 0)
         self.app_layout.setSpacing(21)
 
@@ -25,7 +27,7 @@ class RecentApp(QtGui.QWidget):
         app_btn.remove_action.triggered.connect(self.remove_from_recent_record)
         app_btn.setMaximumWidth(55)
         app_btn.setMinimumHeight(80)
-        app_btn.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
+        app_btn.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
         app_btn.set_text()
         self.app_layout.addWidget(app_btn)
 

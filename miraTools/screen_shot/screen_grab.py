@@ -2,10 +2,12 @@
 import tempfile
 import sys
 import os
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 
-class ScreenGrabber(QtGui.QDialog):
+class ScreenGrabber(QDialog):
     """
     A transparent tool dialog for selecting an area (QRect) on the screen.
 
@@ -21,17 +23,17 @@ class ScreenGrabber(QtGui.QDialog):
 
         self._opacity = 1
         self._click_pos = None
-        self._capture_rect = QtCore.QRect()
+        self._capture_rect = QRect()
 
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint |
-                            QtCore.Qt.WindowStaysOnTopHint |
-                            QtCore.Qt.CustomizeWindowHint |
-                            QtCore.Qt.Tool)
-        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.setCursor(QtCore.Qt.CrossCursor)
+        self.setWindowFlags(Qt.FramelessWindowHint |
+                            Qt.WindowStaysOnTopHint |
+                            Qt.CustomizeWindowHint |
+                            Qt.Tool)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setCursor(Qt.CrossCursor)
         self.setMouseTracking(True)
 
-        desktop = QtGui.QApplication.instance().desktop()
+        desktop = QApplication.instance().desktop()
         desktop.resized.connect(self._fit_screen_geometry)
         desktop.screenCountChanged.connect(self._fit_screen_geometry)
 
@@ -47,27 +49,27 @@ class ScreenGrabber(QtGui.QDialog):
         Paint event
         """
         # Convert click and current mouse positions to local space.
-        mouse_pos = self.mapFromGlobal(QtGui.QCursor.pos())
+        mouse_pos = self.mapFromGlobal(QCursor.pos())
         click_pos = None
         if self._click_pos is not None:
             click_pos = self.mapFromGlobal(self._click_pos)
 
-        painter = QtGui.QPainter(self)
+        painter = QPainter(self)
 
         # Draw background. Aside from aesthetics, this makes the full
         # tool region accept mouse events.
-        painter.setBrush(QtGui.QColor(0, 0, 0, self._opacity))
-        painter.setPen(QtCore.Qt.NoPen)
+        painter.setBrush(QColor(0, 0, 0, self._opacity))
+        painter.setPen(Qt.NoPen)
         painter.drawRect(event.rect())
 
         # Clear the capture area
         if click_pos is not None:
-            capture_rect = QtCore.QRect(click_pos, mouse_pos)
-            painter.setCompositionMode(QtGui.QPainter.CompositionMode_Clear)
+            capture_rect = QRect(click_pos, mouse_pos)
+            painter.setCompositionMode(QPainter.CompositionMode_Clear)
             painter.drawRect(capture_rect)
-            painter.setCompositionMode(QtGui.QPainter.CompositionMode_SourceOver)
+            painter.setCompositionMode(QPainter.CompositionMode_SourceOver)
 
-        pen = QtGui.QPen(QtGui.QColor(255, 255, 255, 64), 1, QtCore.Qt.DotLine)
+        pen = QPen(QColor(255, 255, 255, 64), 1, Qt.DotLine)
         painter.setPen(pen)
 
         # Draw cropping markers at click position
@@ -106,7 +108,7 @@ class ScreenGrabber(QtGui.QDialog):
         """
         Mouse click event
         """
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == Qt.LeftButton:
             # Begin click drag operation
             self._click_pos = event.globalPos()
 
@@ -114,9 +116,9 @@ class ScreenGrabber(QtGui.QDialog):
         """
         Mouse release event
         """
-        if event.button() == QtCore.Qt.LeftButton and self._click_pos is not None:
+        if event.button() == Qt.LeftButton and self._click_pos is not None:
             # End click drag operation and commit the current capture rect
-            self._capture_rect = QtCore.QRect(self._click_pos,
+            self._capture_rect = QRect(self._click_pos,
                                               event.globalPos()).normalized()
             self._click_pos = None
         self.close()
@@ -133,12 +135,12 @@ class ScreenGrabber(QtGui.QDialog):
         """
         self._fit_screen_geometry()
         # Start fade in animation
-        fade_anim = QtCore.QPropertyAnimation(self, "_opacity_anim_prop", self)
+        fade_anim = QPropertyAnimation(self, "_opacity_anim_prop", self)
         fade_anim.setStartValue(self._opacity)
         fade_anim.setEndValue(127)
         fade_anim.setDuration(300)
-        fade_anim.setEasingCurve(QtCore.QEasingCurve.OutCubic)
-        fade_anim.start(QtCore.QAbstractAnimation.DeleteWhenStopped)
+        fade_anim.setEasingCurve(QEasingCurve.OutCubic)
+        fade_anim.start(QAbstractAnimation.DeleteWhenStopped)
 
     def _set_opacity(self, value):
         """
@@ -153,18 +155,18 @@ class ScreenGrabber(QtGui.QDialog):
         """
         return self._opacity
 
-    _opacity_anim_prop = QtCore.Property(int, _get_opacity, _set_opacity)
+    _opacity_anim_prop = Property(int, _get_opacity, _set_opacity)
 
     def _fit_screen_geometry(self):
         # Compute the union of all screen geometries, and resize to fit.
-        desktop = QtGui.QApplication.instance().desktop()
-        workspace_rect = QtCore.QRect()
+        desktop = QApplication.instance().desktop()
+        workspace_rect = QRect()
         for i in range(desktop.screenCount()):
             workspace_rect = workspace_rect.united(desktop.screenGeometry(i))
         self.setGeometry(workspace_rect)
 
 
-class ExternalCaptureThread(QtCore.QThread):
+class ExternalCaptureThread(QThread):
     """
     Wrap external screenshot call in a thread just to be on the safe side!
     This helps avoid the os thinking the application has hung for
@@ -174,7 +176,7 @@ class ExternalCaptureThread(QtCore.QThread):
         """
         :param path: Path to write the screenshot to
         """
-        QtCore.QThread.__init__(self)
+        QThread.__init__(self)
         self._path = path
         self._error = None
 
@@ -214,7 +216,7 @@ def _external_screenshot():
     Linux and macosx support only.
 
     :returns: Captured image
-    :rtype: :class:`~PySide.QtGui.QPixmap`
+    :rtype: :class:`~PySide.QPixmap`
     """
     output_path = tempfile.NamedTemporaryFile(suffix=".png",
                                               prefix="screencapture_",
@@ -227,14 +229,14 @@ def _external_screenshot():
         screenshot_thread.start()
         while not screenshot_thread.isFinished():
             screenshot_thread.wait(100)
-            QtGui.QApplication.processEvents()
+            QApplication.processEvents()
 
         if screenshot_thread.error_message:
             raise Exception("Failed to capture "
                                  "screenshot: %s" % screenshot_thread.error_message)
 
         # load into pixmap:
-        pm = QtGui.QPixmap(output_path)
+        pm = QPixmap(output_path)
     finally:
         # remove the temporary file
         if output_path and os.path.exists(output_path):
@@ -248,12 +250,12 @@ def get_desktop_pixmap(rect):
     Performs a screen capture on the specified rectangle.
 
     :param rect: Rectangle to capture
-    :type rect: :class:`~PySide.QtCore.QRect`
+    :type rect: :class:`~PySide.QRect`
     :returns: Captured image
-    :rtype: :class:`~PySide.QtGui.QPixmap`
+    :rtype: :class:`~PySide.QPixmap`
     """
-    desktop = QtGui.QApplication.instance().desktop()
-    return QtGui.QPixmap.grabWindow(desktop.winId(), rect.x(), rect.y(),
+    desktop = QApplication.instance().desktop()
+    return QPixmap.grabWindow(desktop.winId(), rect.x(), rect.y(),
                                     rect.width(), rect.height())
 
 
@@ -262,7 +264,7 @@ def screen_capture():
     Modally displays the screen capture tool.
 
     :returns: Captured screen
-    :rtype: :class:`~PySide.QtGui.QPixmap`
+    :rtype: :class:`~PySide.QPixmap`
     """
 
     if sys.platform in ["linux2", "darwin"]:

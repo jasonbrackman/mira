@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.OpenMaya as OpenMaya
 from miraLibs.mayaLibs.MayaToolBar import MayaToolBar
 from miraLibs.pipeLibs import pipeMira, pipeHistory
@@ -24,7 +26,7 @@ def add_project_to_maya_globals(project_object):
         maya_globals.update(currentProject=project_object)
 
 
-class ProjectButton(QtGui.QPushButton):
+class ProjectButton(QPushButton):
     def __init__(self, parent=None):
         super(ProjectButton, self).__init__(parent)
         self.projects = pipeMira.get_projects()
@@ -60,14 +62,14 @@ class ProjectButton(QtGui.QPushButton):
         if not os.path.isfile(icon_path):
             icon_path = os.path.join(icon_dir, "project_icon", "company.png")
         icon_path = icon_path.replace("\\", "/")
-        icon = QtGui.QIcon(icon_path)
+        icon = QIcon(icon_path)
         self.setIcon(icon)
-        self.setIconSize(QtCore.QSize(50, self.height()))
+        self.setIconSize(QSize(50, self.height()))
 
     def create_menu(self):
-        self.menu = QtGui.QMenu()
+        self.menu = QMenu()
         for project in self.projects:
-            self.action = QtGui.QAction(project, self)
+            self.action = QAction(project, self)
             self.action.triggered.connect(self.switch_project)
             self.menu.addAction(self.action)
         self.setMenu(self.menu)
@@ -84,10 +86,10 @@ class ProjectButton(QtGui.QPushButton):
             self.record_history()
             self.set_icon()
         else:
-            QtGui.QMessageBox.warning(None, "Warming Tip", "%s is not a unknown project." % project)
+            QMessageBox.warning(None, "Warming Tip", "%s is not a unknown project." % project)
 
     def record_history(self):
-        settings = QtCore.QSettings("Mira", "History")
+        settings = QSettings("Mira", "History")
         settings.setValue("currentProject", self.project)
 
     def set_project_when_scene_opened(self, *args):

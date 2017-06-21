@@ -1,29 +1,31 @@
 # -*- coding: utf-8 -*-
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import codecs
 
 
-class TextEdit(QtGui.QTextEdit):
+class TextEdit(QTextEdit):
     def __init__(self, parent=None):
         super(TextEdit, self).__init__(parent)
         self.image_dict = {}
         self.num = 0
-        self.setFont(QtGui.QFont("Courier", 17))
+        self.setFont(QFont("Courier", 17))
 
     def canInsertFromMimeData(self, source):
         return source.hasImage() or source.hasUrls() or super(TextEdit. self).canInsertFromMimeData(source)
 
     def insertFromMimeData(self, source):
         if source.hasImage():
-            url = QtCore.QUrl("dropped_image_%s" % self.num)
+            url = QUrl("dropped_image_%s" % self.num)
             self.num += 1
             self.drop_image(url, source.imageData())
         elif source.hasUrls():
             for url in source.urls():
                 print url.toString()
-                info = QtCore.QFileInfo(url.toLocalFile())
-                if QtCore.QByteArray(info.suffix()) in QtGui.QImageReader.supportedImageFormats():
-                    self.drop_image(url, QtGui.QImage(info.filePath()))
+                info = QFileInfo(url.toLocalFile())
+                if QByteArray(info.suffix()) in QImageReader.supportedImageFormats():
+                    self.drop_image(url, QImage(info.filePath()))
                 else:
                     self.drop_text_file(url)
         else:
@@ -31,16 +33,16 @@ class TextEdit(QtGui.QTextEdit):
 
     def drop_image(self, url, image):
         if not image.isNull():
-            self.document().addResource(QtGui.QTextDocument.ImageResource, url, image)
+            self.document().addResource(QTextDocument.ImageResource, url, image)
             self.textCursor().insertImage(url.toString())
-            my_byte = QtCore.QByteArray()
-            my_buffer = QtCore.QBuffer(my_byte)
+            my_byte = QByteArray()
+            my_buffer = QBuffer(my_byte)
             image.save(my_buffer, "PNG")
             self.image_dict[url.toString()] = my_byte.toBase64().data()
 
     def drop_text_file(self, url):
         file_path = url.toLocalFile()
-        codec = QtCore.QTextCodec.codecForName("utf-8")
+        codec = QTextCodec.codecForName("utf-8")
         with open(file_path, 'r') as f:
             self.textCursor().insertText(codec.toUnicode(f.read()))
 
@@ -58,11 +60,11 @@ class TextEdit(QtGui.QTextEdit):
             self.setHtml(html)
 
     def to_image(self, image_path):
-        pixmap = QtGui.QPixmap(self.document().size().toSize())
-        painter = QtGui.QPainter(pixmap)
+        pixmap = QPixmap(self.document().size().toSize())
+        painter = QPainter(pixmap)
         painter.eraseRect(pixmap.rect())
         painter.begin(self)
-        painter.setPen(QtCore.Qt.black)
+        painter.setPen(Qt.black)
         self.document().drawContents(painter)
         painter.end()
         pixmap.save(image_path)
@@ -85,7 +87,7 @@ class TextEdit(QtGui.QTextEdit):
 
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     tw = TextEdit()
     tw.show()
     app.exec_()

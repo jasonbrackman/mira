@@ -1,25 +1,27 @@
 # -*- coding: utf-8 -*-
 import os
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from miraFramework.Filter import ButtonLineEdit
 from miraLibs.osLibs import FileOpener
 from miraLibs.pyLibs import start_file
 from miraLibs.osLibs import get_engine
 
 
-class FileTreeView(QtGui.QTreeView):
+class FileTreeView(QTreeView):
     def __init__(self, name=None, parent=None):
         super(FileTreeView, self).__init__(parent)
-        self.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.setFocusPolicy(Qt.NoFocus)
         self.name = name
         self.expandAll()
         self.header().setVisible(False)
-        self.setSelectionMode(QtGui.QListWidget.SingleSelection)
+        self.setSelectionMode(QListWidget.SingleSelection)
         self.setSortingEnabled(True)
-        self.menu = QtGui.QMenu(self)
-        self.open_action = QtGui.QAction("Open", self)
-        self.copy_to_local_action = QtGui.QAction("Copy To Local", self)
-        self.show_in_filesystem_action = QtGui.QAction("Show In File System", self)
+        self.menu = QMenu(self)
+        self.open_action = QAction("Open", self)
+        self.copy_to_local_action = QAction("Copy To Local", self)
+        self.show_in_filesystem_action = QAction("Show In File System", self)
         self.set_signals()
 
     def set_signals(self):
@@ -32,7 +34,7 @@ class FileTreeView(QtGui.QTreeView):
         self.menu.addAction(self.show_in_filesystem_action)
         if self.name == "work":
             self.menu.addAction(self.copy_to_local_action)
-        self.menu.exec_(QtGui.QCursor.pos())
+        self.menu.exec_(QCursor.pos())
         event.accept()
 
     def get_filter(self):
@@ -50,7 +52,7 @@ class FileTreeView(QtGui.QTreeView):
 
     def set_dir(self, file_dir):
         if os.path.isdir(file_dir):
-            self.model = QtGui.QFileSystemModel()
+            self.model = QFileSystemModel()
             filter_list = self.get_filter()
             self.model.setNameFilters(filter_list)
             self.model.setNameFilterDisables(False)
@@ -61,7 +63,7 @@ class FileTreeView(QtGui.QTreeView):
             self.hideColumn(2)
             self.hideColumn(3)
         else:
-            self.model = QtGui.QStandardItemModel()
+            self.model = QStandardItemModel()
             self.setModel(self.model)
 
     def get_selected(self):
@@ -92,42 +94,42 @@ class FileTreeView(QtGui.QTreeView):
         start_file.start_file(dir_name)
 
     def clear(self):
-        model = QtGui.QStandardItemModel()
+        model = QStandardItemModel()
         self.setModel(model)
 
 
-class TaskGetUI(QtGui.QDialog):
+class TaskGetUI(QDialog):
     def __init__(self, parent=None):
         super(TaskGetUI, self).__init__(parent)
-        self.setWindowFlags(QtCore.Qt.Window)
+        self.setWindowFlags(Qt.Window)
         self.resize(900, 700)
         self.setWindowTitle("Task get")
         self.setObjectName("Task get")
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
 
-        project_layout = QtGui.QHBoxLayout()
-        project_label = QtGui.QLabel("Project")
+        project_layout = QHBoxLayout()
+        project_label = QLabel("Project")
         project_label.setFixedWidth(50)
-        self.project_cbox = QtGui.QComboBox()
+        self.project_cbox = QComboBox()
         project_layout.addWidget(project_label)
         project_layout.addWidget(self.project_cbox)
 
-        main_splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
+        main_splitter = QSplitter(Qt.Horizontal)
 
-        task_widget = QtGui.QTabWidget()
-        my_task_widget = QtGui.QWidget()
+        task_widget = QTabWidget()
+        my_task_widget = QWidget()
         task_widget.addTab(my_task_widget, "My Tasks")
-        my_task_layout = QtGui.QVBoxLayout(my_task_widget)
+        my_task_layout = QVBoxLayout(my_task_widget)
         self.filter_le = ButtonLineEdit()
-        self.final_checkbox = QtGui.QCheckBox("Complete")
+        self.final_checkbox = QCheckBox("Complete")
         self.final_checkbox.setChecked(False)
-        self.task_view = QtGui.QTreeView()
+        self.task_view = QTreeView()
         my_task_layout.addWidget(self.filter_le)
         my_task_layout.addWidget(self.final_checkbox)
         my_task_layout.addWidget(self.task_view)
 
-        self.file_widget = QtGui.QTabWidget()
+        self.file_widget = QTabWidget()
         self.local_file_widget = FileTreeView("local")
         self.work_file_widget = FileTreeView("work")
         self.publish_file_widget = FileTreeView("publish")
@@ -138,8 +140,8 @@ class TaskGetUI(QtGui.QDialog):
         main_splitter.addWidget(task_widget)
         main_splitter.addWidget(self.file_widget)
 
-        btn_layout = QtGui.QHBoxLayout()
-        self.open_btn = QtGui.QPushButton("Open")
+        btn_layout = QHBoxLayout()
+        self.open_btn = QPushButton("Open")
         btn_layout.addStretch()
         btn_layout.addWidget(self.open_btn)
 
@@ -152,7 +154,7 @@ class TaskGetUI(QtGui.QDialog):
 
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     tg = TaskGetUI()
     tg.show()
     app.exec_()

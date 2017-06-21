@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import logging
-import PySide.QtCore as QtCore
+from Qt.QtWidgets import *
+from Qt.QtGui import *
+from Qt.QtCore import *
 import miraLibs.mayaLibs.get_maya_globals as get_maya_globals
 
 
-Settings = QtCore.QSettings("Mira", "SceneBreakDownTimer")
+Settings = QSettings("Mira", "SceneBreakDownTimer")
 
 
 def set_duration(value):

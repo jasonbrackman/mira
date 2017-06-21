@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 import logging
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import add_environ
 from asset_library_libs.screen_shot.screen_shot import ThumbnailWidget
 from asset_library_libs.get_conf_data import get_conf_data
@@ -15,7 +17,7 @@ from asset_library_libs.export_shd import ShdExporter
 logger = logging.getLogger("Asset library output")
 
 
-class ComboModel(QtCore.QAbstractListModel):
+class ComboModel(QAbstractListModel):
     def __init__(self, model_data=None, parent=None):
         super(ComboModel, self).__init__(parent)
         self.model_data = model_data
@@ -30,20 +32,20 @@ class ComboModel(QtCore.QAbstractListModel):
     def data(self, index, role):
         row = index.row()
         if row < len(self.model_data):
-            if role == QtCore.Qt.DisplayRole:
+            if role == Qt.DisplayRole:
                 return self.model_data[row]
-            elif role == QtCore.Qt.SizeHintRole:
-                return QtCore.QSize(self.parent.width(), 25)
+            elif role == Qt.SizeHintRole:
+                return QSize(self.parent.width(), 25)
 
     def setData(self, index, value, role):
         row = index.row()
         if value:
-            if role == QtCore.Qt.DisplayRole:
+            if role == Qt.DisplayRole:
                 self.model_data[row] = value
                 self.dataChanged.emit(index, index)
             return True
 
-    def insertRows(self, position, count, value, parent=QtCore.QModelIndex()):
+    def insertRows(self, position, count, value, parent=QModelIndex()):
         self.beginInsertRows(parent, position, position+count-1)
         for index, i in enumerate(value):
             self.model_data.insert(position+index, i)
@@ -51,7 +53,7 @@ class ComboModel(QtCore.QAbstractListModel):
         return True
 
 
-class Output(QtGui.QWidget):
+class Output(QWidget):
     def __init__(self, parent=None):
         super(Output, self).__init__(parent)
         self.engine = get_engine()
@@ -64,39 +66,39 @@ class Output(QtGui.QWidget):
 
     def setup_ui(self):
         self.resize(400, 500)
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
 
-        category_layout = QtGui.QHBoxLayout()
-        category_label = QtGui.QLabel("Category")
+        category_layout = QHBoxLayout()
+        category_label = QLabel("Category")
         category_label.setFixedWidth(50)
-        self.category_cbox = QtGui.QComboBox()
+        self.category_cbox = QComboBox()
         category_layout.addWidget(category_label)
         category_layout.addWidget(self.category_cbox)
 
-        name_layout = QtGui.QHBoxLayout()
-        name_label = QtGui.QLabel("Name")
+        name_layout = QHBoxLayout()
+        name_label = QLabel("Name")
         name_label.setFixedWidth(50)
-        name_label.setAlignment(QtCore.Qt.AlignRight)
-        self.name_le = QtGui.QLineEdit()
+        name_label.setAlignment(Qt.AlignRight)
+        self.name_le = QLineEdit()
         self.name_le.setPlaceholderText("Please input an asset name")
         name_layout.addWidget(name_label)
         name_layout.addWidget(self.name_le)
 
-        screen_layout = QtGui.QHBoxLayout()
-        screen_layout.setAlignment(QtCore.Qt.AlignCenter)
+        screen_layout = QHBoxLayout()
+        screen_layout.setAlignment(Qt.AlignCenter)
         self.screen_widget = ThumbnailWidget()
         self.screen_widget.setFixedSize(380, 380)
         screen_layout.addWidget(self.screen_widget)
 
-        path_layout = QtGui.QGridLayout()
-        mdl_path__label = QtGui.QLabel("mdl path")
-        self.mdl_path_le = QtGui.QLineEdit()
-        tex_dir_label = QtGui.QLabel("tex dir")
-        self.tex_dir_le = QtGui.QLineEdit()
-        shd_path_label = QtGui.QLabel("shd path")
-        self.shd_path_le = QtGui.QLineEdit()
-        pic_path_label = QtGui.QLabel("pic path")
-        self.pic_path_le = QtGui.QLineEdit()
+        path_layout = QGridLayout()
+        mdl_path__label = QLabel("mdl path")
+        self.mdl_path_le = QLineEdit()
+        tex_dir_label = QLabel("tex dir")
+        self.tex_dir_le = QLineEdit()
+        shd_path_label = QLabel("shd path")
+        self.shd_path_le = QLineEdit()
+        pic_path_label = QLabel("pic path")
+        self.pic_path_le = QLineEdit()
         for le in [self.mdl_path_le, self.tex_dir_le, self.shd_path_le, self.pic_path_le]:
             le.setReadOnly(True)
         path_layout.addWidget(mdl_path__label, 0, 0)
@@ -108,8 +110,8 @@ class Output(QtGui.QWidget):
         path_layout.addWidget(pic_path_label, 3, 0)
         path_layout.addWidget(self.pic_path_le, 3, 1)
 
-        self.submit_btn = QtGui.QPushButton("Submit")
-        self.progress_bar = QtGui.QProgressBar()
+        self.submit_btn = QPushButton("Submit")
+        self.progress_bar = QProgressBar()
         self.progress_bar.setTextVisible(False)
 
         main_layout.addLayout(category_layout)
@@ -134,13 +136,13 @@ class Output(QtGui.QWidget):
         self.category_model = ComboModel(self.category_list, self.category_cbox)
         self.category_cbox.setModel(self.category_model)
         self.category_view = self.category_cbox.view()
-        self.add_category_btn = QtGui.QPushButton("Add category")
+        self.add_category_btn = QPushButton("Add category")
         self.add_category_btn.clicked.connect(self.add_category)
         btn_index = self.category_model.index(len(self.category_list))
         self.category_view.setIndexWidget(btn_index, self.add_category_btn)
 
     def add_category(self):
-        inputs = QtGui.QInputDialog.getText(self, "Input a category name", "category name:")
+        inputs = QInputDialog.getText(self, "Input a category name", "category name:")
         if inputs[1]:
             text = inputs[0]
             self.category_model.insertRows(0, 1, [text])
@@ -185,18 +187,18 @@ class Output(QtGui.QWidget):
 
     def do_submit(self):
         if not self.pixmap:
-            QtGui.QMessageBox.warning(None, "Warning", "Screen shot first please.")
+            QMessageBox.warning(None, "Warning", "Screen shot first please.")
             return
         category = str(self.category_cbox.currentText())
         name = str(self.name_le.text())
         if not all((category, name)):
-            QtGui.QMessageBox.warning(self, "warning", "Make sure category and name is right.")
+            QMessageBox.warning(self, "warning", "Make sure category and name is right.")
             return
         asset_dir = os.path.join(self.asset_library_dir, category, name).replace("\\", "/")
         if os.path.isdir(asset_dir):
-            message_box = QtGui.QMessageBox.warning(self, "warning",
+            message_box = QMessageBox.warning(self, "warning",
                                                     "%s is an exist directory, Do you want to replace it?" % asset_dir,
-                                                    QtGui.QMessageBox.Yes | QtGui.QMessageBox.Cancel)
+                                                    QMessageBox.Yes | QMessageBox.Cancel)
             if message_box.name == "Cancel":
                 return
         self.progress_bar.setRange(0, 4)

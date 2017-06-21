@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 import os
 import functools
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as mc
-import maya.OpenMayaUI as mui
-import maya.utils as mu
-import shiboken
 import layout_producer_ui
 reload(layout_producer_ui)
 import miraCore
 from miraLibs.pipeLibs import pipeMira, pipeFile
 from miraLibs.pyLibs import join_path, get_latest_version_by_dir
-from miraLibs.mayaLibs import create_reference, import_gpu_cache, add_string_attr, set_dock_raise
+from miraLibs.mayaLibs import create_reference, import_gpu_cache, add_string_attr, show_as_panel
 from miraLibs.pipeLibs.pipeMaya import get_current_project
+
 
 qss_path = join_path.join_path2(os.path.dirname(__file__), "style.qss")
 
@@ -24,7 +24,7 @@ class ListModelItem(object):
         self.publish_path = publish_path
 
 
-class ListModel(QtCore.QAbstractListModel):
+class ListModel(QAbstractListModel):
     def __init__(self, model_data=[], parent=None):
         super(ListModel, self).__init__(parent)
         self.__model_data = model_data
@@ -37,14 +37,14 @@ class ListModel(QtCore.QAbstractListModel):
     def model_data(self, value):
         self.__model_data = value
 
-    def rowCount(self, parent=QtCore.QModelIndex()):
+    def rowCount(self, parent=QModelIndex()):
         return len(self.__model_data)
 
-    def data(self, index, role=QtCore.Qt.DisplayRole):
+    def data(self, index, role=Qt.DisplayRole):
         row = index.row()
-        if role == QtCore.Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             return self.__model_data[row].name
-        if role == QtCore.Qt.ToolTipRole:
+        if role == Qt.ToolTipRole:
             publish_path = self.__model_data[row].publish_path
             if publish_path:
                 obj = pipeFile.PathDetails.parse_path(publish_path)
@@ -54,25 +54,25 @@ class ListModel(QtCore.QAbstractListModel):
                     return "%s\n%s" % (context_version, version)
                 else:
                     return version
-        if role == QtCore.Qt.DecorationRole:
+        if role == Qt.DecorationRole:
             pix_map_path = self.__model_data[row].image_path
             icon_dir = miraCore.get_icons_dir()
             if not pix_map_path:
                 pix_map_path = join_path.join_path2(icon_dir, "unknown.png")
-            pix_map = QtGui.QPixmap(pix_map_path)
-            scaled = pix_map.scaled(QtCore.QSize(100, 100), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-            scaled.setMask(QtGui.QBitmap(join_path.join_path2(icon_dir, "round_corner_mask.png")))
+            pix_map = QPixmap(pix_map_path)
+            scaled = pix_map.scaled(QSize(100, 100), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            scaled.setMask(QBitmap(join_path.join_path2(icon_dir, "round_corner_mask.png")))
             return scaled
-        if role == QtCore.Qt.ForegroundRole:
+        if role == Qt.ForegroundRole:
             if not self.__model_data[row].publish_path:
-                return QtGui.QColor(255, 0, 0)
+                return QColor(255, 0, 0)
             else:
-                return QtGui.QColor(0, 255, 0)
+                return QColor(0, 255, 0)
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
-    def insertRows(self, position, count, value, parent=QtCore.QModelIndex()):
+    def insertRows(self, position, count, value, parent=QModelIndex()):
         self.beginInsertRows(parent, position, position+count-1)
         for index, i in enumerate(value):
             self.__model_data.insert(position+index, i)
@@ -80,7 +80,7 @@ class ListModel(QtCore.QAbstractListModel):
         self.endInsertRows()
         return True
 
-    def removeRows(self, position, count, parent=QtCore.QModelIndex()):
+    def removeRows(self, position, count, parent=QModelIndex()):
         self.beginRemoveRows(parent, position, position+count-1)
         for i in range(count):
             value = self.__model_data[position]
@@ -91,7 +91,7 @@ class ListModel(QtCore.QAbstractListModel):
     def setData(self, index, value, role):
         row = index.row()
         if value:
-            if role == QtCore.Qt.DecorationRole:
+            if role == Qt.DecorationRole:
                 self.model_data[row] = value
                 self.dataChanged.emit(index, index)
             return True
@@ -101,8 +101,8 @@ class ListModel(QtCore.QAbstractListModel):
             self.removeRows(0, 1)
 
 
-class CollectAssetsThread(QtCore.QThread):
-    signal = QtCore.Signal(list)
+class CollectAssetsThread(QThread):
+    signal = Signal(list)
 
     def __init__(self, asset_type_dir=None, low=True, parent=None):
         super(CollectAssetsThread, self).__init__(parent)
@@ -159,10 +159,10 @@ class CollectAssetsThread(QtCore.QThread):
 class LayoutProducer(layout_producer_ui.LayoutProducerUI):
     def __init__(self, parent=None):
         super(LayoutProducer, self).__init__(parent)
-        self.setObjectName("Layout producer")
-        self.setStyle(QtGui.QStyleFactory.create('plastique'))
+        self.setObjectName("LayoutProducer")
+        self.setStyle(QStyleFactory.create('plastique'))
         self.setStyleSheet(open(qss_path, 'r').read())
-        self.setWindowFlags(QtCore.Qt.Window)
+        self.setWindowFlags(Qt.Window)
         self.__threads = list()
         self.__show_thread = CollectAssetsThread()
         self.__projects = pipeMira.get_projects()
@@ -201,9 +201,9 @@ class LayoutProducer(layout_producer_ui.LayoutProducerUI):
             create_reference.create_reference(publish_path, namespace, True)
 
     def set_asset_model(self):
-        self.asset_proxy_model = QtGui.QSortFilterProxyModel()
+        self.asset_proxy_model = QSortFilterProxyModel()
         self.asset_proxy_model.setDynamicSortFilter(True)
-        self.asset_proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.asset_proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
         self.filter_le.textChanged.connect(self.asset_proxy_model.setFilterRegExp)
         self.asset_model = ListModel(self.__asset_model_data)
         self.asset_proxy_model.setSourceModel(self.asset_model)
@@ -246,7 +246,7 @@ class LayoutProducer(layout_producer_ui.LayoutProducerUI):
                 return []
             selected = list()
             model = list_view.model()
-            if isinstance(model, QtGui.QSortFilterProxyModel):
+            if isinstance(model, QSortFilterProxyModel):
                 selected_rows = list(set([model.mapToSource(i).row() for i in selected_indexes]))
                 for row in selected_rows:
                     data = model.sourceModel().model_data[row]
@@ -258,7 +258,7 @@ class LayoutProducer(layout_producer_ui.LayoutProducerUI):
     @staticmethod
     def clear_list_view(list_view):
         model = list_view.model()
-        if isinstance(model, QtGui.QSortFilterProxyModel):
+        if isinstance(model, QSortFilterProxyModel):
             model = model.sourceModel()
         model.remove_all()
 
@@ -298,9 +298,9 @@ class LayoutProducer(layout_producer_ui.LayoutProducerUI):
             namespace = item.name if self.name_space_cbox.currentText() == "asset_name" else ":"
             reference_files.append([publish_path, namespace])
         # add progress dialog
-        progress_dialog = QtGui.QProgressDialog('Referencing...', 'Cancel', 0, len(reference_files))
+        progress_dialog = QProgressDialog('Referencing...', 'Cancel', 0, len(reference_files))
         progress_dialog.setMinimumWidth(400)
-        progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+        progress_dialog.setWindowModality(Qt.WindowModal)
         progress_dialog.show()
         for index, reference_file in enumerate(reference_files):
             progress_dialog.setValue(index)
@@ -350,34 +350,9 @@ class LayoutProducer(layout_producer_ui.LayoutProducerUI):
         mc.setAttr("%s.scalePivot" % parent_name, lock=1)
 
 
-def create(docked=True):
-    dialog = LayoutProducer()
-    if docked:
-        ptr = mui.MQtUtil.mainWindow()
-        main_window = shiboken.wrapInstance(long(ptr), QtGui.QWidget)
-        dialog.setParent(main_window)
-        size = dialog.size()
-        name = mui.MQtUtil.fullName(long(shiboken.getCppPointer(dialog)[0]))
-        dock = mc.dockControl(
-            allowedArea=['right', 'left'],
-            area='right',
-            floating=False,
-            content=name,
-            width=size.width(),
-            height=size.height(),
-            label='Layout producer')
-        return dock
-    else:
-        dialog.show()
-
-
 def main():
-    global dock_widget
-    try:
-        mc.deleteUI(dock_widget)
-    except:pass
-    dock_widget = create(True)
-    mu.executeDeferred("mc.dockControl(\"%s\", e=1, r=1)" % dock_widget)
+    lp = LayoutProducer()
+    show_as_panel.show_as_panel(lp)
 
 
 if __name__ == "__main__":

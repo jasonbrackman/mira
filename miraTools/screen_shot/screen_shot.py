@@ -1,28 +1,30 @@
 # -*- coding: utf-8 -*-
 import tempfile
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from screen_shot_ui import Ui_ThumbnailWidget
 import screen_grab
 
 
-class ThumbnailWidget(QtGui.QWidget):
+class ThumbnailWidget(QWidget):
     """
     Thumbnail widget that provides screen capture functionality
     _get_thumbnail_path() can return the screen path  C:/..../Temp/******.png
     """
 
-    thumbnail_changed = QtCore.Signal()
+    thumbnail_changed = Signal()
 
     def __init__(self, parent=None):
         """
         Construction
         """
-        QtGui.QWidget.__init__(self, parent)
+        QWidget.__init__(self, parent)
         self._ui = Ui_ThumbnailWidget()
         self._ui.setupUi(self)
 
         # create layout to control buttons frame
-        layout = QtGui.QHBoxLayout()
+        layout = QHBoxLayout()
         layout.addWidget(self._ui.buttons_frame)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
@@ -50,7 +52,7 @@ class ThumbnailWidget(QtGui.QWidget):
 
     # @thumbnail.setter
     def _set_thumbnail(self, value):
-        self._ui.thumbnail.setPixmap(value if value else QtGui.QPixmap())
+        self._ui.thumbnail.setPixmap(value if value else QPixmap())
         self._update_ui()
         self.thumbnail_changed.emit()
     thumbnail = property(_get_thumbnail, _set_thumbnail)
@@ -68,7 +70,7 @@ class ThumbnailWidget(QtGui.QWidget):
         if self.thumbnail and self._are_any_btns_enabled():
             self._ui.buttons_frame.show()
             if hasattr(QtCore, "QAbstractAnimation"):
-                self._run_btns_transition_anim(QtCore.QAbstractAnimation.Forward)
+                self._run_btns_transition_anim(QAbstractAnimation.Forward)
             else:
                 # Q*Animation classes aren't available so just
                 # make sure the button is visible:
@@ -80,7 +82,7 @@ class ThumbnailWidget(QtGui.QWidget):
         """
         if self.thumbnail and self._are_any_btns_enabled():
             if hasattr(QtCore, "QAbstractAnimation"):
-                self._run_btns_transition_anim(QtCore.QAbstractAnimation.Backward)
+                self._run_btns_transition_anim(QAbstractAnimation.Backward)
             else:
                 # Q*Animation classes aren't available so just
                 # make sure the button is hidden:
@@ -102,7 +104,7 @@ class ThumbnailWidget(QtGui.QWidget):
     def set_btn_visibility(self, value):
         self._btns_visibility = value
         self._ui.buttons_frame.setStyleSheet("#buttons_frame {border-radius: 2px; background-color: rgba(32, 32, 32, %d);}" % (64 * value))
-    btn_visibility = QtCore.Property(float, get_btn_visibility, set_btn_visibility)
+    btn_visibility = Property(float, get_btn_visibility, set_btn_visibility)
 
     def _run_btns_transition_anim(self, direction):
         """
@@ -110,13 +112,13 @@ class ThumbnailWidget(QtGui.QWidget):
         """
         if not self._btns_transition_anim:
             # set up anim:
-            self._btns_transition_anim =  QtCore.QPropertyAnimation(self, "btn_visibility")
+            self._btns_transition_anim =  QPropertyAnimation(self, "btn_visibility")
             self._btns_transition_anim.setDuration(150)
             self._btns_transition_anim.setStartValue(0.0)
             self._btns_transition_anim.setEndValue(1.0)
             self._btns_transition_anim.finished.connect(self._on_btns_transition_anim_finished)
 
-        if self._btns_transition_anim.state() == QtCore.QAbstractAnimation.Running:
+        if self._btns_transition_anim.state() == QAbstractAnimation.Running:
             if self._btns_transition_anim.direction() != direction:
                 self._btns_transition_anim.pause()
                 self._btns_transition_anim.setDirection(direction)
@@ -128,7 +130,7 @@ class ThumbnailWidget(QtGui.QWidget):
             self._btns_transition_anim.start()
 
     def _on_btns_transition_anim_finished(self):
-        if self._btns_transition_anim.direction() == QtCore.QAbstractAnimation.Backward:
+        if self._btns_transition_anim.direction() == QAbstractAnimation.Backward:
             self._ui.buttons_frame.hide()
 
     def _on_camera_clicked(self):
@@ -157,7 +159,7 @@ class ThumbnailWidget(QtGui.QWidget):
             new_height = min(int(pm_sz.height() * scale), thumbnail_geom.height())
             new_width = min(int(pm_sz.width() * scale), thumbnail_geom.width())
 
-            new_geom = QtCore.QRect(thumbnail_geom)
+            new_geom = QRect(thumbnail_geom)
             new_geom.moveLeft(((thumbnail_geom.width()-4)/2 - new_width/2)+2)
             new_geom.moveTop(((thumbnail_geom.height()-4)/2 - new_height/2)+2)
             new_geom.setWidth(new_width)
@@ -168,7 +170,7 @@ class ThumbnailWidget(QtGui.QWidget):
         self._ui.thumbnail.setGeometry(thumbnail_geom)
 
         # now update buttons based on current thumbnail:
-        if not self._btns_transition_anim or self._btns_transition_anim.state() == QtCore.QAbstractAnimation.Stopped:
+        if not self._btns_transition_anim or self._btns_transition_anim.state() == QAbstractAnimation.Stopped:
             if self.thumbnail or not self._are_any_btns_enabled():
                 self._ui.buttons_frame.hide()
                 self._btns_visibility = 0.0
@@ -188,7 +190,7 @@ class ThumbnailWidget(QtGui.QWidget):
         """
         current_widget = self
         while current_widget:
-            if isinstance(current_widget, QtGui.QDialog):
+            if isinstance(current_widget, QDialog):
                 return current_widget
             current_widget = current_widget.parentWidget()
         return None
@@ -207,9 +209,9 @@ class ThumbnailWidget(QtGui.QWidget):
             win_geom = win.geometry()
             win.setGeometry(1000000, 1000000, win_geom.width(), win_geom.height())
             # make sure this event is processed:
-            QtCore.QCoreApplication.processEvents()
-            QtCore.QCoreApplication.sendPostedEvents(None, 0)
-            QtCore.QCoreApplication.flush()
+            QCoreApplication.processEvents()
+            QCoreApplication.sendPostedEvents(None, 0)
+            QCoreApplication.flush()
         try:
             # get temporary file to use:
             # to be cross-platform and python 2.5 compliant, we can't use
@@ -223,7 +225,7 @@ class ThumbnailWidget(QtGui.QWidget):
             # restore the window:
             if win:
                 win.setGeometry(win_geom)
-                QtCore.QCoreApplication.processEvents()
+                QCoreApplication.processEvents()
         return pm_map
 
 

@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 import maya.cmds as mc
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from miraLibs.mayaLibs import select_current_view_objects
 
 
@@ -43,8 +45,8 @@ def get_work_path(shot):
 def main():
     clear_panel()
     shots = mc.ls(type="shot")
-    progress_dialog = QtGui.QProgressDialog('Exporting...Please Wait', 'Cancel', 0, len(shots))
-    progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+    progress_dialog = QProgressDialog('Exporting...Please Wait', 'Cancel', 0, len(shots))
+    progress_dialog.setWindowModality(Qt.WindowModal)
     progress_dialog.show()
     value = 0
     for shot in shots[:2]:

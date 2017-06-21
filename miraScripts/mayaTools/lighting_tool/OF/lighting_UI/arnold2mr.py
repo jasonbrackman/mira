@@ -2,7 +2,10 @@
 import pymel.core as pm
 import maya.mel as mel
 import re
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
+from Qt import __binding__
 
 mat_dict = {'aiStandard': {'color': {'mr_name': 'diffuse', 'value': (1.0, 1.0, 1.0)},
                               'Kd': {'mr_name': 'diffuse_weight', 'value': 0.7},
@@ -279,59 +282,72 @@ def load_plugin(plugin_name):
         print "load plugin %s successful" % plugin_name
     
 
-def get_maya_win():
+def get_maya_win(module="mayaUI"):
+    """
+    get a QMainWindow Object of maya main window
+    :param module (optional): string "PySide"(default) or "PyQt4"
+    :return main_window: QWidget or QMainWindow object
+    """
     import maya.OpenMayaUI as mui
-    main_window = None
-    ptr = mui.MQtUtil.mainWindow()
-    if 'PyQt4' in QtGui.__name__:
+    prt = mui.MQtUtil.mainWindow()
+    if module == "PyQt":
         import sip
-        main_window = sip.wrapinstance(long(ptr), QtCore.QObject)
-    if 'PySide' in QtGui.__name__:
-        import shiboken
-        main_window = shiboken.wrapInstance(long(ptr), QtCore.QObject)
+        from Qt.QtCore import *
+        main_window = sip.wrapinstance(long(prt), QObject)
+    elif module in ["PySide", "PyQt"]:
+        if __binding__ in ["PySide", "PyQt4"]:
+            import shiboken
+        elif __binding__ in ["PySide2", "PyQt5"]:
+            import shiboken2 as shiboken
+        from Qt.QtWidgets import *
+        main_window = shiboken.wrapInstance(long(prt), QWidget)
+    elif module == "mayaUI":
+        main_window = "MayaWindow"
+    else:
+        raise ValueError('param "module" must be "mayaUI" "PyQt4" or "PySide"')
     return main_window
 
 #----------------------------------------------UI---------------------------------------------#
 
 
-class MyItem(QtGui.QStandardItem):
-    def __init__(self, text=None, color=QtCore.Qt.white, bold=False, font_size=10, parent=None):
+class MyItem(QStandardItem):
+    def __init__(self, text=None, color=Qt.white, bold=False, font_size=10, parent=None):
         super(MyItem, self).__init__(parent)
         self.text = text
         self.setText(self.text)
         self.setForeground(color)
-        font = QtGui.QFont()
+        font = QFont()
         font.setPointSizeF(font_size)
         if bold:
-            font.setWeight(QtGui.QFont.Bold)
-        self.setData(font, QtCore.Qt.FontRole)
+            font.setWeight(QFont.Bold)
+        self.setData(font, Qt.FontRole)
         self.setEditable(False)
 
 
-class ArToMr(QtGui.QDialog):
+class ArToMr(QDialog):
     def __init__(self, parent=None):
         super(ArToMr, self).__init__(parent)
         self.setWindowTitle('Arnold To MentalRay')
         self.setObjectName('Arnold To MentalRay')
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowMinimizeButtonHint)
         self.resize(800, 400)
         self.model = None
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
 
-        refresh_layout = QtGui.QHBoxLayout()
-        self.label = QtGui.QLabel()
-        self.refresh_btn = QtGui.QPushButton('Refresh')
+        refresh_layout = QHBoxLayout()
+        self.label = QLabel()
+        self.refresh_btn = QPushButton('Refresh')
         self.refresh_btn.setFixedWidth(50)
         refresh_layout.addWidget(self.label)
         refresh_layout.addWidget(self.refresh_btn)
 
-        self.tree_view = QtGui.QTreeView()
-        self.model = QtGui.QStandardItemModel()
+        self.tree_view = QTreeView()
+        self.model = QStandardItemModel()
 
-        button_layout = QtGui.QHBoxLayout()
+        button_layout = QHBoxLayout()
         #button_layout.setContentsMargins(2, 5, 2, 5)
-        self.convert_btn = QtGui.QPushButton('Convert')
-        self.delete_btn = QtGui.QPushButton('Delete Unused Nodes')
+        self.convert_btn = QPushButton('Convert')
+        self.delete_btn = QPushButton('Delete Unused Nodes')
         button_layout.addWidget(self.convert_btn)
         button_layout.addWidget(self.delete_btn)
 
@@ -344,8 +360,8 @@ class ArToMr(QtGui.QDialog):
 
     def init_settings(self):
         self.set_model()
-        self.tree_view.setEditTriggers(QtGui.QTreeView.NoEditTriggers)
-        self.tree_view.setSelectionMode(QtGui.QTreeView.ExtendedSelection)
+        self.tree_view.setEditTriggers(QTreeView.NoEditTriggers)
+        self.tree_view.setSelectionMode(QTreeView.ExtendedSelection)
         self.tree_view.resizeColumnToContents(0)
         self.tree_view.resizeColumnToContents(1)
         self.tree_view.resizeColumnToContents(2)
@@ -364,12 +380,12 @@ class ArToMr(QtGui.QDialog):
         self.model.setHorizontalHeaderLabels(header_list)
         shader_types = ['aiStandard', 'aiSkinSss', 'aiOf_aiLayerMixer', 'aiOf_aiRimFilter']
         for types in shader_types:
-            type_item = MyItem(types, color=QtGui.QColor(255, 100, 0), bold=True)
-            type_item.setBackground(QtGui.QColor(20, 10, 0))
+            type_item = MyItem(types, color=QColor(255, 100, 0), bold=True)
+            type_item.setBackground(QColor(20, 10, 0))
             shaders = get_shader_by_type(types)
-            ar_shader_num_item = MyItem(str(len(shaders)), color=QtGui.QColor(255, 100, 0), bold=True)
-            ar_shader_num_item.setTextAlignment(QtCore.Qt.AlignCenter)
-            ar_shader_num_item.setBackground(QtGui.QColor(20, 10, 0))
+            ar_shader_num_item = MyItem(str(len(shaders)), color=QColor(255, 100, 0), bold=True)
+            ar_shader_num_item.setTextAlignment(Qt.AlignCenter)
+            ar_shader_num_item.setBackground(QColor(20, 10, 0))
             num_mr_shader = 0
             for index, shader in enumerate(shaders):
                 ar_child_item = MyItem(shader)
@@ -377,14 +393,14 @@ class ArToMr(QtGui.QDialog):
                 mr_shader = shader+'_mr'
                 if mc.objExists(mr_shader):
                     num_mr_shader += 1
-                    ar_child_item.setForeground(QtCore.Qt.green)
+                    ar_child_item.setForeground(Qt.green)
                     mr_child_item = MyItem(mr_shader)
                     type_item.setChild(index, 2, mr_child_item)
                 else:
-                    ar_child_item.setForeground(QtCore.Qt.red)
-            mr_shader_num_item = MyItem(str(num_mr_shader), color=QtGui.QColor(255, 100, 0), bold=True)
-            mr_shader_num_item.setTextAlignment(QtCore.Qt.AlignCenter)
-            mr_shader_num_item.setBackground(QtGui.QColor(20, 10, 0))
+                    ar_child_item.setForeground(Qt.red)
+            mr_shader_num_item = MyItem(str(num_mr_shader), color=QColor(255, 100, 0), bold=True)
+            mr_shader_num_item.setTextAlignment(Qt.AlignCenter)
+            mr_shader_num_item.setBackground(QColor(20, 10, 0))
             items = [type_item, ar_shader_num_item, mr_shader_num_item]
             self.model.appendRow(items)
         self.tree_view.setModel(self.model)
@@ -400,8 +416,8 @@ class ArToMr(QtGui.QDialog):
         mc.renderThumbnailUpdate(False)
         all_materials = pm.ls(materials=1)
         if all_materials:
-            pd = QtGui.QProgressDialog('Converting...', 'Cancel', 0, len(all_materials))
-            pd.setWindowModality(QtCore.Qt.WindowModal)
+            pd = QProgressDialog('Converting...', 'Cancel', 0, len(all_materials))
+            pd.setWindowModality(Qt.WindowModal)
             pd.show()
             value = 0
             for material in all_materials:
@@ -443,7 +459,7 @@ class ArToMr(QtGui.QDialog):
     def show_UI(cls):
         if mc.window('Arnold To MentalRay', q=1, exists=1):
             mc.deleteUI('Arnold To MentalRay')
-        atm = cls(get_maya_win())
+        atm = cls(get_maya_win("PySide"))
         atm.show()
         
 

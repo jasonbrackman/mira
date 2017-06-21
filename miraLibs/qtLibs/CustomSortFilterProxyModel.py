@@ -1,21 +1,23 @@
 # -*- coding: utf-8 -*-
 import logging
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 
-class CustomSortFilterProxyModel(QtGui.QSortFilterProxyModel):
+class CustomSortFilterProxyModel(QSortFilterProxyModel):
     def __init__(self, columns=[], parent=None):
         super(CustomSortFilterProxyModel, self).__init__(parent)
         self.logger = logging.getLogger(__name__)
         self.setDynamicSortFilter(True)
-        self.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.setFilterCaseSensitivity(Qt.CaseInsensitive)
         self.columns = columns
         self.regexp_list = []
         if self.columns:
             for column in self.columns:
-                regexp_object = QtCore.QRegExp()
-                regexp_object.setCaseSensitivity(QtCore.Qt.CaseInsensitive)
-                regexp_object.setPatternSyntax(QtCore.QRegExp.RegExp)
+                regexp_object = QRegExp()
+                regexp_object.setCaseSensitivity(Qt.CaseInsensitive)
+                regexp_object.setPatternSyntax(QRegExp.RegExp)
                 self.regexp_list.append(regexp_object)
 
     def filterAcceptsRow(self, source_row, source_parent):

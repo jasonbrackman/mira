@@ -11,7 +11,9 @@
 # Built-in modules
 
 # Third-party modules
-import PySide.QtCore as QtCore
+from Qt.QtWidgets import *
+from Qt.QtGui import *
+from Qt.QtCore import *
 
 # Studio modules
 
@@ -37,7 +39,7 @@ def drag_move_dec(widget_class):
 
         def mousePressEvent(self, event):
             super(MovedClass, self).mousePressEvent(event)
-            self.__last_clicked_pos = (event.globalPos(), QtCore.QPoint(self.pos()))
+            self.__last_clicked_pos = (event.globalPos(), QPoint(self.pos()))
 
         def mouseMoveEvent(self, event):
             if self.__last_clicked_pos:
@@ -53,14 +55,16 @@ def drag_move_dec(widget_class):
     return MovedClass
 
 if __name__ == "__main__":
-    import PySide.QtGui as QtGui
+    from Qt.QtWidgets import *
+    from Qt.QtCore import *
+    from Qt.QtGui import *
     import sys
 
     @drag_move_dec
-    class TestLabel(QtGui.QLabel):
+    class TestLabel(QLabel):
         pass
 
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     test = TestLabel("hello")
     test.show()
     app.exec_()

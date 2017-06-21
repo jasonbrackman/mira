@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import logging
 import os
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import maya.cmds as mc
 import pymel.core as pm
 import miraCore
@@ -10,14 +12,13 @@ reload(lgt_assign_shader_deformed)
 from miraLibs.mayaLibs import get_maya_win, replace_reference
 from miraFramework.Filter import ButtonLineEdit
 from miraLibs.pyLibs import join_path
-from miraLibs.pipeLibs.pipeDb import sql_api
 from miraLibs.pipeLibs import pipeFile
 
 
 ASSET_DICT = {"char": "character", "prop": "prop", "env": "environment"}
 
 
-class AssetTableModel(QtCore.QAbstractTableModel):
+class AssetTableModel(QAbstractTableModel):
     def __init__(self, arg=[], parent=None):
         super(AssetTableModel, self).__init__(parent)
         self.__arg = arg
@@ -36,17 +37,17 @@ class AssetTableModel(QtCore.QAbstractTableModel):
     def columnCount(self, parent):
         return len(self.__arg[0])
 
-    def data(self, index, role=QtCore.Qt.DisplayRole):
-        if role == QtCore.Qt.DisplayRole:
+    def data(self, index, role=Qt.DisplayRole):
+        if role == Qt.DisplayRole:
             row = index.row()
             column = index.column()
             return self.__arg[row][column]
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
-    def setData(self, index, value, role=QtCore.Qt.DisplayRole):
-        if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
+    def setData(self, index, value, role=Qt.DisplayRole):
+        if role == Qt.DisplayRole or role == Qt.EditRole:
             row = index.row()
             column = index.column()
             self.__arg[row][column] = value
@@ -56,18 +57,18 @@ class AssetTableModel(QtCore.QAbstractTableModel):
 
     def headerData(self, section, orientation, role):
         header_data = ["Assets", "Shader Version"]
-        if role == QtCore.Qt.DisplayRole:
-            if orientation == QtCore.Qt.Horizontal:
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
                 return header_data[section]
 
 
-class ComboDelegate(QtGui.QItemDelegate):
+class ComboDelegate(QItemDelegate):
     def __init__(self, parent=None):
         super(ComboDelegate, self).__init__(parent)
 
     def createEditor(self, parent, option, index):
         if index.column() == 1:
-            combo = QtGui.QComboBox(parent)
+            combo = QComboBox(parent)
             combo.currentIndexChanged.connect(self.onCurrentIndexChanged)
             return combo
 
@@ -92,7 +93,7 @@ class ComboDelegate(QtGui.QItemDelegate):
 
     def setModelData(self, editor, model, index):
         value = editor.currentText()
-        model.setData(index, value, QtCore.Qt.DisplayRole)
+        model.setData(index, value, Qt.DisplayRole)
 
     def updateEditorGeometry(self, editor, option, index):
         editor.setGeometry(option.rect)
@@ -101,39 +102,39 @@ class ComboDelegate(QtGui.QItemDelegate):
         self.commitData.emit(self.sender())
 
 
-class SwitchShader(QtGui.QDialog):
+class SwitchShader(QDialog):
     def __init__(self, parent=None):
         super(SwitchShader, self).__init__(parent)
         self.logger = logging.getLogger(__name__)
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
         self.setWindowTitle("Switch Shader")
         self.resize(400, 350)
         self.current_project = get_current_project.get_current_project()
         self.__db = sql_api.SqlApi(self.current_project)
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(4, 4, 4, 4)
 
-        self.filter_layout = QtGui.QHBoxLayout()
+        self.filter_layout = QHBoxLayout()
         self.filter_le = ButtonLineEdit()
         self.filter_layout.addStretch()
         self.filter_layout.addWidget(self.filter_le)
-        self.update_btn = QtGui.QToolButton()
+        self.update_btn = QToolButton()
         icon_path = join_path.join_path2(miraCore.get_icons_dir(), "update.png")
-        self.update_btn.setIcon(QtGui.QIcon(icon_path))
+        self.update_btn.setIcon(QIcon(icon_path))
         self.update_btn.setStyleSheet("QToolButton{background:transparent;}"
                                       "QToolButton::hover{background:#00BFFF;border-color:#00BFFF;}")
         self.filter_layout.addWidget(self.update_btn)
 
-        self.table_view = QtGui.QTableView()
+        self.table_view = QTableView()
         self.table_view.verticalHeader().hide()
         self.table_view.horizontalHeader().setStretchLastSection(True)
         self.table_view.setSortingEnabled(True)
         self.table_view.setAlternatingRowColors(True)
-        self.table_view.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.table_view.setSelectionBehavior(QAbstractItemView.SelectRows)
 
-        self.btn_layout = QtGui.QHBoxLayout()
-        self.switch_btn = QtGui.QPushButton("Switch")
-        self.cancel_btn = QtGui.QPushButton("Cancel")
+        self.btn_layout = QHBoxLayout()
+        self.switch_btn = QPushButton("Switch")
+        self.cancel_btn = QPushButton("Cancel")
         self.btn_layout.addStretch()
         self.btn_layout.addWidget(self.switch_btn)
         self.btn_layout.addWidget(self.cancel_btn)
@@ -158,10 +159,10 @@ class SwitchShader(QtGui.QDialog):
             shd_version = self.__db.getShadeVersion(arg_dict)
             model_data.append([asset, shd_version])
         self.model = AssetTableModel(model_data)
-        self.proxy_model = QtGui.QSortFilterProxyModel()
+        self.proxy_model = QSortFilterProxyModel()
         self.proxy_model.setFilterKeyColumn(0)
         self.proxy_model.setDynamicSortFilter(True)
-        self.proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
         self.proxy_model.setSourceModel(self.model)
         self.filter_le.textChanged.connect(self.set_filter)
         self.table_view.setModel(self.proxy_model)
@@ -236,7 +237,7 @@ class SwitchShader(QtGui.QDialog):
 
     @staticmethod
     def message_box(message):
-        QtGui.QMessageBox.information(None, "Warming Tip", message)
+        QMessageBox.information(None, "Warming Tip", message)
 
 
 def main():

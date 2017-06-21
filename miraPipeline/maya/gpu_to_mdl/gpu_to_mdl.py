@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import maya.cmds as mc
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import gpu_to_mdl_ui
 reload(gpu_to_mdl_ui)
 from miraLibs.mayaLibs import get_maya_win, create_reference
@@ -35,28 +37,28 @@ class GpuNode(object):
         self.shd_path = mc.getAttr("%s.shd_path" % self.name)
 
 
-class GpuModel(QtCore.QAbstractTableModel):
+class GpuModel(QAbstractTableModel):
     def __init__(self, arg=[], headers=[], parent=None):
         super(GpuModel, self).__init__(parent)
         self.arg = arg
         self.headers = headers
 
-    def rowCount(self, parent=QtCore.QModelIndex()):
+    def rowCount(self, parent=QModelIndex()):
         return len(self.arg)
 
-    def columnCount(self, parent=QtCore.QModelIndex()):
+    def columnCount(self, parent=QModelIndex()):
         return 3
 
-    def data(self, index, role=QtCore.Qt.DisplayRole):
+    def data(self, index, role=Qt.DisplayRole):
         if not index.isValid():
             return
-        if role == QtCore.Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             row = index.row()
             column = index.column()
             return self.arg[row][column]
 
-    def setData(self, index, value, role=QtCore.Qt.DisplayRole):
-        if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
+    def setData(self, index, value, role=Qt.DisplayRole):
+        if role == Qt.DisplayRole or role == Qt.EditRole:
             row = index.row()
             column = index.column()
             self.arg[row][column] = value
@@ -65,21 +67,21 @@ class GpuModel(QtCore.QAbstractTableModel):
         return False
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
     def headerData(self, section, orientation, role):
-        if role == QtCore.Qt.DisplayRole:
-            if orientation == QtCore.Qt.Horizontal:
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
                 return self.headers[section]
 
 
-class ComboDelegate(QtGui.QItemDelegate):
+class ComboDelegate(QItemDelegate):
     def __init__(self, parent=None):
         super(ComboDelegate, self).__init__(parent)
 
     def createEditor(self, parent, option, index):
         if index.column() == 1:
-            combo = QtGui.QComboBox(parent)
+            combo = QComboBox(parent)
             combo.addItems(["mdl", "shd"])
             combo.currentIndexChanged.connect(self.onCurrentIndexChanged)
             return combo
@@ -87,7 +89,7 @@ class ComboDelegate(QtGui.QItemDelegate):
     def setModelData(self, editor, model, index):
         value = editor.currentText()
         source_index = model.mapToSource(index)
-        model.sourceModel().setData(source_index, value, QtCore.Qt.DisplayRole)
+        model.sourceModel().setData(source_index, value, Qt.DisplayRole)
 
     def updateEditorGeometry(self, editor, option, index):
         editor.setGeometry(option.rect)
@@ -96,14 +98,14 @@ class ComboDelegate(QtGui.QItemDelegate):
         self.commitData.emit(self.sender())
 
 
-class ReplaceDelegate(QtGui.QItemDelegate):
-    clicked = QtCore.Signal(QtCore.QModelIndex)
+class ReplaceDelegate(QItemDelegate):
+    clicked = Signal(QModelIndex)
 
     def __init__(self, parent=None):
         super(ReplaceDelegate, self).__init__(parent)
 
     def createEditor(self, parent, option, index):
-        btn = QtGui.QPushButton("Replace", parent)
+        btn = QPushButton("Replace", parent)
         btn.index = index
         btn.clicked.connect(self.send_index)
         return btn
@@ -170,11 +172,11 @@ class GpuMdl(gpu_to_mdl_ui.GpuToMdlUI):
         self.table_view.setSortingEnabled(True)
         self.table_view.verticalHeader().hide()
         self.table_view.setAlternatingRowColors(True)
-        self.table_view.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        self.table_view.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
-        self.proxy_model = QtGui.QSortFilterProxyModel()
+        self.table_view.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.table_view.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.proxy_model = QSortFilterProxyModel()
         self.proxy_model.setDynamicSortFilter(True)
-        self.proxy_model.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
         self.proxy_model.setFilterKeyColumn(0)
         self.table_view.setModel(self.proxy_model)
         headers = ["gpu", "mdl/shd", "Replace"]

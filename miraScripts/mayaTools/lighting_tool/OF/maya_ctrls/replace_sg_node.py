@@ -4,7 +4,9 @@
 
 
 import maya.cmds as mc
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 
 def replace_sg():
@@ -22,13 +24,13 @@ def replace_sg():
 
 
 def main():
-    message_box = QtGui.QMessageBox()
-    message_box.setIcon(QtGui.QMessageBox.Information)
+    message_box = QMessageBox()
+    message_box.setIcon(QMessageBox.Information)
     message_box.setText('information')
     message_box.setInformativeText('Do you want to replace all the sg node?')
-    message_box.setStandardButtons(QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+    message_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
     ret = message_box.exec_()
-    if ret == QtGui.QMessageBox.Yes:
+    if ret == QMessageBox.Yes:
         import rebulid_arnold_aov
         reload(rebulid_arnold_aov)
         rebulid_arnold_aov.rebuild_arnold_aov()

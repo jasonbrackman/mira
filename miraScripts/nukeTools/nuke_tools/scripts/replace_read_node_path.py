@@ -9,7 +9,9 @@
 # notes       :
 
 # Built-in modules
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 # Third-party modules
 import nuke
 # Studio modules
@@ -17,27 +19,27 @@ import nuke
 # Local modules
 
 
-class ReplacePath(QtGui.QDialog):
+class ReplacePath(QDialog):
     def __init__(self, parent=None):
         super(ReplacePath, self).__init__(parent)
         self.resize(500, 100)
         self.setWindowTitle('Replace Read Node Path')
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
-        main_layout = QtGui.QVBoxLayout(self)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
+        main_layout = QVBoxLayout(self)
         main_layout.setSpacing(15)
 
-        source_label = QtGui.QLabel('Source Path')
-        self.source_le = QtGui.QLineEdit()
-        target_label = QtGui.QLabel('Target Path')
-        self.target_le = QtGui.QLineEdit()
-        self.replace_btn = QtGui.QPushButton('Replace')
+        source_label = QLabel('Source Path')
+        self.source_le = QLineEdit()
+        target_label = QLabel('Target Path')
+        self.target_le = QLineEdit()
+        self.replace_btn = QPushButton('Replace')
         self.replace_btn.clicked.connect(self.do_replace)
 
-        source_layout = QtGui.QHBoxLayout()
+        source_layout = QHBoxLayout()
         source_layout.addWidget(source_label)
         source_layout.addWidget(self.source_le)
 
-        target_layout = QtGui.QHBoxLayout()
+        target_layout = QHBoxLayout()
         target_layout.addWidget(target_label)
         target_layout.addWidget(self.target_le)
 
@@ -56,7 +58,7 @@ class ReplacePath(QtGui.QDialog):
 
 
 def main():
-    app = QtGui.qApp
+    app = QApplication.instance()
     global rp
     try:
         rp.close()

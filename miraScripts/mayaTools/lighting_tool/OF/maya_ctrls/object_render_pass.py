@@ -15,7 +15,9 @@ import maya.cmds as mc
 import mtoa.aovs as aovs
 import mtoa.ui.ae.shadingEngineTemplate as se
 import mtoa.ui.ae.shaderTemplate as st
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 import time
 
 
@@ -140,8 +142,8 @@ class ObjectRenderPass():
         sg_nodes = pm.ls(type='shadingEngine')
         #if len(sg_nodes) > 200:
         #    sg_nodes = sg_nodes[:200]
-        progress_dialog = QtGui.QProgressDialog('<Total: %s>build aov...,Please wait......' % len(sg_nodes), 'Cancel', 0, len(sg_nodes))
-        progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+        progress_dialog = QProgressDialog('<Total: %s>build aov...,Please wait......' % len(sg_nodes), 'Cancel', 0, len(sg_nodes))
+        progress_dialog.setWindowModality(Qt.WindowModal)
         progress_dialog.show()
         value = 0
         for sg in sg_nodes:
@@ -365,8 +367,8 @@ class ObjectRenderPass():
                 sg_nodes = self.get_sg_node_of_selected()
                 if sg_nodes:
                     shader = self.create_shader(args[1])
-                    progress_dialog = QtGui.QProgressDialog('<Total: %s>build aov...,Please wait......' % len(sg_nodes), 'Cancel', 0, len(sg_nodes))
-                    progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+                    progress_dialog = QProgressDialog('<Total: %s>build aov...,Please wait......' % len(sg_nodes), 'Cancel', 0, len(sg_nodes))
+                    progress_dialog.setWindowModality(Qt.WindowModal)
                     progress_dialog.show()
                     value = 0
                     for i in sg_nodes:
@@ -449,7 +451,7 @@ class ObjectRenderPass():
                     self.add_attribute(hair, args[0], args[1])
                     print '[add attribute] %s.mtoa_constant_%s' % (hair, args[0])
             else:
-                QtGui.QMessageBox.information(None, 'Information', 'Nothing Selected')
+                QMessageBox.information(None, 'Information', 'Nothing Selected')
 
         if pm.checkBox('all_check', q=1, value=1):
             all_shapes = self.get_all_by_select()
@@ -458,7 +460,7 @@ class ObjectRenderPass():
                     self.add_attribute(shape, args[0], args[1])
                     print '[add attribute] %s.mtoa_constant_%s' % (shape, args[0])
             else:
-                QtGui.QMessageBox.information(None, 'Information', 'Nothing Selected')
+                QMessageBox.information(None, 'Information', 'Nothing Selected')
 
     def get_obj_shader(self, obj):
         return list(set(pm.ls([i.inputs() for i in obj.shadingGroups()], materials=1)))
@@ -600,8 +602,8 @@ class ObjectRenderPass():
     def connect_costom_shader(self, name):
         sg_nodes = self.get_sg_node_of_opacity()
         if sg_nodes:
-            progress_dialog = QtGui.QProgressDialog('<Total: %s>build aov...,Please wait......' % len(sg_nodes), 'Cancel', 0, len(sg_nodes))
-            progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+            progress_dialog = QProgressDialog('<Total: %s>build aov...,Please wait......' % len(sg_nodes), 'Cancel', 0, len(sg_nodes))
+            progress_dialog.setWindowModality(Qt.WindowModal)
             progress_dialog.show()
             value = 0
             for i in sg_nodes:

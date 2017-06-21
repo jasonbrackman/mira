@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 
 
 class Node(object):
@@ -57,7 +59,7 @@ class ContentNode(Node):
         return "content"
 
 
-class TreeModel(QtCore.QAbstractItemModel):
+class TreeModel(QAbstractItemModel):
     def __init__(self, root_node=None, parent=None):
         super(TreeModel, self).__init__(parent)
         self.root_node = root_node
@@ -80,7 +82,7 @@ class TreeModel(QtCore.QAbstractItemModel):
         if not index.isValid():
             return
         node = index.internalPointer()
-        if role == QtCore.Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             if index.column() == 0 and node.node_type == "id":
                 return node.name()
             if index.column() == 1 and node.node_type == "content":
@@ -96,7 +98,7 @@ class TreeModel(QtCore.QAbstractItemModel):
         if not index.isValid():
             return
         node = index.internalPointer()
-        if role == QtCore.Qt.EditRole:
+        if role == Qt.EditRole:
             if index.column() == 0:
                 node.setName(value)
                 return True
@@ -104,17 +106,17 @@ class TreeModel(QtCore.QAbstractItemModel):
 
     def headerData(self, section, orientation, role):
         header_list = ["id", "people", "status", "date", "description"]
-        if role == QtCore.Qt.DisplayRole and orientation == QtCore.Qt.Horizontal:
+        if role == Qt.DisplayRole and orientation == Qt.Horizontal:
             return header_list[section]
 
     def flags(self, index):
-        return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
     def parent(self, index):
         node = self.getNode(index)
         parent_node = node.parent()
         if parent_node == self.root_node:
-            return QtCore.QModelIndex()
+            return QModelIndex()
         return self.createIndex(parent_node.row(), 0, parent_node)
 
     def index(self, row, column, parent):
@@ -123,21 +125,21 @@ class TreeModel(QtCore.QAbstractItemModel):
         if child_item:
             return self.createIndex(row, column, child_item)
         else:
-            return QtCore.QModelIndex()
+            return QModelIndex()
 
 
-class UserDelegate(QtGui.QItemDelegate):
+class UserDelegate(QItemDelegate):
     def __init__(self, parent=None):
         super(UserDelegate, self).__init__(parent)
 
     def createEditor(self, parent, option, index):
         if index.column() == 4:
-            text_edit = QtGui.QTextEdit(parent)
+            text_edit = QTextEdit(parent)
             text_edit.setAutoFillBackground(True)
             # text_edit.setStyleSheet("background-color: #00FF00;")
             return text_edit
         else:
-            return QtGui.QItemDelegate.createEditor(self, parent, option, index)
+            return QItemDelegate.createEditor(self, parent, option, index)
 
     def setEditorData(self, editor, index):
         value = index.data()
@@ -148,15 +150,15 @@ class UserDelegate(QtGui.QItemDelegate):
         editor.setGeometry(option.rect)
 
     def sizeHint(self, option, index):
-        return QtCore.QSize(200, 100)
+        return QSize(200, 100)
 
 
-class LeafFilterProxyModel(QtGui.QSortFilterProxyModel):
+class LeafFilterProxyModel(QSortFilterProxyModel):
     def __init__(self):
         super(LeafFilterProxyModel, self).__init__()
         self.setFilterKeyColumn(1)
         self.setDynamicSortFilter(True)
-        self.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.setFilterCaseSensitivity(Qt.CaseInsensitive)
 
     def filterAcceptsRow(self, row_num, source_parent):
         if self.filter_accepts_row_itself(row_num, source_parent):
@@ -185,14 +187,14 @@ class LeafFilterProxyModel(QtGui.QSortFilterProxyModel):
         return False
 
 
-class TreeDialog(QtGui.QDialog):
+class TreeDialog(QDialog):
     def __init__(self, parent=None):
         super(TreeDialog, self).__init__(parent)
         self.resize(600, 300)
-        main_layout = QtGui.QVBoxLayout(self)
-        self.filter_le = QtGui.QLineEdit()
+        main_layout = QVBoxLayout(self)
+        self.filter_le = QLineEdit()
         main_layout.addWidget(self.filter_le)
-        self.tree_view = QtGui.QTreeView()
+        self.tree_view = QTreeView()
         main_layout.addWidget(self.tree_view)
 
         self.root_node = Node("kaka")
@@ -237,7 +239,7 @@ class TreeDialog(QtGui.QDialog):
 
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     td = TreeDialog()
     td.show()
     sys.exit(app.exec_())

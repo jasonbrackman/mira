@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-from PySide import QtGui
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from ..libs import get_icon_dir
 
 
@@ -11,7 +13,7 @@ def get_tray_icon_path():
     return tray_icon_path
 
 
-class SystemTray(QtGui.QSystemTrayIcon):
+class SystemTray(QSystemTrayIcon):
     def __init__(self, parent=None):
         super(SystemTray, self).__init__(parent)
         self.duration = 10000
@@ -26,14 +28,14 @@ class SystemTray(QtGui.QSystemTrayIcon):
     def set_icon(self, icon_path=None):
         if not icon_path:
             icon_path = get_tray_icon_path()
-        icon = QtGui.QIcon(icon_path)
+        icon = QIcon(icon_path)
         self.setIcon(icon)
 
     def create_actions(self):
-        self.quit_action = QtGui.QAction("quit", self)
+        self.quit_action = QAction("quit", self)
 
     def create_tray_menu(self):
-        self.tray_menu = QtGui.QMenu()
+        self.tray_menu = QMenu()
         self.tray_menu.addAction(self.quit_action)
         self.setContextMenu(self.tray_menu)
 
@@ -42,12 +44,12 @@ class SystemTray(QtGui.QSystemTrayIcon):
         sys.exit(1)
 
     def show_message(self, title="You have a new message", msg=""):
-        self.showMessage(title, msg, QtGui.QSystemTrayIcon.Information, self.duration)
+        self.showMessage(title, msg, QSystemTrayIcon.Information, self.duration)
 
 
 def main():
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     st = SystemTray()
     st.show()
     app.exec_()

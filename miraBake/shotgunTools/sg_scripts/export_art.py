@@ -14,7 +14,9 @@ import sys
 # Third-party modules
 
 # Studio modules
-from PySide import QtGui, QtCore
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 # Local modules
 import add_environ
 from sg_utils import get_tk_object
@@ -106,70 +108,70 @@ class ShotgunUtility(object):
             self.sg.download_attachment(attachment=version['sg_uploaded_movie'], file_path=path)
 
 
-class ExportArtUI(QtGui.QDialog):
+class ExportArtUI(QDialog):
     def __init__(self, parent=None):
         super(ExportArtUI, self).__init__(parent)
 
         self.setWindowTitle('Export art task latest version')
         self.resize(400, 100)
-        self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowCloseButtonHint | QtCore.Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
         qss_path = get_qss_path()
-        self.setStyle(QtGui.QStyleFactory.create('plastique'))
+        self.setStyle(QStyleFactory.create('plastique'))
         self.setStyleSheet(open(qss_path, 'r').read())
 
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QVBoxLayout(self)
 
-        company_label = QtGui.QLabel('Company')
+        company_label = QLabel('Company')
         company_label.setFixedWidth(55)
-        self.company_cbox = QtGui.QComboBox()
+        self.company_cbox = QComboBox()
         self.company_cbox.setEditable(True)
-        self.add_company_btn = QtGui.QPushButton('New')
+        self.add_company_btn = QPushButton('New')
         self.add_company_btn.setFixedWidth(40)
 
-        company_layout = QtGui.QHBoxLayout()
+        company_layout = QHBoxLayout()
         company_layout.addWidget(company_label)
         company_layout.addWidget(self.company_cbox)
         company_layout.addWidget(self.add_company_btn)
 
-        project_layout = QtGui.QHBoxLayout()
-        project_label = QtGui.QLabel('Project')
+        project_layout = QHBoxLayout()
+        project_label = QLabel('Project')
         project_label.setFixedWidth(55)
-        self.project_cbox = QtGui.QComboBox()
+        self.project_cbox = QComboBox()
         self.project_cbox.setEditable(True)
         project_layout.addWidget(project_label)
         project_layout.addWidget(self.project_cbox)
 
-        sequence_layout = QtGui.QHBoxLayout()
-        sequence_label = QtGui.QLabel('Sequence')
+        sequence_layout = QHBoxLayout()
+        sequence_label = QLabel('Sequence')
         sequence_label.setFixedWidth(55)
-        self.sequence_cbox = QtGui.QComboBox()
+        self.sequence_cbox = QComboBox()
         self.sequence_cbox.setEditable(True)
         sequence_layout.addWidget(sequence_label)
         sequence_layout.addWidget(self.sequence_cbox)
 
-        type_layout = QtGui.QHBoxLayout()
-        type_label = QtGui.QLabel('type')
+        type_layout = QHBoxLayout()
+        type_label = QLabel('type')
         type_label.setFixedWidth(55)
         type_layout.addWidget(type_label)
-        self.button_group = QtGui.QButtonGroup()
+        self.button_group = QButtonGroup()
         self.button_group.setExclusive(False)
         for asset_type in asset_types:
-            self.check_box = QtGui.QCheckBox(asset_type)
+            self.check_box = QCheckBox(asset_type)
             self.button_group.addButton(self.check_box)
             type_layout.addWidget(self.check_box)
 
-        separator_layout = QtGui.QHBoxLayout()
+        separator_layout = QHBoxLayout()
         separator_layout.setContentsMargins(0, 10, 0, 0)
-        separator_layout.setAlignment(QtCore.Qt.AlignVCenter)
-        frame = QtGui.QFrame()
-        frame.setFrameStyle(QtGui.QFrame.HLine)
+        separator_layout.setAlignment(Qt.AlignVCenter)
+        frame = QFrame()
+        frame.setFrameStyle(QFrame.HLine)
         frame.setStyleSheet('QFrame{color: #111111}')
         separator_layout.addWidget(frame)
 
-        button_layout = QtGui.QHBoxLayout()
+        button_layout = QHBoxLayout()
         button_layout.addStretch()
-        self.cancel_btn = QtGui.QPushButton('Cancel')
-        self.export_btn = QtGui.QPushButton('Export')
+        self.cancel_btn = QPushButton('Cancel')
+        self.export_btn = QPushButton('Export')
         button_layout.addWidget(self.cancel_btn)
         button_layout.addWidget(self.export_btn)
 
@@ -225,7 +227,7 @@ class ExportArt(ExportArtUI):
         self.company_cbox.addItems(all_companies)
 
     def add_new_company(self):
-        text = QtGui.QInputDialog.getText(None, 'Input a company', 'Please input a new company name')
+        text = QInputDialog.getText(None, 'Input a company', 'Please input a new company name')
         if text[0]:
             new_company_dir = os.path.join(root_path, text[0])
             if not os.path.isdir(new_company_dir):
@@ -245,8 +247,8 @@ class ExportArt(ExportArtUI):
         assets = self.sg_util.get_assets_under_sequence(current_project, current_sequence)
         if not assets:
             raise Exception("[AAS] info: Project: %s Sequence: %s linked no asset" % (current_project, current_sequence))
-        progress_dialog = QtGui.QProgressDialog('Downloading...Please wait - -', 'Cancel', 0, len(assets))
-        progress_dialog.setWindowModality(QtCore.Qt.WindowModal)
+        progress_dialog = QProgressDialog('Downloading...Please wait - -', 'Cancel', 0, len(assets))
+        progress_dialog.setWindowModality(Qt.WindowModal)
         progress_dialog.show()
         value = 0
         for asset in assets:
@@ -274,7 +276,7 @@ class ExportArt(ExportArtUI):
 
 
 def main():
-    app = QtGui.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     ea = ExportArt()
     ea.show()
     app.exec_()
