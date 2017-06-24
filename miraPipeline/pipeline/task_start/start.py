@@ -35,7 +35,7 @@ class Start(object):
             self.logger.error("%s is not an exist file" % start_py)
             return
         mayabatch = pipeMira.get_mayabatch_path(self.project)
-        cmd = "%s -command \"python \\\"file_name='%s';execfile('%s')\\\"\"" % (
+        cmd = '\"\"%s\" -command \"python \"\"file_name=\'%s\';execfile(\'%s\')\"\"\"\"' % (
             mayabatch, self.work_file, start_py)
         self.logger.info("cmd:\n\n%s\n\n" % cmd)
         return_file = os.popen(cmd)

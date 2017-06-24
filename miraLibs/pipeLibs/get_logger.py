@@ -11,8 +11,9 @@ def get_logger(project, logger_type, task_name):
     logger_dir = pipeMira.get_site_value(project, "task_log_dir")
     logger_dir = logger_dir.format(primary=primary, project=project)
     logger_dir = join_path.join_path2(logger_dir, logger_type)
-    if not os.path.isdir(logger_dir):
-        os.makedirs(logger_dir)
+    # if not os.path.isdir(logger_dir):
+    #     os.makedirs(logger_dir)
+    logger_dir = "D:/log"
     current_time = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
     file_base_name = "%s-%s.txt" % (task_name, current_time)
     file_name = join_path.join_path2(logger_dir, file_base_name)

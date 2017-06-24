@@ -94,7 +94,8 @@ class TaskStart(QDialog):
     def do_start(self):
         if not self.work_file:
             return
-        start_script_path = join_path.join_path2("__file__", "..", "start.py")
+        start_script_path = join_path.join_path2(__file__, "..", "start.py")
+        print start_script_path
         obj = pipeFile.PathDetails.parse_path(self.work_file)
         task_name = get_task_name(obj)
         deadline_job_name = "start_%s" % task_name

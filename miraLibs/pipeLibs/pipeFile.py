@@ -244,6 +244,7 @@ def get_asset_task_finalImage_file(project, asset_type, asset_name, step, task, 
     image_file = get_task_file(project, asset_type, asset_name, step, task, format_str, engine, local)
     return image_file
 
+
 ########################################################################################################################
 # below is for get shot files
 ########################################################################################################################

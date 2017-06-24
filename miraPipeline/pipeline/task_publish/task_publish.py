@@ -93,15 +93,15 @@ class TaskPublish(QDialog):
     def do_publish(self):
         if not self.work_file:
             return
-        publish_script_path = join_path.join_path2("__file__", "..", "publish.py")
+        publish_script_path = join_path.join_path2(__file__, "..", "publish.py")
         obj = pipeFile.PathDetails.parse_path(self.work_file)
         task_name = get_task_name(obj)
         deadline_job_name = "publish_%s" % task_name
         change_status = self.task_status_check.isChecked()
         # work_file, change_task
         argv = "%s %s" % (self.work_file, change_status)
-        submitter = u'heshuai'
-        tar_name = u'heshuai'
+        submitter = u'pipemanager'
+        tar_name = u'pipemanager'
         submit.submit_python_job(deadline_job_name, publish_script_path, argv, submitter, tar_name)
 
 

@@ -44,6 +44,8 @@ def get_parent_win():
         parent_win = get_maya_win("PySide")
     elif engine == "nuke":
         parent_win = get_nuke_win()
+    elif engine == "python":
+        return
     else:
         # todo
         print "add method to how to get main window."

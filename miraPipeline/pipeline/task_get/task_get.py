@@ -407,26 +407,9 @@ class TaskGet(task_get_ui.TaskGetUI):
         pipeHistory.set("currentProject", self.__project)
 
 
-def run_standalone():
-    import sys
-    app = QApplication(sys.argv)
-    tg = TaskGet()
-    tg.show()
-    app.exec_()
-
-
-def run_maya():
-    import maya.cmds as mc
-    if mc.window("TaskGet", q=1, ex=1):
-        mc.deleteUI("TaskGet")
-    tg = TaskGet(get_parent_win.get_parent_win())
-    tg.show()
-
-
-def run_nuke():
-    tg = TaskGet(get_parent_win.get_parent_win())
-    tg.show()
-
+def main():
+    from miraLibs.qtLibs import render_ui
+    render_ui.render(TaskGet)
 
 if __name__ == "__main__":
-    run_standalone()
+    main()
