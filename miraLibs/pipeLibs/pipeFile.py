@@ -168,6 +168,26 @@ class PathDetails(object):
     def gpu_wrap_path(self):
         return self.get_path("gpuwrap", False)
 
+    @property
+    def final_path(self):
+        return self.get_path("final", False)
+
+    @property
+    def final_image_path(self):
+        return self.get_path("finalImage", False)
+
+    @property
+    def final_video_path(self):
+        return self.get_path("finalVideo", False)
+
+    @property
+    def final_gpu_path(self):
+        return self.get_path("finalGpu", False)
+
+    @property
+    def final_gpu_wrap_path(self):
+        return self.get_path("finalGpuwrap", False)
+
 
 ########################################################################################################################
 # below is for get asset files
@@ -207,11 +227,22 @@ def get_asset_task_image_file(project, asset_type, asset_name, step, task, versi
     return image_file
 
 
-def get_asset_task_publish_file(project, asset_type, asset_name, step, task, version=None, engine="maya", local=False):
+def get_asset_task_publish_file(project, asset_type, asset_name, step, task, engine="maya", local=False):
     format_str = "%s_asset_publish" % engine
-    publish_file = get_task_file(project, asset_type, asset_name, step, task, format_str, version, engine, local)
+    publish_file = get_task_file(project, asset_type, asset_name, step, task, format_str, engine, local)
     return publish_file
 
+
+def get_asset_task_final_file(project, asset_type, asset_name, step, task, version=None, engine="maya", local=False):
+    format_str = "%s_asset_work" % engine
+    work_file = get_task_file(project, asset_type, asset_name, step, task, format_str, version, engine, local)
+    return work_file
+
+
+def get_asset_task_finalImage_file(project, asset_type, asset_name, step, task, engine="maya", local=False):
+    format_str = "%s_asset_image" % engine
+    image_file = get_task_file(project, asset_type, asset_name, step, task, format_str, engine, local)
+    return image_file
 
 ########################################################################################################################
 # below is for get shot files

@@ -7,7 +7,7 @@ from miraLibs.pipeLibs import pipeFile
 
 
 def main():
-    logger = logging.getLogger("lowMdl start")
+    logger = logging.getLogger("MidMdl start")
     new_file.new_file()
     obj = pipeFile.PathDetails.parse_path(options.file)
     asset_type = obj.asset_type

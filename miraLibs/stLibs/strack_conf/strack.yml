@@ -1,0 +1,4 @@
+base_url: "http://192.168.0.220/strack_api/public/"
+login: "admin"
+api_key: "a918e8e721cdc3a43ec0e2089d13e0fe"
+st_api_path: "Z:/mira/miraLibs/site-packages/py27"

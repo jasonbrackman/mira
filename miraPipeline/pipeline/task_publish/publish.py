@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-sys.path.insert(0, "Z:/mira")
 from miraLibs.pipeLibs.get_task_name import get_task_name
 import miraCore
 from miraLibs.pyLibs import join_path

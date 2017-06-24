@@ -7,15 +7,15 @@ from miraLibs.mayaLibs import new_file, save_as, create_reference, create_group,
 
 
 def main():
-    logger = logging.getLogger("lowRig start")
+    logger = logging.getLogger("MidRig start")
     obj = pipeFile.PathDetails.parse_path(options.file)
     project = obj.project
     asset_type = obj.asset_type
     asset_type_short_name = obj.asset_type_short_name
     asset_name = obj.asset_name
-    lowMdl_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "lowMdl", "lowMdl")
+    lowMdl_publish_file = pipeFile.get_asset_task_final_file(project, asset_type, asset_name, "MidMdl", "MidMdl")
     if not os.path.isfile(lowMdl_publish_file):
-        logger.warning("No model file published.")
+        logger.warning("No MidMdl file published.")
         quit_maya.quit_maya()
         return
     new_file.new_file()

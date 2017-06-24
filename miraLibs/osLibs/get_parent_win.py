@@ -2,7 +2,6 @@ from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
 from Qt import __binding__
-import maya.OpenMayaUI as mui
 import get_engine
 
 
@@ -12,6 +11,7 @@ def get_maya_win(module="PySide"):
     :param module (optional): string "PySide"(default) or "PyQt4"
     :return main_window: QWidget or QMainWindow object
     """
+    import maya.OpenMayaUI as mui
     prt = mui.MQtUtil.mainWindow()
     if module == "PyQt":
         import sip

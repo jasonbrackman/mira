@@ -18,6 +18,10 @@ def main():
     delete_layer.delete_layer()
     mc.select(model_name, r=1)
     export_selected.export_selected(publish_path)
+    # export abc
+    if obj.asset_type in ["Prop", "Character"]:
+        pass
+    # generate an AD file
     # quit maya
     quit_maya.quit_maya()
 

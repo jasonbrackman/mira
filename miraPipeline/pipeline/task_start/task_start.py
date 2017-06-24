@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-sys.path.insert(0, "Z:/mira")
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
@@ -10,6 +9,7 @@ from miraFramework.task_common_form import CommonForm
 from miraLibs.pyLibs import Path, join_path
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.deadlineLibs import submit
+from miraLibs.qtLibs import render_ui
 
 
 class TaskStart(QDialog):
@@ -105,10 +105,7 @@ class TaskStart(QDialog):
 
 
 def main():
-    app = QApplication(sys.argv)
-    tm = TaskStart()
-    tm.show()
-    app.exec_()
+    render_ui.render(TaskStart)
 
 
 if __name__ == "__main__":

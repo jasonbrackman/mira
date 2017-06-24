@@ -10,6 +10,8 @@ from ..libs import get_icon_dir
 from ..libs import get_department_of_user
 from ..libs import get_conf_data
 
+MIRA_DIR = "Z:/mira"
+
 
 def get_tray_icon_path():
     icon_dir = get_icon_dir.get_icon_dir()
@@ -53,6 +55,7 @@ class SystemTray(QSystemTrayIcon):
         for each_action in action_list:
             name = department_actions[each_action]["name"]
             command = department_actions[each_action]["command"]
+            command = command.format(mira_dir=MIRA_DIR)
             actions.append(Action(name, command))
         return actions
 

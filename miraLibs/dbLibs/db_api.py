@@ -20,5 +20,6 @@ class DbApi(object):
             from miraLibs.stLibs import St
             db = St.St(self.project)
         else:
-            db = None
+            from miraLibs.stLibs import St
+            db = St.St(self.project)
         return db

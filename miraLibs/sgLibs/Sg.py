@@ -130,3 +130,7 @@ class Sg(object):
 
     def upload(self, entity_type, entity_id, path, field=None):
         self.sg.upload(entity_type, entity_id, path, field)
+
+    def get_department_of_user(self, user):
+        user_info = self.get_user_by_name(user)
+        return user_info.get("department").get("name")
