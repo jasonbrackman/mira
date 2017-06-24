@@ -12,8 +12,8 @@ def get_context():
     except:
         engine = get_engine.get_engine()
         if engine == "maya":
-            return "mdl"
+            return "MidMdl"
         elif engine == "nuke":
-            return "comp"
+            return "Comp"
         elif engine == "houdini":
-            return "vfx"
+            return "Vfx"

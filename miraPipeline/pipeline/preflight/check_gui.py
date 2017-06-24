@@ -244,7 +244,7 @@ class CheckGui(QDialog):
     def set_header_style(self):
         font_size = 10
         horizontal_header = self.table_widget.horizontalHeader()
-        horizontal_header.setClickable(False)
+        # horizontal_header.setClickable(False)
         font = QFont()
         font.setPointSizeF(font_size)
         font.setWeight(QFont.Bold)
