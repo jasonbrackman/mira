@@ -100,8 +100,8 @@ class TaskStart(QDialog):
         deadline_job_name = "start_%s" % task_name
         # work_file, change_task
         argv = self.work_file
-        submitter = u'heshuai'
-        tar_name = u'heshuai'
+        submitter = u'pipemanager'
+        tar_name = u'pipemanager'
         submit.submit_python_job(deadline_job_name, start_script_path, argv, submitter, tar_name)
 
 
