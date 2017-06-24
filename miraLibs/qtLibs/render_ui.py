@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from Qt.QtWidgets import *
+from Qt.QtCore import *
+from Qt.QtGui import *
 from miraLibs.osLibs import get_parent_win
 from miraFramework.PipelineBaseUI import PipelineBaseUI
 
@@ -15,9 +18,6 @@ def render(widget_class):
         pb_ui.show()
     else:
         import sys
-        from Qt.QtWidgets import *
-        from Qt.QtCore import *
-        from Qt.QtGui import *
         app = QApplication(sys.argv)
         pb_ui = PipelineBaseUI(widget_class)
         pb_ui.show()

@@ -5,7 +5,6 @@ import miraLibs.pyLibs.yml_operation as yml
 import miraLibs.pyLibs.join_path as join_path
 
 
-logger = logging.getLogger(__name__)
 conf_dir = miraCore.get_conf_dir()
 
 
@@ -18,9 +17,9 @@ def get_site_value(project_name, option):
             value = yml_data[project_name][option]
             return value
         else:
-            logger.error("KeyError")
+            logging.error("KeyError")
     else:
-        logger.error("%s not in the config file: %s" % (project_name, root_dir_conf_dir))
+        logging.error("%s not in the config file: %s" % (project_name, root_dir_conf_dir))
 
 
 def get_root_dir(project_name):

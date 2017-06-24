@@ -4,7 +4,7 @@ reload(task_get)
 
 
 def main():
-    task_get.run_maya()
+    task_get.main()
 
 
 if __name__ == "__main__":

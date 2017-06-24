@@ -46,8 +46,9 @@ SnowKidTest:
   asset_steps: "LowMdl,MidMdl,HighMdl,Shd,MidRig,Rig,Hair,Group"
   shot_steps: "Set,AnimLay,VfxLay,LgtLay,CompLay,Anim,Vfx,Cfx,Lgt,Comp,Cut"
 
+  # maya
+  # -asset
   asset_template: "{primary}/{project}/{category}/assets/{asset_type}/{asset_name}/{step}/{task}/{area}/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.{ext}"
-  photoshop_asset_publish: "{primary}/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_publish/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.psd"
   maya_asset_local: "{primary}/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_workarea/{engine}/{project}_{asset_name}_{step}_{task}_v{version}_e{edition}.ma"
   maya_asset_work: "{primary}/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_workarea/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.ma"
   maya_asset_image: "{primary}/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_image/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.png"
@@ -57,15 +58,17 @@ SnowKidTest:
   maya_asset_gpu: "{primary}/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_gpu/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.abc"
   maya_asset_gpuwrap: "{primary}/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_gpuwrap/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.ma"
   maya_asset_other: "{primary}/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_other/v{version}"
-  maya_asset_final: "{primary}/{project}/final/assets/{asset_type}/{asset_name}/{step}/{task}/_final/{engine}/{project}_{asset_name}_{step}_{task}.psd"
+  maya_asset_final: "{primary}/{project}/final/assets/{asset_type}/{asset_name}/{step}/{task}/_final/{engine}/{project}_{asset_name}_{step}_{task}.ma"
   maya_asset_finalImage: "{primary}/{project}/final/assets/{asset_type}/{asset_name}/{step}/{task}/_image/{engine}/{project}_{asset_name}_{step}_{task}.png"
+  maya_asset_finalTopology: "{primary}/{project}/final/assets/{asset_type}/{asset_name}/{step}/{task}/_topology/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.json"
   maya_asset_finalVideo: "{primary}/{project}/final/assets/{asset_type}/{asset_name}/{step}/{task}/_video/{engine}/{project}_{asset_name}_{step}_{task}.mov"
   maya_asset_finalGpu: "{primary}/{project}/final/assets/{asset_type}/{asset_name}/{step}/{task}/_gpu/{engine}/{project}_{asset_name}_{step}_{task}.abc"
   maya_asset_finalGpuwrap: "{primary}/{project}/final/assets/{asset_type}/{asset_name}/{step}/{task}/_gpuwrap/{engine}/{project}_{asset_name}_{step}_{task}.ma"
-
-  shot_template: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/{area}/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.{ext}"
-  maya_shot_work: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/_workarea/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.ma"
-  maya_shot_image: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.png"
-  maya_shot_video: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/_video/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.mov"
-  maya_shot_publish: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/_publish/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.ma"
-  maya_shot_other: "{primary}/{project}/shots/{sequence}/{shot}/{step}/{task}/_other/v{version}"
+  # -shot
+  maya_shot_work: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_workarea/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.ma"
+  maya_shot_image: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.png"
+  maya_shot_publish: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_publish/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.ma"
+  maya_shot_video: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_video/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.mov"
+  # photoshop
+  photoshop_asset_publish: "{primary}/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_publish/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.psd"
+  photoshop_asset_final: "{primary}/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_final/{engine}/{project}_{asset_name}_{step}_{task}.psd"

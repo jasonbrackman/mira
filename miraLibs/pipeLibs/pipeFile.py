@@ -227,14 +227,14 @@ def get_asset_task_image_file(project, asset_type, asset_name, step, task, versi
     return image_file
 
 
-def get_asset_task_publish_file(project, asset_type, asset_name, step, task, engine="maya", local=False):
+def get_asset_task_publish_file(project, asset_type, asset_name, step, task, version=None, engine="maya", local=False):
     format_str = "%s_asset_publish" % engine
-    publish_file = get_task_file(project, asset_type, asset_name, step, task, format_str, engine, local)
+    publish_file = get_task_file(project, asset_type, asset_name, step, task, format_str, version, engine, local)
     return publish_file
 
 
 def get_asset_task_final_file(project, asset_type, asset_name, step, task, version=None, engine="maya", local=False):
-    format_str = "%s_asset_work" % engine
+    format_str = "%s_asset_final" % engine
     work_file = get_task_file(project, asset_type, asset_name, step, task, format_str, version, engine, local)
     return work_file
 
@@ -271,3 +271,6 @@ def get_shot_task_video_file(project, sequence, shot, step, task, version=None, 
     video_file = get_task_file(project, sequence, shot, step, task, format_str, version, engine, local)
     return video_file
 
+
+if __name__ == "__main__":
+    print get_shot_task_image_file("SnowKidTest", "s001", "c001", "mdl", "mdl", version=None, engine="maya", local=False)

@@ -136,10 +136,8 @@ class St(object):
         user_info = self.get_user_by_name(user)
         user_id = user_info.get("id")
         task_filters = "assignee=%s and project_id=%s" % (user_id, self.project_id)
-        # fields = ["content", "sg_status_list", "sg_priority_1", "step.Step.short_name", "entity.Asset.sg_asset_type",
-        #           "entity.Asset.code", "entity.Shot.sg_sequence", "entity.Shot.code", "entity"]
-        # my_tasks = self.sg.find("Task", task_filter, fields)
-        my_tasks = self.st.task.select(filters=task_filters)
+        fields = ["item", "step.name", "status.name"]
+        my_tasks = self.st.task.select(filters=task_filters, fields=fields)
         return my_tasks
 
     def update_task_status(self, task, status):
@@ -169,11 +167,31 @@ class St(object):
         if entity_type == "task":
             self.st.task.upload(entity_id=entity_info.get("id"), path=path)
 
+    def get_asset_type_by_asset_id(self, asset_id):
+        asset_info = self.st.asset.find("id=%s" % asset_id, ["category.name"])
+        return asset_info.get("category").get("name")
+
+    def get_sequence_by_shot_id(self, shot_id):
+        shot_info = self.st.shot.find("id=%s" % shot_id, ["sequence.name"])
+        return shot_info.get("sequence").get("name")
+
+    @staticmethod
+    def get_task_entity_type(task):
+        if not task.__contains__("item"):
+            return
+        type_dict = {70: "Shot", 40: "Asset"}
+        task_entity_type = type_dict.get(task.get("item").get("type"))
+        return task_entity_type
+
 
 if __name__ == "__main__":
     st = St("SnowKidTest")
-    print st.get_user_department("heshuai")
-    print st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")
+    # print st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")
+    # print st.get_my_tasks()
+    #print st.st.asset.find("id=4", ["category.name"])
+    # print st.get_asset_type_by_asset_id(4)
+    print st.get_sequence_by_shot_id(1)
+
 
 
 

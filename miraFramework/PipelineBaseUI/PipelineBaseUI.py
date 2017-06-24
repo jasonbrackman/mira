@@ -68,7 +68,7 @@ class PipelineBaseUI(QDialog):
         self.main_layout = QVBoxLayout(self)
         self.main_layout.setSpacing(0)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
-        self.main_layout.setAlignment(Qt.AlignTop)
+        # self.main_layout.setAlignment(Qt.AlignTop)
         self.background_widget = BackgroundWidget(BACKGROUND_ICON_PATH)
         self.label = self.background_widget.text_label
         self.label.setText('<font face="Microsoft YaHei" color="#FFFFFF" size=6>%s</font>' % window_title)

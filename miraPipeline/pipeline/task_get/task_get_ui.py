@@ -102,9 +102,9 @@ class TaskGetUI(QDialog):
     def __init__(self, parent=None):
         super(TaskGetUI, self).__init__(parent)
         self.setWindowFlags(Qt.Window)
-        self.resize(900, 700)
         self.setWindowTitle("Task get")
         self.setObjectName("Task get")
+        self.resize(900, 700)
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
 
@@ -115,7 +115,7 @@ class TaskGetUI(QDialog):
         project_layout.addWidget(project_label)
         project_layout.addWidget(self.project_cbox)
 
-        main_splitter = QSplitter(Qt.Horizontal)
+        main_splitter = QSplitter(Qt.Horizontal, self)
 
         task_widget = QTabWidget()
         my_task_widget = QWidget()
@@ -140,24 +140,17 @@ class TaskGetUI(QDialog):
         main_splitter.addWidget(task_widget)
         main_splitter.addWidget(self.file_widget)
 
-        btn_layout = QHBoxLayout()
-        self.open_btn = QPushButton("Open")
-        btn_layout.addStretch()
-        btn_layout.addWidget(self.open_btn)
-
-        main_splitter.setSizes([self.width()*0.4, self.width()*0.6])
+        main_splitter.setSizes([self.width()*0.45, self.width()*0.55])
+        main_splitter.setStretchFactor(1, 1)
 
         main_layout.addLayout(project_layout)
         main_layout.addWidget(main_splitter)
-        # main_layout.addLayout(btn_layout)
 
 
 if __name__ == "__main__":
     import sys
-    app = QApplication(sys.argv)
-    tg = TaskGetUI()
-    tg.show()
-    app.exec_()
+    from miraLibs.qtLibs import render_ui
+    render_ui.render(TaskGetUI)
 
 
 

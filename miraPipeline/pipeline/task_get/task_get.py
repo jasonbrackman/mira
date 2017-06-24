@@ -215,7 +215,7 @@ class LeafFilterProxyModel(QSortFilterProxyModel):
     def filter_accepts_row_itself(self, row_num, parent):
         final_index = self.sourceModel().index(row_num, 2, parent)
         index_data = final_index.data()
-        is_final = "status:  cmpt" not in index_data if index_data else False
+        is_final = "status:  final" not in index_data if index_data else False
         filter_result = super(LeafFilterProxyModel, self).filterAcceptsRow(row_num, parent)
         if self.final_checked:
             return filter_result
@@ -242,6 +242,7 @@ class LeafFilterProxyModel(QSortFilterProxyModel):
 class TaskGet(task_get_ui.TaskGetUI):
     def __init__(self, parent=None):
         super(TaskGet, self).__init__(parent)
+        self.resize(900, 700)
         self.setObjectName("TaskGet")
         self.__logger = logging.getLogger("TaskGet")
         self.__project = get_current_project.get_current_project()
@@ -308,7 +309,7 @@ class TaskGet(task_get_ui.TaskGetUI):
 
     def update_task_status(self, file_path):
         task = task_from_db_path.task_from_db_path(self.__db, file_path)
-        self.__db.update_task_status(task, "ip")
+        self.__db.update_task_status(task, "In progress")
 
     def set_model(self):
         self.root_node = Node("Task get")
@@ -317,43 +318,79 @@ class TaskGet(task_get_ui.TaskGetUI):
             self.model = QStandardItemModel()
             self.task_view.setModel(self.model)
             return
-        entity_types = [task["entity"]["type"] for task in my_tasks]
-        entity_types = list(set(entity_types))
-        if "Asset" in entity_types:
-            asset_entity_node = EntityNode("Asset", self.root_node)
-        if "Shot" in entity_types:
-            shot_eneity_node = EntityNode("Shot", self.root_node)
-        asset_type_nodes = list()
-        sequence_nodes = list()
-        for task in my_tasks:
-            if task["entity"]["type"] == "Asset":
-                asset_type_names = [node.name for node in asset_type_nodes]
-                asset_type_name = task["entity.Asset.sg_asset_type"]
-                if asset_type_name not in asset_type_names:
-                    asset_type_node = AssetTypeNode(asset_type_name, asset_entity_node)
-                    asset_type_nodes.append(asset_type_node)
+        if self.__db.typ == "shotgun":
+            entity_types = [task["entity"]["type"] for task in my_tasks]
+            entity_types = list(set(entity_types))
+            if "Asset" in entity_types:
+                asset_entity_node = EntityNode("Asset", self.root_node)
+            if "Shot" in entity_types:
+                shot_eneity_node = EntityNode("Shot", self.root_node)
+            asset_type_nodes = list()
+            sequence_nodes = list()
+            for task in my_tasks:
+                if task["entity"]["type"] == "Asset":
+                    asset_type_names = [node.name for node in asset_type_nodes]
+                    asset_type_name = task["entity.Asset.sg_asset_type"]
+                    if asset_type_name not in asset_type_names:
+                        asset_type_node = AssetTypeNode(asset_type_name, asset_entity_node)
+                        asset_type_nodes.append(asset_type_node)
+                    else:
+                        asset_type_node = [node for node in asset_type_nodes if node.name == asset_type_name][0]
+                    asset_name = task["entity.Asset.code"]
+                    step = task["step.Step.short_name"]
+                    task_name = task["content"]
+                    status = task["sg_status_list"]
+                    priority = task["sg_priority_1"]
+                    asset_node = AssetNode(asset_name, step, task_name, status, priority, asset_type_node)
                 else:
-                    asset_type_node = [node for node in asset_type_nodes if node.name == asset_type_name][0]
-                asset_name = task["entity.Asset.code"]
-                step = task["step.Step.short_name"]
-                task_name = task["content"]
-                status = task["sg_status_list"]
-                priority = task["sg_priority_1"]
-                asset_node = AssetNode(asset_name, step, task_name, status, priority, asset_type_node)
-            else:
-                sequence_names = [node.name for node in sequence_nodes]
-                sequence_name = task["entity.Shot.sg_sequence"]["name"]
-                if sequence_name not in sequence_names:
-                    sequence_node = SequenceNode(sequence_name, shot_eneity_node)
-                    sequence_nodes.append(sequence_node)
+                    sequence_names = [node.name for node in sequence_nodes]
+                    sequence_name = task["entity.Shot.sg_sequence"]["name"]
+                    if sequence_name not in sequence_names:
+                        sequence_node = SequenceNode(sequence_name, shot_eneity_node)
+                        sequence_nodes.append(sequence_node)
+                    else:
+                        sequence_node = [node for node in sequence_nodes if node.name == sequence_name][0]
+                    shot = task["entity.Shot.code"]
+                    step = task["step.Step.short_name"]
+                    task_name = task["content"]
+                    status = task["sg_status_list"]
+                    priority = task["sg_priority_1"]
+                    shot_node = ShotNode(shot, step, task_name, status, priority, sequence_node)
+        elif self.__db.typ == "strack":
+            entity_types = [self.__db.get_task_entity_type(task) for task in my_tasks]
+            entity_types = list(set(entity_types))
+            if "Asset" in entity_types:
+                asset_entity_node = EntityNode("Asset", self.root_node)
+            if "Shot" in entity_types:
+                shot_eneity_node = EntityNode("Shot", self.root_node)
+            asset_type_nodes = list()
+            sequence_nodes = list()
+            for task in my_tasks:
+                task_entity_type = self.__db.get_task_entity_type(task)
+                task_entity_id = task["item_id"]
+                task_entity_name = task["item"]["item_name"]
+                task_name = task.get("name")
+                step = task["step"]["name"]
+                status = task["status"]["name"]
+                priority = "A"
+                if task_entity_type == "Asset":
+                    asset_type_names = [node.name for node in asset_type_nodes]
+                    asset_type_name = self.__db.get_asset_type_by_asset_id(task_entity_id)
+                    if asset_type_name not in asset_type_names:
+                        asset_type_node = AssetTypeNode(asset_type_name, asset_entity_node)
+                        asset_type_nodes.append(asset_type_node)
+                    else:
+                        asset_type_node = [node for node in asset_type_nodes if node.name == asset_type_name][0]
+                    asset_node = AssetNode(task_entity_name, step, task_name, status, priority, asset_type_node)
                 else:
-                    sequence_node = [node for node in sequence_nodes if node.name == sequence_name][0]
-                shot = task["entity.Shot.code"]
-                step = task["step.Step.short_name"]
-                task_name = task["content"]
-                status = task["sg_status_list"]
-                priority = task["sg_priority_1"]
-                shot_node = ShotNode(shot, step, task_name, status, priority, sequence_node)
+                    sequence_names = [node.name for node in sequence_nodes]
+                    sequence_name = self.__db.get_sequence_by_shot_id(task_entity_id)
+                    if sequence_name not in sequence_names:
+                        sequence_node = SequenceNode(sequence_name, shot_eneity_node)
+                        sequence_nodes.append(sequence_node)
+                    else:
+                        sequence_node = [node for node in sequence_nodes if node.name == sequence_name][0]
+                    shot_node = ShotNode(task_entity_name, step, task_name, status, priority, sequence_node)
 
         self.proxy_model = LeafFilterProxyModel()
         self.model = AssetTreeModel(self.root_node, self.__project)
