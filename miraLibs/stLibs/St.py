@@ -171,8 +171,9 @@ class St(object):
 
 
 if __name__ == "__main__":
-    st = St()
+    st = St("SnowKidTest")
     print st.get_user_department("heshuai")
+    print st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")
 
 
 

@@ -60,14 +60,16 @@ class Start(object):
         db = db_api.DbApi(self.project).db_obj
         # register the file path
         current_task = task_from_db_path.task_from_db_path(db, self.work_file)
-        create_filesystem_structure.create_filesystem_structure(self.work_file, engine="tk-%s" % self.engine)
+        if db.typ == "shotgun":
+            create_filesystem_structure.create_filesystem_structure(self.work_file, engine="tk-%s" % self.engine)
         self.logger.info("Current Task: %s" % current_task)
         # update sg_workfile
-        db.update_task(current_task, sg_workfile=self.work_file)
-        self.logger.info("update task sg_workfile: %s" % self.work_file)
+        if db.typ == "shotgun":
+            db.update_task(current_task, sg_workfile=self.work_file)
+            self.logger.info("update task sg_workfile: %s" % self.work_file)
         # update sg_status_list
-        db.update_task_status(current_task, "rdy")
-        self.logger.info("update task sg_status_list: rdy")
+        db.update_task_status(current_task, "Ready to Start")
+        self.logger.info("update task sg_status_list: Ready to Start")
         self.logger.info("\n\nALL Done!")
 
     def main(self):
