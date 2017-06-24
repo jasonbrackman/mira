@@ -1,1 +1,1 @@
-+ PLATFORM:win64 miraEnv 1.0.0 E:\mira\miraEnv\maya
++ PLATFORM:win64 miraEnv 1.0.0 Z:\mira\miraEnv\maya
