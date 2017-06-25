@@ -15,14 +15,12 @@ def get_maya_win(module="PySide"):
     prt = mui.MQtUtil.mainWindow()
     if module == "PyQt":
         import sip
-        from Qt.QtCore import *
         main_window = sip.wrapinstance(long(prt), QObject)
-    elif module in ["PySide", "PyQt"]:
-        if __binding__ in ["PySide", "PyQt4"]:
+    elif module in ["PySide"]:
+        if __binding__ in ["PySide"]:
             import shiboken
-        elif __binding__ in ["PySide2", "PyQt5"]:
+        elif __binding__ in ["PySide2"]:
             import shiboken2 as shiboken
-        from Qt.QtWidgets import *
         main_window = shiboken.wrapInstance(long(prt), QWidget)
     elif module == "mayaUI":
         main_window = "MayaWindow"

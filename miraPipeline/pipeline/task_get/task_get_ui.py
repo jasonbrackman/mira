@@ -20,8 +20,8 @@ class FileTreeView(QTreeView):
         self.setSortingEnabled(True)
         self.menu = QMenu(self)
         self.open_action = QAction("Open", self)
-        self.copy_to_local_action = QAction("Copy To Local", self)
-        self.show_in_filesystem_action = QAction("Show In File System", self)
+        self.copy_to_local_action = QAction("Receive The Task", self)
+        self.show_in_filesystem_action = QAction("Show in File System", self)
         self.set_signals()
 
     def set_signals(self):

@@ -18,19 +18,21 @@ def splash(func):
         splash.setMask(splash_pix.mask())
         splash.show()
         QCoreApplication.processEvents()
-        func(*args, **kwargs)
+        result = func(*args, **kwargs)
         splash.close()
         try:
             sys.exit(app.exec_())
         except:pass
+        return result
     return _wrapper
 
 
 @splash
 def tka():
     import time
-    time.sleep(5)
+    time.sleep(1)
+    return 1
 
 
 if __name__ == "__main__":
-    tka()
+    print tka()

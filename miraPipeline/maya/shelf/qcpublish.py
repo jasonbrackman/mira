@@ -2,10 +2,10 @@
 import os
 import logging
 import sys
-import miraCore
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
+import miraCore
 from miraLibs.pyLibs import join_path
 from miraLibs.pipeLibs import pipeFile
 from miraPipeline.pipeline.preflight import check_gui
@@ -15,7 +15,7 @@ from miraLibs.pipeLibs.copy import Copy
 from miraFramework.FileListWidget import FileListWidget
 
 
-maya_window = get_maya_win.get_maya_win("PySide")
+maya_window = get_maya_win.get_maya_win()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
@@ -117,7 +117,7 @@ def post_qcpublish(obj):
     if not task:
         logger.warning("No matched task")
         return
-    db.update_task(task, sg_status_list="rev", sg_workfile=obj.work_path)
+    db.update_task_status(task, "First Review")
     db.upload_thumbnail(task, obj.image_path)
 
 
@@ -146,6 +146,7 @@ def main():
     result, cg = check_gui.main_for_publish()
     if result:
         cg.close()
+        cg.deleteLater()
     else:
         logger.error("Some checks can not be passed.")
         progress_dialog.close()

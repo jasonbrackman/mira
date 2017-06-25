@@ -149,7 +149,7 @@ class St(object):
         self.st.task.update(task.get("id"), kwargs)
 
     def upload_thumbnail(self, entity_info, image_path):
-        self.upload(entity_info, image_path)
+        self.upload(entity_info.get("type"), entity_info.get("id"), image_path)
 
     def create(self, entity_type, data):
         """
@@ -162,10 +162,13 @@ class St(object):
         elif entity_type == "Shot":
             return self.st.shot.create(data=data)
 
-    def upload(self, entity_info, path):
-        entity_type = entity_info.get("type")
+    def upload(self, entity_type, entity_id, path):
         if entity_type == "task":
-            self.st.task.upload(entity_id=entity_info.get("id"), path=path)
+            self.st.task.upload(entity_id=entity_id, path=path)
+        elif entity_type == "asset":
+            self.st.asset.upload(entity_id=entity_id, path=path)
+        elif entity_type == "shot":
+            self.st.shot.upload(entity_id=entity_id, path=path)
 
     def get_asset_type_by_asset_id(self, asset_id):
         asset_info = self.st.asset.find("id=%s" % asset_id, ["category.name"])
@@ -190,8 +193,11 @@ if __name__ == "__main__":
     # print st.get_my_tasks()
     #print st.st.asset.find("id=4", ["category.name"])
     # print st.get_asset_type_by_asset_id(4)
-    print st.get_sequence_by_shot_id(1)
-
-
-
-
+    print st.st.version.fields
+    # help(st.st.version.create)
+    # print st.st.media.methods
+    # task_id = 7
+    # #st.st.create()
+    file_path = r"E:\SnowKidTest\workarea\assets\Prop\TdTest\MidMdl\MidMdl\_workarea\maya\SnowKidTest_TdTest_MidMdl_MidMdl_v001.ma"
+    file_path = file_path.replace("\\", "/")
+    st.st.version.create({"task_id": 7, "path":{"file_path": file_path}, "version": "v005"})

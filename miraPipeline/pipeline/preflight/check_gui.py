@@ -156,10 +156,13 @@ class FailDialog(QDialog):
         select_node.select_node(node)
 
     def do_manual(self):
-        self.setModal(False)
+        self.hide()
+        self.setWindowModality(Qt.NonModal)
+        self.show()
         self.check_object.close()
         if not self.error_list_widget.count():
             self.close()
+            self.deleteLater()
         self.has_error = True
 
     def do_item_clicked(self, item):
@@ -180,6 +183,7 @@ class FailDialog(QDialog):
 class CheckGui(QDialog):
     def __init__(self, parent=None):
         super(CheckGui, self).__init__(parent)
+        self.setModal(False)
         add_environ.add_environ()
         self.setObjectName("PREFLIGHT")
         self.context = get_context.get_context()
@@ -338,7 +342,9 @@ class CheckGui(QDialog):
             check_object.close()
 
     def deal_fail(self, module_name, ignorable, can_auto, check_object, label):
-        self.fd = FailDialog(module_name, ignorable, can_auto, check_object, label, get_parent_win.get_parent_win())
+        self.fd = FailDialog(module_name, ignorable, can_auto, check_object, label,
+                             get_parent_win.get_parent_win())
+        # self.fd.setWindowModality(Qt.ApplicationModal)
         self.fd.exec_()
         if self.fd.has_error:
             raise RuntimeError("Stop here.")
@@ -368,7 +374,8 @@ def main():
     # cg.show()
     # return cg
     from miraLibs.qtLibs import render_ui
-    render_ui.render(CheckGui)
+    reload(render_ui)
+    return render_ui.render(CheckGui)
 
 
 def main_for_publish():

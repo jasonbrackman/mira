@@ -95,7 +95,6 @@ class TaskStart(QDialog):
         if not self.work_file:
             return
         start_script_path = join_path.join_path2(__file__, "..", "start.py")
-        print start_script_path
         obj = pipeFile.PathDetails.parse_path(self.work_file)
         task_name = get_task_name(obj)
         deadline_job_name = "start_%s" % task_name
@@ -104,6 +103,7 @@ class TaskStart(QDialog):
         submitter = u'pipemanager'
         tar_name = u'pipemanager'
         submit.submit_python_job(deadline_job_name, start_script_path, argv, submitter, tar_name)
+        QMessageBox.information(self, "Warming Tip", "%s submit done." % task_name)
 
 
 def main():

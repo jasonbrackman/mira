@@ -5,23 +5,22 @@ from Qt import __binding__
 import get_engine
 
 
-def get_maya_win(module="mayaUI"):
+def get_maya_win(module="PySide"):
     """
     get a QMainWindow Object of maya main window
     :param module (optional): string "PySide"(default) or "PyQt4"
     :return main_window: QWidget or QMainWindow object
     """
+    import maya.OpenMayaUI as mui
     prt = mui.MQtUtil.mainWindow()
     if module == "PyQt":
         import sip
-        from Qt.QtCore import *
         main_window = sip.wrapinstance(long(prt), QObject)
-    elif module in ["PySide", "PyQt"]:
-        if __binding__ == ["PySide", "PyQt4"]:
+    elif module in ["PySide"]:
+        if __binding__ in ["PySide"]:
             import shiboken
-        elif __binding__ == ["PySide2", "PyQt5"]:
+        elif __binding__ in ["PySide2"]:
             import shiboken2 as shiboken
-        from Qt.QtWidgets import *
         main_window = shiboken.wrapInstance(long(prt), QWidget)
     elif module == "mayaUI":
         main_window = "MayaWindow"
