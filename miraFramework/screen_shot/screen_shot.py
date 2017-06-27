@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import tempfile
+import Qt as Qtegg
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
@@ -69,7 +70,7 @@ class ThumbnailWidget(QWidget):
         """
         if self.thumbnail and self._are_any_btns_enabled():
             self._ui.buttons_frame.show()
-            if hasattr(QtCore, "QAbstractAnimation"):
+            if hasattr(Qtegg.QtCore, "QAbstractAnimation"):
                 self._run_btns_transition_anim(QAbstractAnimation.Forward)
             else:
                 # Q*Animation classes aren't available so just
@@ -81,7 +82,7 @@ class ThumbnailWidget(QWidget):
         when the cursor leaves the control, hide the buttons
         """
         if self.thumbnail and self._are_any_btns_enabled():
-            if hasattr(QtCore, "QAbstractAnimation"):
+            if hasattr(Qtegg.QtCore, "QAbstractAnimation"):
                 self._run_btns_transition_anim(QAbstractAnimation.Backward)
             else:
                 # Q*Animation classes aren't available so just
@@ -230,4 +231,9 @@ class ThumbnailWidget(QWidget):
 
 
 if __name__ == "__main__":
-    pass
+    import sys
+    app = QApplication(sys.argv)
+    tw = ThumbnailWidget()
+    tw.show()
+    sys.exit(app.exec_())
+

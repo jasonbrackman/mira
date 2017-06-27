@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
 import logging
 import maya.cmds as mc
 import playblaster
@@ -11,7 +10,7 @@ from miraLibs.pyLibs import create_parent_dir
 from miraLibs.pipeLibs.copy import Copy
 
 
-def playblast_turntable():
+def playblast_turntable(submit=True):
     logger = logging.getLogger(__name__)
     # get path
     obj = pipeFile.PathDetails.parse_path()
@@ -29,7 +28,10 @@ def playblast_turntable():
     playblaster.playblaster(local_video_path, "tt_camera", 1, 300, resolution, percent, False, None, True)
     remove_turntable.remove_turntable()
     logger.info("playblast done.")
-    Copy.copy(local_video_path, video_path)
-    logger.info("Copy %s >> %s" % (local_video_path, video_path))
     mc.lookThru("persp")
-    return video_path
+    if submit:
+        Copy.copy(local_video_path, video_path)
+        logger.info("Copy %s >> %s" % (local_video_path, video_path))
+        return video_path
+    else:
+        return local_video_path

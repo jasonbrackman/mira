@@ -32,7 +32,8 @@ class MayaOpener(object):
     def __init__(self, path):
         self.path = path
         self.threads = list()
-        self.maya_path_dict = {"2016": "C:/tools/Autodesk/Maya2016/bin/maya.exe"}
+        self.maya_path_dict = {"2016": "C:/tools/Autodesk/Maya2016/bin/maya.exe",
+                               "2017": "C:/Program Files/Autodesk/Maya2017/bin/maya.exe"}
 
     def get_may_version(self):
         ext = os.path.splitext(self.path)[1].lower()

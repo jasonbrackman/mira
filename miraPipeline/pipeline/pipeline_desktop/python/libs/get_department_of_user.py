@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import getpass
 import sys
-sys.path.insert(0, "Z:/mira")
 from miraLibs.dbLibs import db_api
 
 

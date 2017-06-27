@@ -4,13 +4,13 @@ import logging
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
-import maya.cmds as mc
-from miraLibs.mayaLibs import get_maya_win, save_as
+from miraLibs.mayaLibs import save_as
 from miraLibs.mayaLibs import get_scene_name
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.dbLibs import db_api
 import playblast_turntable
 import playblast_shot
+from miraLibs.qtLibs import render_ui
 
 OBJECT_NAME = "Playblast"
 
@@ -56,45 +56,46 @@ def upload_movie(description):
     entity_type = obj.entity_type
     step = obj.step
     task = obj.task
-    next_version_file = obj.next_version_file
+    # next_version_file = obj.next_version_file
+    # save_as.save_as(next_version_file)
     if entity_type == "Asset":
         asset_type_or_sequence = obj.asset_type
         asset_or_shot = obj.asset_name
-        video_path = playblast_turntable.playblast_turntable()
+        video_path = playblast_turntable.playblast_turntable(submit=False)
     else:
         asset_type_or_sequence = obj.sequence
         asset_or_shot = obj.shot
-        video_path = playblast_shot.playblast_shot()
+        video_path = playblast_shot.playblast_shot(submit=False)
     logger.info("Playblast done")
     if video_path and os.path.isfile(video_path):
-        save_as.save_as(next_version_file)
+        # save_as.save_as(next_version_file)
         db = db_api.DbApi(project).db_obj
-    # entity_type, asset_type_or_sequence, asset_or_shot, step, task_name
+        # entity_type, asset_type_or_sequence, asset_or_shot, step, task_name
         current_task = db.get_current_task(entity_type, asset_type_or_sequence, asset_or_shot, step, task)
         logger.info("Current Task: %s" % current_task)
         if not current_task:
             logger.warning("Task is None")
             return
-        project_info = db.get_project_by_name()
-        user = db.get_current_user()
-        code = os.path.splitext(os.path.basename(video_path))[0]
-        data = {'project': project_info,
-                'code': code,
-                'description': description,
-                'sg_status_list': 'rev',
-                'entity': current_task["entity"],
-                'sg_task': current_task,
-                'user': user}
-        result = db.create('Version', data)
-        db.upload("Version", result["id"], video_path, "sg_uploaded_movie")
-        return True
+        if db.typ == "shotgun":
+            project_info = db.get_project_by_name()
+            user = db.get_current_user()
+            code = os.path.splitext(os.path.basename(video_path))[0]
+            data = {'project': project_info,
+                    'code': code,
+                    'description': description,
+                    'sg_status_list': 'rev',
+                    'entity': current_task["entity"],
+                    'sg_task': current_task,
+                    'user': user}
+            result = db.create('Version', data)
+            db.upload("Version", result["id"], video_path, "sg_uploaded_movie")
+            return True
+        elif db.typ == "strack":
+            db.upload_version(current_task, video_path)
     else:
         logger.warning("May playblast wrong.")
         return False
 
 
 def main():
-    if mc.window(OBJECT_NAME, q=1, ex=1):
-        mc.deleteUI(OBJECT_NAME)
-    um = UploadMovie(get_maya_win.get_maya_win("PySide"))
-    um.show()
+    render_ui.render(UploadMovie)

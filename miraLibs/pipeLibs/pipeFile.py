@@ -161,8 +161,8 @@ class PathDetails(object):
         return self.get_path("topology", False)
 
     @property
-    def gpu_cache_path(self):
-        return self.get_path("gpu", False)
+    def abc_cache_path(self):
+        return self.get_path("cache", False)
 
     @property
     def gpu_wrap_path(self):
@@ -181,12 +181,20 @@ class PathDetails(object):
         return self.get_path("finalVideo", False)
 
     @property
-    def final_gpu_path(self):
-        return self.get_path("finalGpu", False)
+    def final_cache_path(self):
+        return self.get_path("finalCache", False)
+
+    @property
+    def final_topology_path(self):
+        return self.get_path("finalTopology", False)
 
     @property
     def final_gpu_wrap_path(self):
         return self.get_path("finalGpuwrap", False)
+
+    @property
+    def definition_path(self):
+        return self.get_path("definition", False)
 
 
 ########################################################################################################################

@@ -6,7 +6,7 @@ from miraLibs.mayaLibs import get_scene_name
 from miraPipeline.maya.playblast import playblast_turntable
 
 
-def mdl_qcpublish():
+def HighMdl_qcpublish():
     logger = logging.getLogger(__name__)
     # copy to QCPublish path
     obj = pipeFile.PathDetails.parse_path()

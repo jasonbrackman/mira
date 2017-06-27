@@ -122,7 +122,7 @@ class St(object):
         entity_info = self.get_entity_info(entity_type, asset_type_or_sequence, asset_or_shot)
         entity_id = entity_info.get("id")
         task_filters = "item_id=%s and step_id=%s and name=%s" % (entity_id, step_id, task_name)
-        task_info = self.st.task.find(filters=task_filters)
+        task_info = self.st.task.find(filters=task_filters, fields=["custom"])
         return task_info
 
     def get_current_user(self):
@@ -186,18 +186,27 @@ class St(object):
         task_entity_type = type_dict.get(task.get("item").get("type"))
         return task_entity_type
 
+    def upload_version(self, task_info, media_path="", file_path=""):
+        task_id = task_info.get("id")
+        version = self.st.version.create(data={"task_id": task_id, "path": {"file": file_path, "media": media_path}})
+        self.st.media.encoding(version.get("id"), media_path)
+
 
 if __name__ == "__main__":
     st = St("SnowKidTest")
-    # print st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")
-    # print st.get_my_tasks()
-    #print st.st.asset.find("id=4", ["category.name"])
-    # print st.get_asset_type_by_asset_id(4)
-    print st.st.version.fields
-    # help(st.st.version.create)
-    # print st.st.media.methods
-    # task_id = 7
-    # #st.st.create()
-    file_path = r"E:\SnowKidTest\workarea\assets\Prop\TdTest\MidMdl\MidMdl\_workarea\maya\SnowKidTest_TdTest_MidMdl_MidMdl_v001.ma"
-    file_path = file_path.replace("\\", "/")
-    st.st.version.create({"task_id": 7, "path":{"file_path": file_path}, "version": "v005"})
+    # file_path = "W:/SnowKidTest/workarea/assets/Prop/TdTest/MidMdl/MidMdl/_workarea/maya/SnowKidTest_TdTest_MidMdl_MidMdl_v002.ma"
+    # media_path = "W:/SnowKidTest/workarea/assets/Prop/TdTest/MidMdl/MidMdl/_video/maya/SnowKidTest_TdTest_MidMdl_MidMdl_v002.mov"
+    # version = st.st.version.create(data={"task_id": 7, "path": {"file": file_path, "media": media_path}})
+    # st.st.media.encoding(version.get("id"), media_path)
+    # print "done"
+    # print st.st.task.find("id=20", ["custom"])
+    task = st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")
+    temp = {"work_file_path": "W:/test.ma"}
+    import json
+    data = json.dumps(temp)
+    st.update_task(task, file_path=data)
+
+
+
+
+

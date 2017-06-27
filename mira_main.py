@@ -180,8 +180,6 @@ def add_system_python_path_env():
     mira_batch_dir = miraCore.get_batch_dir()
     python_path_bat = os.path.join(mira_batch_dir, "PYTHONPATH.bat").replace("\\", "/")
     startup_python_path_bat = os.path.join(startup_dir, "PYTHONPATH.bat")
-    if os.path.isfile(startup_python_path_bat):
-        return
     try:
         os.system(python_path_bat)
         shutil.copyfile(python_path_bat, startup_python_path_bat)

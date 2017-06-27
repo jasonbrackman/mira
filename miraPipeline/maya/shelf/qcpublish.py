@@ -2,6 +2,7 @@
 import os
 import logging
 import sys
+import json
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
@@ -94,9 +95,8 @@ def qcpublish_screen_shot(entity_type, image_path):
         screen_shot_object = screen_shot.ScreenShot(image_path, False)
         screen_shot_object.screen_shot()
     else:
-        return
-        # screen_shot_object = screen_shot.ScreenShot(image_path, True)
-    # screen_shot_object.screen_shot()
+        screen_shot_object = screen_shot.ScreenShot(image_path, True)
+        screen_shot_object.screen_shot()
 
 
 def qcpublish(step):
@@ -117,8 +117,16 @@ def post_qcpublish(obj):
     if not task:
         logger.warning("No matched task")
         return
-    db.update_task_status(task, "First Review")
+    db.update_task_status(task, "Supervisor Review")
     db.upload_thumbnail(task, obj.image_path)
+    # upload version
+    db.upload_version(task, media_path=obj.video_path, file_path=obj.work_path)
+    logger.info("Upload version done.")
+    # update task
+    temp = {"work_file_path": obj.work_path}
+    data = json.dumps(temp)
+    db.update_task(task, file_path=data)
+    logger.info("Update work file done.")
 
 
 def main():

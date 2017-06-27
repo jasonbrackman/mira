@@ -7,18 +7,18 @@ from miraLibs.pipeLibs import pipeFile
 
 
 def main():
-    logger = logging.getLogger("mdl start")
+    logger = logging.getLogger("HighMdl start")
     # copy low mdl publish file as mdl file
     obj = pipeFile.PathDetails.parse_path(options.file)
     project = obj.project
     asset_type = obj.asset_type
     asset_name = obj.asset_name
-    lowMdl_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "lowMdl", "lowMdl")
-    if not os.path.isfile(lowMdl_publish_file):
-        logger.warning("No lowMdl file published.")
+    MidMdl_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "MidMdl", "MidMdl")
+    if not os.path.isfile(MidMdl_publish_file):
+        logger.warning("No MidMdl file published.")
         quit_maya.quit_maya()
         return
-    open_file.open_file(lowMdl_publish_file)
+    open_file.open_file(MidMdl_publish_file)
     save_as.save_as(options.file)
     logger.info("%s publish successful!" % options.file)
     quit_maya.quit_maya()

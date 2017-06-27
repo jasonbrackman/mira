@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-sys.path.insert(0, "Z:/mira")
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *

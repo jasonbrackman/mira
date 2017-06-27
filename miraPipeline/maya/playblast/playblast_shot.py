@@ -9,7 +9,7 @@ from miraLibs.pyLibs import create_parent_dir
 from miraLibs.pipeLibs.copy import Copy
 
 
-def playblast_shot():
+def playblast_shot(submit=True):
     logger = logging.getLogger(__name__)
     valid_camera = get_valid_camera.get_valid_camera()
     if not valid_camera:
@@ -27,6 +27,9 @@ def playblast_shot():
                             resolution, percent, open_it=True)
     logger.info("Playblast to %s" % local_video_path)
     # backup video path
-    Copy.copy(local_video_path, video_path)
-    logger.info("Copy %s >> %s" % (local_video_path, video_path))
-    return video_path
+    if submit:
+        Copy.copy(local_video_path, video_path)
+        logger.info("Copy %s >> %s" % (local_video_path, video_path))
+        return video_path
+    else:
+        return local_video_path

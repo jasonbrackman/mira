@@ -6,7 +6,6 @@ from strackConfParser import StrackConfParser
 def get_standalone_st():
     conf_data = StrackConfParser.st_conf_data()
     st_api_path = conf_data.get("st_api_path")
-    print st_api_path
     if st_api_path not in sys.path:
         sys.path.insert(0, st_api_path)
     base_url = conf_data.get("base_url")
@@ -18,4 +17,4 @@ def get_standalone_st():
 
 
 if __name__ == "__main__":
-    print get_standalone_sg()
+    print get_standalone_st()

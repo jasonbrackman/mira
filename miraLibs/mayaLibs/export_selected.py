@@ -13,6 +13,10 @@ def export_selected(file_path, maya_type="mayaBinary", pr_flag=False):
     parent_dir = os.path.dirname(file_path)
     if not os.path.isdir(parent_dir):
         os.makedirs(parent_dir)
+    if file_path.endswith(".mb"):
+        maya_type = maya_type
+    elif file_path.endswith(".ma"):
+        maya_type = "mayaAscii"
     pm.exportSelected(file_path, type=maya_type, force=1, pr=pr_flag)
 
 
