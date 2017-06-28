@@ -2,7 +2,6 @@
 import os
 import logging
 import sys
-import json
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
@@ -109,23 +108,21 @@ def qcpublish(step):
     exec(cmd_text)
 
 
-def post_qcpublish(obj):
+def post_qcpublish(context):
     from miraLibs.dbLibs import db_api
     from miraLibs.pipeLibs.pipeDb import task_from_db_path
-    db = db_api.DbApi(obj.project).db_obj
-    task = task_from_db_path.task_from_db_path(db, obj.work_path)
+    db = db_api.DbApi(context.project).db_obj
+    task = task_from_db_path.task_from_db_path(db, context.work_path)
     if not task:
         logger.warning("No matched task")
         return
     db.update_task_status(task, "Supervisor Review")
-    db.upload_thumbnail(task, obj.image_path)
+    db.upload_thumbnail(task, context.work_image_path)
     # upload version
-    db.upload_version(task, media_path=obj.video_path, file_path=obj.work_path)
+    db.upload_version(task, media_path=context.work_video_path, file_path=context.work_path)
     logger.info("Upload version done.")
     # update task
-    temp = {"work_file_path": obj.work_path}
-    data = json.dumps(temp)
-    db.update_task(task, file_path=data)
+    db.update_file_path(task, work_file_path=context.work_path)
     logger.info("Update work file done.")
 
 
@@ -135,16 +132,16 @@ def main():
     if message_box.name == "No":
         return
     try:
-        obj = pipeFile.PathDetails.parse_path()
+        context = pipeFile.PathDetails.parse_path()
     except:
         logger.warning("Name Error.")
         return
     # check is local file
-    if not obj.is_local_file():
+    if not context.is_local_file():
         QMessageBox.warning(None, "Warning", "This file is not a local work file.\n Permission defined.")
         return
     # check if work file
-    if not obj.is_working_file():
+    if not context.is_working_file():
         QMessageBox.warning(None, "Warning", "This file is not a work file.")
         return
     progress_dialog = ProgressDialog(maya_window)
@@ -161,18 +158,17 @@ def main():
         return
     progress_dialog.set_value(30)
     # save as next version file
-    next_version_file = obj.next_version_file
+    next_version_file = context.next_version_file
     save_as.save_as(next_version_file)
     logger.info("Save to %s" % next_version_file)
     progress_dialog.set_value(40)
     # get path
-    obj = pipeFile.PathDetails.parse_path(next_version_file)
-    project = obj.project
-    entity_type = obj.entity_type
-    image_path = obj.image_path
-    local_image_path = obj.local_image_path
-    step = obj.step
-    other_dir = obj.other_dir
+    context = pipeFile.PathDetails.parse_path(next_version_file)
+    entity_type = context.entity_type
+    work_image_path = context.work_image_path
+    local_image_path = context.local_image_path
+    step = context.step
+    other_dir = context.other_dir
     # copy to _other
     od = OtherDialog(other_dir, maya_window)
     od.exec_()
@@ -181,7 +177,7 @@ def main():
     # screen shot
     progress_dialog.set_text("Screen shot")
     qcpublish_screen_shot(entity_type, local_image_path)
-    Copy.copy(local_image_path, image_path)
+    Copy.copy(local_image_path, work_image_path)
     logger.info("PreQCPublish successful.")
     progress_dialog.set_value(60)
     # post publish
@@ -191,7 +187,7 @@ def main():
     progress_dialog.set_value(85)
     # write root task id to database
     progress_dialog.set_text("Add to database.")
-    post_qcpublish(obj)
+    post_qcpublish(context)
     logger.info("PostQCPublish successful.")
     # pop message
     progress_dialog.set_value(100)

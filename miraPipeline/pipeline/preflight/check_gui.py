@@ -380,5 +380,5 @@ def main():
 
 def main_for_publish():
     cg = main()
-    result = cg.do_check_all()
+    result = cg.widget.do_check_all()
     return result, cg

@@ -40,7 +40,7 @@ class MayaOpener(object):
         f = open(self.path, "r")
         line = f.readline()
         if ext == ".ma":
-            r = re.findall(r'//Maya ASCII (\d+) scene', line, re.I)
+            r = re.findall(r'//Maya ASCII (\d+).* scene', line, re.I)
             if r:
                 return int(r[0])
         else:

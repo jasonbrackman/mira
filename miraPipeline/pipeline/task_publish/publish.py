@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
+sys.path.insert(0, "Z:/mira")
 from miraLibs.pipeLibs.get_task_name import get_task_name
 import miraCore
 from miraLibs.pyLibs import join_path
@@ -13,20 +14,20 @@ class Publish(object):
     def __init__(self, work_file=None, change_task_status=True):
         self.work_file = work_file
         self.change_task_status = change_task_status
-        self.obj = pipeFile.PathDetails.parse_path(self.work_file)
+        self.context = pipeFile.PathDetails.parse_path(self.work_file)
         self.logger = self.get_logger()
-        self.engine = self.obj.engine
-        self.project = self.obj.project
+        self.engine = self.context.engine
+        self.project = self.context.project
 
     def get_publish_py(self):
         pipeline_dir = miraCore.get_pipeline_dir()
         publish_dir = join_path.join_path2(pipeline_dir, self.engine, "publish")
-        publish_py = join_path.join_path2(publish_dir, "%s_publish.py" % self.obj.step)
+        publish_py = join_path.join_path2(publish_dir, "%s_publish.py" % self.context.step)
         return publish_py
 
     def get_logger(self):
-        task_name = get_task_name(self.obj)
-        logger = get_logger.get_logger(self.obj.project, "publish", task_name)
+        task_name = get_task_name(self.context)
+        logger = get_logger.get_logger(self.context.project, "publish", task_name)
         return logger
 
     def maya_publish(self):
@@ -35,7 +36,7 @@ class Publish(object):
         if not os.path.isfile(publish_py):
             self.logger.error("%s is not an exist file" % publish_py)
             return
-        mayabatch = pipeMira.get_mayabatch_path(self.obj.project)
+        mayabatch = pipeMira.get_mayabatch_path(self.context.project)
         cmd = '\"\"%s\" -command \"python \"\"file_name=\'%s\';execfile(\'%s\')\"\"\"\"' % (
             mayabatch, self.work_file, publish_py)
         self.logger.info("cmd:\n\n%s\n\n" % cmd)
@@ -53,7 +54,7 @@ class Publish(object):
         pass
 
     def post_publish(self):
-        if not os.path.isfile(self.obj.publish_path):
+        if not os.path.isfile(self.context.publish_path):
             self.logger.error("Something wrong with publish")
             return
         # set task sg_publishfile
@@ -61,20 +62,20 @@ class Publish(object):
         db = db_api.DbApi(self.project).db_obj
         current_task = task_from_db_path.task_from_db_path(db, self.work_file)
         self.logger.info("Current Task: %s" % current_task)
-        db.update_task(current_task, sg_publishfile=self.obj.publish_path)
-        self.logger.info("update task sg_publishfile: %s" % self.obj.publish_path)
+        db.update_file_path(current_task, publish_file_path=self.context.publish_path)
+        self.logger.info("update task sg_publishfile: %s" % self.context.publish_path)
         # change task status
         if self.change_task_status:
-            db.update_task_status(current_task, "cmpt")
-            self.logger.info("update task sg_status_list: cmpt")
-        # register publish file
-        self.logger.info("publish path: %s" % self.obj.publish_path)
-        try:
-            tk = toolkit.Toolkit(self.project).tk_obj
-            self.logger.info("%s" % repr(tk.get_context_from_path(self.obj.publish_path)))
-            tk.publish_file(self.obj.publish_path)
-        except RuntimeError as e:
-            self.logger.error(str(e))
+            db.update_task_status(current_task, "Final")
+            self.logger.info("update task status: Final")
+        # # for shotgun register publish file
+        # self.logger.info("publish path: %s" % self.context.publish_path)
+        # try:
+        #     tk = toolkit.Toolkit(self.project).tk_obj
+        #     self.logger.info("%s" % repr(tk.get_context_from_path(self.context.publish_path)))
+        #     tk.publish_file(self.context.publish_path)
+        # except RuntimeError as e:
+        #     self.logger.error(str(e))
         self.logger.info("All Done.")
 
     def main(self):

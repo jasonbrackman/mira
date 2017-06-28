@@ -125,76 +125,60 @@ class PathDetails(object):
             return next_edition_file
 
     @property
-    def work_path(self):
-        return self.get_path("work", False)
-
-    @property
     def local_work_path(self):
         return self.get_path("local", True)
 
     @property
-    def image_path(self):
-        return self.get_path("image", False)
-
-    @property
     def local_image_path(self):
-        return self.get_path("image", True)
-
-    @property
-    def video_path(self):
-        return self.get_path("video", False)
+        return self.get_path("localImage", True)
 
     @property
     def local_video_path(self):
-        return self.get_path("video", True)
+        return self.get_path("localVideo", True)
+
+    @property
+    def work_path(self):
+        return self.get_path("work")
+
+    @property
+    def work_image_path(self):
+        return self.get_path("workImage")
+
+    @property
+    def work_video_path(self):
+        return self.get_path("workVideo")
 
     @property
     def other_dir(self):
-        return self.get_path("other", False)
+        return self.get_path("other")
 
     @property
     def publish_path(self):
-        return self.get_path("publish", False)
+        return self.get_path("publish")
+
+    @property
+    def image_path(self):
+        return self.get_path("image")
+
+    @property
+    def video_path(self):
+        return self.get_path("video")
 
     @property
     def topology_path(self):
-        return self.get_path("topology", False)
+        return self.get_path("topology")
 
     @property
     def abc_cache_path(self):
-        return self.get_path("cache", False)
+        return self.get_path("cache")
 
     @property
     def gpu_wrap_path(self):
-        return self.get_path("gpuwrap", False)
-
-    @property
-    def final_path(self):
-        return self.get_path("final", False)
-
-    @property
-    def final_image_path(self):
-        return self.get_path("finalImage", False)
-
-    @property
-    def final_video_path(self):
-        return self.get_path("finalVideo", False)
-
-    @property
-    def final_cache_path(self):
-        return self.get_path("finalCache", False)
-
-    @property
-    def final_topology_path(self):
-        return self.get_path("finalTopology", False)
-
-    @property
-    def final_gpu_wrap_path(self):
-        return self.get_path("finalGpuwrap", False)
+        return self.get_path("gpuwrap")
 
     @property
     def definition_path(self):
-        return self.get_path("definition", False)
+        return self.get_path("definition")
 
 
 ########################################################################################################################
@@ -216,7 +200,7 @@ def get_task_file(project, asset_type_sequence, asset_name_shot, step, task,
     file_name = file_format.format(primary=primary, project=project, asset_type=asset_type_sequence,
                                    sequence=asset_type_sequence, shot=asset_name_shot.split("_")[-1],
                                    asset_name=asset_name_shot.split("_")[-1], step=step,
-                                   task=task, version=version_str, edition=edition, engine=engine)
+                                   task=task.split("_")[-1], version=version_str, edition=edition, engine=engine)
     if not version:
         file_list = get_latest_version.get_latest_version(file_name)
         file_name = file_list[0] if file_list else file_name
@@ -230,7 +214,7 @@ def get_asset_task_work_file(project, asset_type, asset_name, step, task, versio
 
 
 def get_asset_task_image_file(project, asset_type, asset_name, step, task, version=None, engine="maya", local=False):
-    format_str = "%s_asset_image" % engine
+    format_str = "%s_asset_workImage" % engine
     image_file = get_task_file(project, asset_type, asset_name, step, task, format_str, version, engine, local)
     return image_file
 
@@ -239,18 +223,6 @@ def get_asset_task_publish_file(project, asset_type, asset_name, step, task, ver
     format_str = "%s_asset_publish" % engine
     publish_file = get_task_file(project, asset_type, asset_name, step, task, format_str, version, engine, local)
     return publish_file
-
-
-def get_asset_task_final_file(project, asset_type, asset_name, step, task, version=None, engine="maya", local=False):
-    format_str = "%s_asset_final" % engine
-    work_file = get_task_file(project, asset_type, asset_name, step, task, format_str, version, engine, local)
-    return work_file
-
-
-def get_asset_task_finalImage_file(project, asset_type, asset_name, step, task, engine="maya", local=False):
-    format_str = "%s_asset_image" % engine
-    image_file = get_task_file(project, asset_type, asset_name, step, task, format_str, engine, local)
-    return image_file
 
 
 ########################################################################################################################

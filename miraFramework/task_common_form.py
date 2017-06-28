@@ -7,6 +7,7 @@ from Filter import ButtonLineEdit
 from miraLibs.pyLibs import join_path
 from miraLibs.pipeLibs import pipeMira, get_current_project
 from miraLibs.dbLibs import db_api
+from miraLibs.pipeLibs import pipeHistory
 
 
 ENGINELIST = ["maya", "nuke", "houdini"]
@@ -310,7 +311,8 @@ class CommonForm(QWidget):
         self.third_widget.list_view.clicked.connect(self.show_task)
 
     def on_project_changed(self, project):
-        self.db = Sg.Sg(project)
+        pipeHistory.set("currentProject", project)
+        self.db = db_api.DbApi(project).db_obj
         self.asset_check.setChecked(False)
         self.shot_check.setChecked(False)
         for widget in [self.first_widget, self.second_widget, self.third_widget, self.fourth_widget]:
@@ -360,6 +362,9 @@ class CommonForm(QWidget):
         if not self.asset_type_or_sequence:
             return
         steps = self.db.get_step(self.entity_type, self.asset_type_or_sequence, asset_or_shot)
+        if not steps:
+            print "No step under this entity"
+            return
         step_names = list(set(steps))
         self.third_widget.set_model_data(step_names)
 

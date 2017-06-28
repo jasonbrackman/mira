@@ -54,8 +54,9 @@ class FileTreeView(QTreeView):
         if os.path.isdir(file_dir):
             self.model = QFileSystemModel()
             filter_list = self.get_filter()
+            # self.model.setFilter(QDir.Files | QDir.NoDotAndDotDot)
             self.model.setNameFilters(filter_list)
-            self.model.setNameFilterDisables(False)
+            self.model.setNameFilterDisables(True)
             self.setModel(self.model)
             root_index = self.model.setRootPath(file_dir)
             self.setRootIndex(root_index)
@@ -148,7 +149,6 @@ class TaskGetUI(QDialog):
 
 
 if __name__ == "__main__":
-    import sys
     from miraLibs.qtLibs import render_ui
     render_ui.render(TaskGetUI)
 

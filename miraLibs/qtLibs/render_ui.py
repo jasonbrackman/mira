@@ -22,4 +22,4 @@ def render(widget_class):
         import sys
         pb_ui = PipelineBaseUI(widget_class)
         pb_ui.show()
-    return pb_ui.widget
+    return pb_ui

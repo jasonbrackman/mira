@@ -191,22 +191,34 @@ class St(object):
         version = self.st.version.create(data={"task_id": task_id, "path": {"file": file_path, "media": media_path}})
         self.st.media.encoding(version.get("id"), media_path)
 
+    def update_file_path(self, task_info, work_file_path="", publish_file_path=""):
+        import json
+        old_value = task_info.get("file_path")
+        old_value = old_value.replace("&quot;", '"')
+        if not old_value:
+            old_value = dict()
+        else:
+            old_value = json.loads(old_value)
+        if work_file_path:
+            old_value["work_file_path"] = work_file_path
+        if publish_file_path:
+            old_value["publish_file_path"] = publish_file_path
+        data = json.dumps(old_value)
+        self.update_task(task_info, file_path=data)
+
 
 if __name__ == "__main__":
     st = St("SnowKidTest")
-    # file_path = "W:/SnowKidTest/workarea/assets/Prop/TdTest/MidMdl/MidMdl/_workarea/maya/SnowKidTest_TdTest_MidMdl_MidMdl_v002.ma"
+    # file_path = "W:/SnowKidTest/workarea/assets/Prop/TdTest/MidMdl/MidMdl/_workarea/maya/SnowKidTest_TdTest_MidMdl_MidMdl_v004.ma"
     # media_path = "W:/SnowKidTest/workarea/assets/Prop/TdTest/MidMdl/MidMdl/_video/maya/SnowKidTest_TdTest_MidMdl_MidMdl_v002.mov"
     # version = st.st.version.create(data={"task_id": 7, "path": {"file": file_path, "media": media_path}})
     # st.st.media.encoding(version.get("id"), media_path)
     # print "done"
     # print st.st.task.find("id=20", ["custom"])
-    task = st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")
-    temp = {"work_file_path": "W:/test.ma"}
-    import json
-    data = json.dumps(temp)
-    st.update_task(task, file_path=data)
-
-
-
-
-
+    # task = st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")
+    # temp = {"work_file_path": "W:/test.ma"}
+    # import json
+    # data = json.dumps(temp)
+    # st.update_task(task, file_path=data)
+    # st.update_file_path(task, file_path)
+    print st.get_current_task("Asset", "Prop", )

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-import sys
+import json
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
@@ -71,7 +71,12 @@ class TaskPublish(QDialog):
         if not self.task_info:
             self.path_le.setText("")
         else:
-            work_file_path = self.task_info["sg_workfile"]
+            # sg
+            # work_file_path = self.task_info["sg_workfile"]
+            # st
+            file_path = self.task_info.get("file_path")
+            file_path = file_path.replace("&quot;", '"')
+            work_file_path = json.loads(file_path).get("work_file_path")
             if work_file_path:
                 self.path_le.setText(work_file_path)
             else:
@@ -103,6 +108,7 @@ class TaskPublish(QDialog):
         submitter = u'pipemanager'
         tar_name = u'pipemanager'
         submit.submit_python_job(deadline_job_name, publish_script_path, argv, submitter, tar_name)
+        QMessageBox.information(self, "Warming Tip", "%s submit done." % task_name)
 
 
 def main():

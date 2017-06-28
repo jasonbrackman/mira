@@ -5,9 +5,9 @@ import load_plugin
 
 
 def export_abc(start_frame, end_frame, tar_path, root, uv_write=True, renderable_only=True, attribute=None):
-    if isinstance(root, "basestring"):
+    if isinstance(root, basestring):
         root = [root]
-    if isinstance(attribute, "basestring"):
+    if isinstance(attribute, basestring):
         attribute = [attribute]
     tar_dir = os.path.dirname(tar_path)
     if not os.path.isdir(tar_dir):

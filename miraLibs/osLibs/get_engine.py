@@ -9,10 +9,12 @@ def get_engine():
     app_name = os.path.splitext(app_basename)[0]
     if "Nuke" in app_name:
         app_name = "nuke"
-    if "houdini" in app_name:
+    elif "houdini" in app_name:
         app_name = "houdini"
-    if "Photoshop" in app_name:
+    elif "Photoshop" in app_name:
         app_name = "photoshop"
+    elif "maya" in app_name:
+        app_name = "maya"
     return app_name
 
 

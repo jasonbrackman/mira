@@ -15,7 +15,7 @@ def playblast_turntable(submit=True):
     # get path
     obj = pipeFile.PathDetails.parse_path()
     local_video_path = obj.local_video_path
-    video_path = obj.video_path
+    work_video_path = obj.work_video_path
     current_project = obj.project
     # playblast
     model_name = get_model_name.get_model_name()
@@ -30,8 +30,8 @@ def playblast_turntable(submit=True):
     logger.info("playblast done.")
     mc.lookThru("persp")
     if submit:
-        Copy.copy(local_video_path, video_path)
-        logger.info("Copy %s >> %s" % (local_video_path, video_path))
-        return video_path
+        Copy.copy(local_video_path, work_video_path)
+        logger.info("Copy %s >> %s" % (local_video_path, work_video_path))
+        return work_video_path
     else:
         return local_video_path

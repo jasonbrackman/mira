@@ -51,23 +51,24 @@ def upload_movie(description):
     if not scene_name:
         QMessageBox.warning(None, "Warning", "Save scene first")
         return
-    obj = pipeFile.PathDetails.parse_path(scene_name)
-    project = obj.project
-    entity_type = obj.entity_type
-    step = obj.step
-    task = obj.task
-    # next_version_file = obj.next_version_file
-    # save_as.save_as(next_version_file)
+    context = pipeFile.PathDetails.parse_path(scene_name)
+    next_edition_file = context.next_edition_file
+    save_as.save_as(next_edition_file)
+    context = pipeFile.PathDetails.parse_path(next_edition_file)
+    project = context.project
+    entity_type = context.entity_type
+    step = context.step
+    task = context.task
     if entity_type == "Asset":
-        asset_type_or_sequence = obj.asset_type
-        asset_or_shot = obj.asset_name
-        video_path = playblast_turntable.playblast_turntable(submit=False)
+        asset_type_or_sequence = context.asset_type
+        asset_or_shot = context.asset_name
+        local_video_path = playblast_turntable.playblast_turntable(submit=False)
     else:
-        asset_type_or_sequence = obj.sequence
-        asset_or_shot = obj.shot
-        video_path = playblast_shot.playblast_shot(submit=False)
+        asset_type_or_sequence = context.sequence
+        asset_or_shot = context.shot
+        local_video_path = playblast_shot.playblast_shot(submit=False)
     logger.info("Playblast done")
-    if video_path and os.path.isfile(video_path):
+    if local_video_path and os.path.isfile(local_video_path):
         # save_as.save_as(next_version_file)
         db = db_api.DbApi(project).db_obj
         # entity_type, asset_type_or_sequence, asset_or_shot, step, task_name
@@ -79,7 +80,7 @@ def upload_movie(description):
         if db.typ == "shotgun":
             project_info = db.get_project_by_name()
             user = db.get_current_user()
-            code = os.path.splitext(os.path.basename(video_path))[0]
+            code = os.path.splitext(os.path.basename(local_video_path))[0]
             data = {'project': project_info,
                     'code': code,
                     'description': description,
@@ -88,10 +89,11 @@ def upload_movie(description):
                     'sg_task': current_task,
                     'user': user}
             result = db.create('Version', data)
-            db.upload("Version", result["id"], video_path, "sg_uploaded_movie")
+            db.upload("Version", result["id"], local_video_path, "sg_uploaded_movie")
             return True
         elif db.typ == "strack":
-            db.upload_version(current_task, video_path)
+            db.upload_version(current_task, local_video_path, next_edition_file)
+            return True
     else:
         logger.warning("May playblast wrong.")
         return False
