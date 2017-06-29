@@ -56,7 +56,7 @@ class FileTreeView(QTreeView):
             filter_list = self.get_filter()
             # self.model.setFilter(QDir.Files | QDir.NoDotAndDotDot)
             self.model.setNameFilters(filter_list)
-            self.model.setNameFilterDisables(True)
+            self.model.setNameFilterDisables(False)
             self.setModel(self.model)
             root_index = self.model.setRootPath(file_dir)
             self.setRootIndex(root_index)

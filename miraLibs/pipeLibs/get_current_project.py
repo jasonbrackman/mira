@@ -8,6 +8,7 @@ def get_current_project():
     logger = logging.getLogger(__name__)
     run_app = sys.executable
     current_project = None
+    all_projects = pipeMira.get_projects()
     if run_app.endswith("maya.exe"):
         from miraLibs.mayaLibs import get_maya_globals
         obj = pipeFile.PathDetails.parse_path()
@@ -23,7 +24,7 @@ def get_current_project():
         current_project = pipeHistory.get("currentProject")
         if current_project:
             logger.info("Get project from history.")
-        else:
-            current_project = pipeMira.get_current_project()
-            logger.info("Get project from configuration.")
+    if not current_project or current_project not in all_projects:
+        current_project = pipeMira.get_current_project()
+        logger.info("Get project from configuration.")
     return current_project

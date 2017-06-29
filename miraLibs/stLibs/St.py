@@ -194,10 +194,10 @@ class St(object):
     def update_file_path(self, task_info, work_file_path="", publish_file_path=""):
         import json
         old_value = task_info.get("file_path")
-        old_value = old_value.replace("&quot;", '"')
         if not old_value:
             old_value = dict()
         else:
+            old_value = old_value.replace("&quot;", '"')
             old_value = json.loads(old_value)
         if work_file_path:
             old_value["work_file_path"] = work_file_path

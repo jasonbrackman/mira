@@ -39,7 +39,7 @@ SnowKidTest:
   resolution: "2048*858"
   maya_path: "C:/Program Files/Autodesk/Maya2017/bin/maya.exe"
   mayabatch_path: "C:/Program Files/Autodesk/Maya2017/bin/mayabatch.exe"
-  playblast_percent: 50
+  playblast_percent: 100
   primary: "W:"
   task_log_dir: "{primary}/{project}/log"
   priority: ["A", "B", "C", "D"]
