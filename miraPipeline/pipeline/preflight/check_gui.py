@@ -374,7 +374,6 @@ def main():
     # cg.show()
     # return cg
     from miraLibs.qtLibs import render_ui
-    reload(render_ui)
     return render_ui.render(CheckGui)
 
 

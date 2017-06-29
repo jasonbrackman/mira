@@ -215,7 +215,7 @@ class LeafFilterProxyModel(QSortFilterProxyModel):
     def filter_accepts_row_itself(self, row_num, parent):
         final_index = self.sourceModel().index(row_num, 2, parent)
         index_data = final_index.data()
-        is_final = "status:  final" not in index_data if index_data else False
+        is_final = "status:  Final" not in index_data if index_data else False
         filter_result = super(LeafFilterProxyModel, self).filterAcceptsRow(row_num, parent)
         if self.final_checked:
             return filter_result
@@ -402,7 +402,7 @@ class TaskGet(task_get_ui.TaskGetUI):
 
     def filter_status(self, state):
         self.proxy_model.final_checked = state
-        self.proxy_model.reset()
+        # self.proxy_model.reset()
         self.task_view.expandAll()
 
     def filter_name(self, text):

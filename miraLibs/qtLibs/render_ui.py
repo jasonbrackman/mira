@@ -11,11 +11,6 @@ from splash import splash
 def render(widget_class):
     parent_win = get_parent_win.get_parent_win()
     if parent_win:
-        global pb_ui
-        try:
-            pb_ui.close()
-            pb_ui.deleteLater()
-        except:pass
         pb_ui = PipelineBaseUI(widget_class, parent_win)
         pb_ui.show()
     else:

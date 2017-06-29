@@ -44,6 +44,12 @@ class FileListWidget(QListWidget):
             path = str(url.toLocalFile())
             self.add_file_item(path)
 
+    def contextMenuEvent(self, event):
+        self.menu.clear()
+        self.menu.addAction(self.remove_action)
+        self.menu.exec_(QCursor.pos())
+        event.accept()
+
     def all_items_text(self):
         all_items_text = list()
         if self.count():
@@ -59,9 +65,10 @@ class FileListWidget(QListWidget):
         file_info = QFileInfo(file_path)
         icon_provider = QFileIconProvider()
         icon = icon_provider.icon(file_info)
+        pixmap = icon.pixmap(512)
         item = QListWidgetItem(file_path)
         item.setSizeHint(QSize(item.sizeHint().width(), 35))
-        item.setIcon(icon)
+        item.setIcon(pixmap)
         self.addItem(item)
 
     def append_dir(self, file_dir):

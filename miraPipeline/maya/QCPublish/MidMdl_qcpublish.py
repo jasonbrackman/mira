@@ -3,7 +3,6 @@ import logging
 from miraLibs.pipeLibs.copy import Copy
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import get_scene_name
-from miraPipeline.maya.playblast import playblast_turntable
 
 
 def MidMdl_qcpublish():
@@ -16,7 +15,3 @@ def MidMdl_qcpublish():
         logger.info("copy %s >> %s" % (scene_name, work_path))
     else:
         raise RuntimeError("copy to work path error.")
-    # playblast to video
-    logger.info("Start playblasting...")
-    playblast_turntable.playblast_turntable()
-    logger.info("Playblast successful")

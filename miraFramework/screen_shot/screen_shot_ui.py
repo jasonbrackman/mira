@@ -82,8 +82,10 @@ class Ui_ThumbnailWidget(object):
         QMetaObject.connectSlotsByName(ThumbnailWidget)
 
     def retranslateUi(self, ThumbnailWidget):
-        ThumbnailWidget.setWindowTitle(QApplication.translate("ThumbnailWidget", "Screen Shot", None, QApplication.UnicodeUTF8))
-
+        try:
+            ThumbnailWidget.setWindowTitle(QApplication.translate("ThumbnailWidget", "Screen Shot", None, QApplication.UnicodeUTF8))
+        except:
+            ThumbnailWidget.setWindowTitle(QApplication.translate("ThumbnailWidget", "Screen Shot", None))
 
 if __name__ == "__main__":
     pass

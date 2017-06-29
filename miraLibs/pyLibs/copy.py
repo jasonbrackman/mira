@@ -10,4 +10,9 @@ def copy(src, dst):
     if (not src) or (not os.path.isfile(src)):
         print "%s is not an exist file" % src
         return
-    shutil.copy(src, dst)
+    try:
+        shutil.copy(src, dst)
+        return True
+    except:
+        print "Can't copy %s--->%s" % (src, dst)
+        return False

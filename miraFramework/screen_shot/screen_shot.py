@@ -236,4 +236,3 @@ if __name__ == "__main__":
     tw = ThumbnailWidget()
     tw.show()
     sys.exit(app.exec_())
-
