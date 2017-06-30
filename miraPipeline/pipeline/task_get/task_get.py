@@ -296,6 +296,7 @@ class TaskGet(task_get_ui.TaskGetUI):
         if not os.path.isfile(file_path):
             return
         try:
+            print file_path
             obj = pipeFile.PathDetails.parse_path(file_path)
             local_path = obj.local_work_path
             copy.copy(file_path, local_path)
@@ -310,6 +311,11 @@ class TaskGet(task_get_ui.TaskGetUI):
     def update_task_status(self, file_path):
         task = task_from_db_path.task_from_db_path(self.__db, file_path)
         self.__db.update_task_status(task, "In progress")
+        self.__logger.info("Change task status to In progress.")
+        from datetime import datetime
+        now_time = datetime.now().strftime('%Y-%m-%d')
+        self.__db.update_task(task, sub_date=now_time)
+        self.__logger.info("Change task sub date: %s" % now_time)
 
     def set_model(self):
         self.root_node = Node("Task get")

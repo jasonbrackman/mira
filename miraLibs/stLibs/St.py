@@ -221,4 +221,7 @@ if __name__ == "__main__":
     # data = json.dumps(temp)
     # st.update_task(task, file_path=data)
     # st.update_file_path(task, file_path)
-    print st.get_current_task("Asset", "Prop", )
+    # print st.get_current_task("Asset", "Prop", )
+    # print st.st.task.fields
+    # print st.st.task.find("id=7", ["sub_date"])
+    print st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")

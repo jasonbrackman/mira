@@ -68,12 +68,10 @@ def create_ad(context):
     new_file.new_file()
     mc.file(rename=ad_path)
     gpu_name = "%s_gpu" % context.step
-    mdl_name = "%s_mdl" % context.step
     ad_node_name = "%s_%s_AD" % (context.asset_type_short_name, context.asset_name)
     assemb = Assembly.Assembly()
     node = assemb.create_assembly_node(ad_node_name, "assemblyDefinition")
     assemb.create_representation(node, "Cache", gpu_name, gpu_name, context.abc_cache_path)
-    assemb.create_representation(node, "Scene", mdl_name, mdl_name, context.path)
     save_file.save_file()
 
 

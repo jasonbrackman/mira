@@ -88,7 +88,7 @@ def create_turntable():
             new_camera = mc.duplicate(camPath)[0]
             mc.rename(new_camera, "tt_camera")
             # look though the camera
-            mc.viewFit("tt_camera", fitFactor=mc.getAttr('defaultResolution.pixelAspect')/mc.getAttr('defaultResolution.deviceAspectRatio'))
+            mc.viewFit("tt_camera", fitFactor=mc.getAttr('defaultResolution.pixelAspect')/mc.getAttr('defaultResolution.deviceAspectRatio')*1.2)
             #center = mc.objectCenter(box)
             #distance = max([abs(each) for each in bb])
             #distance *= 2.42
