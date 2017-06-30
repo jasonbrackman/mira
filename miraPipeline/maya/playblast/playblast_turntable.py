@@ -2,12 +2,14 @@
 import logging
 import maya.cmds as mc
 import playblaster
+from miraBake import remove_turntable
 from miraLibs.mayaLibs import set_image_size
 from miraLibs.pipeLibs import pipeFile, pipeMira
-from miraLibs.pipeLibs.pipeMaya import get_model_name
-from miraPipeline.maya.asset_turntable import create_turntable, remove_turntable
-from miraLibs.pyLibs import create_parent_dir
 from miraLibs.pipeLibs.copy import Copy
+from miraLibs.pipeLibs.pipeMaya import get_model_name
+from miraLibs.pyLibs import create_parent_dir
+from miraPipeline.maya.asset_turntable import create_turntable
+reload(create_turntable)
 
 
 def playblast_turntable(submit=True):
@@ -23,9 +25,9 @@ def playblast_turntable(submit=True):
     percent = pipeMira.get_playblast_percent(current_project)
     set_image_size.set_image_size(*resolution)
     mc.select(model_name, r=1)
-    create_turntable.create_turntable()
+    cam = create_turntable.create_turntable()
     create_parent_dir.create_parent_dir(local_video_path)
-    playblaster.playblaster(local_video_path, "tt_camera", 1, 300, resolution, percent, False, None, True)
+    playblaster.playblaster(local_video_path, cam, 1, 240, resolution, percent, False, None, True)
     remove_turntable.remove_turntable()
     logger.info("playblast done.")
     mc.lookThru("persp")

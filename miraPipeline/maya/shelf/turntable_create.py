@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from miraPipeline.maya.asset_turntable import create_turntable
+from miraBake import create_turntable
 
 
 def main():

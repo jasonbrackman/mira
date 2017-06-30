@@ -11,7 +11,7 @@ from miraFramework.screen_shot import screen_shot
 from miraFramework.drag_file_widget import DragFileWidget
 from miraLibs.pipeLibs import pipeFile, pipeMira
 from miraPipeline.pipeline.preflight import check_gui
-from miraLibs.mayaLibs import save_as
+from miraLibs.mayaLibs import save_as, save_file
 from miraPipeline.maya.playblast import playblast_turntable, playblast_shot
 
 logger = logging.getLogger(__name__)
@@ -85,7 +85,7 @@ class CellQCWidget(QWidget):
         main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         self.command = None
-        self.status = "executing"
+        self.status = "start"
         self.check = QCheckBox()
         self.check.setFixedWidth(COLUMN_WIDTH)
         self.check.setChecked(True)
@@ -107,8 +107,8 @@ class CellQCWidget(QWidget):
         self.check.setChecked(True)
         self.check.setEnabled(False)
 
-    def executing(self):
-        self.set_status("executing")
+    def start(self):
+        self.set_status("start")
 
     def waiting(self):
         self.set_status("waiting")
@@ -162,7 +162,7 @@ class QC(QDialog):
         self.qc_widget.set_mandatory()
 
         self.other_widget = CellQCWidget(DragFileWidget())
-        self.other_widget.check.setChecked(False)
+        self.other_widget.set_mandatory()
 
         post_qc_label = TextLabel("Post QC")
         self.post_qc_widget = CellQCWidget(post_qc_label)
@@ -183,7 +183,7 @@ class QC(QDialog):
 
     def submit(self):
         # has screen
-        self.screen_shot_label.set_status("executing")
+        self.screen_shot_label.set_status("start")
         thumbnail_path = self.screen_shot_widget.get_thumbnail_path()
         if thumbnail_path:
             self.screen_shot_label.set_status("success")
@@ -191,19 +191,27 @@ class QC(QDialog):
             self.screen_shot_label.set_status("fail")
             return
         # valid file
-        self.valid_file_widget.executing()
+        self.valid_file_widget.start()
         context = pipeFile.PathDetails.parse_path()
-        if not context:
-            self.valid_file_widget.fail()
-            return
-        if context.is_local_file() and context.is_working_file():
+        if context and context.is_local_file() and context.is_working_file():
             self.valid_file_widget.success()
         else:
             self.valid_file_widget.fail()
             return
+        # if version is 000, save as 001
+        if context.version == "000":
+            next_version_file = context.next_version_file
+            save_as.save_as(next_version_file)
+            context = pipeFile.PathDetails.parse_path()
+        # get path
+        entity_type = context.entity_type
+        work_image_path = context.work_image_path
+        local_image_path = context.local_image_path
+        step = context.step
+        other_dir = context.other_dir
         # preflight
         if self.preflight_widget.check.isChecked():
-            self.preflight_widget.executing()
+            self.preflight_widget.start()
             result, cg = check_gui.main_for_publish()
             if result:
                 cg.close()
@@ -212,39 +220,29 @@ class QC(QDialog):
             else:
                 self.preflight_widget.fail()
                 return
-        # save as next version file
-        next_version_file = context.next_version_file
-        save_as.save_as(next_version_file)
-        logger.info("Save to %s" % next_version_file)
-        # get path
-        context = pipeFile.PathDetails.parse_path(next_version_file)
-        entity_type = context.entity_type
-        work_image_path = context.work_image_path
-        local_image_path = context.local_image_path
-        step = context.step
-        other_dir = context.other_dir
-        # copy image
-        copy.copy(thumbnail_path, local_image_path)
-        copy.copy(thumbnail_path, work_image_path)
-        os.remove(thumbnail_path)
         # playblast
         not_playblast_step = pipeMira.get_site_value(context.project, "not_playblast_step").split(",")
         if step in not_playblast_step:
             self.playblast_widget.check.setChecked(False)
         if self.playblast_widget.check.isChecked():
-            self.playblast_widget.executing()
+            self.playblast_widget.start()
             try:
                 if entity_type == "Asset":
                     playblast_turntable.playblast_turntable()
                 elif entity_type == "Shot":
                     playblast_shot.playblast_shot()
                 self.playblast_widget.success()
-            except:
+            except RuntimeError as e:
+                logger.error(str(e))
                 self.playblast_widget.fail()
                 return
+        # copy image
+        copy.copy(thumbnail_path, local_image_path)
+        copy.copy(thumbnail_path, work_image_path)
+        os.remove(thumbnail_path)
         # step qc
         if self.qc_widget.check.isChecked():
-            self.qc_widget.executing()
+            self.qc_widget.start()
             try:
                 qcpublish(step)
                 self.qc_widget.success()
@@ -253,7 +251,7 @@ class QC(QDialog):
                 return
         # other
         if self.other_widget.check.isChecked():
-            self.other_widget.executing()
+            self.other_widget.start()
             try:
                 submit_other(other_dir, self.other_widget.widget.file_list.all_items_text())
                 self.other_widget.success()
@@ -262,12 +260,19 @@ class QC(QDialog):
                 return
         # post qc
         if self.post_qc_widget.check.isChecked():
-            self.post_qc_widget.executing()
+            self.post_qc_widget.start()
             try:
                 post_qcpublish(context)
                 self.post_qc_widget.success()
             except:
                 self.post_qc_widget.fail()
+        # if not preflight, save current file
+        if not self.preflight_widget.check.isChecked():
+            save_file.save_file()
+        # save as next version file
+        next_version_file = context.next_version_file
+        save_as.save_as(next_version_file)
+        logger.info("Save to %s" % next_version_file)
 
 
 def main():

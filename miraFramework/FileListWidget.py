@@ -62,13 +62,13 @@ class FileListWidget(QListWidget):
         exists = self.all_items_text()
         if file_path in exists:
             return
-        file_info = QFileInfo(file_path)
-        icon_provider = QFileIconProvider()
-        icon = icon_provider.icon(file_info)
-        pixmap = icon.pixmap(512)
+        # file_info = QFileInfo(file_path)
+        # icon_provider = QFileIconProvider()
+        # icon = icon_provider.icon(file_info)
+        # pixmap = icon.pixmap(512)
         item = QListWidgetItem(file_path)
         item.setSizeHint(QSize(item.sizeHint().width(), 35))
-        item.setIcon(pixmap)
+        # item.setIcon(pixmap)
         self.addItem(item)
 
     def append_dir(self, file_dir):
