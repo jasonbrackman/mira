@@ -80,28 +80,25 @@ def create_turntable():
             mc.playbackOptions(maxTime=240, animationEndTime=240)
             bb = bounding_by_frame([0,240],['tt_rotation'])
             box = create_warp_box_bounding(bb)
-            
             view = OpenMayaUI.M3dView.active3dView()
             cam = OpenMaya.MDagPath()
             view.getCamera(cam)
             camPath = cam.fullPathName()
+            # duplicate a camera
+            new_camera = mc.duplicate(camPath)[0]
+            mc.rename(new_camera, "tt_camera")
             # look though the camera
-            mc.viewFit(camPath, fitFactor=mc.getAttr('defaultResolution.pixelAspect')/mc.getAttr('defaultResolution.deviceAspectRatio'))
-            
+            mc.viewFit("tt_camera", fitFactor=mc.getAttr('defaultResolution.pixelAspect')/mc.getAttr('defaultResolution.deviceAspectRatio'))
             #center = mc.objectCenter(box)
             #distance = max([abs(each) for each in bb])
             #distance *= 2.42
-            
             #cam_ = mc.listRelatives(camPath,parent=True)[0]
-            
             #mc.setAttr("%s.translateX" % cam_,center[0])
             #mc.setAttr("%s.translateY" % cam_,center[1])
             #mc.setAttr("%s.translateZ" % cam_,center[2])
-      
             #mc.camera(camPath,e=True,centerOfInterest=distance)
-            
             mc.delete(box)
-            return camPath
+            return True
     else:
         logging.error('No object selected, please select an object')
         return False
