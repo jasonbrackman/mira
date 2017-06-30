@@ -74,11 +74,11 @@ def create_turntable():
             mc.xform("tt_rotation", rotatePivot=[0, 0, 0], worldSpace=1)
             # key the tt_rotation group
             mc.setKeyframe("tt_rotation", value=0, t=0, itt="linear", ott="linear", at="rotateY")
-            mc.setKeyframe('tt_rotation', v=360, t=240, itt='linear', ott='linear', at='rotateY')
+            mc.setKeyframe('tt_rotation', v=360, t=120, itt='linear', ott='linear', at='rotateY')
             # set animation range
             mc.playbackOptions(minTime=0, animationStartTime=0)
-            mc.playbackOptions(maxTime=240, animationEndTime=240)
-            bb = bounding_by_frame([0,240],['tt_rotation'])
+            mc.playbackOptions(maxTime=120, animationEndTime=120)
+            bb = bounding_by_frame([0,120],['tt_rotation'])
             box = create_warp_box_bounding(bb)
             view = OpenMayaUI.M3dView.active3dView()
             cam = OpenMaya.MDagPath()

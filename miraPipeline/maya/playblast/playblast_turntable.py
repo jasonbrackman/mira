@@ -27,7 +27,7 @@ def playblast_turntable(submit=True):
     mc.select(model_name, r=1)
     create_turntable.create_turntable()
     create_parent_dir.create_parent_dir(local_video_path)
-    playblaster.playblaster(local_video_path, "tt_camera", 1, 240, resolution, percent, False, None, True)
+    playblaster.playblaster(local_video_path, "tt_camera", 1, 120, resolution, percent, False, None, True)
     remove_turntable.remove_turntable()
     logger.info("playblast done.")
     mc.lookThru("persp")
