@@ -156,9 +156,10 @@ class FailDialog(QDialog):
         select_node.select_node(node)
 
     def do_manual(self):
-        self.hide()
-        self.setWindowModality(Qt.NonModal)
-        self.show()
+        if QApplication.activeModalWidget():
+            self.hide()
+            self.setWindowModality(Qt.NonModal)
+            self.show()
         self.check_object.close()
         if not self.error_list_widget.count():
             self.close()

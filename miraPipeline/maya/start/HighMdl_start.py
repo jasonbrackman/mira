@@ -9,11 +9,12 @@ from miraLibs.pipeLibs import pipeFile
 def main():
     logger = logging.getLogger("HighMdl start")
     # copy low mdl publish file as mdl file
-    obj = pipeFile.PathDetails.parse_path(options.file)
-    project = obj.project
-    asset_type = obj.asset_type
-    asset_name = obj.asset_name
+    context = pipeFile.PathDetails.parse_path(options.file)
+    project = context.project
+    asset_type = context.asset_type
+    asset_name = context.asset_name
     MidMdl_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "MidMdl", "MidMdl")
+    logger.info("MidMdl publish file: %s" % MidMdl_publish_file)
     if not os.path.isfile(MidMdl_publish_file):
         logger.warning("No MidMdl file published.")
         quit_maya.quit_maya()

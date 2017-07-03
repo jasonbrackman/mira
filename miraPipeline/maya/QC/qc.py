@@ -274,8 +274,8 @@ class QC(QDialog):
         save_as.save_as(next_version_file)
         logger.info("Save to %s" % next_version_file)
         # close self and pop a message box to tell that all finished
-        self.close()
-        self.deleteLater()
+        self.parent_win.close()
+        self.parent_win.deleteLater()
         QMessageBox.information(None, "Warming Tip", "Congratulations, QC successful.")
 
 

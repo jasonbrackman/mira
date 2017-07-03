@@ -60,6 +60,7 @@ class PipelineBaseUI(QDialog):
         super(PipelineBaseUI, self).__init__(parent)
         self.setObjectName("PipelineBaseUI")
         self.widget = widget_class()
+        self.widget.parent_win = self
         window_title = self.widget.windowTitle()
         self.setWindowTitle(window_title)
         self.resize(self.widget.width(), self.widget.height()+TITLE_HEIGHT)
