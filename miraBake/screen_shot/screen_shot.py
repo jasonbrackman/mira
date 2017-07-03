@@ -6,7 +6,7 @@ from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
 from miraLibs.pipeLibs import pipeFile
-from miraTools.screen_shot import screen_shot
+from miraFramework.screen_shot import screen_shot
 from miraLibs.mayaLibs import get_maya_win
 from miraLibs.pipeLibs.backup import backup
 

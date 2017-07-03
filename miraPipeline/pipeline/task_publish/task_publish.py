@@ -36,7 +36,7 @@ class TaskPublish(QDialog):
         bottom_layout.addWidget(self.path_btn)
 
         btn_layout = QHBoxLayout()
-        self.task_status_check = QCheckBox("Change task status to final")
+        self.task_status_check = QCheckBox("Change task status to Delivered")
         self.task_status_check.setChecked(True)
         self.publish_btn = QPushButton("Publish")
         self.publish_btn.setEnabled(False)

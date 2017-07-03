@@ -66,8 +66,8 @@ class Publish(object):
         self.logger.info("update task sg_publishfile: %s" % self.context.publish_path)
         # change task status
         if self.change_task_status:
-            db.update_task_status(current_task, "Final")
-            self.logger.info("update task status: Final")
+            db.update_task_status(current_task, "Delivered")
+            self.logger.info("update task status: Delivered")
         # # for shotgun register publish file
         # self.logger.info("publish path: %s" % self.context.publish_path)
         # try:

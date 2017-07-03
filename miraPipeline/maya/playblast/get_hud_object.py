@@ -32,11 +32,8 @@ def get_hud_object():
     maya_globals = get_maya_globals.get_maya_globals()
     if "hud" not in maya_globals.keys():
         company_name = get_company()
-        print company_name
         project_name = get_project()
-        print project_name
         shot_name = get_shot_name()
-        print company_name, project_name, shot_name
         hud_obj = hud.HeadsUpDisplay(company_name, project_name, shot_name)
         maya_globals.add(hud=hud_obj)
     return maya_globals.get("hud")

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from miraPipeline.maya.screen_shot import screen_shot
+from miraBake.screen_shot import screen_shot
+
 reload(screen_shot)
 
 

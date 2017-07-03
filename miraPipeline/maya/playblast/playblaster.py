@@ -112,6 +112,7 @@ def display_mode():
     # Display smoothness low
     model_panels = mc.getPanel(typ="modelPanel")
     for currentPanel in model_panels:
+        mc.modelEditor(currentPanel, edit=True, grid=False)
         for item in display_keys:
             eval("mc.modelEditor(\'"+currentPanel+"\',e=True,"+item+"=0)")
 
