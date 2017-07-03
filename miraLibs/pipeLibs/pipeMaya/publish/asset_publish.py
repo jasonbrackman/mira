@@ -68,3 +68,4 @@ def add_gpu_to_ad(context):
     gpu_name = "%s_gpu" % context.step
     assemb = Assembly.Assembly()
     assemb.create_representation(ad_node_name, "Cache", gpu_name, gpu_name, context.abc_cache_path)
+    save_file.save_file()
