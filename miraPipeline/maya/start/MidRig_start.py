@@ -2,6 +2,7 @@
 import os
 import logging
 import optparse
+import maya.cmds as mc
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import new_file, save_as, create_reference, create_group, quit_maya
 
@@ -35,8 +36,18 @@ def main():
     elif asset_type == "Prop":
         rig_group_name = "%s_%s_RIG" % (asset_type_short_name, asset_name)
         create_group.create_group(model_name, root_group_name)
+        bounding = mc.xform(model_name, q=1, bb=1)
+        max_value = max(abs(bounding[0]), abs(bounding[2]), abs(bounding[3]), abs(bounding[5]))
+        radius = max_value*1.1
+        center = mc.xform(model_name, q=1, sp=1, ws=1)
+        circle_list = mc.circle(c=center, nr=[0, 1, 0], r=radius, name="%s_%s_Ctl" % (asset_type_short_name, asset_name))
+        circle_name = circle_list[0]
+        constraint_parent = mc.parentConstraint(circle_name, model_name, maintainOffset=True)
+        constraint_scale = mc.scaleConstraint(circle_name, model_name, maintainOffset=True)
+        mc.parent(constraint_parent, rig_group_name)
+        mc.parent(constraint_scale, rig_group_name)
+        mc.parent(circle_name, rig_group_name)
     create_group.create_group(rig_group_name, root_group_name)
-
     save_as.save_as(options.file)
     logger.info("%s publish successful!" % options.file)
     quit_maya.quit_maya()
