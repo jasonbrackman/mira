@@ -8,18 +8,18 @@ from miraLibs.mayaLibs import new_file, save_as, create_reference, create_group,
 
 def main():
     logger = logging.getLogger("MidRig start")
-    obj = pipeFile.PathDetails.parse_path(options.file)
-    project = obj.project
-    asset_type = obj.asset_type
-    asset_type_short_name = obj.asset_type_short_name
-    asset_name = obj.asset_name
-    lowMdl_publish_file = pipeFile.get_asset_task_final_file(project, asset_type, asset_name, "MidMdl", "MidMdl")
-    if not os.path.isfile(lowMdl_publish_file):
+    context = pipeFile.PathDetails.parse_path(options.file)
+    project = context.project
+    asset_type = context.asset_type
+    asset_type_short_name = context.asset_type_short_name
+    asset_name = context.asset_name
+    MidMdl_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "MidMdl", "MidMdl")
+    if not os.path.isfile(MidMdl_publish_file):
         logger.warning("No MidMdl file published.")
         quit_maya.quit_maya()
         return
     new_file.new_file()
-    create_reference.create_reference(lowMdl_publish_file)
+    create_reference.create_reference(MidMdl_publish_file)
     model_name = "%s_%s_MODEL" % (asset_type_short_name, asset_name)
     # create root group
     root_group_name = "%s_%s_ROOT" % (asset_type_short_name, asset_name)

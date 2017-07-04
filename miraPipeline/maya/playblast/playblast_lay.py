@@ -51,7 +51,7 @@ class PlayblastLay(object):
         start_frame = mc.getAttr("%s.startFrame" % shot_node)
         end_frame = mc.getAttr("%s.endFrame" % shot_node)
         shot_type, seq, shot = shot_node.split("_")
-        video_path = pipeFile.get_shot_step_video_file(seq, shot, "lay", self.current_project)
+        video_path = pipeFile.get_shot_task_video_file(seq, shot, "lay", self.current_project)
         prefix, suffix = os.path.splitdrive(video_path)
         local_video_path = os.path.join(self.local_dir, suffix).replace("\\", "/")
         playblaster.playblaster(local_video_path, camera[0], start_frame, end_frame, self.resolution, self.percent,

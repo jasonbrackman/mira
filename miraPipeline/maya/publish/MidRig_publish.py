@@ -9,7 +9,7 @@ from miraLibs.mayaLibs import export_selected, import_load_remove_unload_ref
 
 
 def main():
-    logger = logging.getLogger("rig publish")
+    logger = logging.getLogger("MidRig publish")
     file_path = options.file
     open_file.open_file(file_path)
     # get paths
@@ -23,7 +23,7 @@ def main():
         raise RuntimeError("Rename shape error.")
     # export rig root group
     delete_layer.delete_layer()
-    rig_group = get_model_name.get_model_name(context="rig")
+    rig_group = get_model_name.get_model_name(typ="rig")
     mc.select(rig_group, r=1)
     export_selected.export_selected(publish_path)
     logger.info("Export %s to %s" % (rig_group, publish_path))

@@ -117,5 +117,26 @@ def get_unload_plugins():
     return unload_plugins
 
 
+# ******************************get up and down step value****************************** #
+def get_step_conf_value():
+    step_conf_path = join_path.join_path2(conf_dir, "step.yml")
+    yml_data = yml.get_yaml_data(step_conf_path)
+    return yml_data
+
+
+def get_up_step(current_step=None):
+    conf_data = get_step_conf_value()
+    up_value = conf_data["up_step"]
+    if current_step in up_value:
+        return up_value.get(current_step)
+
+
+def get_down_step(current_step=None):
+    conf_data = get_step_conf_value()
+    up_value = conf_data["down_step"]
+    if current_step in up_value:
+        return up_value.get(current_step)
+
+
 if __name__ == "__main__":
-    pass
+    print get_down_step("MidMdl")

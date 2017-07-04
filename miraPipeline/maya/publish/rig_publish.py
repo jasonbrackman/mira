@@ -20,11 +20,11 @@ def main():
     import_load_remove_unload_ref.import_load_remove_unload_ref()
     logger.info("Import all reference.")
     # rename shape
-    if not rename_pipeline_shape.rename_pipeline_shape( ):
+    if not rename_pipeline_shape.rename_pipeline_shape():
         raise RuntimeError("Rename shape error.")
     # export rig root group
     delete_layer.delete_layer()
-    rig_group = get_model_name.get_model_name(context="rig")
+    rig_group = get_model_name.get_model_name(typ="rig")
     mc.select(rig_group, r=1)
     export_selected.export_selected(publish_path)
     logger.info("Export %s to %s" % (rig_group, publish_path))
