@@ -36,6 +36,7 @@ def main():
     elif asset_type == "Prop":
         rig_group_name = "%s_%s_RIG" % (asset_type_short_name, asset_name)
         create_group.create_group(model_name, root_group_name)
+        create_group.create_group(rig_group_name)
         bounding = mc.xform(model_name, q=1, bb=1)
         max_value = max(abs(bounding[0]), abs(bounding[2]), abs(bounding[3]), abs(bounding[5]))
         radius = max_value*1.1

@@ -5,6 +5,9 @@ import logging
 import join_path
 
 
+logger = logging.getLogger(__name__)
+
+
 def sort_key(text, length=10):
     str_num = "".join(re.findall("\d+", text))
     text = "".join(re.findall("\D", text)) + str_num.zfill(length)
@@ -56,5 +59,5 @@ def get_latest_version(path, offset=0):
         max_version_file = join_path.join_path2(version_dir, max_version, base_name)
         return max_version_file, max_version_num
     else:
-        logging.warning("not match standard file name.")
+        logger.warning("not match standard file name.")
         return
