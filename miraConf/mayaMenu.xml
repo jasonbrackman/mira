@@ -23,6 +23,8 @@
                  <!--mode="python" name="角色赋材质【char assign shader】" type="command"/>-->
         <command cmd="import SoftClusterEX;SoftClusterEX.launch()"
                  mode="python" name="SoftClusterEX" type="command"/>
+        <command cmd="from miraScripts.mayaTools.rig_tool import auto_publish;reload(auto_publish);auto_publish.auto_publish()"
+                 mode="python" name="Auto publish" type="command"/>
     </submenu>
     <!--sceneset tools-->
     <submenu name="sceneset" type="submenu">
