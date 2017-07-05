@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 import optparse
 import logging
-import maya.cmds as mc
 from miraLibs.pipeLibs import pipeFile
-from miraLibs.mayaLibs import open_file, quit_maya, delete_layer
-from miraLibs.pipeLibs.pipeMaya import get_model_name, rename_pipeline_shape
-from miraLibs.mayaLibs import export_selected, import_load_remove_unload_ref
+from miraLibs.mayaLibs import open_file, quit_maya
+from miraLibs.pipeLibs.pipeMaya import publish
 
 
 def main():
@@ -13,20 +11,19 @@ def main():
     file_path = options.file
     open_file.open_file(file_path)
     # get paths
-    obj = pipeFile.PathDetails.parse_path(file_path)
-    publish_path = obj.publish_path
+    context = pipeFile.PathDetails.parse_path(file_path)
+    # copy image
+    publish.copy_image_and_video(context)
+    logger.info("Copy image and video done.")
     # import all reference
-    import_load_remove_unload_ref.import_load_remove_unload_ref()
-    logger.info("Import all reference.")
-    # rename shape
-    if not rename_pipeline_shape.rename_pipeline_shape():
-        raise RuntimeError("Rename shape error.")
-    # export rig root group
-    delete_layer.delete_layer()
-    rig_group = get_model_name.get_model_name(typ="rig")
-    mc.select(rig_group, r=1)
-    export_selected.export_selected(publish_path)
-    logger.info("Export %s to %s" % (rig_group, publish_path))
+    publish.reference_opt()
+    logger.info("Import reference done.")
+    # export needed
+    publish.export_need_to_publish(context)
+    logger.info("Export to publish path done.")
+    # add to AD
+    publish.add_mesh_to_ad(context)
+    logger.info("Add to AD done.")
     # quit maya
     quit_maya.quit_maya()
 

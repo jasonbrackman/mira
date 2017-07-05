@@ -189,7 +189,8 @@ class St(object):
     def upload_version(self, task_info, media_path="", file_path=""):
         task_id = task_info.get("id")
         version = self.st.version.create(data={"task_id": task_id, "path": {"file": file_path, "media": media_path}})
-        self.st.media.encoding(version.get("id"), media_path)
+        if media_path:
+            self.st.media.encoding(version.get("id"), media_path)
 
     def update_file_path(self, task_info, work_file_path="", publish_file_path=""):
         import json
@@ -224,4 +225,7 @@ if __name__ == "__main__":
     # print st.get_current_task("Asset", "Prop", )
     # print st.st.task.fields
     # print st.st.task.find("id=7", ["sub_date"])
-    print st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")
+    # print st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")
+    # st.update_task(task_info, file_path=data)
+    # st.st.task.update(10, {"file_path": "sdfa"})
+    st.st.version.create(data={"task_id": 10, "path": {"file": "file_path", "media": "media_path"}})

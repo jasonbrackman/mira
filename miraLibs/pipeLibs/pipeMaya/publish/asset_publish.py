@@ -3,8 +3,10 @@ import os
 import logging
 import maya.cmds as mc
 from miraLibs.pyLibs import copy
-from miraLibs.mayaLibs import delete_layer, export_selected, export_abc, new_file, Assembly, save_file, open_file
-from miraLibs.pipeLibs.pipeMaya import get_model_name
+from miraLibs.mayaLibs import delete_layer, export_selected, export_abc, new_file, Assembly, save_file, \
+    open_file, import_load_remove_unload_ref
+from miraLibs.pipeLibs.pipeMaya import get_model_name, rename_pipeline_shape
+
 
 logger = logging.getLogger("miraLibs.pipeLibs.pipeMaya.asset_publish")
 
@@ -19,13 +21,21 @@ def copy_image_and_video(context):
     copy.copy(work_video_path, video_path)
 
 
-def export_need_to_publish(context):
+def export_need_to_publish(context, typ="model"):
     # export _MODEL group to publish path
     publish_path = context.publish_path
-    model_name = get_model_name.get_model_name()
+    model_name = get_model_name.get_model_name(typ=typ)
     delete_layer.delete_layer()
     mc.select(model_name, r=1)
     export_selected.export_selected(publish_path)
+
+
+def reference_opt():
+    import_load_remove_unload_ref.import_load_remove_unload_ref()
+
+
+def rename_shape():
+    return rename_pipeline_shape.rename_pipeline_shape()
 
 
 def export_model_to_abc(context):
@@ -69,3 +79,21 @@ def add_gpu_to_ad(context):
     assemb = Assembly.Assembly()
     assemb.create_representation(ad_node_name, "Cache", gpu_name, gpu_name, context.abc_cache_path)
     save_file.save_file()
+
+
+def add_mesh_to_ad(context):
+    if not os.path.isfile(context.publish_path):
+        logger.error("%s is not an exist file." % context.publish_path)
+        return
+    ad_path = context.definition_path
+    if not os.path.isfile(ad_path):
+        logger.error("AD file not exist.")
+        return
+    open_file.open_file(ad_path)
+    ad_node_name = "%s_%s_AD" % (context.asset_type_short_name, context.asset_name)
+    mesh_name = context.step
+    assemb = Assembly.Assembly()
+    assemb.create_representation(ad_node_name, "Scene", mesh_name, mesh_name, context.publish_path)
+    save_file.save_file()
+
+

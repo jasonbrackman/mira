@@ -35,13 +35,18 @@ def post_qcpublish(context):
     from miraLibs.pipeLibs.pipeDb import task_from_db_path
     db = db_api.DbApi(context.project).db_obj
     task = task_from_db_path.task_from_db_path(db, context.work_path)
+    logger.info("Current Task: %s" % task)
     if not task:
         logger.warning("No matched task")
         return
     db.update_task_status(task, "Supervisor Review")
     db.upload_thumbnail(task, context.work_image_path)
     # upload version
-    db.upload_version(task, media_path=context.work_video_path, file_path=context.work_path)
+    not_playblast_step = pipeMira.get_site_value(context.project, "not_playblast_step").split(",")
+    if context.step in not_playblast_step:
+        db.upload_version(task, file_path=context.work_path)
+    else:
+        db.upload_version(task, media_path=context.work_video_path, file_path=context.work_path)
     logger.info("Upload version done.")
     # update task
     db.update_file_path(task, work_file_path=context.work_path)
