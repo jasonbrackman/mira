@@ -15,9 +15,9 @@ def main():
     asset_type_short_name = context.asset_type_short_name
     asset_name = context.asset_name
     task = context.task
-    MidRig_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "lowRig", task)
+    MidRig_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "MidRig", task)
     if not os.path.isfile(MidRig_publish_file):
-        MidRig_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "lowRig", "lowRig")
+        MidRig_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "MidRig", "MidRig")
     HighMdl_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "HighMdl", "HighMdl")
     if not (os.path.isfile(MidRig_publish_file) and os.path.isfile(HighMdl_publish_file)):
         logger.warning("No model file published or No lowRig file published.")
