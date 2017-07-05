@@ -67,13 +67,16 @@ class PathDetails(object):
             x.__is_working_file = True
         elif x.area == "_publish":
             x.__is_publish_file = True
-        if "_e" in x.version:
-            x.__is_local_file = True
-            x.version, x.edition = x.version.split("_e")
-            x.edition_format_spec = len(x.edition)
+        if hasattr(x, "version"):
+            if "_e" in x.version:
+                x.__is_local_file = True
+                x.version, x.edition = x.version.split("_e")
+                x.edition_format_spec = len(x.edition)
+                x.version_format_spec = len(x.version)
+        else:
+            x.version = ""
         if x.entity_type == "Asset":
             x.asset_type_short_name = type_dict[x.asset_type]
-        x.version_format_spec = len(x.version)
         return x
 
     def is_working_file(self):
@@ -190,18 +193,18 @@ def get_task_file(project, asset_type_sequence, asset_name_shot, step, task,
         primary = get_local_root_dir(project)
     else:
         primary = get_primary_dir(project)
+    file_format = get_site_value(project, format_str)
+    if not file_format:
+        return
     if not version:
         version_str = "000"
     else:
         version_str = version
-    file_format = get_site_value(project, format_str)
-    if not file_format:
-        return
     file_name = file_format.format(primary=primary, project=project, asset_type=asset_type_sequence,
                                    sequence=asset_type_sequence, shot=asset_name_shot.split("_")[-1],
                                    asset_name=asset_name_shot.split("_")[-1], step=step,
                                    task=task.split("_")[-1], version=version_str, edition=edition, engine=engine)
-    if not version:
+    if version is None:
         file_list = get_latest_version.get_latest_version(file_name)
         file_name = file_list[0] if file_list else file_name
     return file_name

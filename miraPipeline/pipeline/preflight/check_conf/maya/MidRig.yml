@@ -53,6 +53,11 @@ check_duplicate_names:
   order: 120
   ignorable: False
   description: "检查是否有同名物体存在"
+check_unknown_node:
+  name: "Unknown nodes | 删除unknown节点"
+  order: 125
+  ignorable: False
+  description: "删除unkonwn节点"
 check_save_file:
   name: "Save file | 保存文件"
   order: 130

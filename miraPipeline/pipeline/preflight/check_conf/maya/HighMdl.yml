@@ -138,6 +138,11 @@ check_unused_nodes:
   order: 250
   ignorable: False
   description: "删除无用节点"
+check_unknown_node:
+  name: "Unknown nodes | 删除unknown节点"
+  order: 255
+  ignorable: False
+  description: "删除unkonwn节点"
 check_duplicate_names_again:
   name: "Duplicate names | 同名物体"
   order: 260
