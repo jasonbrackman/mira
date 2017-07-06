@@ -8,8 +8,8 @@ from miraLibs.pipeLibs.copy import Copy
 def HighRig_qcpublish():
     logger = logging.getLogger(__name__)
     # copy to QCPublish path
-    obj = pipeFile.PathDetails.parse_path()
-    work_path = obj.work_path
+    context = pipeFile.PathDetails.parse_path()
+    work_path = context.work_path
     scene_name = get_scene_name.get_scene_name()
     if Copy.copy(scene_name, work_path):
         logger.info("copy %s >> %s" % (scene_name, work_path))

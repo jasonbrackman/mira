@@ -13,8 +13,8 @@ def export_shd_textures(change_file_texture_name=True):
     file_nodes = mc.ls(type="file")
     if not file_nodes:
         return
-    obj = pipeFile.PathDetails.parse_path()
-    texture_dir = obj.tex_dir
+    context = pipeFile.PathDetails.parse_path()
+    texture_dir = context.tex_dir
     for file_node in file_nodes:
         texture = mc.getAttr("%s.computedFileTextureNamePattern" % file_node)
         if not texture:

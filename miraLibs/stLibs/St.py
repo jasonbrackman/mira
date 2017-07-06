@@ -12,6 +12,11 @@ class St(object):
         if self.project_name:
             self.project_id = self.get_project_by_name().get("id")
 
+    @property
+    def user_id(self):
+        user_info = self.get_user_by_name(self.user)
+        return user_info.get("id")
+
     def get_project_by_name(self):
         project_info = self.st.project.find(filters="name=%s" % self.project_name)
         return project_info
@@ -188,7 +193,10 @@ class St(object):
 
     def upload_version(self, task_info, media_path="", file_path=""):
         task_id = task_info.get("id")
-        version = self.st.version.create(data={"task_id": task_id, "path": {"file": file_path, "media": media_path}})
+        version = self.st.version.create(data={"task_id": task_id,
+                                               "path": {"file": file_path, "media": media_path}})
+        # update version user id
+        # self.st.version.update(version.get("id"), {"user_id": self.user_id})
         if media_path:
             self.st.media.encoding(version.get("id"), media_path)
 
@@ -212,20 +220,11 @@ if __name__ == "__main__":
     st = St("SnowKidTest")
     # file_path = "W:/SnowKidTest/workarea/assets/Prop/TdTest/MidMdl/MidMdl/_workarea/maya/SnowKidTest_TdTest_MidMdl_MidMdl_v004.ma"
     # media_path = "W:/SnowKidTest/workarea/assets/Prop/TdTest/MidMdl/MidMdl/_video/maya/SnowKidTest_TdTest_MidMdl_MidMdl_v002.mov"
-    # version = st.st.version.create(data={"task_id": 7, "path": {"file": file_path, "media": media_path}})
-    # st.st.media.encoding(version.get("id"), media_path)
-    # print "done"
-    # print st.st.task.find("id=20", ["custom"])
-    # task = st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")
-    # temp = {"work_file_path": "W:/test.ma"}
-    # import json
-    # data = json.dumps(temp)
-    # st.update_task(task, file_path=data)
-    # st.update_file_path(task, file_path)
-    # print st.get_current_task("Asset", "Prop", )
-    # print st.st.task.fields
-    # print st.st.task.find("id=7", ["sub_date"])
-    # print st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")
-    # st.update_task(task_info, file_path=data)
-    # st.st.task.update(10, {"file_path": "sdfa"})
-    st.st.version.create(data={"task_id": 10, "path": {"file": "file_path", "media": "media_path"}})
+    version = st.st.version.create(data={"task_id": 10, "path": {"file": "file_path", "media": "media_path"}})
+    st.st.version.update(version.get("id"), {"user_id": st.user_id})
+    # print st.st.version.find(filters="id=190", fields=["created", "user_id"])
+    # print st.st.user.find("name=heshuai")
+    # print st.st.user.fields
+    # print st.user_id
+    # help(st.st.version.update)
+    # print st.st.version.fields
