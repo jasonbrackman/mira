@@ -222,7 +222,7 @@ def get_asset_task_image_file(project, asset_type, asset_name, step, task, versi
     return image_file
 
 
-def get_asset_task_publish_file(project, asset_type, asset_name, step, task, version=None, engine="maya", local=False):
+def get_asset_task_publish_file(project, asset_type, asset_name, step, task, version="", engine="maya", local=False):
     format_str = "%s_asset_publish" % engine
     publish_file = get_task_file(project, asset_type, asset_name, step, task, format_str, version, engine, local)
     return publish_file
