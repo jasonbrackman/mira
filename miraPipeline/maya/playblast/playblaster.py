@@ -3,7 +3,8 @@ import os
 import logging
 import copy
 import maya.cmds as mc
-from get_hud_object import get_hud_object
+import maya.mel as mel
+from miraLibs.pipeLibs.pipeMaya import hud
 import miraLibs.pyLibs.avi_to_mov as avi_to_mov
 from miraLibs.mayaLibs import display_smooth_shaded
 
@@ -25,8 +26,14 @@ def playblaster(file_name, camera=None, start_frame=None, end_frame=None, width_
     # get frame range
     if not start_frame:
         start_frame = mc.playbackOptions(q=1, minTime=1)
+    else:
+        mc.playbackOptions(e=1, minTime=start_frame)
+        mc.playbackOptions(e=1, animationStartTime=start_frame)
     if not end_frame:
         end_frame = mc.playbackOptions(q=1, maxTime=1)
+    else:
+        mc.playbackOptions(e=1, maxTime=end_frame)
+        mc.playbackOptions(e=1, animationEndTime=end_frame)
     # -get sound
     if useTraxSounds:
         sound = None
@@ -53,7 +60,7 @@ def playblaster(file_name, camera=None, start_frame=None, end_frame=None, width_
         "sequenceTime": use_sequence_time
     }
     # -show huds
-    hud_obj = get_hud_object()
+    hud_obj = hud.get_hud_object()
     hud_obj.camera = camera
     hud_obj.show()
     # execute playblast
@@ -112,9 +119,10 @@ def display_mode():
     # Display smoothness low
     model_panels = mc.getPanel(typ="modelPanel")
     for currentPanel in model_panels:
-        mc.modelEditor(currentPanel, edit=True, grid=False)
+        mc.modelEditor(currentPanel, edit=True, grid=True)
         for item in display_keys:
             eval("mc.modelEditor(\'"+currentPanel+"\',e=True,"+item+"=0)")
+    mel.eval("setViewAxisVisibility(1);")
 
 
 def set_camera_settings(camera):

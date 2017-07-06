@@ -103,9 +103,9 @@
     <submenu name= "----------" type="separator"/>
     <!--custom tools-->
     <submenu name="custom" type="submenu">
-        <command cmd="import miraPipeline.maya.playblast.get_hud_object as gho;reload(gho);hud=gho.get_hud_object();hud.show()"
+        <command cmd="from miraLibs.pipeLibs.pipeMaya import hud;reload(hud);hu=hud.get_hud_object();hu.show()"
                  mode="python" name="显示HUD【Show hud】" type="command"/>
-        <command cmd="import miraPipeline.maya.playblast.get_hud_object as gho;reload(gho);hud=gho.get_hud_object();hud.clear()"
+        <command cmd="from miraLibs.pipeLibs.pipeMaya import hud;reload(hud);hu=hud.get_hud_object();hu.clear()"
                  mode="python" name="隐藏HUD【Hide hud】" type="command"/>
     </submenu>
 </menu>

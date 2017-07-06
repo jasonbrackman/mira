@@ -42,10 +42,10 @@ class check_shd_node_name(BaseCheck):
 
     @staticmethod
     def get_prefix():
-        obj = pipeFile.PathDetails.parse_path()
-        asset_name = obj.asset_name
-        shd_version = obj.shd_version
-        prefix = asset_name+"_"+shd_version+"_"
+        context = pipeFile.PathDetails.parse_path()
+        asset_name = context.asset_name
+        task = context.task
+        prefix = asset_name+"_"+task+"_"
         return prefix
 
     def auto_solve(self):

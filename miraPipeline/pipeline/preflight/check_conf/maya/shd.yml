@@ -53,11 +53,11 @@ check_naming_space:
   order: 70
   ignorable: False
   description: "检查模型大组下是否有名称空间存在"
-check_shd_reference_nodes:
-  name: "Reference material | reference的材质节点"
-  order: 75
-  ignorable: False
-  description: "检查有没有reference进来的材质节点"
+#check_shd_reference_nodes:
+#  name: "Reference material | reference的材质节点"
+#  order: 75
+#  ignorable: False
+#  description: "检查有没有reference进来的材质节点"
 check_shd_node_name:
   name: "Shd node name | 材质节点命名"
   order: 80
@@ -108,6 +108,11 @@ check_duplicate_names:
   order: 200
   ignorable: False
   description: "检查是否有同名物体存在"
+check_unknown_node:
+  name: "Unknown nodes | 删除unknown节点"
+  order: 205
+  ignorable: False
+  description: "删除unkonwn节点"
 check_save_file:
   name: "Save file | 保存文件"
   order: 210

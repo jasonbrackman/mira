@@ -2,95 +2,95 @@ color:
   label_color: 19
   value_color: 17
 hud_company_name:
-  label: ""
+  label: "公司名称："
   section: 0
-  labelWidth: 0
-  command: "'{company_name}'"
+  labelWidth: 55
+  command: "from miraLibs.pipeLibs.pipeMaya import hud;hud.get_company()"
   event: NewSceneOpened
-  labelFontSize: small
-  dataFontSize: small
-  blockSize: small
+  labelFontSize: large
+  dataFontSize: large
+  blockSize: large
 hud_project_name:
   label: "项目名称："
   section: 0
-  labelWidth: 50
-  command: "'{project_name}'"
+  labelWidth: 55
+  command: "from miraLibs.pipeLibs.pipeMaya import hud;hud.get_project()"
   event: NewSceneOpened
-  labelFontSize: small
-  dataFontSize: small
-  blockSize: small
+  labelFontSize: large
+  dataFontSize: large
+  blockSize: large
 hud_resolution:
   label: "长宽比："
   section: 2
-  labelWidth: 40
-  command: "'{resolution}'"
+  labelWidth: 50
+  command: "from miraLibs.pipeLibs.pipeMaya import hud;hud.get_resolution()"
   event: NewSceneOpened
-  labelFontSize: small
-  dataFontSize: small
-  blockSize: small
+  labelFontSize: large
+  dataFontSize: large
+  blockSize: large
 hud_shot_name:
-  label: "镜头号："
+  label: "任务名："
   section: 4
-  labelWidth: 40
-  command: "'{shot_name}'"
+  labelWidth: 50
+  command: "from miraLibs.pipeLibs.pipeMaya import hud;hud.get_task_name()"
   event: NewSceneOpened
-  labelFontSize: small
-  dataFontSize: small
-  blockSize: small
+  labelFontSize: large
+  dataFontSize: large
+  blockSize: large
 hud_frame_range:
   label: "帧范围："
   section: 4
-  labelWidth: 40
-  command: "'{frame_range}'"
+  labelWidth: 50
+  command: "from miraLibs.pipeLibs.pipeMaya import hud;hud.get_frame_range()"
   event: NewSceneOpened
-  labelFontSize: small
-  dataFontSize: small
-  blockSize: small
+  labelFontSize: large
+  dataFontSize: large
+  blockSize: large
 hud_date:
   label: "日期："
   section: 5
-  labelWidth: 40
+  labelWidth: 50
   command: "import time;time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())"
   event: timeChanged
-  labelFontSize: small
-  dataFontSize: small
-  blockSize: small
+  labelFontSize: large
+  dataFontSize: large
+  blockSize: large
 hud_user:
   label: "制作者："
   section: 5
-  labelWidth: 40
-  command: "'{user}'"
+  labelWidth: 50
+  command: "import getpass;getpass.getuser()"
   event: NewSceneOpened
-  labelFontSize: small
-  dataFontSize: small
-  blockSize: small
+  labelFontSize: large
+  dataFontSize: large
+  blockSize: large
 hud_camera:
   label: "摄像机："
   section: 7
-  labelWidth: 40
+  labelWidth: 50
   command: "import maya.cmds as mc;mc.lookThru(q=1)"
   event: cameraChange
-  labelFontSize: small
-  dataFontSize: small
-  blockSize: small
+  labelFontSize: large
+  dataFontSize: large
+  blockSize: large
 hud_focal_length:
   label: "焦距："
   section: 7
-  labelWidth: 40
+  labelWidth: 50
   command: "import maya.cmds as mc;mc.getAttr('%s.focalLength' % mc.lookThru(q=1))"
   event: cameraChange
-  labelFontSize: small
-  dataFontSize: small
-  blockSize: small
+  labelFontSize: large
+  dataFontSize: large
+  blockSize: large
 hud_current_frame:
   label: "当前帧："
   section: 9
-  labelWidth: 40
+  labelWidth: 50
   command: "import maya.cmds as mc;mc.currentTime(q=1)"
   event: timeChanged
-  labelFontSize: small
-  dataFontSize: small
-  blockSize: small
+  labelFontSize: large
+  dataFontSize: large
+  blockSize: large
 
 
 

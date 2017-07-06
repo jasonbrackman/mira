@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-import getpass
 import maya.cmds as mc
 import maya.OpenMayaUI as OpenMayaUI
 from miraLibs.pyLibs import yml_operation
 from miraLibs.pyLibs import join_path
 import miraCore
-from miraLibs.pipeLibs import pipeMira
 
 
 def get_hud_conf():
@@ -23,27 +21,12 @@ def cam_call_back(*args):
 
 
 class HeadsUpDisplay(object):
-    def __init__(self, company_name, project_name, shot_name, resolution=None, user=None, frame_range=None, camera=None):
-        self.__company_name = company_name
-        self.__project_name = project_name
-        self.__resolution = resolution
-        self.__shot_name = shot_name
-        self.__user = user
-        self.__frame_range = frame_range
+    def __init__(self, camera=None):
         self.__camera = camera
-        if not self.__resolution:
-            self.__resolution = pipeMira.get_resolution(project_name)
-            self.__resolution = "*".join([str(i) for i in self.__resolution])
-        if not self.__user:
-            self.__user = getpass.getuser()
         if not self.__camera:
             self.__camera = mc.lookThru(q=1)
         else:
             mc.lookThru(self.__camera)
-        if not self.__frame_range:
-            start = int(mc.playbackOptions(q=1, min=1))
-            end = int(mc.playbackOptions(q=1, max=1))
-            self.__frame_range = "%s-%s" % (start, end)
         self.__hud_dict = get_hud_conf()
         self.__huds = self.__hud_dict.keys()
         self.__hud_color = self.__hud_dict["color"]
@@ -81,7 +64,7 @@ class HeadsUpDisplay(object):
         if mc.objExists("hudRefresh*"):
             mc.delete("hudRefresh")
 
-    def show(self):
+    def show(self, *args):
         if not self.__camera:
             self.__camera = mc.lookThru(q=1)
         # ----clear old huds---- #
@@ -101,14 +84,7 @@ class HeadsUpDisplay(object):
             labelFontSize = self.__hud_dict[hud]["labelFontSize"]
             dataFontSize = self.__hud_dict[hud]["dataFontSize"]
             blockSize = self.__hud_dict[hud]["blockSize"]
-            command = self.__hud_dict[hud]["command"].format(company_name=self.__company_name,
-                                                             project_name=self.__project_name,
-                                                             resolution=self.__resolution,
-                                                             shot_name=self.__shot_name,
-                                                             frame_range=self.__frame_range,
-                                                             user=self.__user,
-                                                             camera=self.__camera
-                                                             )
+            command = self.__hud_dict[hud]["command"].format(camera=self.__camera)
             mc.headsUpDisplay(hud, label=label, section=section, block=block, labelWidth=labelWidth,
                               labelFontSize=labelFontSize, dataFontSize=dataFontSize,
                               blockSize=blockSize, attachToRefresh=True, command=command)
