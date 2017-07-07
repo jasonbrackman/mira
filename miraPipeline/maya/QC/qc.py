@@ -26,7 +26,7 @@ def qcpublish(step):
     if publish_dir not in sys.path:
         sys.path.insert(0, publish_dir)
     step_publish = "{0}_qcpublish".format(step)
-    cmd_text = "import {0}; reload({0}); {0}.{0}()".format(step_publish)
+    cmd_text = "import {0}; reload({0}); {0}.main()".format(step_publish)
     exec(cmd_text)
 
 
@@ -263,6 +263,13 @@ class QC(QDialog):
             except:
                 self.other_widget.fail()
                 return
+        # if not preflight, save current file
+        if not self.preflight_widget.check.isChecked():
+            save_file.save_file()
+        # save as next version file
+        next_version_file = context.next_version_file
+        save_as.save_as(next_version_file)
+        logger.info("Save to %s" % next_version_file)
         # post qc
         if self.post_qc_widget.check.isChecked():
             self.post_qc_widget.start()
@@ -271,13 +278,7 @@ class QC(QDialog):
                 self.post_qc_widget.success()
             except:
                 self.post_qc_widget.fail()
-        # if not preflight, save current file
-        if not self.preflight_widget.check.isChecked():
-            save_file.save_file()
-        # save as next version file
-        next_version_file = context.next_version_file
-        save_as.save_as(next_version_file)
-        logger.info("Save to %s" % next_version_file)
+                return
         # close self and pop a message box to tell that all finished
         self.parent_win.close()
         self.parent_win.deleteLater()

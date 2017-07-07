@@ -10,7 +10,7 @@ from miraLibs.pipeLibs.copy import Copy
 from miraLibs.pipeLibs.pipeMaya import export_shd_textures
 
 
-def shd_qcpublish():
+def main():
     logger = logging.getLogger(__name__)
     scene_name = get_scene_name.get_scene_name()
     # copy scene to temp dir

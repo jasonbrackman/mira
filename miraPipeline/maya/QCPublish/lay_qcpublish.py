@@ -6,7 +6,7 @@ from miraPipeline.maya.playblast import playblast_lay
 from miraLibs.pipeLibs.copy import Copy
 
 
-def lay_qcpublish():
+def main():
     logger = logging.getLogger(__name__)
     # playblast to video
     pl = playblast_lay.PlayblastLay()

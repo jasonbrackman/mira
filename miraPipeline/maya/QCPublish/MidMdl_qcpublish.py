@@ -5,7 +5,7 @@ from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import get_scene_name
 
 
-def MidMdl_qcpublish():
+def main():
     logger = logging.getLogger(__name__)
     # copy to QCPublish path
     obj = pipeFile.PathDetails.parse_path()

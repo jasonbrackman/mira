@@ -63,7 +63,7 @@ def publish_textures(tex_dir):
         Copy.copy(tex, new_path)
 
 
-def hair_qcpublish():
+def main():
     logger = logging.getLogger(__name__)
     obj = pipeFile.PathDetails.parse_path()
     tex_dir = obj.tex_dir

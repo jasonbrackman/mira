@@ -277,6 +277,7 @@ class TaskGet(task_get_ui.TaskGetUI):
         self.project_cbox.currentIndexChanged[str].connect(self.on_project_changed)
         self.task_view.clicked.connect(self.show_path)
         self.work_file_widget.copy_to_local_action.triggered.connect(self.copy_to_local)
+        self.refresh_btn.clicked.connect(self.refresh)
 
     def on_project_changed(self, text):
         self.__project = text

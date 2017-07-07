@@ -6,7 +6,7 @@ from miraLibs.mayaLibs import get_scene_name
 from miraPipeline.maya.playblast import playblast_shot
 
 
-def anim_qcpublish():
+def main():
     logger = logging.getLogger(__name__)
     # playblast
     playblast_shot.playblast_shot()
