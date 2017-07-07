@@ -94,6 +94,7 @@ def add_mesh_to_ad(context):
     except:
         pass
     ad_node_name = "%s_%s_AD" % (context.asset_type_short_name, context.asset_name)
+    print ad_node_name
     mesh_name = context.step
     assemb = Assembly.Assembly()
     assemb.create_representation(ad_node_name, "Scene", mesh_name, mesh_name, context.publish_path)
