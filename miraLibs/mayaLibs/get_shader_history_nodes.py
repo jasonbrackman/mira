@@ -2,7 +2,8 @@
 import pymel.core as pm
 
 
-def get_shader_history_nodes(node, include_self=True, exclude_type=["mesh", "reference", "transform", "colorManagementGlobals"]):
+def get_shader_history_nodes(node, include_self=True,
+                             exclude_type=["mesh", "reference", "transform", "colorManagementGlobals"]):
     if not pm.objExists(node):
         print "%s is not an exist node"
         return
