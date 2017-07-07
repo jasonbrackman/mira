@@ -8,11 +8,11 @@ check_display_smooth:
   order: 5
   ignorable: False
   description: "所有模型按1显示"
-check_reference_is_newest:
-  name: "neweset reference | 最新的reference"
-  order: 8
-  ignorable: True
-  description: "检查文件中的reference文件是不是最新的"
+#check_reference_is_newest:
+#  name: "neweset reference | 最新的reference"
+#  order: 8
+#  ignorable: True
+#  description: "检查文件中的reference文件是不是最新的"
 check_topology:
   name: "topology | 拓扑结构"
   order: 10
@@ -58,11 +58,11 @@ check_naming_space:
 #  order: 75
 #  ignorable: False
 #  description: "检查有没有reference进来的材质节点"
-check_shd_node_name:
-  name: "Shd node name | 材质节点命名"
-  order: 80
-  ignorable: False
-  description: "检查材质节点命名规范，所有材质节点必须以'{资产名}_{材质版本}_'开始"
+#check_shd_node_name:
+#  name: "Shd node name | 材质节点命名"
+#  order: 80
+#  ignorable: False
+#  description: "检查材质节点命名规范，所有材质节点必须以'{资产名}_{材质版本}_'开始"
 check_use_default_lambert:
   name: "Assign lambert1 | 赋予了lambert1"
   order: 83

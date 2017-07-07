@@ -89,7 +89,10 @@ def add_mesh_to_ad(context):
     if not os.path.isfile(ad_path):
         logger.error("AD file not exist.")
         return
-    open_file.open_file(ad_path)
+    try:
+        open_file.open_file(ad_path)
+    except:
+        pass
     ad_node_name = "%s_%s_AD" % (context.asset_type_short_name, context.asset_name)
     mesh_name = context.step
     assemb = Assembly.Assembly()
