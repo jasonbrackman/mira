@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-import pymel.core as pm
+import maya.cmds as mc
 
 
 def export_selected(file_path, maya_type="mayaBinary", pr_flag=False):
@@ -17,7 +17,7 @@ def export_selected(file_path, maya_type="mayaBinary", pr_flag=False):
         maya_type = maya_type
     elif file_path.endswith(".ma"):
         maya_type = "mayaAscii"
-    pm.exportSelected(file_path, type=maya_type, force=1, pr=pr_flag)
+    mc.file(file_path, typ=maya_type, options="v=0", force=1, es=1, pr=pr_flag)
 
 
 if __name__ == "__main__":

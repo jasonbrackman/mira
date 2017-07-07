@@ -183,6 +183,10 @@ class PathDetails(object):
     def definition_path(self):
         return self.get_path("definition")
 
+    @property
+    def tex_dir(self):
+        return self.get_path("tex")
+
 
 ########################################################################################################################
 # below is for get asset files

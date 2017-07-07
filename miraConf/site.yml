@@ -66,6 +66,7 @@ SnowKidTest:
   maya_asset_cache: "{primary}/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_cache/{engine}/{project}_{asset_name}_{step}_{task}.abc"
   maya_asset_gpuwrap: "{primary}/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_gpuwrap/{engine}/{project}_{asset_name}_{step}_{task}.ma"
   maya_asset_definition: "{primary}/{project}/publish/assets/{asset_type}/{asset_name}/{project}_{asset_name}_AD.ma"
+  maya_asset_tex: "{primary}/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_tex/{engine}"
   # -shot
   maya_shot_work: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_workarea/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.ma"
   maya_shot_image: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.png"

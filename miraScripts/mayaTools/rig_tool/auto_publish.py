@@ -14,7 +14,7 @@ logger = logging.getLogger("Rig auto publish")
 def auto_publish():
     scene_name = get_scene_name.get_scene_name()
     context = pipeFile.PathDetails.parse_path(scene_name)
-    if context.step not in ["MidRig", "Rig"]:
+    if context.step not in ["MidRig", "HighRig"]:
         return
     message_box = QMessageBox.information(None, "Warming Tip",
                                           "Do you want to change current task status to Delivered ?",
@@ -36,6 +36,7 @@ def auto_publish():
     post_publish(context, change_task_status)
     # open current file
     open_file.open_file(scene_name)
+    QMessageBox(None, "Warming Tip", "Publish done.")
 
 
 def post_publish(context, change_task_status=False):
