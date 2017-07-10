@@ -97,6 +97,7 @@ QTableView, QTreeView{
 QTreeView:item
 {
     height: 30px;
+    padding: 0 15px;
 }
 
 QMenu

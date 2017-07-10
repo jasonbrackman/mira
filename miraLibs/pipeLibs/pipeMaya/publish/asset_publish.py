@@ -99,5 +99,3 @@ def add_mesh_to_ad(context):
     assemb = Assembly.Assembly()
     assemb.create_representation(ad_node_name, "Scene", mesh_name, mesh_name, context.publish_path)
     save_file.save_file()
-
-

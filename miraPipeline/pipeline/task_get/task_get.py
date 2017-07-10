@@ -152,13 +152,13 @@ class AssetTreeModel(QAbstractItemModel):
                 if os.path.isfile(pix_map_path):
                     pix_map = QPixmap(pix_map_path)
                 else:
-                    pix_map = QPixmap(100, 100)
-                    pix_map.fill(QColor("#111111"))
-                scaled = pix_map.scaled(QSize(100, 90), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+                    image_path = os.path.abspath(os.path.join(__file__, "..", "unknown.png")).replace("\\", "/")
+                    pix_map = QPixmap(image_path)
+                scaled = pix_map.scaled(QSize(100, 80), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
                 return scaled
         elif role == Qt.SizeHintRole:
             if node.node_type in ["entity", "asset_type", "sequence"]:
-                return QSize(30, 20)
+                return QSize(10, 20)
             else:
                 return QSize(100, 100)
 
@@ -404,6 +404,7 @@ class TaskGet(task_get_ui.TaskGetUI):
         self.proxy_model.setSourceModel(self.model)
         self.task_view.setModel(self.proxy_model)
         self.task_view.expandAll()
+        self.task_view.setColumnWidth(0, 80)
         self.filter_le.textChanged.connect(self.filter_name)
         self.final_checkbox.stateChanged.connect(self.filter_status)
 
