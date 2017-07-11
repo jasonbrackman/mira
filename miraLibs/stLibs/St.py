@@ -141,7 +141,7 @@ class St(object):
         user_info = self.get_user_by_name(user)
         user_id = user_info.get("id")
         task_filters = "assignee=%s and project_id=%s" % (user_id, self.project_id)
-        fields = ["item", "step.name", "status.name"]
+        fields = ["item", "step.name", "status.name", "priority", "name"]
         my_tasks = self.st.task.select(filters=task_filters, fields=fields)
         return my_tasks
 
@@ -220,11 +220,16 @@ if __name__ == "__main__":
     st = St("SnowKidTest")
     # file_path = "W:/SnowKidTest/workarea/assets/Prop/TdTest/MidMdl/MidMdl/_workarea/maya/SnowKidTest_TdTest_MidMdl_MidMdl_v004.ma"
     # media_path = "W:/SnowKidTest/workarea/assets/Prop/TdTest/MidMdl/MidMdl/_video/maya/SnowKidTest_TdTest_MidMdl_MidMdl_v002.mov"
-    version = st.st.version.create(data={"task_id": 10, "path": {"file": "file_path", "media": "media_path"}})
-    st.st.version.update(version.get("id"), {"user_id": st.user_id})
+    # version = st.st.version.create(data={"task_id": 10, "path": {"file": "file_path", "media": "media_path"}})
+    # st.st.version.update(version.get("id"), {"user_id": st.user_id})
     # print st.st.version.find(filters="id=190", fields=["created", "user_id"])
     # print st.st.user.find("name=heshuai")
     # print st.st.user.fields
     # print st.user_id
     # help(st.st.version.update)
     # print st.st.version.fields
+    print st.get_my_tasks()
+    # print st.st.task.relations
+    # print st.st.task.find("id=7", ["priority"])
+    # print st.st.priority.fields
+    # print st.st.task.fields

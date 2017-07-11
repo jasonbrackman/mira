@@ -43,6 +43,6 @@ def init_db_menu(*args):
     if not obj:
         return
     project = obj.project
-    database = pipeMira.get_site_value(project, "database")
+    database = pipeMira.get_studio_value(project, "database")
     if database == "shotgun":
         init_shotgun_menu(project)

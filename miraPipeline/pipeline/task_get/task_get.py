@@ -379,7 +379,7 @@ class TaskGet(task_get_ui.TaskGetUI):
                 task_name = task.get("name")
                 step = task["step"]["name"]
                 status = task["status"]["name"]
-                priority = "A"
+                priority = task["priority"]
                 if task_entity_type == "Asset":
                     asset_type_names = [node.name for node in asset_type_nodes]
                     asset_type_name = self.__db.get_asset_type_by_asset_id(task_entity_id)

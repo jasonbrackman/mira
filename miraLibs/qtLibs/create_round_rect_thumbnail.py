@@ -24,7 +24,7 @@ def create_round_rect_thumbnail(image_path, scale_width, scale_height, border_ra
         # scale it down to fit inside a frame of maximum 512x512
         thumb_scaled = thumb.scaled(scale_width,
                                     scale_height,
-                                    Qt.KeepAspectRatioByExpanding,
+                                    Qt.IgnoreAspectRatio,
                                     Qt.SmoothTransformation)
 
         # now composite the thumbnail on top of the base image

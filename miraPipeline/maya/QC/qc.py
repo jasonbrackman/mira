@@ -42,7 +42,7 @@ def post_qcpublish(context):
     db.update_task_status(task, "Supervisor Review")
     db.upload_thumbnail(task, context.work_image_path)
     # upload version
-    not_playblast_step = pipeMira.get_site_value(context.project, "not_playblast_step").split(",")
+    not_playblast_step = pipeMira.get_studio_value(context.project, "not_playblast_step").split(",")
     if context.step in not_playblast_step:
         db.upload_version(task, file_path=context.work_path)
     else:
@@ -226,7 +226,7 @@ class QC(QDialog):
                 self.preflight_widget.fail()
                 return
         # playblast
-        not_playblast_step = pipeMira.get_site_value(context.project, "not_playblast_step").split(",")
+        not_playblast_step = pipeMira.get_studio_value(context.project, "not_playblast_step").split(",")
         if step in not_playblast_step:
             self.playblast_widget.check.setChecked(False)
         if self.playblast_widget.check.isChecked():

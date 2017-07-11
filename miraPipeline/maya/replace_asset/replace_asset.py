@@ -202,7 +202,7 @@ class ReplaceAsset(ui.ReplaceAssetUI):
         self.set_signals()
 
     def init(self):
-        asset_step_list = pipeMira.get_site_value(self.project, "asset_steps").split(",")
+        asset_step_list = pipeMira.get_studio_value(self.project, "asset_steps").split(",")
         if "art" in asset_step_list:
             asset_step_list.remove("art")
         src_cbox_model = ComboModel(asset_step_list, self.src_cbox)

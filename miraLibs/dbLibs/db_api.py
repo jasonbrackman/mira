@@ -12,7 +12,7 @@ class DbApi(object):
         get the database instance
         :return: database instance
         """
-        database = pipeMira.get_site_value(self.project, "database")
+        database = pipeMira.get_studio_value(self.project, "database")
         if database == "shotgun":
             from miraLibs.sgLibs import Sg
             db = Sg.Sg(self.project)

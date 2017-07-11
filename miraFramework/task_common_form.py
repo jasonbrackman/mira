@@ -173,11 +173,11 @@ class CommonWidget(QWidget):
 class CommonForm(QWidget):
     def __init__(self, parent=None):
         super(CommonForm, self).__init__(parent)
-        self.__asset_types = pipeMira.get_asset_type()
         self.setup_ui()
         self.init()
         self.set_signals()
         self.db = db_api.DbApi(self.project).db_obj
+        self.__asset_types = pipeMira.get_studio_value(self.project, "asset_type")
 
     def setup_ui(self):
         main_layout = QVBoxLayout(self)

@@ -4,7 +4,7 @@ import re
 import logging
 from miraLibs.pyLibs.Path import Path
 from miraLibs.pyLibs import opposite_format, get_latest_version
-from miraLibs.pipeLibs.pipeMira import get_local_root_dir, get_primary_dir, get_site_value
+from miraLibs.pipeLibs.pipeMira import get_local_root_dir, get_primary_dir, get_studio_value
 
 
 type_dict = {"Character": "char", "Prop": "prop", "Environment": "env"}
@@ -56,9 +56,9 @@ class PathDetails(object):
         x.entity_type = get_entity_type(path)
         project = get_project(path)
         if x.entity_type == "Asset":
-            template = get_site_value(project, "asset_template")
+            template = get_studio_value(project, "asset_template")
         else:
-            template = get_site_value(project, "shot_template")
+            template = get_studio_value(project, "shot_template")
         context_dict = opposite_format.opposite_format(template, path)
         if not context_dict:
             return x
@@ -197,7 +197,7 @@ def get_task_file(project, asset_type_sequence, asset_name_shot, step, task,
         primary = get_local_root_dir(project)
     else:
         primary = get_primary_dir(project)
-    file_format = get_site_value(project, format_str)
+    file_format = get_studio_value(project, format_str)
     if not file_format:
         return
     if not version:
@@ -230,6 +230,12 @@ def get_asset_task_publish_file(project, asset_type, asset_name, step, task, ver
     format_str = "%s_asset_publish" % engine
     publish_file = get_task_file(project, asset_type, asset_name, step, task, format_str, version, engine, local)
     return publish_file
+
+
+def get_asset_task_image(project, asset_type, asset_name, step, task, version="", engine="maya", local=False):
+    format_str = "%s_asset_image" % engine
+    image_file = get_task_file(project, asset_type, asset_name, step, task, format_str, version, engine, local)
+    return image_file
 
 
 ########################################################################################################################
