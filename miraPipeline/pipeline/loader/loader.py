@@ -10,18 +10,20 @@ from miraLibs.pipeLibs import pipeMira, get_current_project
 from miraLibs.dbLibs import db_api
 from miraLibs.qtLibs import create_round_rect_thumbnail
 from miraLibs.pipeLibs import pipeFile
-from miraLibs.pyLibs import join_path, yml_operation
+from miraLibs.pyLibs import join_path, yml_operation, start_file
+from miraLibs.mayaLibs import maya_import, create_reference
+from miraLibs.mayaLibs.Assembly import Assembly
 
 
 IMAGE_WIDTH = 100
 
 
 class AssetItem(object):
-    def __init__(self, project=None, typ=None, name=None, image_path=None):
+    def __init__(self, project=None, typ=None, name=None, image=None):
         self.project = project
         self.typ = typ
         self.name = name
-        self.image_path = image_path
+        self.image = image
 
 
 class LoaderModel(QAbstractListModel):
@@ -43,15 +45,8 @@ class LoaderModel(QAbstractListModel):
         if role == Qt.ToolTipRole:
             return item.name
         if role == Qt.DecorationRole:
-            # image = create_round_rect_thumbnail.create_round_rect_thumbnail(item.image_path, IMAGE_WIDTH, IMAGE_WIDTH, 10)
-            image = QPixmap(item.image_path)
-            image = image.scaled(QSize(100, 100), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
+            image = item.image
             return image
-        # if role == Qt.ForegroundRole:
-        #     if not self.model_data[row].publish_path:
-        #         return QColor(255, 0, 0)
-        #     else:
-        #         return QColor(0, 255, 0)
 
     def flags(self, index):
         return Qt.ItemIsEnabled | Qt.ItemIsSelectable
@@ -86,13 +81,18 @@ class LoaderModel(QAbstractListModel):
 
 
 class Loader(loader_ui.LoaderUI):
+    triggered = Signal()
+
     def __init__(self, parent=None):
         super(Loader, self).__init__(parent)
         self.init_project()
         self.init_asset_type()
-        self.set_signals()
         self.__db = db_api.DbApi(self.project).db_obj
         self.__image_dir = miraCore.get_icons_dir()
+        self.main_menu = QMenu()
+        self.entity_action_group = QActionGroup(self)
+        self.task_action_group = QActionGroup(self)
+        self.set_signals()
 
     @property
     def project(self):
@@ -117,19 +117,21 @@ class Loader(loader_ui.LoaderUI):
 
     def set_signals(self):
         self.asset_btn_grp.buttonClicked[QAbstractButton].connect(self.show_assets)
+        self.task_action_group.triggered.connect(self.on_task_action_triggered)
+        self.entity_action_group.triggered.connect(self.on_entity_action_triggered)
+        self.list_view.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.list_view.customContextMenuRequested.connect(self.show_context_menu)
 
     def set_model(self, model_data):
-        self.asset_proxy_model = QSortFilterProxyModel()
-        self.asset_proxy_model.setDynamicSortFilter(True)
-        self.asset_proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
-        self.filter_le.textChanged.connect(self.asset_proxy_model.setFilterRegExp)
-        self.asset_model = LoaderModel(model_data)
-        self.asset_proxy_model.setSourceModel(self.asset_model)
-        self.list_view.setModel(self.asset_proxy_model)
+        self.proxy_model = QSortFilterProxyModel()
+        self.proxy_model.setDynamicSortFilter(True)
+        self.proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
+        self.filter_le.textChanged.connect(self.proxy_model.setFilterRegExp)
+        self.model = LoaderModel(model_data)
+        self.proxy_model.setSourceModel(self.model)
+        self.list_view.setModel(self.proxy_model)
 
     def show_assets(self, btn):
-        import time
-        start = time.time()
         project = self.project
         asset_type = btn.text()
         assets = self.__db.get_all_assets(asset_type)
@@ -141,23 +143,105 @@ class Loader(loader_ui.LoaderUI):
         project_data = yml_data.get(self.project)
         primary = project_data.get("primary")
         format_str = project_data.get("maya_asset_image")
-        print time.time()-start
-        print format_str
-        start = time.time()
         for asset in assets:
             asset_name = asset.get("name")
             image_path = format_str.format(primary=primary, project=project, asset_type=asset_type,
                                            asset_name=asset_name, step="MidMdl", task="MidMdl", engine="maya")
             if not os.path.isfile(image_path):
                 image_path = join_path.join_path2(self.__image_dir, "unknown.png")
-            item = AssetItem(project, asset_type, asset_name, image_path)
+            image = create_round_rect_thumbnail.create_round_rect_thumbnail(image_path, IMAGE_WIDTH, IMAGE_WIDTH, 10)
+            item = AssetItem(project, asset_type, asset_name, image)
             model_data.append(item)
-        print time.time()-start
-        start = time.time()
         self.set_model(model_data)
-        print time.time()-start
+
+    def get_selected(self):
+        selected_indexes = self.list_view.selectedIndexes()
+        if not selected_indexes:
+            return
+        selected_rows = [self.proxy_model.mapToSource(index).row() for index in selected_indexes]
+        selected_rows = list(set(selected_rows))
+        selected = [self.model.model_data[row] for row in selected_rows]
+        return selected
+
+    def show_context_menu(self, pos):
+        self.main_menu.clear()
+        selected = self.get_selected()
+        if selected and len(selected) == 1:
+            item = selected[0]
+            asset_type = item.typ
+            asset_name = item.name
+            out_arg = ["Asset", asset_type, asset_name]
+            ad_action = self.entity_action_group.addAction("AD")
+            ad_action.attr = out_arg
+            launch_action = self.entity_action_group.addAction("Lunch Folder")
+            launch_action.attr = out_arg
+            self.main_menu.addAction(ad_action)
+            self.main_menu.addAction(launch_action)
+            steps = self.__db.get_step("Asset", asset_type, asset_name)
+            if not steps:
+                return
+            steps = list(set(steps))
+            steps.sort()
+            for step in steps:
+                step_menu = self.main_menu.addMenu(step)
+                step_menu.up_level = self.main_menu
+                tasks = self.__db.get_task("Asset", asset_type, asset_name, step)
+                if not tasks:
+                    continue
+                for task in tasks:
+                    task_name = task.get("name")
+                    task_menu = step_menu.addMenu(task_name)
+                    task_menu.up_level = step_menu
+                    import_action = self.task_action_group.addAction("Import")
+                    import_action.up_level = task_menu
+                    import_action.attr = out_arg
+                    reference_action = self.task_action_group.addAction("Reference")
+                    reference_action.up_level = task_menu
+                    reference_action.attr = out_arg
+                    task_menu.addAction(import_action)
+                    task_menu.addAction(reference_action)
+        global_pos = self.list_view.mapToGlobal(pos)
+        self.main_menu.exec_(global_pos)
+
+    def get_publish_path(self, entity_type, typ, name, step, task):
+        publish_file_path = None
+        if entity_type == "Asset":
+            publish_file_path = pipeFile.get_asset_task_publish_file(self.project, typ, name, step, task)
+        return publish_file_path
+
+    def on_task_action_triggered(self, action):
+        task = action.up_level.title()
+        step = action.up_level.up_level.title()
+        entity_type, typ, name = action.attr
+        publish_file_path = self.get_publish_path(entity_type, typ, name, step, task)
+        if not os.path.isfile(publish_file_path):
+            QMessageBox.warning(self, "Warming Tip", "%s is not an exist file." % publish_file_path)
+            return
+        if action.text() == "Import":
+            maya_import.maya_import(publish_file_path)
+        elif action.text() == "Reference":
+            create_reference.create_reference(publish_file_path, name)
+        else:
+            return
+
+    def on_entity_action_triggered(self, action):
+        entity_type, typ, name = action.attr
+        if action.text() == "AD":
+            ad_file_path = pipeFile.get_asset_AD_file(self.project, typ, name)
+            if not os.path.isfile(ad_file_path):
+                QMessageBox.warning(self, "Warming Tip", "%s is not an exist file." % ad_file_path)
+                return
+            assemb = Assembly()
+            assemb.reference_ad("%s_AR" % name, ad_file_path)
+        else:
+            entity_dir = pipeFile.get_entity_dir(self.project, entity_type, "publish", typ, name)
+            start_file.start_file(entity_dir)
+
+
+def main():
+    from miraLibs.qtLibs import render_ui
+    render_ui.render(Loader)
 
 
 if __name__ == "__main__":
-    from miraLibs.qtLibs import render_ui
-    render_ui.render(Loader)
+    main()

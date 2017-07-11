@@ -214,6 +214,17 @@ def get_task_file(project, asset_type_sequence, asset_name_shot, step, task,
     return file_name
 
 
+def get_entity_dir(project, entity_type, category, asset_type_sequence, asset_name_shot):
+    # "{primary}/{project}/{category}/{entity_type}/{asset_type_sequence}/{asset_name_shot}"
+    entity_type = "assets" if entity_type == "Asset" else "shots"
+    primary = get_studio_value(project, "primary")
+    template = get_studio_value(project, "entity_dir")
+    entity_dir = template.format(primary=primary, project=project, category=category, entity_type=entity_type,
+                                 asset_type_sequence=asset_type_sequence,
+                                 asset_name_shot=asset_name_shot.split("_")[-1])
+    return entity_dir
+
+
 def get_asset_task_work_file(project, asset_type, asset_name, step, task, version=None, engine="maya", local=False):
     format_str = "%s_asset_work" % engine
     work_file = get_task_file(project, asset_type, asset_name, step, task, format_str, version, engine, local)
@@ -232,10 +243,11 @@ def get_asset_task_publish_file(project, asset_type, asset_name, step, task, ver
     return publish_file
 
 
-def get_asset_task_image(project, asset_type, asset_name, step, task, version="", engine="maya", local=False):
-    format_str = "%s_asset_image" % engine
-    image_file = get_task_file(project, asset_type, asset_name, step, task, format_str, version, engine, local)
-    return image_file
+def get_asset_AD_file(project, asset_type, asset_name):
+    primary = get_studio_value(project, "primary")
+    template = get_studio_value(project, "maya_asset_definition")
+    ad_file = template.format(primary=primary, project=project, asset_type=asset_type, asset_name=asset_name)
+    return ad_file
 
 
 ########################################################################################################################

@@ -37,3 +37,8 @@ class Assembly(object):
         index = all_representation.index(rep_name)
         if rep_label:
             mc.setAttr("%s.rep[%s].rla" % (node, index), rep_label, type="string")
+
+    def reference_ad(self, name, ad_path):
+        ar_node = self.create_assembly_node(name, "assemblyReference")
+        mc.setAttr("%s.definition" % ar_node, ad_path, type="string")
+        return ar_node

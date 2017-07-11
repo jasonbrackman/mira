@@ -7,18 +7,10 @@ pipeline_shelf:
     order: 30
   version_up:
     order: 40
-#  turntable_create:
-#    order: 3
-#  turntable_remove:
-#    order: 4
-#  assign_shader:
-#    order: 5
-#  screen_shot:
-#    order: 6
-  scene_break_down:
-    order: 50
-  playblast:
-    order: 55
+#  scene_break_down:
+#    order: 50
+  loader:
+    order: 45
   preflight:
     order: 60
   qcpublish:

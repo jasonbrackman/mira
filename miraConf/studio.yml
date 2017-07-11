@@ -47,6 +47,7 @@ SnowKidTest:
   asset_steps: ["LowMdl","MidMdl","HighMdl","Shd","MidRig","Rig","Hair","Group"]
   shot_steps: ["Set","AnimLay","VfxLay","LgtLay","CompLay","Anim","Vfx","Cfx","Lgt","Comp","Cut"]
   not_playblast_step: ["HighRig","MidRig","Shd","Hair"]
+  entity_dir: "{primary}/{project}/{category}/{entity_type}/{asset_type_sequence}/{asset_name_shot}"
   # maya
   # -asset
   asset_template: "{primary}/{project}/{category}/assets/{asset_type}/{asset_name}/{step}/{task}/{area}/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.{ext}"

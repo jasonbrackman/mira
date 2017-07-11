@@ -7,7 +7,8 @@ from miraFramework.Filter import ButtonLineEdit
 class ThumbListView(QListView):
     def __init__(self, parent=None):
         super(ThumbListView, self).__init__(parent)
-        self.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        # self.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.setSelectionMode(QAbstractItemView.SingleSelection)
         self.setViewMode(QListView.IconMode)
         self.setResizeMode(QListView.Adjust)
         self.setFlow(QListView.LeftToRight)
@@ -21,7 +22,7 @@ class LoaderUI(QDialog):
     def __init__(self, parent=None):
         super(LoaderUI, self).__init__(parent)
         self.setWindowTitle("Loader")
-        self.resize(480, 600)
+        self.resize(720, 600)
         self.setWindowFlags(Qt.Window)
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(2, 2, 2, 2)
