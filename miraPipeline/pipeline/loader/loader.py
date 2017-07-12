@@ -173,7 +173,7 @@ class Loader(loader_ui.LoaderUI):
             out_arg = ["Asset", asset_type, asset_name]
             ad_action = self.entity_action_group.addAction("AD")
             ad_action.attr = out_arg
-            launch_action = self.entity_action_group.addAction("Lunch Folder")
+            launch_action = self.entity_action_group.addAction("Launch Folder")
             launch_action.attr = out_arg
             self.main_menu.addAction(ad_action)
             self.main_menu.addAction(launch_action)

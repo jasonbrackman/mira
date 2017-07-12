@@ -22,7 +22,7 @@ class LoaderUI(QDialog):
     def __init__(self, parent=None):
         super(LoaderUI, self).__init__(parent)
         self.setWindowTitle("Loader")
-        self.resize(720, 600)
+        self.resize(720, 690)
         self.setWindowFlags(Qt.Window)
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(2, 2, 2, 2)
