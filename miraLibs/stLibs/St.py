@@ -90,11 +90,14 @@ class St(object):
             assets = self.st.asset.select(filters=filters, fields=["name"])
         return assets
 
-    def get_all_shots_by_sequence(self, sequence_name):
-        sequence_info = self.get_sequence_by_name(sequence_name)
-        sequence_id = sequence_info.get("id")
-        shots = self.st.shot.select(filters="sequence_id=%s" % sequence_id, fields=["name"])
-        shots = [shot for shot in shots if '_000' not in shot['name']]
+    def get_all_shots(self, sequence_name=None):
+        if not sequence_name:
+            shots = self.st.shot.select(filters="project_id=%s" % self.project_id, fields=["name"])
+        else:
+            sequence_info = self.get_sequence_by_name(sequence_name)
+            sequence_id = sequence_info.get("id")
+            shots = self.st.shot.select(filters="sequence_id=%s" % sequence_id, fields=["name"])
+            shots = [shot for shot in shots if '_000' not in shot['name']]
         return shots
 
     def get_task(self, entity_type, asset_type_or_sequence, asset_or_shot, step=None):

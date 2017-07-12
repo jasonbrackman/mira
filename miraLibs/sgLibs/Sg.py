@@ -32,11 +32,14 @@ class Sg(object):
                                   ["code"])
         return assets
 
-    def get_all_shots_by_sequence(self, sequence_name):
-        sequence_info = self.sg.find_one('Sequence',
-                                         [['project', 'name_is', self.project_name], ['code', 'is', sequence_name]],
-                                         ['shots'])
-        shots = [shot for shot in sequence_info['shots'] if '_000' not in shot['name']]
+    def get_all_shots(self, sequence_name=None):
+        if not sequence_name:
+            shots = self.sg.find("Shot", [['project', 'name_is', self.project_name]])
+        else:
+            sequence_info = self.sg.find_one('Sequence',
+                                             [['project', 'name_is', self.project_name], ['code', 'is', sequence_name]],
+                                             ['shots'])
+            shots = [shot for shot in sequence_info['shots'] if '_000' not in shot['name']]
         return shots
 
     def get_task(self, entity_type, asset_type_or_sequence, asset_or_shot, step=None):
