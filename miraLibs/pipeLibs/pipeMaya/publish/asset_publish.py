@@ -3,7 +3,7 @@ import os
 import logging
 import maya.cmds as mc
 from miraLibs.pyLibs import copy
-from miraLibs.mayaLibs import delete_layer, export_selected, export_abc, new_file, Assembly, save_file, \
+from miraLibs.mayaLibs import delete_layer, export_selected, export_gpu_cache, new_file, Assembly, save_file, \
     open_file, import_load_remove_unload_ref
 from miraLibs.pipeLibs.pipeMaya import get_model_name, rename_pipeline_shape
 
@@ -39,13 +39,14 @@ def rename_shape():
 
 
 def export_model_to_abc(context):
-    # export abc
+    # export gpu abc
     model_name = get_model_name.get_model_name()
-    logger.info(context.asset_type)
+    directory = os.path.dirname(context.abc_cache_path)
+    filename = os.path.splitext(os.path.basename(context.abc_cache_path))[0]
     if context.asset_type in ["Prop", "Character"]:
         logger.info("Exporting abc...")
-        export_abc.export_abc(1, 1, context.abc_cache_path, model_name, False)
-        logger.info("Exporting abc done")
+        export_gpu_cache.export_gpu_cache(model_name, directory, filename)
+        logger.info("Exporting abc to %s" % context.abc_cache_path)
 
 
 def create_ad(context):
