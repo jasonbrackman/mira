@@ -19,7 +19,7 @@ def get_studio_value(project_name, option):
         else:
             logging.error("KeyError")
     else:
-        logging.error("%s not in the config file: %s" % (project_name, root_dir_conf_dir))
+        logging.error("pipeMira: %s not in the config file: %s" % (project_name, root_dir_conf_dir))
 
 
 def get_root_dir(project_name):

@@ -19,8 +19,6 @@
     </submenu>
     <!--rig tools-->
     <submenu name="rig" type="submenu">
-        <!--<command cmd="from miraScripts.pipeTools.shelf import assign_shader;reload(assign_shader);assign_shader.main()"-->
-                 <!--mode="python" name="角色赋材质【char assign shader】" type="command"/>-->
         <command cmd="import SoftClusterEX;SoftClusterEX.launch()"
                  mode="python" name="SoftClusterEX" type="command"/>
         <command cmd="from miraScripts.mayaTools.rig_tool import auto_publish;reload(auto_publish);auto_publish.auto_publish()"
@@ -35,8 +33,8 @@
     </submenu>
     <!--layout tools-->
     <submenu name="layout" type="submenu">
-        <command cmd="from miraPipeline.maya.layout_producer import layout_producer;reload(layout_producer);layout_producer.main()"
-                 mode="python" name="导入资产工具【reference in assets】" type="command"/>
+        <!--<command cmd="from miraPipeline.maya.layout_producer import layout_producer;reload(layout_producer);layout_producer.main()"-->
+                 <!--mode="python" name="导入资产工具【reference in assets】" type="command"/>-->
         <!--<command cmd="from miraLibs.pipeLibs.pipeMaya.rebuild_scene import rebuild_scene;reload(rebuild_scene);rebuild_scene.rebuild_scene()"-->
                  <!--mode="python" name="更新场景工具【refresh env】" type="command"/>-->
         <!--<command cmd="from miraScripts.pipeTools.camera_sequencer import camera_sequencer;reload(camera_sequencer);camera_sequencer.main()"-->

@@ -4,7 +4,7 @@ import re
 import logging
 from miraLibs.pyLibs.Path import Path
 from miraLibs.pyLibs import opposite_format, get_latest_version
-from miraLibs.pipeLibs.pipeMira import get_local_root_dir, get_primary_dir, get_studio_value
+from miraLibs.pipeLibs.pipeMira import get_projects, get_local_root_dir, get_primary_dir, get_studio_value
 
 
 type_dict = {"Character": "char", "Prop": "prop", "Environment": "env"}
@@ -23,7 +23,8 @@ def get_entity_type(path):
 def get_project(path):
     base_name = Path(path).basename()
     project = base_name.split("_")[0]
-    return project
+    if project in get_projects():
+        return project
 
 
 class PathDetails(object):
@@ -55,6 +56,8 @@ class PathDetails(object):
         x.path = path
         x.entity_type = get_entity_type(path)
         project = get_project(path)
+        if not project:
+            return
         if x.entity_type == "Asset":
             template = get_studio_value(project, "asset_template")
         else:
