@@ -19,9 +19,8 @@ IMAGE_WIDTH = 100
 
 
 class AssetItem(object):
-    def __init__(self, project=None, typ=None, name=None, image=None):
+    def __init__(self, project=None, name=None, image=None):
         self.project = project
-        self.typ = typ
         self.name = name
         self.image = image
 
@@ -99,8 +98,24 @@ class Loader(loader_ui.LoaderUI):
         return self.project_cbox.currentText()
 
     @property
-    def asset_type(self):
-        return self.asset_btn_grp.checkedButton().text()
+    def asset_type_sequence(self):
+        if self.entity_type == "Asset":
+            return self.asset_btn_grp.checkedButton().text()
+
+    @property
+    def entity_type(self):
+        tab_index = self.entity_tab.currentIndex()
+        if tab_index == 0:
+            return "Asset"
+        else:
+            return "Shot"
+
+    @property
+    def pipeline_steps(self):
+        if self.entity_type == "Asset":
+            return pipeMira.get_studio_value(self.project, "asset_steps")
+        else:
+            return pipeMira.get_studio_value(self.project, "shot_steps")
 
     def init_project(self):
         projects = pipeMira.get_projects()
@@ -133,8 +148,7 @@ class Loader(loader_ui.LoaderUI):
 
     def show_assets(self, btn):
         project = self.project
-        asset_type = btn.text()
-        assets = self.__db.get_all_assets(asset_type)
+        assets = self.__db.get_all_assets(self.asset_type_sequence)
         if not assets:
             return
         model_data = list()
@@ -145,12 +159,12 @@ class Loader(loader_ui.LoaderUI):
         format_str = project_data.get("maya_asset_image")
         for asset in assets:
             asset_name = asset.get("name")
-            image_path = format_str.format(primary=primary, project=project, asset_type=asset_type,
+            image_path = format_str.format(primary=primary, project=project, asset_type=self.asset_type_sequence,
                                            asset_name=asset_name, step="MidMdl", task="MidMdl", engine="maya")
             if not os.path.isfile(image_path):
                 image_path = join_path.join_path2(self.__image_dir, "unknown.png")
             image = create_round_rect_thumbnail.create_round_rect_thumbnail(image_path, IMAGE_WIDTH, IMAGE_WIDTH, 10)
-            item = AssetItem(project, asset_type, asset_name, image)
+            item = AssetItem(project, asset_name, image)
             model_data.append(item)
         self.set_model(model_data)
 
@@ -164,20 +178,25 @@ class Loader(loader_ui.LoaderUI):
         return selected
 
     def show_context_menu(self, pos):
+        # add entity menu and action
         self.main_menu.clear()
         selected = self.get_selected()
-        if selected and len(selected) == 1:
-            item = selected[0]
-            asset_type = item.typ
-            asset_name = item.name
-            out_arg = ["Asset", asset_type, asset_name]
+        if not selected:
+            return
+        asset_shot_names = [item.name for item in selected]
+        out_arg = [self.entity_type, self.asset_type_sequence, asset_shot_names]
+        if self.entity_type == "Asset":
             ad_action = self.entity_action_group.addAction("AD")
             ad_action.attr = out_arg
+            self.main_menu.addAction(ad_action)
+        # add task menu and action
+        if selected and len(selected) == 1:
             launch_action = self.entity_action_group.addAction("Launch Folder")
             launch_action.attr = out_arg
-            self.main_menu.addAction(ad_action)
             self.main_menu.addAction(launch_action)
-            steps = self.__db.get_step("Asset", asset_type, asset_name)
+            asset_shot_name = asset_shot_names[0]
+            out_arg = [self.entity_type, self.asset_type_sequence, asset_shot_name]
+            steps = self.__db.get_step(self.entity_type, self.asset_type_sequence, asset_shot_name)
             if not steps:
                 return
             steps = list(set(steps))
@@ -185,7 +204,7 @@ class Loader(loader_ui.LoaderUI):
             for step in steps:
                 step_menu = self.main_menu.addMenu(step)
                 step_menu.up_level = self.main_menu
-                tasks = self.__db.get_task("Asset", asset_type, asset_name, step)
+                tasks = self.__db.get_task(self.entity_type, self.asset_type_sequence, asset_shot_name, step)
                 if not tasks:
                     continue
                 for task in tasks:
@@ -225,16 +244,20 @@ class Loader(loader_ui.LoaderUI):
             return
 
     def on_entity_action_triggered(self, action):
-        entity_type, typ, name = action.attr
+        entity_type, typ, names = action.attr
+        error_list = list()
         if action.text() == "AD":
-            ad_file_path = pipeFile.get_asset_AD_file(self.project, typ, name)
-            if not os.path.isfile(ad_file_path):
-                QMessageBox.warning(self, "Warming Tip", "%s is not an exist file." % ad_file_path)
-                return
-            assemb = Assembly()
-            assemb.reference_ad("%s_AR" % name, ad_file_path)
+            for name in names:
+                ad_file_path = pipeFile.get_asset_AD_file(self.project, typ, name)
+                if not os.path.isfile(ad_file_path):
+                    error_list.append(ad_file_path)
+                    continue
+                assemb = Assembly()
+                assemb.reference_ad("%s_AR" % name, ad_file_path)
+            if error_list:
+                QMessageBox.warning(self, "Warming Tip", "%s \n\nis not an exist file." % "\n\n".join(error_list))
         else:
-            entity_dir = pipeFile.get_entity_dir(self.project, entity_type, "publish", typ, name)
+            entity_dir = pipeFile.get_entity_dir(self.project, entity_type, "publish", typ, names[0])
             start_file.start_file(entity_dir)
 
 

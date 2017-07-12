@@ -7,8 +7,7 @@ from miraFramework.Filter import ButtonLineEdit
 class ThumbListView(QListView):
     def __init__(self, parent=None):
         super(ThumbListView, self).__init__(parent)
-        # self.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.setViewMode(QListView.IconMode)
         self.setResizeMode(QListView.Adjust)
         self.setFlow(QListView.LeftToRight)
@@ -25,6 +24,7 @@ class LoaderUI(QDialog):
         self.resize(720, 690)
         self.setWindowFlags(Qt.Window)
         main_layout = QVBoxLayout(self)
+        main_layout.setAlignment(Qt.AlignTop)
         main_layout.setContentsMargins(2, 2, 2, 2)
         main_layout.setSpacing(2)
 
@@ -36,10 +36,18 @@ class LoaderUI(QDialog):
         project_layout.addWidget(project_label)
         project_layout.addWidget(self.project_cbox)
 
-        asset_group = QGroupBox("asset type")
-        self.asset_layout = QHBoxLayout(asset_group)
+        self.entity_tab = QTabWidget()
+        asset_widget = QWidget()
+        self.asset_layout = QHBoxLayout(asset_widget)
+        self.asset_layout.setAlignment(Qt.AlignTop)
         self.asset_btn_grp = QButtonGroup()
         self.asset_btn_grp.setExclusive(True)
+        self.entity_tab.addTab(asset_widget, "Asset")
+        self.entity_tab.setMaximumHeight(60)
+
+        shot_widget = QWidget()
+        #todo: add shot
+        self.entity_tab.addTab(shot_widget, "Shot")
 
         filter_layout = QHBoxLayout()
         self.filter_le = ButtonLineEdit()
@@ -49,7 +57,7 @@ class LoaderUI(QDialog):
         self.list_view = ThumbListView()
 
         main_layout.addLayout(project_layout)
-        main_layout.addWidget(asset_group)
+        main_layout.addWidget(self.entity_tab)
         main_layout.addLayout(filter_layout)
         main_layout.addWidget(self.list_view)
 
