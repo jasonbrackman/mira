@@ -19,7 +19,7 @@ def main():
     publish.reference_opt()
     logger.info("Import reference done.")
     # export needed
-    publish.export_need_to_publish(context)
+    publish.export_need_to_publish(context, "rig")
     logger.info("Export to publish path done.")
     # add to AD
     publish.add_mesh_to_ad(context)
