@@ -176,7 +176,7 @@ def open_port():
 
 def add_system_python_path_env():
     user = getpass.getuser()
-    if user == "heshuai":
+    if user in ["heshuai", "zhaopeng"]:
         return
     startup_dir = "C:/Users/%s/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup" % user
     mira_batch_dir = miraCore.get_batch_dir()
