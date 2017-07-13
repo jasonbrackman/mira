@@ -18,42 +18,6 @@ from miraLibs.mayaLibs.Assembly import Assembly
 IMAGE_WIDTH = 100
 
 
-class RunThread(QThread):
-    signal = Signal(list)
-
-    def __init__(self, project, entity_type, asset_type_sequence, entities, parent=None):
-        super(RunThread, self).__init__(parent)
-        self.__project = project
-        self.__asset_type_sequence = asset_type_sequence
-        self.__entity_type = entity_type
-        self.__entities = entities
-        self.__image_dir = miraCore.get_icons_dir()
-        self.__collect_data = list()
-
-    def run(self):
-        studio_conf_path = join_path.join_path2(miraCore.get_conf_dir(), "studio.yml")
-        yml_data = yml_operation.get_yaml_data(studio_conf_path)
-        project_data = yml_data.get(self.__project)
-        primary = project_data.get("primary")
-        if self.__entity_type == "Asset":
-            format_str = project_data.get("maya_asset_image")
-            step = "MidMdl"
-            task = "MidMdl"
-        else:
-            format_str = project_data.get("maya_shot_image")
-            step = "MidMdl"
-            task = "MidMdl"
-        for entity in self.__entities:
-            entity_name = entity.get("name")
-            image_path = format_str.format(primary=primary, project=self.__project,
-                                           asset_type=self.__asset_type_sequence,
-                                           asset_name=entity_name, step=step, task=task, engine="maya")
-            if not os.path.isfile(image_path):
-                image_path = join_path.join_path2(self.__image_dir, "unknown.png")
-            self.__collect_data.append([entity_name, image_path])
-        self.signal.emit(self.__collect_data)
-
-
 class AssetItem(object):
     def __init__(self, project=None, name=None, image=None):
         self.project = project
@@ -123,11 +87,11 @@ class Loader(loader_ui.LoaderUI):
         self.init_project()
         self.init_asset_type()
         self.__db = db_api.DbApi(self.project).db_obj
+        self.__image_dir = miraCore.get_icons_dir()
         self.main_menu = QMenu()
         self.entity_action_group = QActionGroup(self)
         self.task_action_group = QActionGroup(self)
         self.set_signals()
-        self.__threads = list()
 
     @property
     def project(self):
@@ -167,17 +131,13 @@ class Loader(loader_ui.LoaderUI):
             self.asset_layout.addWidget(self.asset_type_check)
 
     def set_signals(self):
-        self.asset_btn_grp.buttonClicked.connect(self.calculate_entities)
+        self.asset_btn_grp.buttonClicked[QAbstractButton].connect(self.show_assets)
         self.task_action_group.triggered.connect(self.on_task_action_triggered)
         self.entity_action_group.triggered.connect(self.on_entity_action_triggered)
         self.list_view.setContextMenuPolicy(Qt.CustomContextMenu)
         self.list_view.customContextMenuRequested.connect(self.show_context_menu)
 
     def set_model(self, model_data):
-        if not model_data:
-            self.model = QStandardItemModel()
-            self.list_view.setModel(self.model)
-            return
         self.proxy_model = QSortFilterProxyModel()
         self.proxy_model.setDynamicSortFilter(True)
         self.proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
@@ -186,26 +146,27 @@ class Loader(loader_ui.LoaderUI):
         self.proxy_model.setSourceModel(self.model)
         self.list_view.setModel(self.proxy_model)
 
-    def calculate_entities(self):
-        self.waiting_widget.show()
-        if self.entity_type == "Asset":
-            entities = self.__db.get_all_assets(self.asset_type_sequence)
-        if not entities:
+    def show_assets(self, btn):
+        project = self.project
+        assets = self.__db.get_all_assets(self.asset_type_sequence)
+        if not assets:
             return
-        thread = RunThread(self.project, self.entity_type, self.asset_type_sequence, entities)
-        thread.signal.connect(self.show_entities)
-        self.__threads.append(thread)
-        thread.start()
-
-    def show_entities(self, value):
         model_data = list()
-        for data in value:
-            entity_name, image_path = data
+        studio_conf_path = join_path.join_path2(miraCore.get_conf_dir(), "studio.yml")
+        yml_data = yml_operation.get_yaml_data(studio_conf_path)
+        project_data = yml_data.get(self.project)
+        primary = project_data.get("primary")
+        format_str = project_data.get("maya_asset_image")
+        for asset in assets:
+            asset_name = asset.get("name")
+            image_path = format_str.format(primary=primary, project=project, asset_type=self.asset_type_sequence,
+                                           asset_name=asset_name, step="MidMdl", task="MidMdl", engine="maya")
+            if not os.path.isfile(image_path):
+                image_path = join_path.join_path2(self.__image_dir, "unknown.png")
             image = create_round_rect_thumbnail.create_round_rect_thumbnail(image_path, IMAGE_WIDTH, IMAGE_WIDTH, 10)
-            item = AssetItem(self.project, entity_name, image)
+            item = AssetItem(project, asset_name, image)
             model_data.append(item)
         self.set_model(model_data)
-        self.waiting_widget.quit()
 
     def get_selected(self):
         selected_indexes = self.list_view.selectedIndexes()
@@ -298,10 +259,6 @@ class Loader(loader_ui.LoaderUI):
         else:
             entity_dir = pipeFile.get_entity_dir(self.project, entity_type, "publish", typ, names[0])
             start_file.start_file(entity_dir)
-
-    def resizeEvent(self, event):
-        self.waiting_widget.resize(event.size())
-        event.accept()
 
 
 def main():

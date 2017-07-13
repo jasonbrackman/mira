@@ -2,6 +2,7 @@
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from miraFramework.Filter import ButtonLineEdit
+from miraFramework.waiting import Waiting
 
 
 class ThumbListView(QListView):
@@ -14,16 +15,18 @@ class ThumbListView(QListView):
         self.setMovement(QListView.Static)
         self.setFocusPolicy(Qt.NoFocus)
         self.setWrapping(True)
-        self.setSpacing(30)
+        self.setSpacing(25)
 
 
-class LoaderUI(QDialog):
+class LoaderUI(QMainWindow):
     def __init__(self, parent=None):
         super(LoaderUI, self).__init__(parent)
         self.setWindowTitle("Loader")
         self.resize(720, 690)
         self.setWindowFlags(Qt.Window)
-        main_layout = QVBoxLayout(self)
+        central_widget = QWidget()
+        self.setCentralWidget(central_widget)
+        main_layout = QVBoxLayout(central_widget)
         main_layout.setAlignment(Qt.AlignTop)
         main_layout.setContentsMargins(2, 2, 2, 2)
         main_layout.setSpacing(2)
@@ -60,6 +63,9 @@ class LoaderUI(QDialog):
         main_layout.addWidget(self.entity_tab)
         main_layout.addLayout(filter_layout)
         main_layout.addWidget(self.list_view)
+
+        self.waiting_widget = Waiting(self.list_view)
+        self.waiting_widget.hide()
 
 
 if __name__ == "__main__":

@@ -231,8 +231,11 @@ if __name__ == "__main__":
     # print st.user_id
     # help(st.st.version.update)
     # print st.st.version.fields
-    print st.get_my_tasks()
+    # print st.get_my_tasks()
     # print st.st.task.relations
     # print st.st.task.find("id=7", ["priority"])
     # print st.st.priority.fields
     # print st.st.task.fields
+    # print st.st.asset.relations
+    # print st.st.web_url
+    # print st.st.asset.find("id=100", ["thumbnail"])
