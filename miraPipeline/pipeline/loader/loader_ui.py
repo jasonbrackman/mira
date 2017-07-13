@@ -22,7 +22,7 @@ class LoaderUI(QMainWindow):
     def __init__(self, parent=None):
         super(LoaderUI, self).__init__(parent)
         self.setWindowTitle("Loader")
-        self.resize(720, 690)
+        self.resize(570, 690)
         self.setWindowFlags(Qt.Window)
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
