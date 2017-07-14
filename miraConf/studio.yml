@@ -43,7 +43,7 @@ SnowKidTest:
   primary: "W:"
   task_log_dir: "{primary}/{project}/log"
   priority: ["A", "B", "C", "D"]
-  asset_type: ["Character", "Prop", "Environment"]
+  asset_type: ["Character", "Prop", "Environment", "Building"]
   asset_steps: ["LowMdl","MidMdl","HighMdl","Shd","MidRig","Rig","Hair","Group"]
   shot_steps: ["Set","AnimLay","VfxLay","LgtLay","CompLay","Anim","Vfx","Cfx","Lgt","Comp","Cut"]
   not_playblast_step: ["HighRig","MidRig","Shd","Hair"]

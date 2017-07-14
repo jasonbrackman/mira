@@ -177,10 +177,13 @@ class Loader(loader_ui.LoaderUI):
         self.list_view.customContextMenuRequested.connect(self.show_context_menu)
         self.list_view.clicked.connect(self.show_selected)
 
+    def __set_empty_model(self):
+        self.model = QStandardItemModel()
+        self.list_view.setModel(self.model)
+
     def __set_model(self, model_data):
         if not model_data:
-            self.model = QStandardItemModel()
-            self.list_view.setModel(self.model)
+            self.__set_empty_model()
             return
         self.proxy_model = QSortFilterProxyModel()
         self.proxy_model.setDynamicSortFilter(True)
@@ -195,6 +198,8 @@ class Loader(loader_ui.LoaderUI):
         if self.entity_type == "Asset":
             entities = self.__db.get_all_assets(self.asset_type_sequence)
         if not entities:
+            self.__set_empty_model()
+            self.waiting_widget.hide()
             return
         thread = RunThread(self.project, self.entity_type, self.asset_type_sequence, entities)
         thread.signal.connect(self.__show_entities)
