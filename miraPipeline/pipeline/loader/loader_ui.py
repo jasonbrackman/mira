@@ -58,11 +58,19 @@ class LoaderUI(QMainWindow):
         filter_layout.addWidget(self.filter_le)
 
         self.list_view = ThumbListView()
+        show_layout = QHBoxLayout()
+        show_label = QLabel("Current Selected:")
+        self.show_le = QLineEdit()
+        self.show_le.setReadOnly(True)
+        self.show_le.setStyleSheet("border: 0px solid;")
+        show_layout.addWidget(show_label)
+        show_layout.addWidget(self.show_le)
 
         main_layout.addLayout(project_layout)
         main_layout.addWidget(self.entity_tab)
         main_layout.addLayout(filter_layout)
         main_layout.addWidget(self.list_view)
+        main_layout.addLayout(show_layout)
 
         self.waiting_widget = Waiting(self.list_view)
         self.waiting_widget.hide()

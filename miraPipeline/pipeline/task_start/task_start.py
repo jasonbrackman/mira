@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
-import sys
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
 from miraLibs.pipeLibs.get_task_name import get_task_name
 from miraFramework.task_common_form import CommonForm
 from miraLibs.pyLibs import Path, join_path
-from miraLibs.pipeLibs import pipeFile
+from miraLibs.pipeLibs import pipeFile, get_engine_from_step
 from miraLibs.deadlineLibs import submit
 from miraLibs.qtLibs import render_ui
 
@@ -66,17 +65,16 @@ class TaskStart(QDialog):
 
     def show_path(self):
         project = self.common_widget.project
-        engine = self.common_widget.engine
         entity_type = self.common_widget.entity_type
         asset_type_or_sequence = self.common_widget.asset_type_or_sequence
         asset_or_shot = self.common_widget.asset_or_shot
         step = self.common_widget.step
         task = self.common_widget.task
+        engine = get_engine_from_step.get_engine_from_step(step)
         if not all((asset_type_or_sequence, asset_or_shot, step, task)):
             return
-        if entity_type == "Asset":
-            file_path = pipeFile.get_task_work_file(project, asset_type_or_sequence, asset_or_shot, step, task,
-                                                          "000", engine)
+        file_path = pipeFile.get_task_work_file(project, entity_type, asset_type_or_sequence,
+                                                asset_or_shot, step, task, "000", engine)
 
         self.path_le.setText(file_path)
 

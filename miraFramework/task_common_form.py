@@ -10,9 +10,6 @@ from miraLibs.dbLibs import db_api
 from miraLibs.pipeLibs import pipeHistory
 
 
-ENGINELIST = ["maya", "nuke", "houdini"]
-
-
 class ListModel(QAbstractListModel):
     def __init__(self, model_data=[], parent=None):
         super(ListModel, self).__init__(parent)
@@ -203,19 +200,6 @@ class CommonForm(QWidget):
         entity_type_layout.addWidget(self.shot_check)
         entity_type_layout.addStretch()
 
-        engine_layout = QHBoxLayout()
-        engine_label = QLabel("Engine")
-        engine_label.setFixedWidth(70)
-        engine_layout.addWidget(engine_label)
-        self.engine_btn_grp = QButtonGroup()
-        for engine in ENGINELIST:
-            self.engine_check_box = QCheckBox(engine)
-            if engine == "maya":
-                self.engine_check_box.setChecked(True)
-            self.engine_btn_grp.addButton(self.engine_check_box)
-            engine_layout.addWidget(self.engine_check_box)
-        engine_layout.addStretch()
-
         list_layout = QHBoxLayout()
         list_layout.setContentsMargins(0, 3, 0, 3)
         self.first_widget = CommonWidget()
@@ -239,7 +223,6 @@ class CommonForm(QWidget):
 
         main_layout.addLayout(project_layout)
         main_layout.addLayout(entity_type_layout)
-        main_layout.addLayout(engine_layout)
         main_layout.addLayout(list_layout)
         main_layout.addLayout(separator_layout)
 
@@ -260,10 +243,6 @@ class CommonForm(QWidget):
     @property
     def mayabatch(self):
         return pipeMira.get_mayabatch_path(self.project)
-
-    @property
-    def engine(self):
-        return self.engine_btn_grp.checkedButton().text()
 
     @property
     def entity_type(self):

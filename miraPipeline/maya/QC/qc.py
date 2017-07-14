@@ -151,6 +151,8 @@ class QC(QDialog):
         screen_shot_layout.setStretch(1, 1)
         screen_shot_layout.setStretch(2, 0)
 
+        self.version_check = QCheckBox("%s%s" % (" "*40, "Use this screen shot as a version."))
+
         valid_file_label = TextLabel("Valid file")
         self.valid_file_widget = CellQCWidget(valid_file_label)
         self.valid_file_widget.set_mandatory()
@@ -176,6 +178,7 @@ class QC(QDialog):
         self.submit_btn = QPushButton("Submit")
 
         main_layout.addLayout(screen_shot_layout)
+        # main_layout.addWidget(self.version_check)
         main_layout.addWidget(self.valid_file_widget)
         main_layout.addWidget(self.preflight_widget)
         main_layout.addWidget(self.playblast_widget)

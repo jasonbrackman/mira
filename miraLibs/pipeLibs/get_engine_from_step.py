@@ -3,9 +3,10 @@
 
 def get_engine_from_step(step):
     engine = None
-    if step in ["comp"]:
+    if step in ["Art"]:
+        return "photoshop"
+    if step in ["Comp"]:
         engine = "nuke"
-    elif step in ["lowMdl", "mdl", "lowRig", "rig", "shd", "hair",
-                  "lay", "anim", "set", "cfx", "lgt", "sim"]:
+    elif step in ["LowMdl", "MidMdl", "HighMdl", "Shd", "MidRig", "Rig", "Hair", "Group"]:
         engine = "maya"
     return engine

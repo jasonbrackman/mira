@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 from Qt.QtWidgets import *
-from miraLibs.pipeLibs import pipeFile
-from miraLibs.osLibs import get_engine, FileOpener
+from miraLibs.pipeLibs import pipeFile, get_engine_from_step
+from miraLibs.osLibs import FileOpener
 from miraLibs.pyLibs import start_file
 
 
@@ -13,8 +13,8 @@ class Hook(object):
         if hasattr(self.__action, "up_level"):
             self.__task = self.__action.up_level.title()
             self.__step = self.__action.up_level.up_level.title()
+            self.__engine = get_engine_from_step.get_engine_from_step(self.__step)
         self.__action_name = self.__action.text()
-        self.__engine = get_engine.get_engine()
 
     def execute(self):
         # "AD", "Launch AD", "start", "publish", "test", "import", "reference", "Launch Workarea", "Launch Publish"
@@ -26,8 +26,8 @@ class Hook(object):
             self.start()
         elif self.__action_name == "publish":
             self.publish()
-        elif self.__action_name == "test":
-            self.do_test()
+        elif self.__action_name == "QA":
+            self.quality_control()
         elif self.__action_name == "import":
             self.do_import()
         elif self.__action_name == "reference":
@@ -61,9 +61,10 @@ class Hook(object):
     def publish(self):
         pass
 
-    def do_test(self):
+    def quality_control(self):
         work_file = pipeFile.get_task_work_file(self.__project, self.__entity_type, self.__asset_type_sequence,
-                                                self.__asset_shot_names[0], self.__step, self.__task)
+                                                self.__asset_shot_names[0], self.__step, self.__task,
+                                                engine=self.__engine)
         fo = FileOpener.FileOpener(work_file)
         fo.run()
 
@@ -74,7 +75,7 @@ class Hook(object):
         for asset_shot_name in self.__asset_shot_names:
             publish_file = pipeFile.get_task_publish_file(self.__project, self.__entity_type,
                                                           self.__asset_type_sequence, asset_shot_name,
-                                                          self.__step, self.__task)
+                                                          self.__step, self.__task, engine=self.__engine)
             if not os.path.isfile(publish_file):
                 error_list.append(publish_file)
                 continue
@@ -93,7 +94,11 @@ class Hook(object):
 
     def launch_workarea(self):
         work_file = pipeFile.get_task_work_file(self.__project, self.__entity_type, self.__asset_type_sequence,
-                                                self.__asset_shot_names[0], self.__step, self.__task, version="000")
+                                                self.__asset_shot_names[0], self.__step, self.__task,
+                                                version="000", engine=self.__engine)
+        if not work_file:
+            print "Maybe no format exist."
+            return
         work_dir = os.path.dirname(work_file)
         if os.path.isdir(work_dir):
             start_file.start_file(work_dir)
@@ -102,7 +107,11 @@ class Hook(object):
 
     def launch_publish(self):
         publish_file = pipeFile.get_task_publish_file(self.__project, self.__entity_type, self.__asset_type_sequence,
-                                                      self.__asset_shot_names[0], self.__step, self.__task)
+                                                      self.__asset_shot_names[0], self.__step, self.__task,
+                                                      engine=self.__engine)
+        if not publish_file:
+            print "Maybe no format exist."
+            return
         publish_dir = os.path.dirname(publish_file)
         if os.path.isdir(publish_dir):
             start_file.start_file(publish_dir)

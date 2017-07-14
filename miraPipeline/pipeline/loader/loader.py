@@ -5,6 +5,8 @@ from Qt.QtCore import *
 from Qt.QtGui import *
 import loader_ui
 reload(loader_ui)
+import hooks
+reload(hooks)
 from hooks import Hook
 import miraCore
 from miraLibs.pipeLibs import pipeMira, get_current_project
@@ -173,6 +175,7 @@ class Loader(loader_ui.LoaderUI):
         self.__entity_action_group.triggered.connect(self.__on_action_triggered)
         self.list_view.setContextMenuPolicy(Qt.CustomContextMenu)
         self.list_view.customContextMenuRequested.connect(self.show_context_menu)
+        self.list_view.clicked.connect(self.show_selected)
 
     def __set_model(self, model_data):
         if not model_data:
@@ -286,6 +289,12 @@ class Loader(loader_ui.LoaderUI):
     def __on_action_triggered(action):
         hooker = Hook(action)
         hooker.execute()
+
+    def show_selected(self, index):
+        source_index = self.proxy_model.mapToSource(index)
+        selected_item = self.model.model_data[source_index.row()]
+        selected = selected_item.name
+        self.show_le.setText(selected)
 
     def resizeEvent(self, event):
         self.waiting_widget.resize(event.size())
