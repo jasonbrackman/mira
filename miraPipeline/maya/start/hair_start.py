@@ -10,14 +10,15 @@ from miraLibs.pipeLibs import pipeFile
 def main():
     logger = logging.getLogger("mdl start")
     # copy low mdl publish file as mdl file
-    obj = pipeFile.PathDetails.parse_path(options.file)
-    project = obj.project
-    asset_type = obj.asset_type
-    asset_name = obj.asset_name
-    asset_type_short_name = obj.asset_type_short_name
+    context = pipeFile.PathDetails.parse_path(options.file)
+    project = context.project
+    entity_type = context.entity_type
+    asset_type = context.asset_type
+    asset_name = context.asset_name
+    asset_type_short_name = context.asset_type_short_name
     yeti_name = "%s_%s_pgYetiMaya" % (asset_type_short_name, asset_name)
     create_yeti_node(asset_type_short_name, asset_name)
-    mdl_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "mdl", "mdl")
+    mdl_publish_file = pipeFile.get_task_publish_file(project, entity_type, asset_type, asset_name, "mdl", "mdl")
     if not os.path.isfile(mdl_publish_file):
         logger.warning("No mdl file published.")
         quit_maya.quit_maya()

@@ -75,12 +75,9 @@ class TaskStart(QDialog):
         if not all((asset_type_or_sequence, asset_or_shot, step, task)):
             return
         if entity_type == "Asset":
-
-            file_path = pipeFile.get_asset_task_work_file(project, asset_type_or_sequence, asset_or_shot, step, task,
+            file_path = pipeFile.get_task_work_file(project, asset_type_or_sequence, asset_or_shot, step, task,
                                                           "000", engine)
-        else:
-            file_path = pipeFile.get_shot_task_work_file(project, asset_type_or_sequence, asset_or_shot, step, task,
-                                                         "000", engine)
+
         self.path_le.setText(file_path)
 
     def open_dir(self):

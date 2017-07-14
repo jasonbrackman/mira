@@ -11,9 +11,10 @@ def main():
     # copy low mdl publish file as mdl file
     context = pipeFile.PathDetails.parse_path(options.file)
     project = context.project
+    entity_type = context.entity_type
     asset_type = context.asset_type
     asset_name = context.asset_name
-    MidMdl_publish_file = pipeFile.get_asset_task_publish_file(project, asset_type, asset_name, "MidMdl", "MidMdl")
+    MidMdl_publish_file = pipeFile.get_task_publish_file(project, entity_type, asset_type, asset_name, "MidMdl", "MidMdl")
     logger.info("MidMdl publish file: %s" % MidMdl_publish_file)
     if not os.path.isfile(MidMdl_publish_file):
         logger.warning("No MidMdl file published.")

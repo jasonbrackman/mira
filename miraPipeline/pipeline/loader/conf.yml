@@ -1,0 +1,12 @@
+python:
+  Asset:
+    entity:
+      actions: []
+    task:
+      actions: ["start", "publish", "Launch Workarea", "Launch Publish"]
+maya:
+  Asset:
+    entity:
+      actions: ["AD", "Launch Folder"]
+    task:
+      actions: ["test", "import", "reference", "Launch Workarea", "Launch Publish"]

@@ -228,21 +228,39 @@ def get_entity_dir(project, entity_type, category, asset_type_sequence, asset_na
     return entity_dir
 
 
-def get_asset_task_work_file(project, asset_type, asset_name, step, task, version=None, engine="maya", local=False):
-    format_str = "%s_asset_work" % engine
-    work_file = get_task_file(project, asset_type, asset_name, step, task, format_str, version, engine, local)
+def get_task_work_file(project, entity_type, asset_type_sequence, asset_name_shot, step, task, version=None, engine="maya", local=False):
+    if entity_type == "Asset":
+        format_str = "%s_asset_work" % engine
+    else:
+        format_str = "%s_shot_work" % engine
+    work_file = get_task_file(project, asset_type_sequence, asset_name_shot, step, task, format_str, version, engine, local)
     return work_file
 
 
-def get_asset_task_image_file(project, asset_type, asset_name, step, task, version=None, engine="maya", local=False):
-    format_str = "%s_asset_workImage" % engine
-    image_file = get_task_file(project, asset_type, asset_name, step, task, format_str, version, engine, local)
+def get_task_workImage_file(project, entity_type, asset_type_sequence, asset_name_shot, step, task, version=None, engine="maya", local=False):
+    if entity_type == "Asset":
+        format_str = "%s_asset_workImage" % engine
+    else:
+        format_str = "%s_shot_workImage" % engine
+    image_file = get_task_file(project, asset_type_sequence, asset_name_shot, step, task, format_str, version, engine, local)
     return image_file
 
 
-def get_asset_task_publish_file(project, asset_type, asset_name, step, task, version="", engine="maya", local=False):
-    format_str = "%s_asset_publish" % engine
-    publish_file = get_task_file(project, asset_type, asset_name, step, task, format_str, version, engine, local)
+def get_task_publish_file(project, entity_type, asset_type_sequence, asset_name_shot, step, task, version="", engine="maya", local=False):
+    if entity_type == "Asset":
+        format_str = "%s_asset_publish" % engine
+    else:
+        format_str = "%s_shot_publish" % engine
+    publish_file = get_task_file(project, asset_type_sequence, asset_name_shot, step, task, format_str, version, engine, local)
+    return publish_file
+
+
+def get_task_video_file(project, entity_type, asset_type_sequence, asset_name_shot, step, task, version="", engine="maya", local=False):
+    if entity_type == "Asset":
+        format_str = "%s_asset_video" % engine
+    else:
+        format_str = "%s_shot_video" % engine
+    publish_file = get_task_file(project, asset_type_sequence, asset_name_shot, step, task, format_str, version, engine, local)
     return publish_file
 
 
@@ -256,29 +274,5 @@ def get_asset_AD_file(project, asset_type, asset_name):
 ########################################################################################################################
 # below is for get shot files
 ########################################################################################################################
-def get_shot_task_work_file(project, sequence, shot, step, task, version=None, engine="maya", local=False):
-    format_str = "%s_shot_work" % engine
-    work_file = get_task_file(project, sequence, shot, step, task, format_str, version, engine, local)
-    return work_file
-
-
-def get_shot_task_image_file(project, sequence, shot, step, task, version=None, engine="maya", local=False):
-    format_str = "%s_shot_image" % engine
-    image_file = get_task_file(project, sequence, shot, step, task, format_str, version, engine, local)
-    return image_file
-
-
-def get_shot_task_publish_file(project, sequence, shot, step, task, version=None, engine="maya", local=False):
-    format_str = "%s_shot_publish" % engine
-    publish_file = get_task_file(project, sequence, shot, step, task, format_str, version, engine, local)
-    return publish_file
-
-
-def get_shot_task_video_file(project, sequence, shot, step, task, version=None, engine="maya", local=False):
-    format_str = "%s_shot_video" % engine
-    video_file = get_task_file(project, sequence, shot, step, task, format_str, version, engine, local)
-    return video_file
-
-
 if __name__ == "__main__":
-    print get_shot_task_image_file("SnowKidTest", "s001", "c001", "mdl", "mdl", version=None, engine="maya", local=False)
+    print get_task_publish_file("SnowKidTest", "Asset", "Prop", "TdTest", "HighMdl", "HighMdl")

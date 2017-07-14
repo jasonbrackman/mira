@@ -144,11 +144,11 @@ class AssetTreeModel(QAbstractItemModel):
         elif role == Qt.DecorationRole:
             if index.column() == 1 and node.node_type in ["asset", "shot"]:
                 if node.node_type == "asset":
-                    pix_map_path = pipeFile.get_asset_task_image_file(self.project, node.parent().name,
-                                                                      node.name, node.step, node.task)
+                    entity_type = "Asset"
                 else:
-                    pix_map_path = pipeFile.get_shot_task_image_file(self.project, node.parent().name,
-                                                                     node.name, node.step, node.task)
+                    entity_type = "Shot"
+                pix_map_path = pipeFile.get_task_workImage_file(self.project, entity_type, node.parent().name,
+                                                                node.name, node.step, node.task)
                 if os.path.isfile(pix_map_path):
                     pix_map = QPixmap(pix_map_path)
                 else:
@@ -421,23 +421,16 @@ class TaskGet(task_get_ui.TaskGetUI):
     def show_path(self, index):
         node = self.proxy_model.mapToSource(index).internalPointer()
         if node.node_type == "asset":
-            asset_type = node.parent().name
-            asset_name = node.name
-            step = node.step
-            task = node.task
-            local_file = pipeFile.get_asset_task_work_file(self.__project, asset_type, asset_name, step, task, "000", local=True)
-            work_file = pipeFile.get_asset_task_work_file(self.__project, asset_type, asset_name, step, task, "000")
-            publish_file = pipeFile.get_asset_task_publish_file(self.__project, asset_type, asset_name, step, task, "000")
-        elif node.node_type == "shot":
-            sequence = node.parent().name
-            shot = node.name.split("_")[-1]
-            step = node.step
-            task = node.task
-            local_file = pipeFile.get_shot_task_work_file(self.__project, sequence, shot, step, task, "000", local=True)
-            work_file = pipeFile.get_shot_task_work_file(self.__project, sequence, shot, step, task, "000")
-            publish_file = pipeFile.get_shot_task_publish_file(self.__project, sequence, shot, step, task, "000")
+            entity_type = "Asset"
         else:
-            return
+            entity_type = "Shot"
+        asset_type_sequence = node.parent().name
+        asset_name_shot = node.name.split("_")[-1]
+        step = node.step
+        task = node.task
+        local_file = pipeFile.get_task_work_file(self.__project, entity_type, asset_type_sequence, asset_name_shot, step, task, "000", local=True)
+        work_file = pipeFile.get_task_work_file(self.__project, entity_type, asset_type_sequence, asset_name_shot, step, task, "000")
+        publish_file = pipeFile.get_task_publish_file(self.__project, entity_type, asset_type_sequence, asset_name_shot, step, task, "000")
         local_dir = os.path.dirname(os.path.dirname(local_file))
         work_dir = os.path.dirname(os.path.dirname(work_file))
         publish_dir = os.path.dirname(os.path.dirname(publish_file))

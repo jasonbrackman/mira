@@ -44,4 +44,4 @@ class PressLabel(QLabel):
 
 if __name__ == "__main__":
     from miraLibs.qtLibs import render_ui
-    render_ui.render(DragLabel)
+    render_ui.render(PressLabel)

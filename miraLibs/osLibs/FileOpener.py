@@ -76,6 +76,9 @@ class FileOpener(object):
         self.ext = os.path.splitext(self.path)[-1]
 
     def run(self):
+        if not os.path.isfile(self.path):
+            print "FileOpener: %s is not an exist file." % self.path
+            return
         opener = None
         if self.ext in [".ma", ".mb"]:
             opener = MayaOpener(self.path)
