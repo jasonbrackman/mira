@@ -72,7 +72,7 @@ class LoaderUI(QMainWindow):
         main_layout.addWidget(self.list_view)
         main_layout.addLayout(show_layout)
 
-        self.waiting_widget = Waiting(self.list_view)
+        self.waiting_widget = Waiting(self)
         self.waiting_widget.hide()
 
 

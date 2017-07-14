@@ -8,9 +8,10 @@ from Qt.QtCore import *
 class Waiting(QWidget):
     def __init__(self, parent=None):
         super(Waiting, self).__init__(parent)
-        palette = QPalette(self.palette())
-        palette.setColor(palette.Background, Qt.transparent)
-        self.setPalette(palette)
+        # palette = QPalette(self.palette())
+        # palette.setColor(palette.Background, Qt.transparent)
+        # self.setPalette(palette)
+        self.setStyleSheet("background: transparent;")
 
     def paintEvent(self, event):
         painter = QPainter()
@@ -21,9 +22,9 @@ class Waiting(QWidget):
         for i in range(12):
             if (self.counter / 11) % 12 == i:
                 # painter.setBrush(QBrush(QColor(127 + (self.counter % 11)*16, 127, 127)))
-                painter.setBrush(QBrush(QColor(255, 127, 127)))
+                painter.setBrush(QBrush(QColor(64, 255, 64)))
             else:
-                painter.setBrush(QBrush(QColor(127, 127, 127)))
+                painter.setBrush(QBrush(QColor(64, 64, 64)))
             painter.drawEllipse(
                 self.width() / 2 + 30 * math.cos(2 * math.pi * i / 12.0) - 10,
                 self.height() / 2 + 30 * math.sin(2 * math.pi * i / 12.0) - 10,
