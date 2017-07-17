@@ -15,14 +15,12 @@ def main():
 if __name__ == "__main__":
     parser = optparse.OptionParser()
     parser.add_option("-f", dest="file", help="maya file ma or mb.", metavar="string")
-    parser.add_option("-t", dest="task_id", help="maya file ma or mb.", metavar="int")
     parser.add_option("-c", dest="command",
                       help="Not a needed argument, just for mayabatch.exe, " \
                            "if missing this setting, optparse would " \
                            "encounter an error: \"no such option: -c\"",
                       metavar="string")
     options, args = parser.parse_args()
-    if len([i for i in ["file_name", "task_id"] if i in dir()]) == 2:
+    if len([i for i in ["file_name"] if i in dir()]) == 1:
         options.file = file_name
-        options.task_id = task_id
         main()
