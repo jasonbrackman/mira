@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import getpass
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
@@ -94,8 +95,8 @@ class TaskStart(QDialog):
         deadline_job_name = "start_%s" % task_name
         # work_file, change_task
         argv = self.work_file
-        submitter = u'pipemanager'
-        tar_name = u'pipemanager'
+        submitter = getpass.getuser()
+        tar_name = [u'pipemanager', submitter]
         submit.submit_python_job(deadline_job_name, start_script_path, argv, submitter, tar_name)
         QMessageBox.information(self, "Warming Tip", "%s submit done." % task_name)
 
