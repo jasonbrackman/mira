@@ -31,8 +31,8 @@ class Overlay(QWidget):
 
         for i in range(12):
             if (self.counter / 11) % 12 == i:
-                   # painter.setBrush(QBrush(QColor(127 + (self.counter % 11)*16, 127, 127)))
-                   painter.setBrush(QBrush(QColor(255, 127, 127)))
+                   painter.setBrush(QBrush(QColor(127 + (self.counter % 11)*16, 127, 127)))
+                   # painter.setBrush(QBrush(QColor(255, 127, 127)))
             else:
                 painter.setBrush(QBrush(QColor(127, 127, 127)))
             painter.drawEllipse(

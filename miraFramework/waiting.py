@@ -21,15 +21,21 @@ class Waiting(QWidget):
         painter.setPen(QPen(Qt.NoPen))
         for i in range(12):
             if (self.counter / 11) % 12 == i:
-            #     painter.setBrush(QBrush(QColor(64, 127 + (self.counter / 6) % 12*8, 64)))
-                painter.setBrush(QBrush(QColor(64, 255, 64)))
+                painter.setBrush(QBrush(QColor(255, 140, 0)))
+            elif (self.counter / 11) % 12 == i-1:
+                painter.setBrush(QBrush(QColor(255, 157, 38)))
+            elif (self.counter / 11) % 12 == i-2:
+                painter.setBrush(QBrush(QColor(255, 172, 70)))
+            elif (self.counter / 11) % 12 == i-3:
+                painter.setBrush(QBrush(QColor(255, 188, 106)))
+            elif (self.counter / 11) % 12 == i-4:
+                painter.setBrush(QBrush(QColor(255, 203, 139)))
             else:
-                painter.setBrush(QBrush(QColor(64, 64, 64)))
+                painter.setBrush(QBrush(QColor(134, 114, 89)))
             painter.drawEllipse(
                 self.width() / 2 + 30 * math.cos(2 * math.pi * i / 12.0) - 10,
                 self.height() / 2 + 30 * math.sin(2 * math.pi * i / 12.0) - 10,
                 10, 10)
-
         painter.end()
 
     def showEvent(self, event):

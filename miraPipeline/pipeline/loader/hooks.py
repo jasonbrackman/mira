@@ -18,7 +18,7 @@ class Hook(object):
 
     def execute(self):
         # "AD", "Launch AD", "start", "publish", "test", "import", "reference", "Launch Workarea", "Launch Publish"
-        if self.__action_name == "AD":
+        if self.__action_name == "AR":
             self.ad_opt()
         elif self.__action_name == "Launch Folder":
             self.launch_folder()

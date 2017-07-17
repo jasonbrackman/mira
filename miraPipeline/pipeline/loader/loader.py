@@ -307,8 +307,14 @@ class Loader(loader_ui.LoaderUI):
 
 
 def main():
-    from miraLibs.qtLibs import render_ui
-    render_ui.render(Loader)
+    engine = get_engine.get_engine()
+    if engine == "maya":
+        from miraLibs.mayaLibs import show_as_panel
+        ld = Loader()
+        show_as_panel.show_as_panel(ld)
+    else:
+        from miraLibs.qtLibs import render_ui
+        render_ui.render(Loader)
 
 
 if __name__ == "__main__":

@@ -7,6 +7,6 @@ python:
 maya:
   Asset:
     entity:
-      actions: ["AD", "Launch Folder"]
+      actions: ["AR", "Launch Folder"]
     task:
       actions: ["QA", "import", "reference", "Launch Workarea", "Launch Publish"]
