@@ -96,8 +96,8 @@ class TaskStart(QDialog):
         # work_file, change_task
         argv = self.work_file
         submitter = getpass.getuser()
-        tar_name = [u'pipemanager', submitter]
-        submit.submit_python_job(deadline_job_name, start_script_path, argv, submitter, tar_name)
+        tar_name = 'pipemanager,%s' % submitter
+        submit.submit_python_job(deadline_job_name, start_script_path, argv, tar_name, submitter)
         QMessageBox.information(self, "Warming Tip", "%s submit done." % task_name)
 
 
