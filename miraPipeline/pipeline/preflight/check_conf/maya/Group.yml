@@ -1,0 +1,20 @@
+check_display_wireframe:
+  name: "Display wireframe | 线框显示"
+  order: 0
+  ignorable: False
+  description: "以线框显示保存文件"
+check_group_structure:
+  name: "outliner structure | 大纲结构"
+  order: 10
+  ignorable: False
+  description: "大纲里除了assembly Reference节点之外，不能有其他节点。"
+check_display_layer:
+  name: "display layer | 显示层"
+  order: 20
+  ignorable: False
+  description: "不能有显示层的存在"
+check_save_file:
+  name: "Save file | 保存文件"
+  order: 30
+  ignorable: True
+  description: "保存检查后的文件"
