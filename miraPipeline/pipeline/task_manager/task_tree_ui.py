@@ -4,6 +4,43 @@
 
 from PySide.QtGui import *
 from PySide.QtCore import *
+import re
+
+
+class TaskTreeProxyModel(QSortFilterProxyModel):
+    def __init__(self, parent=None):
+        super(TaskTreeProxyModel, self).__init__(parent)
+        self.name_regexp = ''
+        self.setDynamicSortFilter(True)
+        # self.setFilterCaseSensitivity(Qt.CaseInsensitive)
+
+    def filterAcceptsRow(self, source_row, source_parent):
+        model = self.sourceModel()
+        index = model.index(source_row, 0, source_parent)
+        for i in range(model.rowCount(index)):
+            if self.filterAcceptsRow(i, index):
+                return True
+
+        if model.rowCount(index) == 0:
+            item = model.data(index, Qt.DisplayRole)
+            if not len(self.name_regexp):
+                return True
+            else:
+                # print self.name_regexp
+                # print ' '.join(item.tags+item.materialTags)
+                pattern = re.compile(self.name_regexp)
+                match = pattern.findall(item)
+                if match:
+                    return True
+                else:
+                    return False
+        else:
+            return False
+
+    def set_name_filter(self, regexp):
+        self.name_regexp = '.*' + regexp + '.*'
+        self.name_regexp = self.name_regexp if regexp else ""
+        self.invalidateFilter()
 
 
 class TaskTreeModel(QAbstractItemModel):
@@ -95,7 +132,11 @@ class TaskTreeView(QTreeView):
 
         self.assetModel = TaskTreeModel(None)
         self.shotModel = TaskTreeModel(None)
-        self.setModel(self.assetModel)
+
+        self.proxyModel = TaskTreeProxyModel()
+        self.proxyModel.setSourceModel(self.assetModel)
+
+        self.setModel(self.proxyModel)
 
         '''init data'''
         self.__project = ''
@@ -131,6 +172,17 @@ class TaskWidget(QWidget):
         asset_shot = QRadioButton('Shot')
         asset_shot.setFocusPolicy(Qt.NoFocus)
 
+        self.__filter_line = QLineEdit()
+        self.__filter_line.setFocus()
+        self.__filter_line.setStyleSheet('QLineEdit {background-image:url(search.ico);background-repeat: no-repeat;'
+                                         'background-position: right}')
+        self.__filter_line.setValidator(QRegExpValidator(QRegExp('[a-zA-Z0-9]+')))
+        self.__filter_line.setAlignment(Qt.AlignBottom | Qt.AlignLeft)
+        # self.__filter_suffix_line.setContentsMargins(100, 0, 0, 0)
+        # self.__filter_suffix_line.setMaximumHeight(5)
+        self.__filter_line.textEdited.connect(self.__change_filter)
+        self.__filter_line.setPlaceholderText('Search.. \"(*)\"')
+
         self.mode_bg.addButton(asset_radio, 1)
         self.mode_bg.addButton(asset_shot, 2)
 
@@ -140,6 +192,7 @@ class TaskWidget(QWidget):
         main_layout.addWidget(task_grp)
         radio_layout.addWidget(asset_radio)
         radio_layout.addWidget(asset_shot)
+        radio_layout.addWidget(self.__filter_line)
         tree_layout.addWidget(self.treeView)
 
         '''add layout'''
@@ -150,11 +203,9 @@ class TaskWidget(QWidget):
         self.mode_bg.buttonClicked.connect(self.__set_view)
 
     def set_data(self, data):
-        print 'set_data'
         self.__assetData = data
 
     def set_project(self, project):
-        print 'set_project'
         self.__project = project
         self.treeView.set_project(project)
         asset_root = self.__assetData.asset_root[project]
@@ -164,16 +215,25 @@ class TaskWidget(QWidget):
         self.__set_view()
 
     def __set_view(self):
-        print 'set_view'
         mode = self.mode_bg.checkedId()
         if mode == 1:
-            self.treeView.setModel(self.treeView.assetModel)
+            # self.treeView.setModel(self.treeView.assetModel)
+            self.treeView.proxyModel.setSourceModel(self.treeView.assetModel)
         elif mode == 2:
-            self.treeView.setModel(self.treeView.shotModel)
+            # self.treeView.setModel(self.treeView.shotModel)
+            self.treeView.proxyModel.setSourceModel(self.treeView.shotModel)
         else:
             pass
         self.__parent.change_task()
 
+    def __change_filter(self):
+        self.treeView.proxyModel.set_name_filter(self.__filter_line.text())
+
 if __name__ == "__main__":
-    pass
+    import sys
+    app = QApplication(sys.argv)
+    tm = TaskWidget()
+    # tm.set_data(self.__taskObject)
+    tm.show()
+    app.exec_()
 

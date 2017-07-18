@@ -12,6 +12,7 @@ from PySide.QtCore import *
 
 # import maya.utils as utils
 import sys
+import os
 import task_tree_ui
 import task_file_list_ui
 import task_object
@@ -38,7 +39,7 @@ class TaskManager(QDialog):
         super(TaskManager, self).__init__(parent)
         self.setWindowFlags(Qt.Window)
         self.setWindowTitle('Task Manager')
-        self.setMinimumSize(800, 600)
+        self.setMinimumSize(1600, 600)
         self.setStyleSheet("font-family: DesiredFont;")
         # self.setChildrenCollapsible(False)
         # self.setFrameShape(QFrame.StyledPanel)
@@ -46,6 +47,8 @@ class TaskManager(QDialog):
         '''init data'''
         self.__show_thread = CollectThread(task_object.TaskObject())
         self.__taskObject = None
+        self.__workarea_path = ''
+        self.__publish_path = ''
 
         '''create layout'''
         main_layout = QVBoxLayout(self)
@@ -83,7 +86,7 @@ class TaskManager(QDialog):
 
         main_splitter.addWidget(self.__task_tree)
         main_splitter.addWidget(self.__task_file)
-        main_splitter.setSizes([self.width() * 0.33, self.width() * 0.67])
+        main_splitter.setSizes([self.width() * 0.2, self.width() * 0.8])
 
         sub_layout.addWidget(main_splitter)
 
@@ -96,7 +99,6 @@ class TaskManager(QDialog):
         if not data:
             return
 
-        print data
         self.__taskObject = data
         self.__task_tree.set_data(self.__taskObject)
         self.__project_combo.addItems(self.__taskObject.projects)
@@ -112,12 +114,21 @@ class TaskManager(QDialog):
         print 'change_task', self
 
     def __path_change(self):
-        node = self.__task_tree.treeView.selectionModel().currentIndex().internalPointer()
-        print node.name
-        # if self.__category_path != path:
-        #     self.__category_path = path
-        #
-        #     self.__gallery.set_path(path)
+        selection = self.__task_tree.treeView.selectionModel()
+        index = selection.currentIndex()
+        node = selection.model().mapToSource(index).internalPointer()
+
+        # print node.name
+
+        if self.__workarea_path != node.workarea:
+            self.__workarea_path = node.workarea
+            if os.path.isdir(self.__workarea_path):
+                self.__task_file.set_workarea(self.__workarea_path)
+
+        if self.__publish_path != node.publish:
+            self.__publish_path = node.publish
+            if os.path.isdir(self.__publish_path):
+                self.__task_file.set_publish(self.__publish_path)
 
 
 def main():

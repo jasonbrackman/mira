@@ -3,8 +3,8 @@
 # __author__ = 'Arthur|http://wingedwhitetiger.com/'
 
 from miraLibs.dbLibs import db_api
-from miraLibs.pipeLibs import pipeMira, get_current_project, pipeFile
-
+from miraLibs.pipeLibs import pipeMira, pipeFile #get_current_project,
+reload(pipeMira)
 import task_assets_object
 reload(task_assets_object)
 
@@ -29,13 +29,10 @@ class TaskObject(object):
             self.set_project(per_project)
 
     def set_project(self, project):
-        print 'set_project'
         self.project = project
-        try:
-            self.asset_type[project] = pipeMira.get_studio_value(self.project, "asset_type")
-        except:
+        self.asset_type[project] = pipeMira.get_studio_value(self.project, "asset_type")
+        if self.asset_type[project] is None:
             self.assets[self.project] = {}
-            raise Exception("Invalid Project!")
         else:
             try:
                 self.__connect_db(project)
