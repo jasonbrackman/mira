@@ -1,14 +1,23 @@
 # -*- coding: utf-8 -*-
 import optparse
 import logging
+import maya.cmds as mc
+from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import save_as, quit_maya
 
 
 def main():
     logger = logging.getLogger("Group start")
     # copy low mdl publish file as mdl file
-    save_as.save_as(options.file)
-    logger.info("%s publish successful!" % options.file)
+    file_path = options.file
+    context = pipeFile.PathDetails.parse_path(file_path)
+    asset_name = context.asset_name
+    asset_type_short_name = context.asset_type_short_name
+    model_name = "%s_%s_MODEL" % (asset_type_short_name, asset_name)
+    # create default group
+    mc.group(name=model_name, empty=1)
+    save_as.save_as(file_path)
+    logger.info("%s publish successful!" % file_path)
     quit_maya.quit_maya()
 
 
