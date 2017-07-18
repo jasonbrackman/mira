@@ -3,11 +3,11 @@ check_display_wireframe:
   order: 0
   ignorable: False
   description: "以线框显示保存文件"
-check_group_structure:
-  name: "outliner structure | 大纲结构"
-  order: 10
+check_mdl_something_selected:
+  name: "Something Selected | 选中模型大组"
+  order: 20
   ignorable: False
-  description: "大纲里除了assembly Reference节点之外，不能有其他节点。"
+  description: "选中模型大组"
 check_display_layer:
   name: "display layer | 显示层"
   order: 20
