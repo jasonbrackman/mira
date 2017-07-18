@@ -10,6 +10,7 @@ from miraLibs.pyLibs import Path, join_path
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.deadlineLibs import submit
 from miraLibs.qtLibs import render_ui
+import getpass
 
 
 class TaskPublish(QDialog):
@@ -105,9 +106,9 @@ class TaskPublish(QDialog):
         change_status = self.task_status_check.isChecked()
         # work_file, change_task
         argv = "%s %s" % (self.work_file, change_status)
-        submitter = u'pipemanager'
-        tar_name = u'pipemanager'
-        submit.submit_python_job(deadline_job_name, publish_script_path, argv, submitter, tar_name)
+        submitter = getpass.getuser()
+        tar_name = 'pipemanager'
+        submit.submit_python_job(deadline_job_name, publish_script_path, argv, tar_name, submitter)
         QMessageBox.information(self, "Warming Tip", "%s submit done." % task_name)
 
 
