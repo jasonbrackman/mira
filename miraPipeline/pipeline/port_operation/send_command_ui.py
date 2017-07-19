@@ -10,7 +10,7 @@ from Qt.QtGui import *
 import run_send_command
 from CommandOperation import CommandOperation
 from configure_command import ConfigureCommand
-from miraFramework.Filter import ButtonLineEdit
+from miraFramework.Filter import Filter
 from miraLibs.osLibs import get_local_ip
 from miraLibs.pyLibs import ConfParser
 from miraLibs.pyLibs.socketLibs import ping_quick
@@ -182,7 +182,7 @@ class SendCommandUI(QMainWindow):
         user_info_grp = QGroupBox("User Info")
         user_info_layout = QVBoxLayout(user_info_grp)
         filter_layout = QHBoxLayout()
-        self.filter_le = ButtonLineEdit()
+        self.filter_le = Filter()
         self.user_count_label = QLabel()
         filter_layout.addWidget(self.user_count_label)
         filter_layout.addStretch()

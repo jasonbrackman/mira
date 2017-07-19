@@ -4,7 +4,7 @@ from Qt.QtCore import *
 from Qt.QtGui import *
 from get_icon import get_icon
 import miraCore
-from miraFramework.Filter import ButtonLineEdit
+from miraFramework.Filter import Filter
 from miraLibs.pyLibs import join_path
 
 
@@ -22,7 +22,7 @@ class ReplaceUI(QDialog):
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         proxy_filter_layout = QHBoxLayout()
-        self.filter_le = ButtonLineEdit()
+        self.filter_le = Filter()
         proxy_filter_layout.addStretch()
         proxy_filter_layout.addWidget(self.filter_le)
         self.update_btn = QToolButton()

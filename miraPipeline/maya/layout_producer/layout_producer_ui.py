@@ -2,7 +2,7 @@
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
-from miraFramework.Filter import ButtonLineEdit
+from miraFramework.Filter import Filter
 from miraLibs.pyLibs import join_path
 import miraCore
 
@@ -84,7 +84,7 @@ class LayoutProducerUI(QDialog):
         self.low_check.setChecked(True)
         namespace_label = QLabel("namespace")
         self.name_space_cbox = QComboBox()
-        self.filter_le = ButtonLineEdit()
+        self.filter_le = Filter()
         self.update_btn = QToolButton()
         icon_path = join_path.join_path2(miraCore.get_icons_dir(), "update.png")
         self.update_btn.setIcon(QIcon(icon_path))

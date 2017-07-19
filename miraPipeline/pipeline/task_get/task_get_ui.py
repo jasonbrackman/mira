@@ -3,8 +3,9 @@ import os
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
-from miraFramework.Filter import ButtonLineEdit
+from miraFramework.Filter import Filter
 from miraFramework.refresh_btn import RefreshButton
+from miraFramework.combo import ProjectCombo
 from miraLibs.osLibs import FileOpener
 from miraLibs.pyLibs import start_file
 from miraLibs.osLibs import get_engine
@@ -113,7 +114,7 @@ class TaskGetUI(QDialog):
         project_layout = QHBoxLayout()
         project_label = QLabel("Project")
         project_label.setFixedWidth(50)
-        self.project_cbox = QComboBox()
+        self.project_cbox = ProjectCombo()
         project_layout.addWidget(project_label)
         project_layout.addWidget(self.project_cbox)
 
@@ -123,7 +124,7 @@ class TaskGetUI(QDialog):
         my_task_widget = QWidget()
         task_widget.addTab(my_task_widget, "My Tasks")
         my_task_layout = QVBoxLayout(my_task_widget)
-        self.filter_le = ButtonLineEdit()
+        self.filter_le = Filter()
         mid_layout = QHBoxLayout()
         self.final_checkbox = QCheckBox("Delivered")
         self.final_checkbox.setChecked(False)

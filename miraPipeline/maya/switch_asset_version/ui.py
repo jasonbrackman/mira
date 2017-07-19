@@ -2,7 +2,7 @@
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
-from miraFramework.Filter import ButtonLineEdit
+from miraFramework.Filter import Filter
 import miraCore
 from miraLibs.pyLibs import join_path
 
@@ -24,7 +24,7 @@ class ReplaceAssetUI(QDialog):
         self.select_check = QCheckBox("Select in Maya")
         self.select_check.setChecked(True)
 
-        self.filter_le = ButtonLineEdit()
+        self.filter_le = Filter()
         self.filter_le.setPlaceholderText("Search...")
         self.update_btn = QToolButton()
         icon_path = join_path.join_path2(miraCore.get_icons_dir(), "update.png")

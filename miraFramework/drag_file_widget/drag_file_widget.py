@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from Qt.QtWidgets import *
-from press_label import PressLabel
-from FileListWidget import FileListWidget
+
+from miraFramework.drag_file_widget.FileListWidget import FileListWidget
+from miraFramework.drag_file_widget.press_label import PressLabel
 
 
 class DragFileWidget(QWidget):

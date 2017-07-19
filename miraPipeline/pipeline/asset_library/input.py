@@ -6,7 +6,7 @@ from Qt.QtGui import *
 import add_environ
 from asset_library_libs.get_conf_data import get_conf_data
 from asset_library_libs.get_engine import get_engine
-from asset_library_frameworks.Filter import ButtonLineEdit
+from asset_library_frameworks.Filter import Filter
 from asset_library_libs.get_icon_dir import get_icon_dir
 
 
@@ -195,7 +195,7 @@ class Input(QWidget):
         category_layout.addWidget(self.category_cbox)
 
         filter_layout = QHBoxLayout()
-        self.filter_le = ButtonLineEdit()
+        self.filter_le = Filter()
         self.filter_le.setPlaceholderText("Search...")
         self.update_btn = QToolButton()
         icon_path = os.path.join(get_icon_dir(), "update.png").replace("\\", "/")
