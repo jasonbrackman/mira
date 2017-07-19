@@ -10,6 +10,7 @@ from miraLibs.pyLibs import Path, join_path
 from miraLibs.pipeLibs import pipeFile, get_engine_from_step
 from miraLibs.deadlineLibs import submit
 from miraLibs.qtLibs import render_ui
+from miraLibs.pipeLibs import pipeMira
 
 
 class TaskStart(QDialog):
@@ -36,8 +37,6 @@ class TaskStart(QDialog):
         bottom_layout.addWidget(self.path_btn)
 
         btn_layout = QHBoxLayout()
-        self.task_status_check = QCheckBox("Change task status to final")
-        self.task_status_check.setChecked(True)
         self.start_btn = QPushButton("Start")
         btn_layout.addStretch()
         btn_layout.addWidget(self.start_btn)
@@ -64,6 +63,12 @@ class TaskStart(QDialog):
     def task_info(self):
         return self.common_widget.task_info
 
+    def can_publish(self, project, entity_type, asset_type_or_sequence, asset_or_shot, step, task, engine):
+        file_path = pipeFile.get_task_work_file(project, entity_type, asset_type_or_sequence,
+                                                asset_or_shot, step, task, "000", engine)
+        self.path_le.setText(file_path)
+        self.start_btn.setEnabled(True)
+
     def show_path(self):
         project = self.common_widget.project
         entity_type = self.common_widget.entity_type
@@ -74,10 +79,23 @@ class TaskStart(QDialog):
         engine = get_engine_from_step.get_engine_from_step(step)
         if not all((asset_type_or_sequence, asset_or_shot, step, task)):
             return
-        file_path = pipeFile.get_task_work_file(project, entity_type, asset_type_or_sequence,
-                                                asset_or_shot, step, task, "000", engine)
-
-        self.path_le.setText(file_path)
+        up_step_data = pipeMira.get_studio_value(project, "up_step")
+        up_steps = up_step_data.get(step)
+        if up_steps:
+            up_step_published = True
+            for up_step in up_steps:
+                publish_file = pipeFile.get_task_publish_file(project, entity_type, asset_type_or_sequence,
+                                                              asset_or_shot, up_step, up_step, "", engine)
+                if not publish_file or not os.path.isfile(publish_file):
+                    up_step_published = False
+                    break
+            if up_step_published:
+                self.can_publish(project, entity_type, asset_type_or_sequence, asset_or_shot, step, task, engine)
+            else:
+                self.path_le.setText(u"上一环节没有publish")
+                self.start_btn.setDisabled(True)
+        else:
+            self.can_publish(project, entity_type, asset_type_or_sequence, asset_or_shot, step, task, engine)
 
     def open_dir(self):
         path = self.path_le.text()
