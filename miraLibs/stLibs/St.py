@@ -130,8 +130,12 @@ class St(object):
         entity_info = self.get_entity_info(entity_type, asset_type_or_sequence, asset_or_shot)
         entity_id = entity_info.get("id")
         task_filters = "item_id=%s and step_id=%s and name=%s" % (entity_id, step_id, task_name)
-        task_info = self.st.task.find(filters=task_filters, fields=["custom"])
+        task_info = self.st.task.find(filters=task_filters, fields=["custom", "status.color", "status.name"])
         return task_info
+
+    def get_status_color(self, status_id):
+        step_info = self.st.step.find("id=%s" % status_id, ["color"])
+        return step_info.get("color")
 
     def get_current_user(self):
         import getpass
@@ -223,19 +227,5 @@ if __name__ == "__main__":
     st = St("SnowKidTest")
     # file_path = "W:/SnowKidTest/workarea/assets/Prop/TdTest/MidMdl/MidMdl/_workarea/maya/SnowKidTest_TdTest_MidMdl_MidMdl_v004.ma"
     # media_path = "W:/SnowKidTest/workarea/assets/Prop/TdTest/MidMdl/MidMdl/_video/maya/SnowKidTest_TdTest_MidMdl_MidMdl_v002.mov"
-    # version = st.st.version.create(data={"task_id": 10, "path": {"file": "file_path", "media": "media_path"}})
-    # st.st.version.update(version.get("id"), {"user_id": st.user_id})
-    # print st.st.version.find(filters="id=190", fields=["created", "user_id"])
-    # print st.st.user.find("name=heshuai")
-    # print st.st.user.fields
-    # print st.user_id
-    # help(st.st.version.update)
-    # print st.st.version.fields
-    # print st.get_my_tasks()
-    # print st.st.task.relations
-    # print st.st.task.find("id=7", ["priority"])
-    # print st.st.priority.fields
-    # print st.st.task.fields
-    # print st.st.asset.relations
-    # print st.st.web_url
-    # print st.st.asset.find("id=100", ["thumbnail"])
+    print st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")
+

@@ -37,10 +37,14 @@ class TaskPublish(QDialog):
         bottom_layout.addWidget(self.path_btn)
 
         btn_layout = QHBoxLayout()
+        status_label = QLabel("Task Status: ")
+        self.task_status_label = QLabel()
         self.task_status_check = QCheckBox("Change task status to Delivered")
         self.task_status_check.setChecked(True)
         self.publish_btn = QPushButton("Publish")
         self.publish_btn.setEnabled(False)
+        btn_layout.addWidget(status_label)
+        btn_layout.addWidget(self.task_status_label)
         btn_layout.addStretch()
         btn_layout.addWidget(self.task_status_check)
         btn_layout.addWidget(self.publish_btn)
@@ -69,13 +73,18 @@ class TaskPublish(QDialog):
         return self.common_widget.task_info
 
     def show_path(self):
-        if not self.task_info:
+        task_info = self.task_info
+        if not task_info:
             self.path_le.setText("")
+            self.task_status_label.setText("")
         else:
             # sg
             # work_file_path = self.task_info["sg_workfile"]
             # st
-            file_path = self.task_info.get("file_path")
+            status_color = task_info.get("status").get("color")
+            status_name = task_info.get("status").get("name")
+            self.task_status_label.setText("<font color=%s><b>%s</b></font>" % (status_color, status_name))
+            file_path = task_info.get("file_path")
             file_path = file_path.replace("&quot;", '"')
             work_file_path = json.loads(file_path).get("work_file_path")
             if work_file_path:
