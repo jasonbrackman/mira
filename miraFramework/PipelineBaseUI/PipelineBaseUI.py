@@ -3,8 +3,8 @@ from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
 
-BACKGROUND_ICON_PATH = os.path.join(os.path.dirname(__file__), "title.png").replace("\\", "/")
-ICON_PATH = os.path.join(os.path.dirname(__file__), "smile.png").replace("\\", "/")
+BACKGROUND_ICON_PATH = os.path.join(os.path.dirname(__file__), "bg.png").replace("\\", "/")
+ICON_PATH = os.path.join(os.path.dirname(__file__), "logo.png").replace("\\", "/")
 TITLE_HEIGHT = 45
 
 

@@ -6,10 +6,10 @@ import miraCore
 from miraLibs.pyLibs import join_path
 
 
-class ButtonLineEdit(QLineEdit):
+class Filter(QLineEdit):
 
     def __init__(self, icon_file=None, parent=None):
-        super(ButtonLineEdit, self).__init__(parent)
+        super(Filter, self).__init__(parent)
 
         self.icon_file = icon_file
         if not self.icon_file:
@@ -35,7 +35,7 @@ class ButtonLineEdit(QLineEdit):
         frame_width = self.style().pixelMetric(QStyle.PM_DefaultFrameWidth)
         self.button.move(self.rect().right() - frame_width - button_size.width(),
                          (self.rect().bottom() - button_size.height() + 1)/2)
-        super(ButtonLineEdit, self).resizeEvent(event)
+        super(Filter, self).resizeEvent(event)
 
 
 if __name__ == "__main__":

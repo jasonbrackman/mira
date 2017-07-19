@@ -2,7 +2,7 @@
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
-from miraFramework.Filter import ButtonLineEdit
+from miraFramework.Filter import Filter
 from miraLibs.pyLibs import join_path
 import miraCore
 
@@ -16,7 +16,7 @@ class SinglePublishUI(QDialog):
         # filter layout
         filter_layout = QHBoxLayout()
         filter_layout.addStretch()
-        self.filter_le = ButtonLineEdit()
+        self.filter_le = Filter()
         filter_layout.addWidget(self.filter_le)
         self.update_btn = QToolButton()
         icon_path = join_path.join_path2(miraCore.get_icons_dir(), "update.png")

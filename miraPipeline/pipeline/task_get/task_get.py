@@ -256,23 +256,22 @@ class TaskGet(task_get_ui.TaskGetUI):
         self.resize(900, 700)
         self.setObjectName("TaskGet")
         self.__logger = logging.getLogger("TaskGet")
-        self.__project = get_current_project.get_current_project()
         self.__run_app = get_engine.get_engine()
-        self.__db = db_api.DbApi(self.__project).db_obj
+        self.__db = db_api.DbApi(self.project).db_obj
         self.init()
         self.set_style()
         self.set_model()
         self.set_signals()
+
+    @property
+    def project(self):
+        return self.project_cbox.currentText()
 
     def init(self):
         self.task_view.setSortingEnabled(True)
         self.task_view.setFocusPolicy(Qt.NoFocus)
         self.task_view.setSelectionMode(QAbstractItemView.SingleSelection)
         self.task_view.header().hide()
-        # init project
-        projects = pipeMira.get_projects()
-        self.project_cbox.addItems(projects)
-        self.project_cbox.setCurrentIndex(self.project_cbox.findText(self.__project))
 
     def set_style(self):
         if self.__run_app != "python":
@@ -291,7 +290,7 @@ class TaskGet(task_get_ui.TaskGetUI):
         self.refresh_btn.clicked.connect(self.refresh)
 
     def on_project_changed(self, text):
-        self.__project = text
+        self.project = text
         self.refresh()
 
     def refresh(self):
@@ -359,7 +358,7 @@ class TaskGet(task_get_ui.TaskGetUI):
                     task_name = task["content"]
                     status = task["sg_status_list"]
                     priority = task["sg_priority_1"]
-                    asset_node = AssetNode(self.__project, asset_name, step, task_name, status, priority, asset_type_node)
+                    asset_node = AssetNode(self.project, asset_name, step, task_name, status, priority, asset_type_node)
                 else:
                     sequence_names = [node.name for node in sequence_nodes]
                     sequence_name = task["entity.Shot.sg_sequence"]["name"]
@@ -373,7 +372,7 @@ class TaskGet(task_get_ui.TaskGetUI):
                     task_name = task["content"]
                     status = task["sg_status_list"]
                     priority = task["sg_priority_1"]
-                    shot_node = ShotNode(self.__project, shot, step, task_name, status, priority, sequence_node)
+                    shot_node = ShotNode(self.project, shot, step, task_name, status, priority, sequence_node)
         elif self.__db.typ == "strack":
             entity_types = [self.__db.get_task_entity_type(task) for task in my_tasks]
             entity_types = list(set(entity_types))
@@ -399,7 +398,7 @@ class TaskGet(task_get_ui.TaskGetUI):
                         asset_type_nodes.append(asset_type_node)
                     else:
                         asset_type_node = [node for node in asset_type_nodes if node.name == asset_type_name][0]
-                    asset_node = AssetNode(self.__project, task_entity_name, step, task_name, status, priority, asset_type_node)
+                    asset_node = AssetNode(self.project, task_entity_name, step, task_name, status, priority, asset_type_node)
                 else:
                     sequence_names = [node.name for node in sequence_nodes]
                     sequence_name = self.__db.get_sequence_by_shot_id(task_entity_id)
@@ -408,10 +407,10 @@ class TaskGet(task_get_ui.TaskGetUI):
                         sequence_nodes.append(sequence_node)
                     else:
                         sequence_node = [node for node in sequence_nodes if node.name == sequence_name][0]
-                    shot_node = ShotNode(self.__project, task_entity_name, step, task_name, status, priority, sequence_node)
+                    shot_node = ShotNode(self.project, task_entity_name, step, task_name, status, priority, sequence_node)
 
         self.proxy_model = LeafFilterProxyModel()
-        self.model = AssetTreeModel(self.root_node, self.__project)
+        self.model = AssetTreeModel(self.root_node, self.project)
         self.proxy_model.setSourceModel(self.model)
         self.task_view.setModel(self.proxy_model)
         self.task_view.expandAll()
@@ -439,9 +438,9 @@ class TaskGet(task_get_ui.TaskGetUI):
         asset_name_shot = node.name.split("_")[-1]
         step = node.step
         task = node.task
-        local_file = pipeFile.get_task_work_file(self.__project, entity_type, asset_type_sequence, asset_name_shot, step, task, "000", local=True)
-        work_file = pipeFile.get_task_work_file(self.__project, entity_type, asset_type_sequence, asset_name_shot, step, task, "000")
-        publish_file = pipeFile.get_task_publish_file(self.__project, entity_type, asset_type_sequence, asset_name_shot, step, task, "000")
+        local_file = pipeFile.get_task_work_file(self.project, entity_type, asset_type_sequence, asset_name_shot, step, task, "000", local=True)
+        work_file = pipeFile.get_task_work_file(self.project, entity_type, asset_type_sequence, asset_name_shot, step, task, "000")
+        publish_file = pipeFile.get_task_publish_file(self.project, entity_type, asset_type_sequence, asset_name_shot, step, task, "000")
         local_dir = os.path.dirname(os.path.dirname(local_file))
         work_dir = os.path.dirname(os.path.dirname(work_file))
         publish_dir = os.path.dirname(os.path.dirname(publish_file))
@@ -454,7 +453,7 @@ class TaskGet(task_get_ui.TaskGetUI):
         self.publish_file_widget.set_dir(publish_dir)
 
     def closeEvent(self, event):
-        pipeHistory.set("currentProject", self.__project)
+        pipeHistory.set("currentProject", self.project)
 
 
 def main():

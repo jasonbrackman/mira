@@ -7,10 +7,10 @@ from Qt.QtGui import *
 from ..asset_library_libs.get_icon_dir import get_icon_dir
 
 
-class ButtonLineEdit(QLineEdit):
+class Filter(QLineEdit):
 
     def __init__(self, parent=None):
-        super(ButtonLineEdit, self).__init__(parent)
+        super(Filter, self).__init__(parent)
 
         icon_dir = get_icon_dir()
         self.icon_file = os.path.join(icon_dir, "search.png").replace("\\", "/")
@@ -34,7 +34,7 @@ class ButtonLineEdit(QLineEdit):
         frame_width = self.style().pixelMetric(QStyle.PM_DefaultFrameWidth)
         self.button.move(self.rect().right() - frame_width - button_size.width(),
                          (self.rect().bottom() - button_size.height() + 1)/2)
-        super(ButtonLineEdit, self).resizeEvent(event)
+        super(Filter, self).resizeEvent(event)
 
 
 if __name__ == "__main__":

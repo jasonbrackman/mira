@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from Qt.QtWidgets import *
 from Qt.QtCore import *
-from Qt.QtGui import *
 import miraCore
-from Filter import ButtonLineEdit
+from miraFramework.Filter import Filter
+from miraFramework.combo import ProjectCombo
 from miraLibs.pyLibs import join_path
 from miraLibs.pipeLibs import pipeMira, get_current_project
 from miraLibs.dbLibs import db_api
@@ -124,7 +124,7 @@ class CommonWidget(QWidget):
 
         icon_dir = miraCore.get_icons_dir()
         icon_path = join_path.join_path2(icon_dir, "search.png")
-        self.filter_le = ButtonLineEdit(icon_path)
+        self.filter_le = Filter(icon_path)
 
         self.list_view = ListView()
         group_layout.addWidget(self.filter_le)
@@ -183,7 +183,7 @@ class CommonForm(QWidget):
         project_layout = QHBoxLayout()
         project_label = QLabel("Project")
         project_label.setFixedWidth(70)
-        self.project_cbox = QComboBox()
+        self.project_cbox = ProjectCombo()
         project_layout.addWidget(project_label)
         project_layout.addWidget(self.project_cbox)
 

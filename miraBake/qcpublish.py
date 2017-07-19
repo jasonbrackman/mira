@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
-import os
 import logging
+import os
 import sys
-from Qt.QtWidgets import *
-from Qt.QtCore import *
-from Qt.QtGui import *
-import miraCore
-from miraLibs.pyLibs import join_path
-from miraLibs.pipeLibs import pipeFile
-from miraPipeline.pipeline.preflight import check_gui
-from miraLibs.pipeLibs.pipeMaya import screen_shot
-from miraLibs.mayaLibs import get_maya_win, save_as
-from miraLibs.pipeLibs.copy import Copy
-from miraFramework.FileListWidget import FileListWidget
 
+from Qt.QtWidgets import *
+
+import miraCore
+from miraFramework.drag_file_widget.FileListWidget import FileListWidget
+from miraLibs.mayaLibs import get_maya_win, save_as
+from miraLibs.pipeLibs import pipeFile
+from miraLibs.pipeLibs.copy import Copy
+from miraLibs.pipeLibs.pipeMaya import screen_shot
+from miraLibs.pyLibs import join_path
+from miraPipeline.pipeline.preflight import check_gui
 
 maya_window = get_maya_win.get_maya_win()
 logger = logging.getLogger(__name__)

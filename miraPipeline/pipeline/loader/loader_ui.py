@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from Qt.QtWidgets import *
 from Qt.QtCore import *
-from miraFramework.Filter import ButtonLineEdit
+from miraFramework.Filter import Filter
 from miraFramework.waiting import Waiting
+from miraFramework.combo import ProjectCombo
 
 
 class ThumbListView(QListView):
@@ -36,7 +37,7 @@ class LoaderUI(QMainWindow):
         project_layout.setContentsMargins(0, 0, 0, 0)
         project_label = QLabel("Project")
         project_label.setFixedWidth(50)
-        self.project_cbox = QComboBox()
+        self.project_cbox = ProjectCombo()
         project_layout.addWidget(project_label)
         project_layout.addWidget(self.project_cbox)
 
@@ -54,7 +55,7 @@ class LoaderUI(QMainWindow):
         self.entity_tab.addTab(shot_widget, "Shot")
 
         filter_layout = QHBoxLayout()
-        self.filter_le = ButtonLineEdit()
+        self.filter_le = Filter()
         filter_layout.addStretch()
         filter_layout.addWidget(self.filter_le)
 

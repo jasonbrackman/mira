@@ -10,7 +10,7 @@ import miraCore
 from miraLibs.pipeLibs.pipeMaya import get_asset_names, get_current_project, lgt_assign_shader_deformed
 reload(lgt_assign_shader_deformed)
 from miraLibs.mayaLibs import get_maya_win, replace_reference
-from miraFramework.Filter import ButtonLineEdit
+from miraFramework.Filter import Filter
 from miraLibs.pyLibs import join_path
 from miraLibs.pipeLibs import pipeFile
 
@@ -115,7 +115,7 @@ class SwitchShader(QDialog):
         main_layout.setContentsMargins(4, 4, 4, 4)
 
         self.filter_layout = QHBoxLayout()
-        self.filter_le = ButtonLineEdit()
+        self.filter_le = Filter()
         self.filter_layout.addStretch()
         self.filter_layout.addWidget(self.filter_le)
         self.update_btn = QToolButton()
