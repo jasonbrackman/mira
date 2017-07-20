@@ -3,19 +3,17 @@ import os
 import sys
 import imp
 import optparse
+import miraCore
 from miraLibs.pipeLibs import pipeFile
-
-
-def get_start_dir():
-    start_dir = os.path.dirname(sys.argv[0])
-    return start_dir
 
 
 def main():
     file_name = options.file
     context = pipeFile.PathDetails.parse_path(file_name)
     step = context.step
-    start_dir = get_start_dir()
+    engine = context.engine
+    pipeline_dir = miraCore.get_pipeline_dir()
+    start_dir = os.path.join(pipeline_dir, engine, "start")
     fn_, path, desc = imp.find_module(step, [start_dir])
     mod = imp.load_module(step, fn_, path, desc)
     mod.main(file_name)
