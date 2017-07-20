@@ -124,7 +124,6 @@ def submit_maya_script_job(deadline_name,
 
 def load_yaml():
     yml_path = os.path.abspath(os.path.join(__file__, '..\deadline.yml'))
-    print yml_path
     if os.path.isfile(yml_path):
         with open(yml_path) as f:
             return yaml.load(f)['Command']

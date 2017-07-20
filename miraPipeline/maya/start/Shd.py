@@ -13,7 +13,7 @@ def main():
     entity_type = context.entity_type
     asset_type = context.asset_type
     asset_name = context.asset_name
-    mdl_publish_file = pipeFile.get_asset_task_publish_file(project, entity_type, asset_type, asset_name, "HighMdl", "HighMdl")
+    mdl_publish_file = pipeFile.get_task_publish_file(project, entity_type, asset_type, asset_name, "HighMdl", "HighMdl")
     if not os.path.isfile(mdl_publish_file):
         logger.warning("No model file published.")
         quit_maya.quit_maya()
