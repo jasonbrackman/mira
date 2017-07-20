@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import os
+import sys
 import imp
 import optparse
 from miraLibs.pipeLibs import pipeFile
 
 
 def get_start_dir():
-    start_dir = os.path.dirname(__file__)
+    start_dir = os.path.dirname(sys.argv[0])
     return start_dir
 
 
