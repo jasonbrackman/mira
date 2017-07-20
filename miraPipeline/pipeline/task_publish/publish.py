@@ -22,7 +22,7 @@ class Publish(object):
     def get_publish_py(self):
         pipeline_dir = miraCore.get_pipeline_dir()
         publish_dir = join_path.join_path2(pipeline_dir, self.engine, "publish")
-        publish_py = join_path.join_path2(publish_dir, "%s_publish.py" % self.context.step)
+        publish_py = join_path.join_path2(publish_dir, "publish.py")
         return publish_py
 
     def get_logger(self):
