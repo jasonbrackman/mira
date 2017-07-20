@@ -19,5 +19,6 @@ def main(file_name):
     logger.info("Export _MODEL group to publish done.")
     # generate AD file
     publish.create_ad(context)
+    logger.info("Create AD done.")
     # quit maya
     quit_maya.quit_maya()
