@@ -32,7 +32,7 @@ def main(file_name):
         rig_group_name = "Grp_Master_Ctl"
         create_group.create_group("Others", root_group_name)
         create_group.create_group("Geometry", root_group_name)
-        create_group.create_group(model_name, "Geometry")
+        create_group.create_group(model_name, blends_group)
     elif asset_type == "Prop":
         rig_group_name = "%s_%s_RIG" % (asset_type_short_name, asset_name)
         create_group.create_group(model_name, root_group_name)

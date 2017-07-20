@@ -7,7 +7,7 @@ from miraLibs.pipeLibs import pipeFile
 
 
 def main(file_name):
-    logger = logging.getLogger("mdl start")
+    logger = logging.getLogger("Hair start")
     # copy low mdl publish file as mdl file
     context = pipeFile.PathDetails.parse_path(file_name)
     project = context.project
