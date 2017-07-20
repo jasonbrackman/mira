@@ -21,7 +21,7 @@ def splash(func):
         result = func(*args, **kwargs)
         splash.close()
         try:
-            sys.exit(app.exec_())
+            app.exec_()
         except:pass
         return result
     return _wrapper
