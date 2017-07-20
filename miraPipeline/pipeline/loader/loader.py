@@ -52,6 +52,10 @@ class RunThread(QThread):
                                            asset_type=self.__asset_type_sequence,
                                            asset_name=entity_name, step=step, task=task, engine="maya")
             if not os.path.isfile(image_path):
+                image_path = format_str.format(primary=primary, project=self.__project,
+                                               asset_type=self.__asset_type_sequence,
+                                               asset_name=entity_name, step="Group", task="Group", engine="maya")
+            if not os.path.isfile(image_path):
                 image_path = join_path.join_path2(self.__image_dir, "unknown.png")
             self.__collect_data.append([entity_name, image_path])
         self.signal.emit(self.__collect_data)
