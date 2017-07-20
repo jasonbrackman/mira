@@ -22,11 +22,10 @@ COLUMN_WIDTH = 30
 
 def qcpublish(step):
     script_dir = miraCore.get_pipeline_dir()
-    publish_dir = join_path.join_path2(script_dir, "maya", "QCPublish")
-    if publish_dir not in sys.path:
-        sys.path.insert(0, publish_dir)
-    step_publish = "{0}_qcpublish".format(step)
-    cmd_text = "import {0}; reload({0}); {0}.main()".format(step_publish)
+    qcpublish_dir = join_path.join_path2(script_dir, "maya", "QCPublish")
+    if qcpublish_dir not in sys.path:
+        sys.path.insert(0, qcpublish_dir)
+    cmd_text = "import {0}; reload({0}); {0}.main()".format(step)
     exec(cmd_text)
 
 
