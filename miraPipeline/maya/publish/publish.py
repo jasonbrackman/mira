@@ -1,30 +1,25 @@
 # -*- coding: utf-8 -*-
 import os
-import logging
+import imp
 import optparse
+import miraCore
 from miraLibs.pipeLibs import pipeFile
-from miraLibs.mayaLibs import open_file, quit_maya
-from miraLibs.pipeLibs.pipeMaya import publish
 
 
-logger = logging.getLogger("MidMdl publish")
+def publish(file_name):
+    context = pipeFile.PathDetails.parse_path(file_name)
+    step = context.step
+    engine = context.engine
+    pipeline_dir = miraCore.get_pipeline_dir()
+    publish_dir = os.path.join(pipeline_dir, engine, "publish")
+    fn_, path, desc = imp.find_module(step, [publish_dir])
+    mod = imp.load_module(step, fn_, path, desc)
+    mod.main(file_name)
 
 
 def main():
-    file_path = options.file
-    open_file.open_file(file_path)
-    # get paths
-    context = pipeFile.PathDetails.parse_path()
-    publish.copy_image_and_video(context)
-    logger.info("copy image and video done.")
-    publish.export_need_to_publish(context)
-    logger.info("export to publish done.")
-    publish.export_model_to_abc(context)
-    logger.info("export to abc done")
-    publish.create_ad(context)
-    logger.info("create ad done")
-    # quit maya
-    quit_maya.quit_maya()
+    file_name = options.file
+    publish(file_name)
 
 
 if __name__ == "__main__":

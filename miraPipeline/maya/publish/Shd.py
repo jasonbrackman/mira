@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import optparse
 import logging
 import maya.cmds as mc
 from miraLibs.pipeLibs import pipeFile
@@ -40,12 +39,11 @@ def rename_shd_mat_node(context):
                 pass
 
 
-def main():
+def main(file_name):
     logger = logging.getLogger("shd publish")
-    file_path = options.file
-    open_file.open_file(file_path)
+    open_file.open_file(file_name)
     # get paths
-    context = pipeFile.PathDetails.parse_path(file_path)
+    context = pipeFile.PathDetails.parse_path(file_name)
     publish_path = context.publish_path
     # import all reference
     publish.reference_opt()
@@ -73,17 +71,3 @@ def main():
     publish.add_mesh_to_ad(context)
     logger.info("Add to AD done.")
     quit_maya.quit_maya()
-
-
-if __name__ == "__main__":
-    parser = optparse.OptionParser()
-    parser.add_option("-f", dest="file", help="maya file ma or mb.", metavar="string")
-    parser.add_option("-c", dest="command",
-                      help="Not a needed argument, just for mayabatch.exe, " \
-                           "if missing this setting, optparse would " \
-                           "encounter an error: \"no such option: -c\"",
-                      metavar="string")
-    options, args = parser.parse_args()
-    if len([i for i in ["file_name"] if i in dir()]) == 1:
-        options.file = file_name
-        main()
