@@ -5,7 +5,7 @@ check_display_wireframe:
   description: "以线框显示保存文件"
 check_mdl_something_selected:
   name: "Something Selected | 选中模型大组"
-  order: 20
+  order: 10
   ignorable: False
   description: "选中模型大组"
 check_display_layer:

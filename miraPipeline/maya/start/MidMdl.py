@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
-import optparse
 import logging
 import maya.cmds as mc
 from miraLibs.mayaLibs import new_file, save_as, create_group, quit_maya
 from miraLibs.pipeLibs import pipeFile
 
 
-def main():
+def main(file_name):
     logger = logging.getLogger("MidMdl start")
     new_file.new_file()
-    obj = pipeFile.PathDetails.parse_path(options.file)
-    asset_type = obj.asset_type
-    asset_name = obj.asset_name
-    asset_type_short_name = obj.asset_type_short_name
+    context = pipeFile.PathDetails.parse_path(file_name)
+    asset_type = context.asset_type
+    asset_name = context.asset_name
+    asset_type_short_name = context.asset_type_short_name
     model_name = "%s_%s_MODEL" % (asset_type_short_name, asset_name)
     # create default group
     mc.group(name=model_name, empty=1)
@@ -71,20 +70,6 @@ def main():
         other_grp = "other_grp"
         create_group.create_group(other_grp, poly_group)
     # create network node
-    save_as.save_as(options.file)
-    logger.info("%s publish successful!" % options.file)
+    save_as.save_as(file_name)
+    logger.info("%s publish successful!" % file_name)
     quit_maya.quit_maya()
-
-
-if __name__ == "__main__":
-    parser = optparse.OptionParser()
-    parser.add_option("-f", dest="file", help="maya file ma or mb.", metavar="string")
-    parser.add_option("-c", dest="command",
-                      help="Not a needed argument, just for mayabatch.exe, " \
-                           "if missing this setting, optparse would " \
-                           "encounter an error: \"no such option: -c\"",
-                      metavar="string")
-    options, args = parser.parse_args()
-    if len([i for i in ["file_name"] if i in dir()]) == 1:
-        options.file = file_name
-        main()

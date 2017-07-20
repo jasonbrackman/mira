@@ -13,6 +13,7 @@ from miraLibs.pipeLibs.pipeDb import task_from_db_path, create_filesystem_struct
 class Start(object):
     def __init__(self, work_file):
         self.work_file = work_file
+        print self.work_file
         self.context = pipeFile.PathDetails.parse_path(self.work_file)
         self.project = self.context.project
         self.engine = self.context.engine
@@ -21,7 +22,7 @@ class Start(object):
     def get_start_py(self):
         pipeline_dir = miraCore.get_pipeline_dir()
         start_dir = join_path.join_path2(pipeline_dir, self.engine, "start")
-        start_py = join_path.join_path2(start_dir, "%s_start.py" % self.context.step)
+        start_py = join_path.join_path2(start_dir, "start.py")
         return start_py
 
     def get_logger(self):
