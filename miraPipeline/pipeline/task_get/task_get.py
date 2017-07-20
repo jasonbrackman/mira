@@ -7,8 +7,7 @@ from Qt.QtGui import *
 import task_get_ui
 reload(task_get_ui)
 from miraLibs.dbLibs import db_api
-from miraLibs.pipeLibs.pipeMaya import get_current_project
-from miraLibs.pipeLibs import pipeMira, pipeHistory, pipeFile
+from miraLibs.pipeLibs import pipeHistory, pipeFile
 from miraLibs.pyLibs import copy, join_path
 from miraLibs.osLibs import get_engine
 from miraLibs.pipeLibs.pipeDb import task_from_db_path

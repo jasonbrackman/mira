@@ -50,20 +50,29 @@ def export_model_to_abc(context):
 
 
 def create_ad(context):
-    if not os.path.isfile(context.abc_cache_path):
-        logger.error("%s is not an exist file" % context.abc_cache_path)
-        return
     ad_path = context.definition_path
     if os.path.isfile(ad_path):
-        return
-    new_file.new_file()
-    mc.file(rename=ad_path)
-    gpu_name = "%s_gpu" % context.step
+            return
     ad_node_name = "%s_%s_AD" % (context.asset_type_short_name, context.asset_name)
-    assemb = Assembly.Assembly()
-    node = assemb.create_assembly_node(ad_node_name, "assemblyDefinition")
-    assemb.create_representation(node, "Cache", gpu_name, gpu_name, context.abc_cache_path)
-    save_file.save_file()
+    if context.asset_type != "Environment":
+        if not os.path.isfile(context.abc_cache_path):
+            logger.error("%s is not an exist file" % context.abc_cache_path)
+            return
+        new_file.new_file()
+        mc.file(rename=ad_path)
+        gpu_name = "%s_gpu" % context.step
+        assemb = Assembly.Assembly()
+        node = assemb.create_assembly_node(ad_node_name, "assemblyDefinition")
+        assemb.create_representation(node, "Cache", gpu_name, gpu_name, context.abc_cache_path)
+        save_file.save_file()
+    else:
+        new_file.new_file()
+        mc.file(rename=ad_path)
+        name = context.step
+        assemb = Assembly.Assembly()
+        node = assemb.create_assembly_node(ad_node_name, "assemblyDefinition")
+        assemb.create_representation(node, "Scene", name, name, context.abc_cache_path)
+        save_file.save_file()
 
 
 def add_gpu_to_ad(context):
