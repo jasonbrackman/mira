@@ -6,8 +6,7 @@ import miraCore
 from miraLibs.pipeLibs import pipeFile
 
 
-def main():
-    file_name = options.file
+def start(file_name):
     context = pipeFile.PathDetails.parse_path(file_name)
     step = context.step
     engine = context.engine
@@ -16,6 +15,11 @@ def main():
     fn_, path, desc = imp.find_module(step, [start_dir])
     mod = imp.load_module(step, fn_, path, desc)
     mod.main(file_name)
+
+
+def main():
+    file_name = options.file
+    start(file_name)
 
 
 if __name__ == "__main__":
