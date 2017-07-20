@@ -71,7 +71,7 @@ def create_ad(context):
         name = context.step
         assemb = Assembly.Assembly()
         node = assemb.create_assembly_node(ad_node_name, "assemblyDefinition")
-        assemb.create_representation(node, "Scene", name, name, context.abc_cache_path)
+        assemb.create_representation(node, "Scene", name, name, context.publish_path)
         save_file.save_file()
 
 
