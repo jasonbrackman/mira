@@ -107,7 +107,7 @@ class TaskGetUI(QDialog):
         self.setWindowFlags(Qt.Window)
         self.setWindowTitle("Task get")
         self.setObjectName("Task get")
-        self.resize(900, 700)
+        self.resize(750, 630)
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
 
@@ -141,12 +141,17 @@ class TaskGetUI(QDialog):
         info_layout = QVBoxLayout(info_widget)
         info_layout.setContentsMargins(0, 0, 0, 0)
 
-        detail_layout = QGridLayout()
+        detail_widget = QWidget()
+        layout = QVBoxLayout(detail_widget)
+        layout.setContentsMargins(0, 0, 0, 0)
+        detail_group = QGroupBox()
+        layout.addWidget(detail_group)
+        detail_layout = QGridLayout(detail_group)
         status_label = QLabel()
-        status_label.setText("<font size=4>Stauts:</font>")
+        status_label.setText("<font size=3 color=#DDD>Stauts:</font>")
         self.status_label = QLabel()
         due_label = QLabel()
-        due_label.setText("<font size=4>Due Date:</font>")
+        due_label.setText("<font size=3 color=#DDD>Due Date:</font>")
         self.due_label = QLabel()
         detail_layout.addWidget(status_label, 0, 0, 1, 1)
         detail_layout.addWidget(self.status_label, 0, 1, 1, 4)
@@ -169,7 +174,7 @@ class TaskGetUI(QDialog):
         self.file_widget.addTab(self.work_file_widget, "Working")
         self.file_widget.addTab(self.publish_file_widget, "Publishes")
 
-        info_layout.addLayout(detail_layout)
+        info_layout.addWidget(detail_widget)
         info_layout.addLayout(init_layout)
         info_layout.addWidget(self.file_widget)
 
