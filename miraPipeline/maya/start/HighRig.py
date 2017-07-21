@@ -6,8 +6,9 @@ from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import new_file, save_as, create_reference, create_group, quit_maya
 
 
-def main(file_name):
+def main(file_name, local):
     logger = logging.getLogger("lowRig start")
+    new_file.new_file()
     context = pipeFile.PathDetails.parse_path(file_name)
     project = context.project
     entity_type = context.entity_type
@@ -21,9 +22,9 @@ def main(file_name):
     HighMdl_publish_file = pipeFile.get_task_publish_file(project, entity_type, asset_type, asset_name, "HighMdl", "HighMdl")
     if not (os.path.isfile(MidRig_publish_file) and os.path.isfile(HighMdl_publish_file)):
         logger.warning("No model file published or No lowRig file published.")
-        quit_maya.quit_maya()
+        if not local:
+            quit_maya.quit_maya()
         return
-    new_file.new_file()
     create_reference.create_reference(MidRig_publish_file, "MidRig")
     create_reference.create_reference(HighMdl_publish_file)
     model_name = "%s_%s_MODEL" % (asset_type_short_name, asset_name)
@@ -56,4 +57,5 @@ def main(file_name):
     create_group.create_group(rig_group_name, root_group_name)
     save_as.save_as(file_name)
     logger.info("%s publish successful!" % file_name)
-    quit_maya.quit_maya()
+    if not local:
+        quit_maya.quit_maya()

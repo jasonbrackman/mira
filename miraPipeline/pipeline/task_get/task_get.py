@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import os
 import logging
+import imp
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
 import task_get_ui
 reload(task_get_ui)
+import miraCore
 from miraLibs.dbLibs import db_api
 from miraLibs.pipeLibs import pipeHistory, pipeFile
 from miraLibs.pyLibs import copy, join_path
@@ -77,53 +79,30 @@ class SequenceNode(Node):
         return "sequence"
 
 
-class AssetNode(Node):
-    def __init__(self, project, name, step, task, status, priority, parent):
-        super(AssetNode, self).__init__(name, parent)
+class TaskNode(Node):
+    def __init__(self, project, entity_type, entity_name, step, task, status, status_color, due_date, priority, parent):
+        super(TaskNode, self).__init__(entity_name, parent)
         self.project = project
-        self.entity_type = "Asset"
-        self.name = name
+        self.entity_type = entity_type
+        self.entity_name = entity_name
         self.step = step
         self.task = task
         self.status = status
+        self.status_color = status_color
+        self.due_date = due_date
         self.priority = priority
+        self.image = self.get_image()
 
     @property
     def node_type(self):
-        return "asset"
+        return "task"
 
-    @property
-    def image(self):
+    def get_image(self):
         image_path = pipeFile.get_task_workImage_file(self.project, self.entity_type, self.parent().name,
                                                         self.name, self.step, self.task)
         if not os.path.isfile(image_path):
             image_path = os.path.abspath(os.path.join(__file__, "..", "unknown.png")).replace("\\", "/")
-        scaled = create_round_rect_thumbnail(image_path, 100, 80, 20)
-        return scaled
-
-
-class ShotNode(Node):
-    def __init__(self, project, name, step, task, status, priority, parent):
-        super(ShotNode, self).__init__(name, parent)
-        self.project = project
-        self.entity_type = "Shot"
-        self.name = name
-        self.step = step
-        self.task = task
-        self.status = status
-        self.priority = priority
-
-    @property
-    def node_type(self):
-        return "shot"
-
-    @property
-    def image(self):
-        image_path = pipeFile.get_task_workImage_file(self.project, self.entity_type, self.parent().name,
-                                                        self.name, self.step, self.task)
-        if not os.path.isfile(image_path):
-            image_path = os.path.abspath(os.path.join(__file__, "..", "unknown.png")).replace("\\", "/")
-        scaled = create_round_rect_thumbnail(image_path, 100, 80, 20)
+        scaled = create_round_rect_thumbnail(image_path, 100, 70, 10)
         return scaled
 
 
@@ -156,7 +135,7 @@ class AssetTreeModel(QAbstractItemModel):
                 return node.name
             if index.column() == 0 and node.node_type in ["asset_type", "sequence"]:
                 return node.name
-            if index.column() == 2 and node.node_type in ["asset", "shot"]:
+            if index.column() == 2 and node.node_type in ["task"]:
                 value = "name:  %s\n"\
                         "step:  %s\n" \
                         "task:  %s\n" \
@@ -164,13 +143,13 @@ class AssetTreeModel(QAbstractItemModel):
                         "priority: %s" % (node.name, node.step, node.task, node.status, node.priority)
                 return value
         elif role == Qt.DecorationRole:
-            if index.column() == 1 and node.node_type in ["asset", "shot"]:
+            if index.column() == 1 and node.node_type in ["task"]:
                 return node.image
         elif role == Qt.SizeHintRole:
             if node.node_type in ["entity", "asset_type", "sequence"]:
                 return QSize(10, 20)
             else:
-                return QSize(100, 100)
+                return QSize(100, 90)
 
     def setData(self, index, value, role):
         if not index.isValid():
@@ -255,12 +234,13 @@ class TaskGet(task_get_ui.TaskGetUI):
         self.resize(900, 700)
         self.setObjectName("TaskGet")
         self.__logger = logging.getLogger("TaskGet")
-        self.__run_app = get_engine.get_engine()
+        self.__engine = get_engine.get_engine()
         self.__db = db_api.DbApi(self.project).db_obj
         self.init()
         self.set_style()
         self.set_model()
         self.set_signals()
+        self.selected = None
 
     @property
     def project(self):
@@ -273,7 +253,7 @@ class TaskGet(task_get_ui.TaskGetUI):
         self.task_view.header().hide()
 
     def set_style(self):
-        if self.__run_app != "python":
+        if self.__engine != "python":
             self.local_file_widget.setStyleSheet("QTreeView:item{height: 30px;}")
             self.work_file_widget.setStyleSheet("QTreeView:item{height: 30px;}")
             self.publish_file_widget.setStyleSheet("QTreeView:item{height: 30px;}")
@@ -284,9 +264,10 @@ class TaskGet(task_get_ui.TaskGetUI):
 
     def set_signals(self):
         self.project_cbox.currentIndexChanged[str].connect(self.on_project_changed)
-        self.task_view.clicked.connect(self.show_path)
+        self.task_view.clicked.connect(self.on_item_clicked)
         self.work_file_widget.copy_to_local_action.triggered.connect(self.copy_to_local)
         self.refresh_btn.clicked.connect(self.refresh)
+        self.init_btn.clicked.connect(self.init_task)
 
     def on_project_changed(self, text):
         self.project = text
@@ -297,6 +278,8 @@ class TaskGet(task_get_ui.TaskGetUI):
         self.local_file_widget.clear()
         self.work_file_widget.clear()
         self.publish_file_widget.clear()
+        self.status_label.setText("")
+        self.due_label.setText("")
 
     def copy_to_local(self):
         file_paths = self.work_file_widget.get_selected()
@@ -311,7 +294,7 @@ class TaskGet(task_get_ui.TaskGetUI):
             local_path = obj.local_work_path
             copy.copy(file_path, local_path)
             work_dir = os.path.dirname(os.path.dirname(local_path))
-            work_engine_dir = join_path.join_path2(work_dir, self.__run_app)
+            work_engine_dir = join_path.join_path2(work_dir, self.__engine)
             self.local_file_widget.set_dir(work_engine_dir)
             self.update_task_status(file_path)
             self.file_widget.setCurrentIndex(0)
@@ -357,7 +340,7 @@ class TaskGet(task_get_ui.TaskGetUI):
                     task_name = task["content"]
                     status = task["sg_status_list"]
                     priority = task["sg_priority_1"]
-                    asset_node = AssetNode(self.project, asset_name, step, task_name, status, priority, asset_type_node)
+                    asset_node = TaskNode(self.project, "Asset", asset_name, step, task_name, status, priority, asset_type_node)
                 else:
                     sequence_names = [node.name for node in sequence_nodes]
                     sequence_name = task["entity.Shot.sg_sequence"]["name"]
@@ -383,12 +366,14 @@ class TaskGet(task_get_ui.TaskGetUI):
             sequence_nodes = list()
             for task in my_tasks:
                 task_entity_type = self.__db.get_task_entity_type(task)
-                task_entity_id = task["item_id"]
-                task_entity_name = task["item"]["item_name"]
+                task_entity_id = task.get("item_id")
+                task_entity_name = task.get("item").get("item_name")
                 task_name = task.get("name")
-                step = task["step"]["name"]
-                status = task["status"]["name"]
-                priority = task["priority"]
+                step = task.get("step").get("name")
+                status = task.get("status").get("name")
+                status_color = task.get("status").get("color")
+                due_date = task.get("due_date")
+                priority = task.get("priority")
                 if task_entity_type == "Asset":
                     asset_type_names = [node.name for node in asset_type_nodes]
                     asset_type_name = self.__db.get_asset_type_by_asset_id(task_entity_id)
@@ -397,7 +382,8 @@ class TaskGet(task_get_ui.TaskGetUI):
                         asset_type_nodes.append(asset_type_node)
                     else:
                         asset_type_node = [node for node in asset_type_nodes if node.name == asset_type_name][0]
-                    asset_node = AssetNode(self.project, task_entity_name, step, task_name, status, priority, asset_type_node)
+                    asset_node = TaskNode(self.project, task_entity_type, task_entity_name, step, task_name, status,
+                                          status_color, due_date, priority, asset_type_node)
                 else:
                     sequence_names = [node.name for node in sequence_nodes]
                     sequence_name = self.__db.get_sequence_by_shot_id(task_entity_id)
@@ -406,7 +392,8 @@ class TaskGet(task_get_ui.TaskGetUI):
                         sequence_nodes.append(sequence_node)
                     else:
                         sequence_node = [node for node in sequence_nodes if node.name == sequence_name][0]
-                    shot_node = ShotNode(self.project, task_entity_name, step, task_name, status, priority, sequence_node)
+                    shot_node = TaskNode(self.project, task_entity_type, task_entity_name, step, task_name, status,
+                                         status_color, due_date, priority, priority, sequence_node)
 
         self.proxy_model = LeafFilterProxyModel()
         self.model = AssetTreeModel(self.root_node, self.project)
@@ -427,29 +414,68 @@ class TaskGet(task_get_ui.TaskGetUI):
         self.proxy_model.setFilterRegExp(text)
         self.task_view.expandAll()
 
-    def show_path(self, index):
+    def on_item_clicked(self, index):
         node = self.proxy_model.mapToSource(index).internalPointer()
-        if node.node_type == "asset":
-            entity_type = "Asset"
-        else:
-            entity_type = "Shot"
+        self.selected = node
+        if node.node_type != "task":
+            return
+        entity_type = node.entity_type
         asset_type_sequence = node.parent().name
         asset_name_shot = node.name.split("_")[-1]
         step = node.step
         task = node.task
-        local_file = pipeFile.get_task_work_file(self.project, entity_type, asset_type_sequence, asset_name_shot, step, task, "000", local=True)
-        work_file = pipeFile.get_task_work_file(self.project, entity_type, asset_type_sequence, asset_name_shot, step, task, "000")
-        publish_file = pipeFile.get_task_publish_file(self.project, entity_type, asset_type_sequence, asset_name_shot, step, task, "000")
+        status = node.status
+        status_color = node.status_color
+        due_date = node.due_date
+        # show path
+        local_file = pipeFile.get_task_work_file(self.project, entity_type, asset_type_sequence, asset_name_shot, step,
+                                                 task, "000", engine=self.__engine, local=True)
+        work_file = pipeFile.get_task_work_file(self.project, entity_type, asset_type_sequence, asset_name_shot, step,
+                                                task, "000", engine=self.__engine, )
+        publish_file = pipeFile.get_task_publish_file(self.project, entity_type, asset_type_sequence, asset_name_shot,
+                                                      step, task, "000", engine=self.__engine, )
         local_dir = os.path.dirname(os.path.dirname(local_file))
         work_dir = os.path.dirname(os.path.dirname(work_file))
         publish_dir = os.path.dirname(os.path.dirname(publish_file))
-        if self.__run_app != "python":
-            local_dir = join_path.join_path2(local_dir, self.__run_app)
-            work_dir = join_path.join_path2(work_dir, self.__run_app)
-            publish_dir = join_path.join_path2(publish_dir, self.__run_app)
+        if self.__engine != "python":
+            local_dir = join_path.join_path2(local_dir, self.__engine)
+            work_dir = join_path.join_path2(work_dir, self.__engine)
+            publish_dir = join_path.join_path2(publish_dir, self.__engine)
         self.local_file_widget.set_dir(local_dir)
         self.work_file_widget.set_dir(work_dir)
         self.publish_file_widget.set_dir(publish_dir)
+        # show status and due_date
+        self.status_label.setText("<font color=%s><b>%s</b></font>" % (status_color, status))
+        self.due_label.setText("<font color=#ff8c00><b>%s</b></font>" % due_date)
+
+    def init_task(self):
+        node = self.selected
+        if not node:
+            return
+        if node.node_type != "task":
+            return
+        work_file = pipeFile.get_task_work_file(node.project, node.entity_type, node.parent().name, node.entity_name,
+                                                node.step, node.task, version="001", engine=self.__engine)
+        context = pipeFile.PathDetails.parse_path(work_file)
+        local_file = context.local_work_path
+        if os.path.isfile(local_file):
+            msg = QMessageBox.information(self, "Warming Tip", "%s already exist\nDo you want to replace it?" % local_file,
+                                          QMessageBox.Yes | QMessageBox.No)
+            if msg.name == "No":
+                return
+            else:
+                self.do_init_task(node, local_file)
+        else:
+            self.do_init_task(node, local_file)
+
+    def do_init_task(self, node, local_file):
+        pipeline_dir = miraCore.get_pipeline_dir()
+        start_dir = os.path.join(pipeline_dir, self.__engine, "start").replace("\\", "/")
+        fn_, path, desc = imp.find_module(node.step, [start_dir])
+        mod = imp.load_module(node.step, fn_, path, desc)
+        mod.main(local_file, True)
+        self.update_task_status(local_file)
+        self.status_label.setText("<font color=#96e8ff><b>In Progress</b></font>")
 
     def closeEvent(self, event):
         pipeHistory.set("currentProject", self.project)

@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import logging
 import os
-from miraLibs.mayaLibs import open_file, save_as, quit_maya
+from miraLibs.mayaLibs import open_file, save_as, quit_maya, new_file
 from miraLibs.pipeLibs import pipeFile
 
 
-def main(file_name):
+def main(file_name, local):
     logger = logging.getLogger("HighMdl start")
+    new_file.new_file()
     # copy low mdl publish file as mdl file
     context = pipeFile.PathDetails.parse_path(file_name)
     project = context.project
@@ -17,9 +18,11 @@ def main(file_name):
     logger.info("MidMdl publish file: %s" % MidMdl_publish_file)
     if not os.path.isfile(MidMdl_publish_file):
         logger.warning("No MidMdl file published.")
-        quit_maya.quit_maya()
+        if not local:
+            quit_maya.quit_maya()
         return
     open_file.open_file(MidMdl_publish_file)
     save_as.save_as(file_name)
     logger.info("%s publish successful!" % file_name)
-    quit_maya.quit_maya()
+    if not local:
+        quit_maya.quit_maya()

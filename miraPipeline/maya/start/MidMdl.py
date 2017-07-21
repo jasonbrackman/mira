@@ -5,7 +5,7 @@ from miraLibs.mayaLibs import new_file, save_as, create_group, quit_maya
 from miraLibs.pipeLibs import pipeFile
 
 
-def main(file_name):
+def main(file_name, local):
     logger = logging.getLogger("MidMdl start")
     new_file.new_file()
     context = pipeFile.PathDetails.parse_path(file_name)
@@ -72,4 +72,5 @@ def main(file_name):
     # create network node
     save_as.save_as(file_name)
     logger.info("%s publish successful!" % file_name)
-    quit_maya.quit_maya()
+    if not local:
+        quit_maya.quit_maya()

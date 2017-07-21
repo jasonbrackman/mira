@@ -137,6 +137,30 @@ class TaskGetUI(QDialog):
         my_task_layout.addLayout(mid_layout)
         my_task_layout.addWidget(self.task_view)
 
+        info_widget = QWidget()
+        info_layout = QVBoxLayout(info_widget)
+        info_layout.setContentsMargins(0, 0, 0, 0)
+
+        detail_layout = QGridLayout()
+        status_label = QLabel()
+        status_label.setText("<font size=4>Stauts:</font>")
+        self.status_label = QLabel()
+        due_label = QLabel()
+        due_label.setText("<font size=4>Due Date:</font>")
+        self.due_label = QLabel()
+        detail_layout.addWidget(status_label, 0, 0, 1, 1)
+        detail_layout.addWidget(self.status_label, 0, 1, 1, 4)
+        detail_layout.addWidget(due_label, 1, 0, 1, 1)
+        detail_layout.addWidget(self.due_label, 1, 1, 1, 4)
+        detail_layout.setVerticalSpacing(11)
+
+        init_layout = QHBoxLayout()
+        init_layout.setContentsMargins(0, 0, 0, 0)
+        self.init_btn = QPushButton("+ Initialize Task")
+        self.init_btn.setStyleSheet("color: #00b4ff; font-size: 10pt; font-weight: bold; ")
+        init_layout.addStretch()
+        init_layout.addWidget(self.init_btn)
+
         self.file_widget = QTabWidget()
         self.local_file_widget = FileTreeView("local")
         self.work_file_widget = FileTreeView("work")
@@ -145,8 +169,12 @@ class TaskGetUI(QDialog):
         self.file_widget.addTab(self.work_file_widget, "Working")
         self.file_widget.addTab(self.publish_file_widget, "Publishes")
 
+        info_layout.addLayout(detail_layout)
+        info_layout.addLayout(init_layout)
+        info_layout.addWidget(self.file_widget)
+
         main_splitter.addWidget(task_widget)
-        main_splitter.addWidget(self.file_widget)
+        main_splitter.addWidget(info_widget)
 
         main_splitter.setSizes([self.width()*0.45, self.width()*0.55])
         main_splitter.setStretchFactor(1, 1)

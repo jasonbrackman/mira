@@ -2,11 +2,12 @@
 import logging
 import maya.cmds as mc
 from miraLibs.pipeLibs import pipeFile
-from miraLibs.mayaLibs import save_as, quit_maya
+from miraLibs.mayaLibs import save_as, quit_maya, new_file
 
 
-def main(file_name):
+def main(file_name, local):
     logger = logging.getLogger("Group start")
+    new_file.new_file()
     # copy low mdl publish file as mdl file
     context = pipeFile.PathDetails.parse_path(file_name)
     asset_name = context.asset_name
@@ -16,5 +17,6 @@ def main(file_name):
     mc.group(name=model_name, empty=1)
     save_as.save_as(file_name)
     logger.info("%s publish successful!" % file_name)
-    quit_maya.quit_maya()
+    if not local:
+        quit_maya.quit_maya()
 

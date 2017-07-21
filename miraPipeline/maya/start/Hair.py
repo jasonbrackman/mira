@@ -2,12 +2,13 @@
 import logging
 import os
 import maya.cmds as mc
-from miraLibs.mayaLibs import save_as, quit_maya, create_reference, create_group, load_plugin
+from miraLibs.mayaLibs import save_as, quit_maya, create_reference, create_group, load_plugin, new_file
 from miraLibs.pipeLibs import pipeFile
 
 
-def main(file_name):
+def main(file_name, local):
     logger = logging.getLogger("Hair start")
+    new_file.new_file()
     # copy low mdl publish file as mdl file
     context = pipeFile.PathDetails.parse_path(file_name)
     project = context.project
@@ -26,7 +27,8 @@ def main(file_name):
     create_hair_group(asset_type_short_name, asset_name)
     save_as.save_as(file_name)
     logger.info("%s publish successful!" % file_name)
-    quit_maya.quit_maya()
+    if not local:
+        quit_maya.quit_maya()
 
 
 def create_hair_group(asset_type, asset_name):
