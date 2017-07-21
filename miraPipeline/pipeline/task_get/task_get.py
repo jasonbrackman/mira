@@ -445,7 +445,7 @@ class TaskGet(task_get_ui.TaskGetUI):
         self.publish_file_widget.set_dir(publish_dir)
         # show status and due_date
         self.status_label.setText("<font size=4 color=%s><b>%s</b></font>" % (status_color, status))
-        self.due_label.setText("<font size=4 color=#ff8c00><b>%s</b></font>" % due_date)
+        self.due_label.setText("<font size=4 color=#ff8c00>%s</font>" % due_date)
 
     def init_task(self):
         node = self.selected
