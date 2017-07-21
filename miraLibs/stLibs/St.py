@@ -148,7 +148,7 @@ class St(object):
         user_info = self.get_user_by_name(user)
         user_id = user_info.get("id")
         task_filters = "assignee=%s and project_id=%s" % (user_id, self.project_id)
-        fields = ["item", "step.name", "status.name", "priority", "name"]
+        fields = ["item", "step.name", "status.name", "priority", "name", "due_date", "status.color"]
         my_tasks = self.st.task.select(filters=task_filters, fields=fields)
         return my_tasks
 
@@ -227,5 +227,6 @@ if __name__ == "__main__":
     st = St("SnowKidTest")
     # file_path = "W:/SnowKidTest/workarea/assets/Prop/TdTest/MidMdl/MidMdl/_workarea/maya/SnowKidTest_TdTest_MidMdl_MidMdl_v004.ma"
     # media_path = "W:/SnowKidTest/workarea/assets/Prop/TdTest/MidMdl/MidMdl/_video/maya/SnowKidTest_TdTest_MidMdl_MidMdl_v002.mov"
-    print st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")
+    # print st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")
+    print st.get_my_tasks()
 
