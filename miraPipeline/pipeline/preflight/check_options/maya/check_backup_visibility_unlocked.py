@@ -11,15 +11,18 @@ class check_backup_visibility_unlocked(BaseCheck):
             self.fail_check(u"先手动选中模型大组")
             return
         backup_group = self.get_backup_group()
-        if len(backup_group) != 1:
-            self.fail_check(u"_BACKUP组的个数不为1")
+        if len(backup_group) > 1:
+            self.fail_check(u"_BACKUP组的个数不止一个")
             return
-        visibility_is_lock = mc.getAttr("%s.visibility" % backup_group[0], l=1)
-        if visibility_is_lock:
-            self.error_list = backup_group
-            self.fail_check(u"_BACKUP组的显示属性未被锁定")
+        if backup_group:
+            visibility_is_lock = mc.getAttr("%s.visibility" % backup_group[0], l=1)
+            if visibility_is_lock:
+                self.error_list = backup_group
+                self.fail_check(u"_BACKUP组的显示属性未被锁定")
+            else:
+                self.pass_check(u"_BACKUP组的显示属性已被锁定")
         else:
-            self.pass_check(u"_BACKUP组的显示属性已被锁定")
+            self.pass_check(u"不存在_BACKUP组")
 
     @staticmethod
     def get_backup_group():
