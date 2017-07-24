@@ -63,16 +63,11 @@ check_mdl_empty_mesh:
   order: 120
   ignorable: False
   description: "检查模型是否没有面"
-check_mdl_five_faces:
-  name: "Five faces | 五边面"
+check_mdl_cleanup:
+  name: "clean up | 不合法的模型"
   order: 125
   ignorable: False
-  description: "检查模型是否包含五边面"
-check_mdl_T_faces:
-  name: "T faces | T形面"
-  order: 127
-  ignorable: False
-  description: "检查是否有T形面存在"
+  description: "检查模型是否有五边面、未缝合的点、T形面、多面共用一边。"
 check_mdl_instance:
   name: "Instance model | 不允许关联复制"
   order: 130
