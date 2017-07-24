@@ -21,7 +21,7 @@ class check_mdl_cleanup(BaseCheck):
     def get_error_faces():
         selected = mc.ls(sl=1)
         error_faces = mel.eval('polyCleanupArgList 4 '
-                               '{ "0","2","1","0","1","0","1","0","1","1e-005","1","0.001","0",'
+                               '{ "0","2","1","0","1","0","1","0","0","1e-005","1","0.001","0",'
                                '"1e-005","0","-1","1","0" };')
         mc.select(selected)
         return error_faces
