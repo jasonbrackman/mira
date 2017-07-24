@@ -15,7 +15,7 @@ class check_mdl_empty_mesh(BaseCheck):
         if self.error_list:
             self.fail_check(u"有无面模型")
         else:
-            self.pass_check(u"没有屋面模型")
+            self.pass_check(u"没有无面模型")
 
     @staticmethod
     def get_empty_mesh():

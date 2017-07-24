@@ -101,8 +101,13 @@ check_unused_nodes:
 check_mdl_extra_shape:
   name: "Extra shape | 多余的shape"
   order: 160
-  ignorable: True
+  ignorable: False
   description: "检查一个transform下是否有多个shape"
+check_shd_uvset:
+  name: "multi uv set | 多个uvset"
+  order: 170
+  ignorable: False
+  description: "检查是否有多个uv set存在"
 check_duplicate_names:
   name: "Duplicate names | 同名物体"
   order: 200
