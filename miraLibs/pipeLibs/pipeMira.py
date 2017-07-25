@@ -9,17 +9,27 @@ conf_dir = miraCore.get_conf_dir()
 
 
 # ******************************get studio value****************************** #
-def get_studio_value(project_name, option):
-    root_dir_conf_dir = join_path.join_path2(conf_dir, "studio.yml")
-    yml_data = yml.get_yaml_data(root_dir_conf_dir)
+def get_value(name, project_name, option):
+    conf_path = join_path.join_path2(conf_dir, "%s.yml" % name)
+    yml_data = yml.get_yaml_data(conf_path)
     if yml_data. has_key(project_name):
         if yml_data[project_name]. has_key(option):
             value = yml_data[project_name][option]
             return value
         else:
-            logging.error("KeyError")
+            logging.error("pipeMira: KeyError")
     else:
-        logging.error("pipeMira: %s not in the config file: %s" % (project_name, root_dir_conf_dir))
+        logging.error("pipeMira: %s not in the config file: %s" % (project_name, conf_path))
+
+
+def get_studio_value(project_name, option):
+    studio_value = get_value("studio", project_name, option)
+    return studio_value
+
+
+def get_step_value(project_name, step):
+    step_value = get_value("step", project_name, step)
+    return step_value
 
 
 def get_root_dir(project_name):
@@ -109,26 +119,5 @@ def get_unload_plugins():
     return unload_plugins
 
 
-# ******************************get up and down step value****************************** #
-def get_step_conf_value():
-    step_conf_path = join_path.join_path2(conf_dir, "step.yml")
-    yml_data = yml.get_yaml_data(step_conf_path)
-    return yml_data
-
-
-def get_up_step(current_step=None):
-    conf_data = get_step_conf_value()
-    up_value = conf_data["up_step"]
-    if current_step in up_value:
-        return up_value.get(current_step)
-
-
-def get_down_step(current_step=None):
-    conf_data = get_step_conf_value()
-    up_value = conf_data["down_step"]
-    if current_step in up_value:
-        return up_value.get(current_step)
-
-
 if __name__ == "__main__":
-    print get_down_step("MidMdl")
+    pass

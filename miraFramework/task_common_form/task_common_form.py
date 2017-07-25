@@ -330,7 +330,7 @@ class CommonForm(QWidget):
                 return
             self.second_widget.set_model_data(asset_names)
         elif self.entity_type == "Shot":
-            shots = self.db.get_all_shots_by_sequence(selected)
+            shots = self.db.get_all_shots(selected)
             shot_names = [shot["name"] for shot in shots]
             self.second_widget.set_model_data(shot_names)
 

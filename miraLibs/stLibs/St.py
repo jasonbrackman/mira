@@ -228,5 +228,6 @@ if __name__ == "__main__":
     # file_path = "W:/SnowKidTest/workarea/assets/Prop/TdTest/MidMdl/MidMdl/_workarea/maya/SnowKidTest_TdTest_MidMdl_MidMdl_v004.ma"
     # media_path = "W:/SnowKidTest/workarea/assets/Prop/TdTest/MidMdl/MidMdl/_video/maya/SnowKidTest_TdTest_MidMdl_MidMdl_v002.mov"
     # print st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")
-    print st.get_my_tasks()
+    # print st.get_my_tasks()
+    print st.get_current_task("Shot", "s999", "s999_c001", "AnimLay", "AnimLay")
 

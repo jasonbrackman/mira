@@ -3,16 +3,16 @@ from miraLibs.pipeLibs import pipeFile
 
 
 def task_from_db_path(db, path):
-    obj = pipeFile.PathDetails.parse_path(path)
-    entity_type = obj.entity_type
-    step = obj.step
-    task = obj.task
+    context = pipeFile.PathDetails.parse_path(path)
+    entity_type = context.entity_type
+    step = context.step
+    task = context.task
     if entity_type in ["Asset"]:
-        asset_type_or_sequence = obj.asset_type
-        asset_or_shot = obj.asset_name
+        asset_type_or_sequence = context.asset_type
+        asset_or_shot = context.asset_name
     else:
-        asset_type_or_sequence = obj.sequence
-        asset_or_shot = obj.shot
+        asset_type_or_sequence = context.sequence
+        asset_or_shot = "%s_%s" % (context.sequence, context.shot)
     task_info = db.get_current_task(entity_type, asset_type_or_sequence, asset_or_shot, step, task)
     return task_info
 
