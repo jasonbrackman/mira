@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from Qt.QtWidgets import *
-from miraLibs.pipeLibs import pipeFile, get_engine_from_step
+from miraLibs.pipeLibs import pipeFile, Step
 from miraLibs.osLibs import FileOpener
 from miraLibs.pyLibs import start_file
 
@@ -13,7 +13,7 @@ class Hook(object):
         if hasattr(self.__action, "up_level"):
             self.__task = self.__action.up_level.title()
             self.__step = self.__action.up_level.up_level.title()
-            self.__engine = get_engine_from_step.get_engine_from_step(self.__step)
+            self.__engine = Step(self.__project, self.__step).engine
         self.__action_name = self.__action.text()
 
     def execute(self):
@@ -76,7 +76,7 @@ class Hook(object):
             publish_file = pipeFile.get_task_publish_file(self.__project, self.__entity_type,
                                                           self.__asset_type_sequence, asset_shot_name,
                                                           self.__step, self.__task, engine=self.__engine)
-            if not os.path.isfile(publish_file):
+            if not publish_file or not os.path.isfile(publish_file):
                 error_list.append(publish_file)
                 continue
             if opt == "import":

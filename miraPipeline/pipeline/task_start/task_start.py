@@ -7,10 +7,9 @@ from Qt.QtGui import *
 from miraLibs.pipeLibs.get_task_name import get_task_name
 from miraFramework.task_common_form import CommonForm
 from miraLibs.pyLibs import Path, join_path
-from miraLibs.pipeLibs import pipeFile, get_engine_from_step
+from miraLibs.pipeLibs import pipeFile, Step
 from miraLibs.deadlineLibs import submit
 from miraLibs.qtLibs import render_ui
-from miraLibs.pipeLibs import pipeMira
 
 
 class TaskStart(QDialog):
@@ -76,11 +75,10 @@ class TaskStart(QDialog):
         asset_or_shot = self.common_widget.asset_or_shot
         step = self.common_widget.step
         task = self.common_widget.task
-        engine = get_engine_from_step.get_engine_from_step(step)
+        engine = Step(project, step).engine
         if not all((asset_type_or_sequence, asset_or_shot, step, task)):
             return
-        up_step_data = pipeMira.get_studio_value(project, "up_step")
-        up_steps = up_step_data.get(step)
+        up_steps = Step(project, step).up_step
         if up_steps:
             up_step_published = True
             for up_step in up_steps:

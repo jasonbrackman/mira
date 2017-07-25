@@ -47,15 +47,6 @@ SnowKidTest:
   asset_steps: ["LowMdl","MidMdl","HighMdl","Shd","MidRig","HighRig","Hair","Group"]
   shot_steps: ["Set","AnimLay","VfxLay","LgtLay","CompLay","Anim","Vfx","Cfx","Lgt","Comp","Cut"]
   not_playblast_step: ["HighRig","MidRig","Shd","Hair", "Group"]
-  down_step:
-    MidMdl: ["HighMdl", "MidRig"]
-    HighMdl: ["HighRig", "Shd"]
-  up_step:
-    HighMdl: ["MidMdl"]
-    MidRig: ["MidMdl"]
-    HighRig: ["HighMdl", "MidRig"]
-    Shd: ["HighMdl"]
-    Hair: ["HighMdl"]
   entity_dir: "{primary}/{project}/{category}/{entity_type}/{asset_type_sequence}/{asset_name_shot}"
   # maya
   # -asset
@@ -79,9 +70,18 @@ SnowKidTest:
   maya_asset_definition: "{primary}/{project}/publish/assets/{asset_type}/{asset_name}/{project}_{asset_name}_AD.ma"
   maya_asset_tex: "{primary}/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_tex/{engine}"
   # -shot
+  shot_template: "{primary}/{project}/{category}/shots/{sequence}/{shot}/{step}/{task}/{area}/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.{ext}"
+  # --local
+  maya_shot_local: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_workarea/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}_e{edition}.ma"
+  maya_shot_localImage: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}_e{edition}.png"
+  maya_shot_localVideo: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_video/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}_e{edition}.mov"
+  # -- work
   maya_shot_work: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_workarea/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.ma"
-  maya_shot_image: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.png"
-  maya_shot_publish: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_publish/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.ma"
-  maya_shot_video: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_video/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.mov"
+  maya_shot_workImage: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.png"
+  maya_shot_workVideo: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_video/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.mov"
+  # --publish
+  maya_shot_publish: "{primary}/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_workarea/{engine}/{project}_{sequence}_{shot}_{step}_{task}.ma"
+  maya_shot_iamge: "{primary}/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}.png"
+  maya_shot_video: "{primary}/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_video/{engine}/{project}_{sequence}_{shot}_{step}_{task}.mov"
   # photoshop
   photoshop_asset_publish: "{primary}/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_publish/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.psd"

@@ -99,8 +99,8 @@ class TaskNode(Node):
 
     def get_image(self):
         image_path = pipeFile.get_task_workImage_file(self.project, self.entity_type, self.parent().name,
-                                                        self.name, self.step, self.task)
-        if not os.path.isfile(image_path):
+                                                      self.name, self.step, self.task)
+        if not image_path or not os.path.isfile(image_path):
             image_path = os.path.abspath(os.path.join(__file__, "..", "unknown.png")).replace("\\", "/")
         scaled = create_round_rect_thumbnail(image_path, 100, 70, 10)
         return scaled
@@ -353,7 +353,7 @@ class TaskGet(task_get_ui.TaskGetUI):
                     task_name = task["content"]
                     status = task["sg_status_list"]
                     priority = task["sg_priority_1"]
-                    shot_node = ShotNode(self.project, shot, step, task_name, status, priority, sequence_node)
+                    shot_node = TaskNode(self.project, shot, step, task_name, status, priority, sequence_node)
         elif self.__db.typ == "strack":
             entity_types = [self.__db.get_task_entity_type(task) for task in my_tasks]
             entity_types = list(set(entity_types))
@@ -392,7 +392,7 @@ class TaskGet(task_get_ui.TaskGetUI):
                     else:
                         sequence_node = [node for node in sequence_nodes if node.name == sequence_name][0]
                     shot_node = TaskNode(self.project, task_entity_type, task_entity_name, step, task_name, status,
-                                         status_color, due_date, priority, priority, sequence_node)
+                                         status_color, due_date, priority, sequence_node)
 
         self.proxy_model = LeafFilterProxyModel()
         self.model = AssetTreeModel(self.root_node, self.project)

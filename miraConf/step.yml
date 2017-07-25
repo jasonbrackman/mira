@@ -1,0 +1,32 @@
+SnowKidTest:
+  LowMdl:
+    engine: maya
+    up_step: null
+    down_step: null
+  MidMdl:
+    engine: maya
+    up_step: null
+    down_step: ["MidRig"]
+  HighMdl:
+    engine: maya
+    up_step: ["MidMdl"]
+    down_step: ["HighRig", "Shd"]
+  Shd:
+    engine: maya
+    up_step: ["HighMdl"]
+    down_step: null
+  HighRig:
+    engine: maya
+    up_step: ["HighMdl", "MidRig"]
+    down_step: null
+  Hair:
+    engine: maya
+    up_step: ["HighMdl"]
+    down_step: null
+  AnimLay:
+    engine: maya
+    up_step: null
+    down_step: null
+
+
+
