@@ -15,5 +15,5 @@ class check_shd_uvset(BaseCheck):
     @staticmethod
     def get_error_list():
         uv_sets = mc.polyUVSet(q=1, allUVSets=1)
-        if len(uv_sets) > 1:
+        if uv_sets and len(uv_sets) > 1:
             return uv_sets
