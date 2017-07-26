@@ -15,6 +15,10 @@ SnowKidTest:
     engine: maya
     up_step: ["HighMdl"]
     down_step: null
+  MidRig:
+    engine: maya
+    up_step: ["MidMdl"]
+    down_step: ["HighRig"]
   HighRig:
     engine: maya
     up_step: ["HighMdl", "MidRig"]
