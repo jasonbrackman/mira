@@ -20,13 +20,23 @@ def main(file_name, local):
     if not os.path.isfile(MidRig_publish_file):
         MidRig_publish_file = pipeFile.get_task_publish_file(project, entity_type, asset_type, asset_name, "MidRig", "MidRig")
     HighMdl_publish_file = pipeFile.get_task_publish_file(project, entity_type, asset_type, asset_name, "HighMdl", "HighMdl")
-    if not (os.path.isfile(MidRig_publish_file) and os.path.isfile(HighMdl_publish_file)):
-        logger.warning("No model file published or No lowRig file published.")
-        if not local:
-            quit_maya.quit_maya()
-        return
-    create_reference.create_reference(MidRig_publish_file, "MidRig")
+    # Nonactive: only reference in HighMdl publish file.
+    if task == "Nonactive":
+        if not os.path.isfile(HighMdl_publish_file):
+            logger.warning("No HighMdl file published")
+            if not local:
+                quit_maya.quit_maya()
+            return
+    # Active: reference in MidRig and HighMdl
+    if task == "Active":
+        if not (os.path.isfile(MidRig_publish_file) and os.path.isfile(HighMdl_publish_file)):
+            logger.warning("No HighMdl file published or No MidRig file published.")
+            if not local:
+                quit_maya.quit_maya()
+            return
     create_reference.create_reference(HighMdl_publish_file)
+    if task == "Active":
+        create_reference.create_reference(MidRig_publish_file, "MidRig")
     model_name = "%s_%s_MODEL" % (asset_type_short_name, asset_name)
     # create root group
     root_group_name = "%s_%s_ROOT" % (asset_type_short_name, asset_name)
@@ -43,17 +53,18 @@ def main(file_name, local):
         rig_group_name = "%s_%s_RIG" % (asset_type_short_name, asset_name)
         create_group.create_group(model_name, root_group_name)
         create_group.create_group(rig_group_name)
-        bounding = mc.xform(model_name, q=1, bb=1)
-        max_value = max(abs(bounding[0]), abs(bounding[2]), abs(bounding[3]), abs(bounding[5]))
-        radius = max_value*1.1
-        center = mc.xform(model_name, q=1, sp=1, ws=1)
-        circle_list = mc.circle(c=center, nr=[0, 1, 0], r=radius, name="%s_%s_Ctl" % (asset_type_short_name, asset_name))
-        circle_name = circle_list[0]
-        constraint_parent = mc.parentConstraint(circle_name, model_name, maintainOffset=True)
-        constraint_scale = mc.scaleConstraint(circle_name, model_name, maintainOffset=True)
-        mc.parent(constraint_parent, rig_group_name)
-        mc.parent(constraint_scale, rig_group_name)
-        mc.parent(circle_name, rig_group_name)
+        if task == "Nonactive":
+            bounding = mc.xform(model_name, q=1, bb=1)
+            max_value = max(abs(bounding[0]), abs(bounding[2]), abs(bounding[3]), abs(bounding[5]))
+            radius = max_value*1.1
+            center = mc.xform(model_name, q=1, sp=1, ws=1)
+            circle_list = mc.circle(c=center, nr=[0, 1, 0], r=radius, name="%s_%s_Ctl" % (asset_type_short_name, asset_name))
+            circle_name = circle_list[0]
+            constraint_parent = mc.parentConstraint(circle_name, model_name, maintainOffset=True)
+            constraint_scale = mc.scaleConstraint(circle_name, model_name, maintainOffset=True)
+            mc.parent(constraint_parent, rig_group_name)
+            mc.parent(constraint_scale, rig_group_name)
+            mc.parent(circle_name, rig_group_name)
     create_group.create_group(rig_group_name, root_group_name)
     save_as.save_as(file_name)
     logger.info("%s publish successful!" % file_name)

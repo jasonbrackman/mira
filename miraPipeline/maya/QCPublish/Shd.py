@@ -17,7 +17,7 @@ def main():
     base_name = os.path.basename(scene_name)
     temp_dir = tempfile.gettempdir()
     temp_file = join_path.join_path2(temp_dir, base_name)
-    shutil.copy(scene_name, temp_file)
+    shutil.copyfile(scene_name, temp_file)
     logger.info("Copy to temp: %s" % temp_file)
     # copy all textures to _tex
     try:
@@ -34,7 +34,7 @@ def main():
     else:
         raise RuntimeError("copy to work path error.")
     # copy from temp file
-    shutil.copy(temp_file, scene_name)
+    shutil.copyfile(temp_file, scene_name)
     # delete temp file
     os.remove(temp_file)
     # open scene name

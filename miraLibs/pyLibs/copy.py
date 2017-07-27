@@ -11,7 +11,7 @@ def copy(src, dst):
     if not os.path.isdir(dst_dir):
         os.makedirs(dst_dir)
     try:
-        shutil.copy(src, dst)
+        shutil.copyfile(src, dst)
         return True
     except:
         print "Can't copy %s--->%s" % (src, dst)
