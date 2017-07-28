@@ -2,7 +2,7 @@
 import os
 import logging
 from Qt.QtWidgets import *
-from miraLibs.mayaLibs import open_file, get_scene_name
+from miraLibs.mayaLibs import open_file, get_scene_name, save_file
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.pipeLibs.pipeMaya import publish
 from miraLibs.dbLibs import db_api
@@ -13,6 +13,7 @@ logger = logging.getLogger("Rig auto publish")
 
 def auto_publish():
     scene_name = get_scene_name.get_scene_name()
+    save_file.save_file()
     context = pipeFile.PathDetails.parse_path(scene_name)
     if context.step not in ["MidRig", "HighRig"]:
         return

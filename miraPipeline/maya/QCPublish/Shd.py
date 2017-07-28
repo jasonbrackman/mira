@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 import tempfile
-import shutil
 import logging
-from miraLibs.pyLibs import join_path
+from miraLibs.pyLibs import join_path, copy
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import get_scene_name, save_file, open_file
 from miraLibs.pipeLibs.copy import Copy
@@ -17,7 +16,7 @@ def main():
     base_name = os.path.basename(scene_name)
     temp_dir = tempfile.gettempdir()
     temp_file = join_path.join_path2(temp_dir, base_name)
-    shutil.copyfile(scene_name, temp_file)
+    copy.copy(scene_name, temp_file)
     logger.info("Copy to temp: %s" % temp_file)
     # copy all textures to _tex
     try:
@@ -34,7 +33,7 @@ def main():
     else:
         raise RuntimeError("copy to work path error.")
     # copy from temp file
-    shutil.copyfile(temp_file, scene_name)
+    copy.copy(temp_file, scene_name)
     # delete temp file
     os.remove(temp_file)
     # open scene name
