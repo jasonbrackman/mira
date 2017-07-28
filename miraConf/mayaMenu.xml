@@ -24,6 +24,11 @@
         <command cmd="from miraScripts.mayaTools.rig_tool import auto_publish;reload(auto_publish);auto_publish.auto_publish()"
                  mode="python" name="Auto publish" type="command"/>
     </submenu>
+    <!--hair tools-->
+    <submenu name="Hair" type="submenu">
+        <command cmd="from miraScripts.mayaTools.hair_tool import set_project;reload(set_project);set_project.main()"
+                 mode="python" name="Set Project" type="command"/>
+    </submenu>
     <!--sceneset tools-->
     <submenu name="sceneset" type="submenu">
         <command cmd="from miraPipeline.maya.ass_operations import import_ass;reload(import_ass);import_ass.main()"

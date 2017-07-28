@@ -190,6 +190,10 @@ class PathDetails(object):
     def tex_dir(self):
         return self.get_path("tex")
 
+    @property
+    def xgen_dir(self):
+        return self.get_path("xgen")
+
 
 ########################################################################################################################
 # below is for get asset files
