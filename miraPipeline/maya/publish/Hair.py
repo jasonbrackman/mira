@@ -1,29 +1,30 @@
 # -*- coding: utf-8 -*-
 import logging
-import maya.cmds as mc
-from miraLibs.mayaLibs import import_load_remove_unload_ref, open_file, save_as, \
-    quit_maya, export_selected, delete_layer
 from miraLibs.pipeLibs import pipeFile
+from miraLibs.pipeLibs.pipeMaya import get_model_name, publish
+from miraLibs.mayaLibs import open_file, quit_maya, export_abc, Xgen
+
+
+logger = logging.getLogger("Hair publish")
 
 
 def main(file_name):
-    logger = logging.getLogger("hair publish")
     open_file.open_file(file_name)
-    obj = pipeFile.PathDetails.parse_path(file_name)
-    asset_type_short_name = obj.asset_type_short_name
-    asset_name = obj.asset_name
-    publish_path = obj.publish_path
-    hair_path = obj.hair_path
-    yeti_group = "%s_%s_yetiNode" % (asset_type_short_name, asset_name)
-    # import mdl reference
-    import_load_remove_unload_ref.import_load_remove_unload_ref()
-    # export yeti group to _hair group
-    delete_layer.delete_layer()
-    mc.select(yeti_group, r=1)
-    export_selected.export_selected(hair_path)
-    logger.info("export yeti node to _hair done.")
-    mc.delete(yeti_group)
-    # save to publish path
-    save_as.save_as(publish_path)
-    # quit maya
+    # get paths
+    context = pipeFile.PathDetails.parse_path(file_name)
+    hair_cache_path = context.abc_cache_path
+    hair_path = context.hair_path
+    asset_name = context.asset_name
+    # copy image
+    publish.copy_image_and_video(context)
+    logger.info("Copy image done.")
+    # export SCULP group to abc
+    model_name = get_model_name.get_model_name("hair")
+    export_abc.export_abc(1, 1, hair_cache_path, model_name)
+    logger.info("Export abc done.")
+    # export xgen file
+    collection_node = str("%s_collection" % asset_name)
+    xgen = Xgen.Xgen()
+    xgen.export_palette(collection_node, hair_path)
+    logger.info("Export .xgen file done.")
     quit_maya.quit_maya()
