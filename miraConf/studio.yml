@@ -70,6 +70,7 @@ SnowKidTest:
   maya_asset_definition: "{primary}/{project}/publish/assets/{asset_type}/{asset_name}/{project}_{asset_name}_AD.ma"
   maya_asset_tex: "{primary}/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_tex/{engine}"
   maya_asset_xgen: "{primary}/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_xgen/{engine}"
+  maya_asset_hair: "{primary}/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_hair/{engine}/{project}_{asset_name}_{step}_{task}.xgen"
   # -shot
   shot_template: "{primary}/{project}/{category}/shots/{sequence}/{shot}/{step}/{task}/{area}/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.{ext}"
   # --local

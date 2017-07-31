@@ -14,10 +14,11 @@ def main():
     logger = logging.getLogger(__name__)
     scene_name = get_scene_name.get_scene_name()
     context = pipeFile.PathDetails.parse_path()
+    asset_name = context.asset_name
+    collection_node = "%s_collection" % asset_name
     # copy scene and .xgen file to temp dir
     base_name = os.path.basename(scene_name)
-    ext_name = os.path.splitext(base_name)[0]
-    xgen_base_name = "%s__%s_collection.xgen" % (ext_name, context.asset_name)
+    xgen_base_name = mc.getAttr("%s.xgFileName" % collection_node)
     xgen_path = join_path.join_path2(os.path.dirname(scene_name), xgen_base_name)
     temp_dir = tempfile.gettempdir()
     maya_temp_file = join_path.join_path2(temp_dir, base_name)

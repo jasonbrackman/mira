@@ -194,6 +194,10 @@ class PathDetails(object):
     def xgen_dir(self):
         return self.get_path("xgen")
 
+    @property
+    def hair_path(self):
+        return self.get_path("hair")
+
 
 ########################################################################################################################
 # below is for get asset files
