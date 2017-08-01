@@ -36,6 +36,8 @@ class ThumbnailWidget(QWidget):
         self._btns_transition_anim = None
         self._update_ui()
 
+        self.thumbnail_changed.connect(self._on_thumbnail_changed)
+
     # @property
     def _get_thumbnail(self):
         pm_map = self._ui.thumbnail.pixmap()
@@ -135,7 +137,10 @@ class ThumbnailWidget(QWidget):
             self._ui.buttons_frame.hide()
 
     def _on_camera_clicked(self):
-        # self.hide()
+        if self.parent():
+            self.parent().hide()
+        else:
+            self.hide()
         pm_map = self._on_screenshot()
         if pm_map:
             self.thumbnail = pm_map
@@ -228,6 +233,12 @@ class ThumbnailWidget(QWidget):
                 win.setGeometry(win_geom)
                 QCoreApplication.processEvents()
         return pm_map
+
+    def _on_thumbnail_changed(self):
+        if self.parent():
+            self.parent().show()
+        else:
+            self.show()
 
 
 if __name__ == "__main__":
