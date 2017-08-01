@@ -96,19 +96,17 @@
     <submenu name="public" type="submenu">
         <command cmd="import miraPipeline.maya.maya_save_timer.ResetUI as UI; reload(UI);dlg=UI.ResetUI();dlg.show()"
                  mode="python" name="设置保存提醒时间【SetSaveTimer】" type="command"/>
-        <command cmd="from miraPipeline.maya.ass_display_mode import ass_display_mode;reload(ass_display_mode);ass_display_mode.main()"
-                 mode="python" name="切换ASS显示模式【switch ass display mode】" type="command"/>
-        <command cmd="from miraPipeline.maya.scene_break_down import scene_break_down;reload(scene_break_down);scene_break_down.main()"
-                 mode="python" name="更新reference【refresh reference】" type="command"/>
-        <command cmd="import miraPipeline.maya.scene_break_down.ResetUI as UI; reload(UI);dlg=UI.ResetUI();dlg.show()"
-                 mode="python" name="设置版本更新时间【ReferenceUpdateTimer】" type="command"/>
-    </submenu>
-    <submenu name= "----------" type="separator"/>
-    <!--custom tools-->
-    <submenu name="custom" type="submenu">
+        <!--<command cmd="from miraPipeline.maya.ass_display_mode import ass_display_mode;reload(ass_display_mode);ass_display_mode.main()"-->
+                 <!--mode="python" name="切换ASS显示模式【switch ass display mode】" type="command"/>-->
+        <!--<command cmd="from miraPipeline.maya.scene_break_down import scene_break_down;reload(scene_break_down);scene_break_down.main()"-->
+                 <!--mode="python" name="更新reference【refresh reference】" type="command"/>-->
+        <!--<command cmd="import miraPipeline.maya.scene_break_down.ResetUI as UI; reload(UI);dlg=UI.ResetUI();dlg.show()"-->
+                 <!--mode="python" name="设置版本更新时间【ReferenceUpdateTimer】" type="command"/>-->
         <command cmd="from miraLibs.pipeLibs.pipeMaya import hud;reload(hud);hu=hud.get_hud_object();hu.show()"
                  mode="python" name="显示HUD【Show hud】" type="command"/>
         <command cmd="from miraLibs.pipeLibs.pipeMaya import hud;reload(hud);hu=hud.get_hud_object();hu.clear()"
                  mode="python" name="隐藏HUD【Hide hud】" type="command"/>
+        <command cmd="from miraScripts.mayaTools.public_tool import switch_assembly;reload(switch_assembly);switch_assembly.main()"
+                 mode="python" name="切换assembly【Switch Assembly】" type="command"/>
     </submenu>
 </menu>
