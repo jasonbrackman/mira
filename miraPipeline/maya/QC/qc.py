@@ -8,6 +8,7 @@ from Qt.QtGui import *
 import miraCore
 from miraLibs.pyLibs import join_path, copy
 from miraFramework.screen_shot import screen_shot
+reload(screen_shot)
 from miraFramework.drag_file_widget import DragFileWidget
 from miraLibs.pipeLibs import pipeFile, pipeMira
 from miraPipeline.pipeline.preflight import check_gui
@@ -141,7 +142,7 @@ class QC(QDialog):
         self.stretch_check.setEnabled(False)
         self.stretch_check.setFixedWidth(COLUMN_WIDTH)
         self.screen_shot_widget = screen_shot.ThumbnailWidget()
-        self.screen_shot_widget.setFixedHeight(150)
+        self.screen_shot_widget.setFixedHeight(180)
         self.screen_shot_label = StatusLabel()
         screen_shot_layout.addWidget(self.stretch_check)
         screen_shot_layout.addWidget(self.screen_shot_widget)
@@ -288,8 +289,9 @@ class QC(QDialog):
 
 
 def main():
-    from miraLibs.qtLibs import render_ui
-    render_ui.render(QC)
+    from miraLibs.osLibs import get_parent_win
+    qc = QC(get_parent_win.get_parent_win())
+    qc.show()
 
 
 if __name__ == "__main__":

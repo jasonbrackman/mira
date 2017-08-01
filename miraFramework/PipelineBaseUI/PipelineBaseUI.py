@@ -56,10 +56,14 @@ class BackgroundWidget(HasBackgroundWidget):
 
 
 class PipelineBaseUI(QDialog):
-    def __init__(self, widget_class, parent=None):
+    def __init__(self, ui, parent=None):
         super(PipelineBaseUI, self).__init__(parent)
         self.setObjectName("PipelineBaseUI")
-        self.widget = widget_class()
+        self.ui = ui
+        if isinstance(self.ui, QWidget):
+            self.widget = self.ui
+        else:
+            self.widget = ui()
         self.widget.parent_win = self
         window_title = self.widget.windowTitle()
         self.setWindowTitle(window_title)
