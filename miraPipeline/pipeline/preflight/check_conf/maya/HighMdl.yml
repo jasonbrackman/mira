@@ -103,6 +103,11 @@ check_mdl_transform_locked:
   order: 180
   ignorable: True
   description: "锁定所有模型的旋转缩放位移属性"
+check_mdl_MODEL_unlock:
+  name: "Transform locked | 解锁模型大组的基础属性"
+  order: 185
+  ignorable: True
+  description: "解锁模型大组的基础属性，不然绑定不能约束。"
 check_backup_visibility_unlocked:
   name: "Unlock _BACKUP.v | 解锁_BACKUP组的显示属性"
   order: 190
