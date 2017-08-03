@@ -7,7 +7,7 @@ from miraLibs.mayaLibs import new_file, save_as, create_reference, create_group,
 
 
 def main(file_name, local):
-    logger = logging.getLogger("lowRig start")
+    logger = logging.getLogger("HighRig start")
     new_file.new_file()
     context = pipeFile.PathDetails.parse_path(file_name)
     project = context.project
@@ -20,22 +20,13 @@ def main(file_name, local):
     if not os.path.isfile(MidRig_publish_file):
         MidRig_publish_file = pipeFile.get_task_publish_file(project, entity_type, asset_type, asset_name, "MidRig", "MidRig")
     HighMdl_publish_file = pipeFile.get_task_publish_file(project, entity_type, asset_type, asset_name, "HighMdl", "HighMdl")
-    # Nonactive: only reference in HighMdl publish file.
-    if task == "Nonactive":
-        if not os.path.isfile(HighMdl_publish_file):
-            logger.warning("No HighMdl file published")
-            if not local:
-                quit_maya.quit_maya()
-            return
-    # Active: reference in MidRig and HighMdl
-    if task == "Active":
-        if not (os.path.isfile(MidRig_publish_file) and os.path.isfile(HighMdl_publish_file)):
-            logger.warning("No HighMdl file published or No MidRig file published.")
-            if not local:
-                quit_maya.quit_maya()
-            return
+    if not (os.path.isfile(MidRig_publish_file) and os.path.isfile(HighMdl_publish_file)):
+        logger.warning("No HighMdl file published or No MidRig file published.")
+        if not local:
+            quit_maya.quit_maya()
+        return
     create_reference.create_reference(HighMdl_publish_file)
-    if task == "Active":
+    if asset_type in ["Character", "Cprop"]:
         create_reference.create_reference(MidRig_publish_file, "MidRig")
     model_name = "%s_%s_MODEL" % (asset_type_short_name, asset_name)
     # create root group
@@ -49,11 +40,11 @@ def main(file_name, local):
         create_group.create_group("Others", root_group_name)
         create_group.create_group("Geometry", root_group_name)
         create_group.create_group(model_name, "Geometry")
-    elif asset_type == "Prop":
+    elif asset_type in ["Prop", "Cprop"]:
         rig_group_name = "%s_%s_RIG" % (asset_type_short_name, asset_name)
         create_group.create_group(model_name, root_group_name)
         create_group.create_group(rig_group_name)
-        if task == "Nonactive":
+        if asset_type == "Prop":
             bounding = mc.xform(model_name, q=1, bb=1)
             max_value = max(abs(bounding[0]), abs(bounding[2]), abs(bounding[3]), abs(bounding[5]))
             radius = max_value*1.1

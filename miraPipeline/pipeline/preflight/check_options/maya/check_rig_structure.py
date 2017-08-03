@@ -24,7 +24,7 @@ class check_rig_structure(BaseCheck):
         asset_type = obj.asset_type
         children = mc.listRelatives(sel, children=1)
         model_name = sel.replace("_ROOT", "_MODEL")
-        if asset_type == "Prop":
+        if asset_type in ["Prop", "Cprop"]:
             rig_name = sel.replace("_ROOT", "_RIG")
             normal_list = [model_name, rig_name]
         elif asset_type == "Character":

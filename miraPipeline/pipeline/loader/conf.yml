@@ -9,4 +9,4 @@ maya:
     entity:
       actions: ["AR", "Launch Folder"]
     task:
-      actions: ["QA", "import", "reference", "Launch Workarea", "Launch Publish"]
+      actions: ["QA", "open", "import", "reference", "Launch Workarea", "Launch Publish"]

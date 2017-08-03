@@ -283,8 +283,8 @@ class QC(QDialog):
                 self.post_qc_widget.fail()
                 return
         # close self and pop a message box to tell that all finished
-        self.parent_win.close()
-        self.parent_win.deleteLater()
+        self.close()
+        self.deleteLater()
         QMessageBox.information(None, "Warming Tip", "Congratulations, QC successful.")
 
 
