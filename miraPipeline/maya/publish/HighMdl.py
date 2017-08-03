@@ -23,7 +23,7 @@ def main(file_name):
     publish.export_model_to_abc(context)
     logger.info("Export abc done.")
     # write out topology
-    if asset_type in ["Character", "Prop"]:
+    if asset_type in ["Character", "Prop", "Cprop"]:
         # write out topology
         topology_path = context.topology_path
         model_name = get_model_name.get_model_name()

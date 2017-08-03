@@ -7,7 +7,7 @@ from miraLibs.pyLibs import opposite_format, get_latest_version
 from miraLibs.pipeLibs.pipeMira import get_projects, get_local_root_dir, get_primary_dir, get_studio_value
 
 
-type_dict = {"Character": "char", "Prop": "prop", "Environment": "env", "Building": "build"}
+type_dict = {"Character": "char", "Prop": "prop", "Cprop": "cprop", "Environment": "env", "Building": "build"}
 
 
 def get_entity_type(path):

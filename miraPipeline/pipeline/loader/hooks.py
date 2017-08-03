@@ -17,7 +17,6 @@ class Hook(object):
         self.__action_name = self.__action.text()
 
     def execute(self):
-        # "AD", "Launch AD", "start", "publish", "test", "import", "reference", "Launch Workarea", "Launch Publish"
         if self.__action_name == "AR":
             self.ad_opt()
         elif self.__action_name == "Launch Folder":
@@ -28,6 +27,8 @@ class Hook(object):
             self.publish()
         elif self.__action_name == "QA":
             self.quality_control()
+        elif self.__action_name == "open":
+            self.do_open()
         elif self.__action_name == "import":
             self.do_import()
         elif self.__action_name == "reference":
@@ -69,8 +70,7 @@ class Hook(object):
         fo.run()
 
     def maya_opt(self, opt):
-        from miraLibs.mayaLibs import maya_import
-        from miraLibs.mayaLibs import create_reference
+        from miraLibs.mayaLibs import maya_import, create_reference, open_file
         error_list = list()
         for asset_shot_name in self.__asset_shot_names:
             publish_file = pipeFile.get_task_publish_file(self.__project, self.__entity_type,
@@ -83,8 +83,13 @@ class Hook(object):
                 maya_import.maya_import(publish_file)
             elif opt == "reference":
                 create_reference.create_reference(publish_file, asset_shot_name)
+            elif opt == "open":
+                open_file.open_file(publish_file)
         if error_list:
             QMessageBox.warning(None, "Warming Tip", "%s \n\nis not an exist file." % "\n\n".join(error_list))
+
+    def do_open(self):
+        self.maya_opt("open")
 
     def do_import(self):
         self.maya_opt("import")
