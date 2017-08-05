@@ -194,7 +194,7 @@ class St(object):
     def get_task_entity_type(task):
         if not task.__contains__("item"):
             return
-        type_dict = {70: "Shot", 40: "Asset"}
+        type_dict = {"shot": "Shot", "asset": "Asset"}
         task_entity_type = type_dict.get(task.get("item").get("type"))
         return task_entity_type
 
