@@ -14,7 +14,7 @@ class check_display_layer(BaseCheck):
 
     def get_error_list(self):
         display_layers = mc.ls(type="displayLayer")
-        error_list = [layer for layer in display_layers if not "defaultLayer" in layer]
+        error_list = [layer for layer in display_layers if not layer == "defaultLayer"]
         return error_list
 
     def auto_solve(self):

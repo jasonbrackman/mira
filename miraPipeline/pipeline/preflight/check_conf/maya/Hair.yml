@@ -23,6 +23,16 @@ check_unused_nodes:
   order: 15
   ignorable: False
   description: "删除无用节点"
+check_display_layer:
+  name: "Display layer | 多余的显示层"
+  order: 20
+  ignorable: False
+  description: "检查是否有多余的显示层"
+check_render_layer:
+  name: "Render layer | 多余的渲染层"
+  order: 25
+  ignorable: False
+  description: "检查是否有多余的渲染层"
 check_save_file:
   name: "Save file | 保存文件"
   order: 50

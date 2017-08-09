@@ -16,7 +16,7 @@ class check_render_layer(BaseCheck):
     @staticmethod
     def get_render_layer():
         all_layer = mc.ls(type="renderLayer")
-        invalid_renderlayer = [layer for layer in all_layer if "defaultRenderLayer" not in layer]
+        invalid_renderlayer = [layer for layer in all_layer if not layer == "defaultRenderLayer"]
         return invalid_renderlayer
 
     def auto_solve(self):

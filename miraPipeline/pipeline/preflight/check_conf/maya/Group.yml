@@ -13,6 +13,11 @@ check_display_layer:
   order: 20
   ignorable: False
   description: "不能有显示层的存在"
+check_render_layer:
+  name: "Render layer | 多余的渲染层"
+  order: 25
+  ignorable: False
+  description: "检查是否有多余的渲染层"
 check_save_file:
   name: "Save file | 保存文件"
   order: 30
