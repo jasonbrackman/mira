@@ -118,8 +118,18 @@ check_unknown_node:
   order: 205
   ignorable: False
   description: "删除unkonwn节点"
+check_display_layer:
+  name: "Display layer | 多余的显示层"
+  order: 210
+  ignorable: False
+  description: "检查是否有多余的显示层"
+check_render_layer:
+  name: "Render layer | 多余的渲染层"
+  order: 215
+  ignorable: False
+  description: "检查是否有多余的渲染层"
 check_save_file:
   name: "Save file | 保存文件"
-  order: 210
+  order: 220
   ignorable: True
   description: "保存检查后的文件"
