@@ -148,6 +148,16 @@ check_duplicate_names_again:
   order: 260
   ignorable: False
   description: "检查是否有同名物体存在"
+check_display_layer:
+  name: "Display layer | 多余的显示层"
+  order: 265
+  ignorable: False
+  description: "检查是否有多余的显示层"
+check_render_layer:
+  name: "Render layer | 多余的渲染层"
+  order: 270
+  ignorable: False
+  description: "检查是否有多余的渲染层"
 check_save_file:
   name: "Save file | 保存文件"
   order: 270
