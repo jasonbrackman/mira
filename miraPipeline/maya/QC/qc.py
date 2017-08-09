@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
-import sys
 import logging
+import imp
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
@@ -24,10 +24,9 @@ COLUMN_WIDTH = 30
 def qcpublish(step):
     script_dir = miraCore.get_pipeline_dir()
     qcpublish_dir = join_path.join_path2(script_dir, "maya", "QCPublish")
-    if qcpublish_dir not in sys.path:
-        sys.path.insert(0, qcpublish_dir)
-    cmd_text = "import {0}; reload({0}); {0}.main()".format(step)
-    exec(cmd_text)
+    fn_, path, desc = imp.find_module(step, [qcpublish_dir])
+    mod = imp.load_module(step, fn_, path, desc)
+    mod.main()
 
 
 def post_qcpublish(context):
