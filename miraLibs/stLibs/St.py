@@ -130,7 +130,7 @@ class St(object):
         entity_info = self.get_entity_info(entity_type, asset_type_or_sequence, asset_or_shot)
         entity_id = entity_info.get("id")
         task_filters = "item_id=%s and step_id=%s and name=%s" % (entity_id, step_id, task_name)
-        task_info = self.st.task.find(filters=task_filters, fields=["custom", "status.color", "status.name"])
+        task_info = self.st.task.find(filters=task_filters, fields=["json", "status.color", "status.name"])
         return task_info
 
     def get_status_color(self, status_id):
@@ -208,26 +208,21 @@ class St(object):
             self.st.media.encoding(version.get("id"), media_path)
 
     def update_file_path(self, task_info, work_file_path="", publish_file_path=""):
-        import json
-        old_value = task_info.get("file_path")
+        old_value = task_info.get("json")
         if not old_value:
             old_value = dict()
-        else:
-            old_value = old_value.replace("&quot;", '"')
-            old_value = json.loads(old_value)
         if work_file_path:
             old_value["work_file_path"] = work_file_path
         if publish_file_path:
             old_value["publish_file_path"] = publish_file_path
-        data = json.dumps(old_value)
-        self.update_task(task_info, file_path=data)
+        self.update_task(task_info, json=old_value)
 
 
 if __name__ == "__main__":
     st = St("SnowKidTest")
-    # file_path = "W:/SnowKidTest/workarea/assets/Prop/TdTest/MidMdl/MidMdl/_workarea/maya/SnowKidTest_TdTest_MidMdl_MidMdl_v004.ma"
-    # media_path = "W:/SnowKidTest/workarea/assets/Prop/TdTest/MidMdl/MidMdl/_video/maya/SnowKidTest_TdTest_MidMdl_MidMdl_v002.mov"
+    print st.st.task.find("id=615", ["custom"])
+    # st.st.task.update(615, {"json": {"work_file_path": "W:/SnowKidTest/workarea/assets/Prop/TdTest/Hair/Hair/_workarea/maya/SnowKidTest_TdTest_Hair_Hair_v005.ma"}})
     # print st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")
     # print st.get_my_tasks()
-    print st.get_current_task("Shot", "s999", "s999_c001", "AnimLay", "AnimLay")
+    # print st.get_current_task("Shot", "s999", "s999_c001", "AnimLay", "AnimLay")
 

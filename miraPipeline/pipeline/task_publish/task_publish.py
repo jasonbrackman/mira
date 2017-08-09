@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-import json
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
@@ -84,11 +83,9 @@ class TaskPublish(QDialog):
             status_color = task_info.get("status").get("color")
             status_name = task_info.get("status").get("name")
             self.task_status_label.setText("<font color=%s><b>%s</b></font>" % (status_color, status_name))
-            file_path = task_info.get("file_path")
-            file_path = file_path.replace("&quot;", '"')
-            work_file_path = json.loads(file_path).get("work_file_path")
-            if work_file_path:
-                self.path_le.setText(work_file_path)
+            json_data = task_info.get("json")
+            if json_data and json_data. has_key("work_file_path"):
+                self.path_le.setText(json_data.get("work_file_path"))
             else:
                 self.path_le.setText("")
 
