@@ -18,11 +18,16 @@ check_hair_structure:
   order: 10
   ignorable: False
   description: "SCULP和collection在大纲最外层。"
-check_unused_nodes:
-  name: "Unused nodes | 删除无用节点"
+check_unknown_node:
+  name: "Unknown nodes | 删除unknown节点"
   order: 15
   ignorable: False
-  description: "删除无用节点"
+  description: "删除unkonwn节点"
+check_unknown_plugin:
+  name: "Unknown plugin | 删除unknown插件"
+  order: 18
+  ignorable: False
+  description: "删除unkonwn插件"
 check_display_layer:
   name: "Display layer | 多余的显示层"
   order: 20

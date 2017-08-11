@@ -6,8 +6,8 @@ from BaseCheck import BaseCheck
 
 class check_unknown_node(BaseCheck):
     def run(self):
-        unknown_nodes = self.get_unknown_nodes()
-        if unknown_nodes:
+        self.error_list = self.get_unknown_nodes()
+        if self.error_list:
             self.fail_check("Unknown nodes exist.")
         else:
             self.pass_check("No unknown nodes exist.")
@@ -25,7 +25,7 @@ class check_unknown_node(BaseCheck):
                 mc.delete(node)
             except:pass
         self.error_list = self.get_unknown_nodes()
-        if unknown_nodes:
+        if self.error_list:
             self.fail_check("There are some unknown can not be deleted.")
         else:
             self.pass_check("All unknown nodes has been deleted.")

@@ -143,6 +143,11 @@ check_unknown_node:
   order: 255
   ignorable: False
   description: "删除unkonwn节点"
+check_unknown_plugin:
+  name: "Unknown plugin | 删除unknown插件"
+  order: 258
+  ignorable: False
+  description: "删除unkonwn插件"
 check_duplicate_names_again:
   name: "Duplicate names | 同名物体"
   order: 260
