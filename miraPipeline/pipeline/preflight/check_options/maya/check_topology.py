@@ -10,8 +10,8 @@ from miraLibs.mayaLibs import hierarchy_opt
 class check_topology(BaseCheck):
 
     def run(self):
-        obj = pipeFile.PathDetails.parse_path()
-        if obj.asset_type in ["Environment"]:
+        context = pipeFile.PathDetails.parse_path()
+        if context.asset_type in ["Environment"]:
             self.pass_check(u"场景资产不需要检查此项。")
             return
         mdl_topology = self.get_error_topology()
@@ -43,9 +43,15 @@ class check_topology(BaseCheck):
     @staticmethod
     def get_error_topology():
         model_name = get_model_name.get_model_name()
-        reference_file = mc.referenceQuery(model_name, filename=1, withoutCopyNumber=1)
-        obj = pipeFile.PathDetails.parse_path(reference_file)
-        topology_path = obj.topology_path
+        # reference_file = mc.referenceQuery(model_name, filename=1, withoutCopyNumber=1)
+        context = pipeFile.PathDetails.parse_path()
+        project = context.project
+        entity_type = context.entity_type
+        asset_type = context.asset_type
+        asset_name = context.asset_name
+        HighMdl_file = pipeFile.get_task_publish_file(project, entity_type, asset_type, asset_name, "HighMdl", "HighMdl")
+        context = pipeFile.PathDetails.parse_path(HighMdl_file)
+        topology_path = context.topology_path
         if not os.path.isfile(topology_path):
             return
         ho = hierarchy_opt.HierarchyOpt(model_name)
