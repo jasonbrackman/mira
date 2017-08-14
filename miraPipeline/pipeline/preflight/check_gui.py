@@ -9,6 +9,7 @@ from libs import get_context, get_context_conf_path, add_environ, \
 
 
 logger = logging.getLogger("PREFLIGHT")
+CONF_PATH = get_context_conf_path.get_context_conf_path()
 
 
 class ScriptError(RuntimeError):
@@ -257,11 +258,7 @@ class CheckGui(QDialog):
         horizontal_header.setStyleSheet("QHeaderView{color: #DDDDDD}")
 
     def set_cell_widget(self):
-        conf_path = get_context_conf_path.get_context_conf_path()
-        if (not conf_path) or (not os.path.isfile(conf_path)):
-            QMessageBox.critical(self, "Critical", "This context has no configuration .yml file.")
-            return
-        cp = conf_parser.ConfParser(conf_path)
+        cp = conf_parser.ConfParser(CONF_PATH)
         conf_data = cp.parse().get()
         check_options = sorted(conf_data, key=lambda key: conf_data[key]["order"])
         self.table_widget.setRowCount(len(check_options))
@@ -374,6 +371,9 @@ def main():
     # cg = CheckGui(get_parent_win.get_parent_win())
     # cg.show()
     # return cg
+    if (not CONF_PATH) or (not os.path.isfile(CONF_PATH)):
+        QMessageBox.critical(None, "Critical", "This context has no configuration .yml file.")
+        return
     from miraLibs.qtLibs import render_ui
     return render_ui.render(CheckGui)
 
