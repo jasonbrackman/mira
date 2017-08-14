@@ -16,7 +16,7 @@ class ThumbListView(QListView):
         self.setMovement(QListView.Static)
         self.setFocusPolicy(Qt.NoFocus)
         self.setWrapping(True)
-        self.setSpacing(25)
+        # self.setSpacing(5)
 
 
 class LoaderUI(QMainWindow):
