@@ -7,6 +7,7 @@ class check_shd_same_tex_name(BaseCheck):
 
     def run(self):
         self.error_list = get_same_base_name_textures.get_same_base_name_textures()
+        print self.error_list
         if self.error_list:
             self.fail_check(u"这些贴图在不同的路径下，有相同的名字")
         else:
