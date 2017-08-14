@@ -30,5 +30,5 @@ def get_same_base_name_textures():
         same_base_name_files.append(temp_list)
     for i in same_base_name_files:
         if len(list(set(i))) != 1:
-            wrong_files.append(i)
+            wrong_files.extend(i)
     return wrong_files

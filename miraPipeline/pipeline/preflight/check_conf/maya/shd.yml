@@ -78,16 +78,16 @@ check_shd_texture_name:
   order: 87
   ignorable: False
   description: "检查贴图是否命名正确"
-check_shd_same_tex_name:
-  name: "Same texture name | 相同的贴图名字"
-  order: 90
-  ignorable: False
-  description: "检查贴图是否存在不同的路径下，但是有相同的名字，如果有这种情况，拷贝到服务器上的时候会报错"
 check_shd_empty_file_path:
   name: "Invalid file path | 贴图路径"
-  order: 100
+  order: 90
   ignorable: False
   description: "检查贴图路径是否正确"
+check_shd_same_tex_name:
+  name: "Same texture name | 相同的贴图名字"
+  order: 100
+  ignorable: False
+  description: "检查贴图是否存在不同的路径下，但是有相同的名字，如果有这种情况，拷贝到服务器上的时候会报错"
 check_mdl_transform_freeze:
   name: "transform freeze | freeze所有模型"
   order: 110
