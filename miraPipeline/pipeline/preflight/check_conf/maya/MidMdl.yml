@@ -73,6 +73,11 @@ check_mdl_instance:
   order: 130
   ignorable: False
   description: "检查是否有关联复制的模型"
+check_mdl_intermediate:
+  name: "Intermediate Objects | 中间物体"
+  order: 135
+  ignorable: False
+  description: "中间物体，变形或者传递UV产生的多余的shape."
 check_mdl_extra_shape:
   name: "Extra shape | 多余的shape"
   order: 140
