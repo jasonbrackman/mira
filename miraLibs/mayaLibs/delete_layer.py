@@ -4,7 +4,7 @@ import maya.cmds as mc
 
 def delete_display_layer():
     layers = mc.ls(type="displayLayer")
-    layers = [layer for layer in layers if "defaultLayer" not in layer]
+    layers = [layer for layer in layers if not layer == "defaultLayer"]
     if not layers:
         return
     mc.delete(layers)
@@ -12,7 +12,7 @@ def delete_display_layer():
 
 def delete_render_layer():
     layers = mc.ls(type="renderLayer")
-    layers = [layer for layer in layers if "defaultRenderLayer" not in layer]
+    layers = [layer for layer in layers if not layer == "defaultRenderLayer"]
     if not layers:
         return
     for layer in layers:
