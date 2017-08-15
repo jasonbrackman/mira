@@ -192,6 +192,7 @@ class Loader(loader_ui.LoaderUI):
         self.proxy_model = QSortFilterProxyModel()
         self.proxy_model.setDynamicSortFilter(True)
         self.proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
+        self.proxy_model .setSortCaseSensitivity(Qt.CaseInsensitive)
         self.filter_le.textChanged.connect(self.proxy_model.setFilterRegExp)
         self.model = LoaderModel(model_data)
         self.proxy_model.setSourceModel(self.model)

@@ -133,6 +133,7 @@ class FailDialog(QDialog):
             self.error_list_widget.clear()
             if self.check_object.error_list:
                 self.error_list_widget.addItems(self.check_object.error_list)
+                self.error_info_text.setText(self.check_object.info)
         except Exception as e:
             logger.error(str(e))
             QMessageBox.critical(self, "Warming Tip", u"Script Error, Connect TD.脚本错误，联系TD")
