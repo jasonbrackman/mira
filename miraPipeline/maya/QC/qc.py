@@ -45,6 +45,7 @@ def post_qcpublish(context, version_file):
     logger.info("Upload version done.")
     # update task
     db.update_file_path(task, work_file_path=context.work_path)
+    db.update_task(task, current_version=int(context.version))
     logger.info("Update work file done.")
 
 
@@ -335,7 +336,7 @@ def main():
         qc = QC(get_parent_win.get_parent_win())
         qc.show()
     else:
-        QMessageBox.critical(None, "Warming Tip", "This file is not an valid file.Please check it ^ ^")
+        QMessageBox.critical(None, "Warming Tip", "This file is not a valid file.Please check it ^ ^")
 
 
 if __name__ == "__main__":
