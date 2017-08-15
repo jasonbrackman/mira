@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import maya.cmds as mc
 from BaseCheck import BaseCheck
-from miraLibs.mayaLibs import delete_history
+from miraLibs.mayaLibs import delete_history, delete_intermediate_object
 
 
 class check_mdl_intermediate(BaseCheck):
@@ -19,10 +19,9 @@ class check_mdl_intermediate(BaseCheck):
         return intermediate_objects
 
     def auto_solve(self):
-        intermediate_objects = self.get_error_list()
         delete_history.delete_history()
         try:
-            mc.delete(intermediate_objects)
+            delete_intermediate_object.delete_intermediate_object()
         except:pass
         self.error_list = self.get_error_list()
         if self.error_list:
