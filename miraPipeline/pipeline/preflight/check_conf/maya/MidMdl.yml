@@ -28,11 +28,6 @@ check_mdl_reference_node:
   order: 40
   ignorable: False
   description: "检查模型大组下是否有reference节点的存在"
-check_mdl_delete_history:
-  name: "Delete History | 删除历史"
-  order: 50
-  ignorable: False
-  description: "删除大组下所有模型的历史"
 check_naming_space:
   name: "Naming space | 名称空间"
   order: 60
@@ -121,7 +116,7 @@ check_backup_visibility_unlocked:
 check_mdl_render_property:
   name: "Render property | 打开渲染属性"
   order: 200
-  ignorable: True
+  ignorable: False
   description: "打开模型大组下所有模型的渲染属性"
 check_use_default_lambert:
   name: "Assign lambert1 | 赋予了lambert1"
@@ -138,6 +133,16 @@ check_shd_empty_file_path:
   order: 240
   ignorable: False
   description: "检查贴图路径是否正确"
+check_mdl_vertex_zero:
+  name: "Vertex freeze | 点属性归零"
+  order: 242
+  ignorable: False
+  description: "检查模型的点是否归零"
+check_mdl_delete_history:
+  name: "Delete History | 删除历史"
+  order: 245
+  ignorable: False
+  description: "删除大组下所有模型的历史"
 check_unused_nodes:
   name: "Unused nodes | 删除无用节点"
   order: 250
