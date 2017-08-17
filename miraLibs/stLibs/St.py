@@ -220,10 +220,13 @@ class St(object):
 
 if __name__ == "__main__":
     st = St("SnowKidTest")
-    task = st.st.task.find("id=615")
-    st.update_task(task, current_version=10)
+    # for i in st.get_my_tasks():
+    #     print i
+    task = st.st.task.find("id=615", ["priority"])
+    print task
+    # st.update_task(task, current_version=10)
     # st.st.task.update(615, {"json": {"work_file_path": "W:/SnowKidTest/workarea/assets/Prop/TdTest/Hair/Hair/_workarea/maya/SnowKidTest_TdTest_Hair_Hair_v005.ma"}})
     # print st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")
-    # print st.get_my_tasks()
     # print st.get_current_task("Shot", "s999", "s999_c001", "AnimLay", "AnimLay")
+    # print st.st.task.relations
 

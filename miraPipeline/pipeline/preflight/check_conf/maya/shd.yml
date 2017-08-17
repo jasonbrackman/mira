@@ -88,6 +88,11 @@ check_mdl_transform_freeze:
   order: 110
   ignorable: False
   description: "将模型大组下的所有transform freeze"
+check_mdl_vertex_zero:
+  name: "Vertex freeze | 点属性归零"
+  order: 120
+  ignorable: False
+  description: "检查模型的点是否归零"
 check_unused_nodes:
   name: "Unused nodes | 删除无用节点"
   order: 150
