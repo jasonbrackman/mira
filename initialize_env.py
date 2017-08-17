@@ -14,8 +14,8 @@ def copytree(src, dst):
 
 
 def copy_plugins():
-    server_plugin_dir = "Z:/mira_tools"
-    local_plugin_dir = "C:/tools/mira_tools"
+    server_plugin_dir = "Z:/tools"
+    local_plugin_dir = "C:/tools"
     # stop redshift service
     try:
         os.system("sc delete RLM-Redshift")
