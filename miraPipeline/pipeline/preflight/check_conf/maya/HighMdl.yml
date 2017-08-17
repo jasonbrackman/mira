@@ -126,7 +126,7 @@ check_use_default_lambert:
 check_assigned_faces:
   name: "Assgin shader by face | 选面赋材质"
   order: 230
-  ignorable: False
+  ignorable: True
   description: "检查是否有模型选面赋材质"
 check_shd_empty_file_path:
   name: "Invalid file path | 贴图路径"
