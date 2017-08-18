@@ -19,8 +19,6 @@ class check_mdl_vertex_zero(BaseCheck):
                 continue
             vertexes = "%s.vtx[0:%s]" % (mesh, vtx_num-1)
             mc.polyMoveVertex(vertexes, ld=(0, 0, 0))
-            try:
-                delete_history.delete_history()
-            except:pass
+            mc.select(clear=1)
         mc.select(selected, r=1)
         self.pass_check(u"所有的点已清零")
