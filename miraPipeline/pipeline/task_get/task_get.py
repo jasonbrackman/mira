@@ -312,7 +312,6 @@ class TaskGet(task_get_ui.TaskGetUI):
     def set_model(self):
         self.root_node = Node("Task get")
         my_tasks = self.__db.get_my_tasks()
-        print "@"*100
         print my_tasks
         if not my_tasks:
             self.model = QStandardItemModel()
@@ -359,7 +358,6 @@ class TaskGet(task_get_ui.TaskGetUI):
         elif self.__db.typ == "strack":
             entity_types = [self.__db.get_task_entity_type(task) for task in my_tasks]
             entity_types = list(set(entity_types))
-            print entity_types
             if "Asset" in entity_types:
                 asset_entity_node = EntityNode("Asset", self.root_node)
             if "Shot" in entity_types:
@@ -368,7 +366,6 @@ class TaskGet(task_get_ui.TaskGetUI):
             sequence_nodes = list()
             for task in my_tasks:
                 task_entity_type = self.__db.get_task_entity_type(task)
-                print task_entity_type
                 task_entity_id = task.get("item_id")
                 task_entity_name = task.get("item").get("item_name")
                 task_name = task.get("name")
@@ -378,10 +375,8 @@ class TaskGet(task_get_ui.TaskGetUI):
                 due_date = task.get("due_date")
                 priority = task.get("priority")
                 if task_entity_type == "Asset":
-                    print task_entity_id, "ka"
                     asset_type_names = [node.name for node in asset_type_nodes]
                     asset_type_name = self.__db.get_asset_type_by_asset_id(task_entity_id)
-                    print asset_type_name
                     if asset_type_name not in asset_type_names:
                         asset_type_node = AssetTypeNode(asset_type_name, asset_entity_node)
                         asset_type_nodes.append(asset_type_node)
@@ -392,7 +387,6 @@ class TaskGet(task_get_ui.TaskGetUI):
                 else:
                     sequence_names = [node.name for node in sequence_nodes]
                     sequence_name = self.__db.get_sequence_by_shot_id(task_entity_id)
-                    print sequence_name
                     if sequence_name not in sequence_names:
                         sequence_node = SequenceNode(sequence_name, shot_entity_node)
                         sequence_nodes.append(sequence_node)

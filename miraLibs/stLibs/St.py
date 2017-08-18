@@ -148,7 +148,7 @@ class St(object):
         user_info = self.get_user_by_name(user)
         user_id = user_info.get("id")
         task_filters = "assignee=%s and project_id=%s" % (user_id, self.project_id)
-        fields = ["item", "step.name", "status.name", "priority", "name", "due_date", "status.color"]
+        fields = ["item", "step.name", "status.name", "priority", "name", "due_date", "status.color", "sub_date"]
         my_tasks = self.st.task.select(filters=task_filters, fields=fields)
         return my_tasks
 
