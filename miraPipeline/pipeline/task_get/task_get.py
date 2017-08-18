@@ -311,7 +311,7 @@ class TaskGet(task_get_ui.TaskGetUI):
 
     def set_model(self):
         self.root_node = Node("Task get")
-        my_tasks = self.__db.get_my_tasks("liaolin")
+        my_tasks = self.__db.get_my_tasks()
         print "@"*100
         print my_tasks
         if not my_tasks:
