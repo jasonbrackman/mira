@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from miraLibs.sgLibs import Tk
 from miraLibs.pipeLibs import pipeMira
 
 
@@ -15,6 +14,7 @@ class Toolkit(object):
         """
         database = pipeMira.get_studio_value(self.project, "database")
         if database == "shotgun":
+            from miraLibs.sgLibs import Tk
             tk = Tk.Tk(self.project)
         elif database == "strack":
             tk = None  # todo add strack api methods
