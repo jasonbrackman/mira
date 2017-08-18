@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
+import getpass
 from strackConfParser import StrackConfParser
 
 
@@ -13,7 +14,11 @@ def get_standalone_st():
     api_key = conf_data.get("api_key")
     from strack_api import strack
     reload(strack)
-    return strack.Strack(base_url=base_url, login=login, api_key=api_key)
+    user = getpass.getuser()
+    if user == "liaolin":
+        return strack.Strack(base_url=base_url, login="liaolin", api_key="e9772b96c4f86aa458e981cf58ff3983")
+    else:
+        return strack.Strack(base_url=base_url, login=login, api_key=api_key)
 
 
 if __name__ == "__main__":
