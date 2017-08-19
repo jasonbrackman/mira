@@ -161,11 +161,6 @@ class AssetTreeModel(QAbstractItemModel):
                 return True
         return False
 
-    # def headerData(self, section, orientation, role):
-    #     header_list = ["entity", "Asset Type/Sequence", "Thumbnail", "Information"]
-    #     if role == Qt.DisplayRole and orientation == Qt.Horizontal:
-    #         return header_list[section]
-
     def flags(self, index):
         return Qt.ItemIsEnabled | Qt.ItemIsSelectable
 
@@ -288,7 +283,6 @@ class TaskGet(task_get_ui.TaskGetUI):
         if not os.path.isfile(file_path):
             return
         try:
-            print file_path
             obj = pipeFile.PathDetails.parse_path(file_path)
             local_path = obj.local_work_path
             copy.copy(file_path, local_path)
@@ -440,7 +434,6 @@ class TaskGet(task_get_ui.TaskGetUI):
             local_dir = join_path.join_path2(local_dir, self.__engine)
             work_dir = join_path.join_path2(work_dir, self.__engine)
             publish_dir = join_path.join_path2(publish_dir, self.__engine)
-        print local_dir, work_dir, publish_dir
         self.local_file_widget.set_dir(local_dir)
         self.work_file_widget.set_dir(work_dir)
         self.publish_file_widget.set_dir(publish_dir)
