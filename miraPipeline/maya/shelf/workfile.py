@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from miraPipeline.pipeline.task_get import task_get
-reload(task_get)
+from miraPipeline.pipeline.task_init import task_init
+reload(task_init)
 
 
 def main():
-    task_get.main()
+    task_init.main()
 
 
 if __name__ == "__main__":
