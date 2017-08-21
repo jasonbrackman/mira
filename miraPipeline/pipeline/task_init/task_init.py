@@ -70,7 +70,8 @@ class TaskInit(TaskUI):
         self.__logger.info("Change task sub date: %s" % now_time)
     
     def set_dir(self):
-        print self.selected.project, self.selected.entity_type,self.selected.asset_type_sequence, self.selected.asset_name_shot,self.selected.step, self.selected.task,
+        print self.selected.project, self.selected.entity_type, self.selected.asset_type_sequence, self.selected.asset_name_shot, self.selected.step, self.selected.task,
+        print self.__engine
         local_file = pipeFile.get_task_work_file(self.selected.project, self.selected.entity_type,
                                                  self.selected.asset_type_sequence, self.selected.asset_name_shot,
                                                  self.selected.step, self.selected.task, "000",

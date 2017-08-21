@@ -250,6 +250,8 @@ class QC(QDialog):
                 logger.error(str(e))
                 self.playblast_widget.fail()
         else:
+            if self.step in ["MidRig", "HighRig"]:
+                return
             version_files = self.version_widget.widget.file_list.all_items_text()
             if len(version_files) > 1:
                 QMessageBox.warning(None, "Warming Tip", "Only one file can submit once a time.")
@@ -305,7 +307,7 @@ class QC(QDialog):
                 return
         # playblast
         version_file = self.submit_version(thumbnail_path)
-        if not version_file:
+        if (self.step not in ["MidRig", "HighRig"]) and (not version_file):
             return
         # copy image
         copy.copy(thumbnail_path, self.local_image_path)
