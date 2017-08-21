@@ -16,10 +16,6 @@ def main(file_name):
     # import all reference
     publish.reference_opt()
     logger.info("Import reference done.")
-    # rename shape
-    if not rename_pipeline_shape.rename_pipeline_shape():
-        raise RuntimeError("Rename shape error.")
-    logger.info("Rename shape done.")
     # export needed
     publish.export_need_to_publish(context, "rig")
     logger.info("Export to publish path done.")
