@@ -1,9 +1,9 @@
 import os
 import imp
 from Qt.QtWidgets import *
-from Qt.QtGui import *
-from Qt.QtCore import *
 import miraCore
+import ui
+reload(ui)
 from ui import TaskUI
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.osLibs import get_engine
@@ -20,7 +20,7 @@ class TaskInit(TaskUI):
         self.__db = self.my_task_widget.db
 
     def show_task(self, item):
-        self.info_label.setText("<font face=Courier New size=4><b>%s - %s - %s - %s - %s</b></font>"
+        self.info_label.setText("<font color=#00b4ff size=4><b>%s - %s - %s - %s - %s</b></font>"
                                 % (item.entity_type, item.asset_type_sequence,
                                    item.asset_name_shot, item.step, item.task))
 
@@ -70,13 +70,10 @@ class TaskInit(TaskUI):
         self.__logger.info("Change task sub date: %s" % now_time)
     
     def set_dir(self):
-        print self.selected.project, self.selected.entity_type, self.selected.asset_type_sequence, self.selected.asset_name_shot, self.selected.step, self.selected.task,
-        print self.__engine
         local_file = pipeFile.get_task_work_file(self.selected.project, self.selected.entity_type,
                                                  self.selected.asset_type_sequence, self.selected.asset_name_shot,
                                                  self.selected.step, self.selected.task, "000",
                                                  engine=self.__engine, local=True)
-        print local_file
         work_file = pipeFile.get_task_work_file(self.selected.project, self.selected.entity_type,
                                                 self.selected.asset_type_sequence, self.selected.asset_name_shot,
                                                 self.selected.step, self.selected.task, "000", engine=self.__engine)
@@ -96,8 +93,10 @@ class TaskInit(TaskUI):
         self.publish_list.set_dir(publish_dir)
         
 
-if __name__ == "__main__":
+def main():
     from miraLibs.qtLibs import render_ui
     render_ui.render(TaskInit)
-    # local_file = pipeFile.get_task_work_file("SnowKidTest", "Asset", "Prop", "TdTest", "MidMdl", "MidMdl", "000", "maya", True)
-    # print local_file
+
+
+if __name__ == "__main__":
+    main()
