@@ -142,13 +142,18 @@ class St(object):
         user_name = getpass.getuser()
         return self.get_user_by_name(user_name)
 
-    def get_my_tasks(self, user=None):
+    def get_my_tasks(self, user=None, un_finished=True):
         if not user:
             user = self.user
         user_info = self.get_user_by_name(user)
         user_id = user_info.get("id")
-        task_filters = "assignee=%s and project_id=%s" % (user_id, self.project_id)
-        fields = ["item", "step.name", "status.name", "priority", "name", "due_date", "status.color"]
+        if un_finished:
+            finished_status = self.st.status.find("name=Delivered")
+            finished_status_id = finished_status.get("id")
+            task_filters = "assignee=%s and project_id=%s and status_id != %s" % (user_id, self.project_id, finished_status_id)
+        else:
+            task_filters = "assignee=%s and project_id=%s" % (user_id, self.project_id)
+        fields = ["item", "step.name", "status.name", "priority", "name", "due_date", "status.color", "sub_date"]
         my_tasks = self.st.task.select(filters=task_filters, fields=fields)
         return my_tasks
 
@@ -220,10 +225,9 @@ class St(object):
 
 if __name__ == "__main__":
     st = St("SnowKidTest")
-    # for i in st.get_my_tasks():
-    #     print i
-    task = st.st.task.find("id=615", ["priority"])
-    print task
+    for i in st.get_my_tasks():
+        print i
+        break
     # st.update_task(task, current_version=10)
     # st.st.task.update(615, {"json": {"work_file_path": "W:/SnowKidTest/workarea/assets/Prop/TdTest/Hair/Hair/_workarea/maya/SnowKidTest_TdTest_Hair_Hair_v005.ma"}})
     # print st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")
