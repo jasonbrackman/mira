@@ -4,23 +4,27 @@ from Qt.QtWidgets import *
 from Qt.QtGui import *
 from Qt.QtCore import *
 from miraFramework.task_form import my_task_form
+from miraLibs.osLibs import get_engine
 
 
 class FileListWidget(QListWidget):
     def __init__(self, parent=None):
         super(FileListWidget, self).__init__(parent)
+        self.__engine = get_engine.get_engine()
 
     def set_dir(self, file_dir):
-        maya_mb_files = glob.glob("%s/*.mb" % (file_dir))
-        maya_ma_files = glob.glob("%s/*.ma" % (file_dir))
-        maya_files = maya_mb_files + maya_mb_files
-        maya_files.sort()
-        if not maya_ma_files:
+        self.clear()
+        if self.__engine == "maya":
+            maya_mb_files = glob.glob("%s/*.mb" % (file_dir))
+            maya_ma_files = glob.glob("%s/*.ma" % (file_dir))
+            files = maya_mb_files + maya_ma_files
+            files.sort()
+        if not files:
             return
-        for maya_file in maya_files:
-            base_name = os.path.basename(maya_file)
+        for f in files:
+            base_name = os.path.basename(f)
             item = QListWidgetItem(base_name)
-            item.file_path = maya_file
+            item.file_path = f
             self.addItem(item)
         
 
@@ -40,14 +44,16 @@ class TaskUI(QDialog):
         right_widget = QWidget()
         right_layout = QVBoxLayout(right_widget)
 
-        current_task_layout = QHBoxLayout()
+        task_group = QGroupBox()
+        current_task_layout = QHBoxLayout(task_group)
         task_label = QLabel()
-        task_label.setText("<font face=Courier New  size=5>Task:</font>")
+        task_label.setText("<font color=#00b4ff size=5>Task:</font>")
+        task_label.setMinimumHeight(50)
         task_label.setFixedWidth(50)
         self.info_label = QLabel()
         self.info_label.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.info_label.setMinimumHeight(50)
-        task_label.setMinimumHeight(50)
+
         current_task_layout.addWidget(task_label)
         current_task_layout.addWidget(self.info_label)
 
@@ -66,7 +72,7 @@ class TaskUI(QDialog):
         self.file_widget.addTab(self.work_list, "Work")
         self.file_widget.addTab(self.publish_list, "Publish")
 
-        right_layout.addLayout(current_task_layout)
+        right_layout.addWidget(task_group)
         right_layout.addLayout(init_layout)
         right_layout.addWidget(self.file_widget)
 
