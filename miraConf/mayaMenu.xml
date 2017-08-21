@@ -23,6 +23,8 @@
                  mode="python" name="SoftClusterEX" type="command"/>
         <command cmd="from miraScripts.mayaTools.rig_tool import auto_publish;reload(auto_publish);auto_publish.auto_publish()"
                  mode="python" name="Auto publish" type="command"/>
+        <command cmd="from miraLibs.pipeLibs.pipeMaya.rig import reassign_shader;reload(reassign_shader);reassign_shader.reassign_shader()"
+                 mode="python" name="赋材质【reassign shader】" type="command"/>
     </submenu>
     <!--hair tools-->
     <submenu name="Hair" type="submenu">
