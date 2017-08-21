@@ -1,5 +1,6 @@
 import os
 import imp
+import logging
 from Qt.QtWidgets import *
 import miraCore
 import ui
@@ -8,7 +9,7 @@ from ui import TaskUI
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.osLibs import get_engine
 from miraLibs.pipeLibs.pipeDb import task_from_db_path
-from miraLibs.pyLibs import join_path
+from miraLibs.pyLibs import join_path, copy
 
 
 class TaskInit(TaskUI):
@@ -18,6 +19,7 @@ class TaskInit(TaskUI):
         self.selected = None
         self.__engine = get_engine.get_engine()
         self.__db = self.my_task_widget.db
+        self.__logger = logging.getLogger("Task Init")
 
     def show_task(self, item):
         self.info_label.setText("<font color=#00b4ff size=4><b>%s - %s - %s - %s - %s</b></font>"
@@ -26,7 +28,9 @@ class TaskInit(TaskUI):
 
     def set_signals(self):
         self.my_task_widget.task_view.pressed.connect(self.on_task_pressed)
-        
+        self.init_btn.clicked.connect(self.init_task)
+        self.work_list.copy_to_local_action.triggered.connect(self.copy_to_local)
+
     def on_task_pressed(self, index):
         self.selected = index.data()
         self.show_task_info()
@@ -48,9 +52,9 @@ class TaskInit(TaskUI):
             if msg.name == "No":
                 return
             else:
-                self.do_init_task(self.selected, local_file)
+                self.do_init_task(self.selected.step, local_file)
         else:
-            self.do_init_task(self.selected, local_file)
+            self.do_init_task(self.selected.step, local_file)
 
     def do_init_task(self, step, local_file):
         pipeline_dir = miraCore.get_pipeline_dir()
@@ -91,6 +95,25 @@ class TaskInit(TaskUI):
         self.local_list.set_dir(local_dir)
         self.work_list.set_dir(work_dir)
         self.publish_list.set_dir(publish_dir)
+
+    def copy_to_local(self):
+        file_paths = self.work_list.get_selected()
+        if not file_paths:
+            return
+        file_path = file_paths[0]
+        if not os.path.isfile(file_path):
+            return
+        try:
+            context = pipeFile.PathDetails.parse_path(file_path)
+            local_path = context.local_work_path
+            copy.copy(file_path, local_path)
+            work_dir = os.path.dirname(os.path.dirname(local_path))
+            work_engine_dir = join_path.join_path2(work_dir, self.__engine)
+            self.local_file_widget.set_dir(work_engine_dir)
+            self.update_task_status(file_path)
+            self.file_widget.setCurrentIndex(0)
+        except RuntimeError as e:
+            logging.error(str(e))
         
 
 def main():
