@@ -8,6 +8,11 @@ check_mdl_something_selected:
   order: 10
   ignorable: False
   description: "选中模型大组"
+check_mdl_keyframe:
+  name: "keyframe | 不允许K帧"
+  order: 12
+  ignorable: False
+  description: "检查模型是否有K帧，流程不允许在模型阶段对模型K帧"
 check_unknown_node:
   name: "Unknown nodes | 删除unknown节点"
   order: 13
