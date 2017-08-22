@@ -5,6 +5,14 @@ from miraLibs.mayaLibs import new_file, save_as, create_group, quit_maya
 from miraLibs.pipeLibs import pipeFile
 
 
+def create_camera(seq, shot):
+    camera_name = "cam_%s_%s" % (seq, shot)
+    cam = mc.camera()
+    mc.rename(cam[1], "%sShape" % camera_name)
+    camera = mc.rename(cam[0], camera_name)
+    return camera
+
+
 def main(file_name, local):
     logger = logging.getLogger("AnimLay start")
     new_file.new_file()
@@ -12,14 +20,10 @@ def main(file_name, local):
     project = context.project
     seq = context.seq
     shot = context.shot
-    # create camera and create group
-    camera_name = "cam_%s_%s" % (seq, shot)
-    create_group.create_group("camera")
-    cam = mc.camera()
-    mc.rename(cam[1], "%sShape" % camera_name)
-    camera = mc.rename(cam[0], camera_name)
-    mc.parent(camera, "camera")
-    # mc.lockNode(camera, l=1)
+    # create camera
+
+
+
     create_group.create_group("env")
     create_group.create_group("char")
     create_group.create_group("prop")

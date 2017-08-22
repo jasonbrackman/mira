@@ -203,8 +203,10 @@ class St(object):
         task_entity_type = type_dict.get(task.get("item").get("type"))
         return task_entity_type
 
-    def get_shot_task_frame_range(self):
-        pass
+    def get_shot_task_frame_range(self, shot_name):
+        shot = self.st.shot.find("name=%s" % shot_name, ["frame_range"])
+        frame_range = shot["frame_range"]
+        return frame_range
 
     def upload_version(self, task_info, media_path="", file_path=""):
         task_id = task_info.get("id")
