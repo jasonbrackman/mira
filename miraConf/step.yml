@@ -1,33 +1,41 @@
 SnowKidTest:
   LowMdl:
+    entity: Asset
     engine: maya
     up_step: null
     down_step: null
   MidMdl:
+    entity: Asset
     engine: maya
     up_step: null
     down_step: ["MidRig"]
   HighMdl:
+    entity: Asset
     engine: maya
     up_step: ["MidMdl"]
     down_step: ["HighRig", "Shd"]
   Shd:
+    entity: Asset
     engine: maya
     up_step: ["HighMdl"]
     down_step: null
   MidRig:
+    entity: Asset
     engine: maya
     up_step: ["MidMdl"]
     down_step: ["HighRig"]
   HighRig:
+    entity: Asset
     engine: maya
     up_step: ["HighMdl", "MidRig"]
     down_step: null
   Hair:
+    entity: Asset
     engine: maya
     up_step: ["HighMdl"]
     down_step: null
   AnimLay:
+    entity: Asset
     engine: maya
     up_step: null
     down_step: null

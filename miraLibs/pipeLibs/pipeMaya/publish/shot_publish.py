@@ -18,6 +18,7 @@ def create_shot_ad(context):
     new_file.new_file()
     mc.file(rename=ad_path)
     assemb = Assembly.Assembly()
+    name = context.step
     node = assemb.create_assembly_node(ad_node_name, "assemblyDefinition")
-    assemb.create_representation(node, "MayaScene", "env", "env", context.publish_path)
+    assemb.create_representation(node, "MayaScene", name, name, context.publish_path)
     save_file.save_file()
