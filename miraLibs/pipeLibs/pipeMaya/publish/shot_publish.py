@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import logging
-import maya.cmds as mc
-from miraLibs.mayaLibs import new_file, Assembly, save_file
+from miraLibs.mayaLibs import new_file, Assembly, save_file, rename_scene
 
 logger = logging.getLogger("miraLibs.pipeLibs.pipeMaya.asset_publish")
 
@@ -10,15 +9,15 @@ logger = logging.getLogger("miraLibs.pipeLibs.pipeMaya.asset_publish")
 def create_shot_ad(context):
     ad_path = context.definition_path
     if os.path.isfile(ad_path):
-            return
+        return
     ad_node_name = "%s_%s_AD" % (context.sequence, context.shot)
     if not os.path.isfile(context.publish_path):
         logger.error("%s is not an exist file" % context.publish_path)
         return
     new_file.new_file()
-    mc.file(rename=ad_path)
+    rename_scene.rename_scene(ad_path)
     assemb = Assembly.Assembly()
     name = context.step
     node = assemb.create_assembly_node(ad_node_name, "assemblyDefinition")
-    assemb.create_representation(node, "MayaScene", name, name, context.publish_path)
+    assemb.create_representation(node, "Scene", name, name, context.publish_path)
     save_file.save_file()
