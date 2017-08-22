@@ -5,8 +5,8 @@ from miraLibs.pipeLibs import pipeFile
 
 
 def task_from_path(path):
-    obj = pipeFile.PathDetails.parse_path(path)
-    project = obj.project
+    context = pipeFile.PathDetails.parse_path(path)
+    project = context.project
     db = db_api.DbApi(project).db_obj
     task = task_from_db_path(db, path)
     return task
