@@ -4,6 +4,7 @@ plugins:
     - pgYetiMaya.mll
     - VectorRender.mll
     - MayaExocortexAlembic.mll
+    - sceneAssembly.mll
   unload:
     - AbcImport.mll
     - AbcExport.mll

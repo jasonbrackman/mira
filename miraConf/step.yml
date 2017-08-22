@@ -39,6 +39,11 @@ SnowKidTest:
     engine: maya
     up_step: null
     down_step: null
+  Group:
+    entity: Asset
+    engine: maya
+    up_step: null
+    down_step: null
 
 
 
