@@ -47,6 +47,7 @@ SnowKidTest:
   asset_steps: ["LowMdl","MidMdl","HighMdl","Shd","MidRig","HighRig","Hair","Group"]
   shot_steps: ["Set","AnimLay","VfxLay","LgtLay","CompLay","Anim","Vfx","Cfx","Lgt","Comp","Cut"]
   not_playblast_step: ["HighRig","MidRig","Shd","Hair", "Group", "Set"]
+  not_submit_version_step: ["HighRig","MidRig", "Set"]
   entity_dir: "{primary}/{project}/{category}/{entity_type}/{asset_type_sequence}/{asset_name_shot}"
   # maya
   # -asset
@@ -82,7 +83,7 @@ SnowKidTest:
   maya_shot_workImage: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.png"
   maya_shot_workVideo: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_video/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.mov"
   maya_shot_other: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_other/v{version}"
-  # --publish
+  # --publishw
   maya_shot_publish: "{primary}/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_publish/{engine}/{project}_{sequence}_{shot}_{step}_{task}.ma"
   maya_shot_image: "{primary}/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}.png"
   maya_shot_video: "{primary}/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_video/{engine}/{project}_{sequence}_{shot}_{step}_{task}.mov"
