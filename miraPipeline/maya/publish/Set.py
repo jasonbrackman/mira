@@ -18,6 +18,8 @@ def main(file_name):
     mc.select(env_group, r=1)
     export_selected.export_selected(publish_path)
     logger.info("Export %s to publish done." % env_group)
+    # copy image and video
+    publish.copy_image_and_video(context)
     # create AD file
     publish.create_shot_ad(context)
     logger.info("Create AD done.")
