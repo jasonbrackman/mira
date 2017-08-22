@@ -8,14 +8,13 @@ from miraLibs.stLibs import St
 
 
 def reference_in_env(context):
-    env_ad_path = pipeFile.get_task_file(context.project, context.seq, "c000", "Set", "Set", "maya_shot_definition", "")
-    if not os.path.isfile(env_ad_path):
-        print "%s is not an exist file" % env_ad_path
+    set_ad_path = pipeFile.get_task_file(context.project, context.sequence, "c000", "Set", "Set", "maya_shot_definition", "")
+    if not os.path.isfile(set_ad_path):
+        print "%s is not an exist file" % set_ad_path
         return
     assemb = Assembly.Assembly()
-    node_name = "%s_%s_set" % (context.seq, context.shot)
-    node = assemb.create_assembly_node(node_name, "assemblyReference")
-    assemb.create_representation(node, "MayaScene", "env", "env", env_ad_path)
+    node_name = "%s_%s_set" % (context.sequence, "c000")
+    node = assemb.reference_ad(node_name, set_ad_path)
     return node
 
 
@@ -24,7 +23,7 @@ def create_references_group():
 
 
 def fix_frame_range(context):
-    shot_name = "%s_%s" % (context.seq, context.shot)
+    shot_name = "%s_%s" % (context.sequence, context.shot)
     st = St.St(context.project)
     frame_range = st.get_shot_task_frame_range(shot_name)
     if not frame_range:
@@ -46,18 +45,17 @@ def main(file_name, local):
     logger = logging.getLogger("AnimLay start")
     new_file.new_file()
     context = pipeFile.PathDetails.parse_path(file_name)
-    project = context.project
-    seq = context.seq
+    seq = context.sequence
     shot = context.shot
     # create camera
     create_camera(seq, shot)
     logger.info("Create camera done.")
     # reference env
-
-
-
-    # fix frame range
-
+    reference_in_env(context)
+    logger.info("Reference env done.")
+    # create_references_group
+    create_references_group()
+    logger.info("Create reference group done.")
     save_as.save_as(file_name)
     logger.info("%s publish successful!" % file_name)
     if not local:

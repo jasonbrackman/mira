@@ -55,6 +55,7 @@ class TaskInit(TaskUI):
                 self.do_init_task(self.selected.step, local_file)
         else:
             self.do_init_task(self.selected.step, local_file)
+        self.set_dir()
 
     def do_init_task(self, step, local_file):
         pipeline_dir = miraCore.get_pipeline_dir()

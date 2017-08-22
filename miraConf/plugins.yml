@@ -5,16 +5,15 @@ plugins:
     - VectorRender.mll
     - MayaExocortexAlembic.mll
     - sceneAssembly.mll
-  unload:
     - AbcImport.mll
     - AbcExport.mll
+    - redshift4maya.mll
+  unload:
     - MayaMuscle.mll
     - BifrostMain.mll
     - bifrostshellnode.mll
     - bifrostvisplugin.mll
     - Mayatomr.mll
-    - redshift4maya.mll
     - gameFbxExporter.mll
     - GamePipeline.mll
-    - sceneAssembly.mll
     - Turtle.mll

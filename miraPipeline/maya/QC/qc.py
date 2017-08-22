@@ -144,6 +144,7 @@ class QC(QDialog):
         self.video_path = self.context.work_video_path
         self.next_version_file = self.context.next_version_file
         self.not_playblast_step = pipeMira.get_studio_value(self.project, "not_playblast_step")
+        self.not_submit_version_step = pipeMira.get_studio_value(self.project, "not_submit_version_step")
         self.has_playblast = self.step not in self.not_playblast_step
         self.setup_ui()
 
@@ -250,7 +251,7 @@ class QC(QDialog):
                 logger.error(str(e))
                 self.playblast_widget.fail()
         else:
-            if self.step in ["MidRig", "HighRig", "Set"]:
+            if self.step in self.not_submit_version_step:
                 return
             version_files = self.version_widget.widget.file_list.all_items_text()
             if len(version_files) > 1:
@@ -307,7 +308,7 @@ class QC(QDialog):
                 return
         # playblast
         version_file = self.submit_version(thumbnail_path)
-        if (self.step not in ["MidRig", "HighRig", "Set"]) and (not version_file):
+        if (self.step not in self.not_submit_version_step) and (not version_file):
             return
         # copy image
         copy.copy(thumbnail_path, self.local_image_path)
