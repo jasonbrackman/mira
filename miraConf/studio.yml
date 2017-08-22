@@ -84,7 +84,7 @@ SnowKidTest:
   maya_shot_other: "{primary}/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_other/v{version}"
   # --publish
   maya_shot_publish: "{primary}/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_publish/{engine}/{project}_{sequence}_{shot}_{step}_{task}.ma"
-  maya_shot_iamge: "{primary}/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}.png"
+  maya_shot_image: "{primary}/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}.png"
   maya_shot_video: "{primary}/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_video/{engine}/{project}_{sequence}_{shot}_{step}_{task}.mov"
   maya_shot_definition: "{primary}/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_definition/{engine}/{project}_{sequence}_{shot}_{step}_{task}.ma"
   # photoshop
