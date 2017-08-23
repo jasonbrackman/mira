@@ -27,7 +27,10 @@ def export_need_to_publish(context, typ="model"):
     delete_layer.delete_layer()
     mc.select(model_name, r=1)
     if context.step in ["MidRig", "HighRig"]:
-        mc.select("Sets", add=1, ne=1)
+        try:
+            mc.select("Sets", add=1, ne=1)
+        except:
+            logger.info("No Sets group.")
     export_selected.export_selected(publish_path)
 
 
