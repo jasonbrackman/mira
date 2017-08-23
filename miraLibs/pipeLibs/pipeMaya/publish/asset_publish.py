@@ -22,11 +22,12 @@ def copy_image_and_video(context):
 
 
 def export_need_to_publish(context, typ="model"):
-    # export _MODEL group to publish path
     publish_path = context.publish_path
     model_name = get_model_name.get_model_name(typ=typ)
     delete_layer.delete_layer()
     mc.select(model_name, r=1)
+    if context.step in ["MidRig", "HighRig"]:
+        mc.select("Sets", add=1)
     export_selected.export_selected(publish_path)
 
 
