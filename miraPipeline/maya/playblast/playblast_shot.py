@@ -15,13 +15,13 @@ def playblast_shot(submit=True):
     if not valid_camera:
         raise Exception("No valid camera found.")
     frame_range = get_frame_range.get_frame_range()
-    obj = pipeFile.PathDetails.parse_path()
-    current_project = obj.project
+    context = pipeFile.PathDetails.parse_path()
+    current_project = context.project
     resolution = pipeMira.get_resolution(current_project)
     percent = pipeMira.get_playblast_percent(current_project)
     set_image_size.set_image_size(*resolution)
-    local_video_path = obj.local_video_path
-    video_path = obj.video_path
+    local_video_path = context.local_video_path
+    video_path = context.work_video_path
     create_parent_dir.create_parent_dir(local_video_path)
     playblaster.playblaster(local_video_path, valid_camera, frame_range[0], frame_range[1],
                             resolution, percent, open_it=True)
