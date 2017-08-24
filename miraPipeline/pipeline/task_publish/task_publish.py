@@ -5,6 +5,7 @@ from Qt.QtCore import *
 from Qt.QtGui import *
 from miraLibs.pipeLibs.get_task_name import get_task_name
 from miraFramework.task_common_form import CommonForm
+from miraFramework.message_box import MessageWidget
 from miraLibs.pyLibs import Path, join_path
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.deadlineLibs import submit
@@ -115,7 +116,8 @@ class TaskPublish(QDialog):
         submitter = getpass.getuser()
         tar_name = 'pipemanager'
         submit.submit_python_job(deadline_job_name, publish_script_path, argv, tar_name, submitter)
-        QMessageBox.information(self, "Warming Tip", "%s submit done." % task_name)
+        mw = MessageWidget("Success", "%s submit done." % task_name, self)
+        mw.show()
 
 
 def main():

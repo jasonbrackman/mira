@@ -30,8 +30,8 @@ class check_lay_valid_camera(BaseCheck):
 
     @staticmethod
     def get_valid_camera():
-        obj = pipeFile.PathDetails.parse_path()
-        seq = obj.seq
-        shot = obj.shot
+        context = pipeFile.PathDetails.parse_path()
+        seq = context.sequence
+        shot = context.shot
         valid_camera = "cam_%s_%s" % (seq, shot)
         return valid_camera

@@ -15,6 +15,8 @@ def reference_in_env(context):
     assemb = Assembly.Assembly()
     node_name = "%s_%s_set" % (context.sequence, "c000")
     node = assemb.reference_ad(node_name, set_ad_path)
+    create_group.create_group("Env")
+    mc.parent(node, "Env")
     return node
 
 
@@ -34,11 +36,12 @@ def fix_frame_range(context):
 
 
 def create_camera(seq, shot):
+    create_group.create_group("Camera")
     camera_name = "cam_%s_%s" % (seq, shot)
     cam = mc.camera()
     mc.rename(cam[1], "%sShape" % camera_name)
     camera = mc.rename(cam[0], camera_name)
-    return camera
+    mc.parent(camera, "Camera")
 
 
 def main(file_name, local):
@@ -56,6 +59,8 @@ def main(file_name, local):
     # create_references_group
     create_references_group()
     logger.info("Create reference group done.")
+    # fix frame range
+    fix_frame_range(context)
     save_as.save_as(file_name)
     logger.info("%s publish successful!" % file_name)
     if not local:
