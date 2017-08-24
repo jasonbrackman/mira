@@ -32,7 +32,7 @@ def get_task_name():
     try:
         context = pipeFile.PathDetails.parse_path()
         if context.entity_type == "Shot":
-            return "_".join([context.seq, context.shot, context.step, context.task])
+            return "_".join([context.sequence, context.shot, context.step, context.task])
         else:
             return "_".join([context.asset_name, context.step, context.task])
     except:
