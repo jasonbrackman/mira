@@ -8,12 +8,15 @@ from Qt.QtGui import *
 import miraCore
 from miraLibs.pyLibs import join_path, copy
 from miraFramework.screen_shot import screen_shot
-reload(screen_shot)
 from miraFramework.drag_file_widget import DragFileWidget
+from miraFramework.message_box import MessageWidget
 from miraLibs.pipeLibs import pipeFile, pipeMira
 from miraPipeline.pipeline.preflight import check_gui
 from miraLibs.mayaLibs import save_as, save_file
 from miraPipeline.maya.playblast import playblast_turntable, playblast_shot
+from miraLibs.osLibs import get_parent_win
+
+PARENT_WIN = get_parent_win.get_parent_win()
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -335,11 +338,11 @@ class QC(QDialog):
 def main():
     context = pipeFile.PathDetails.parse_path()
     if context and context.is_local_file() and context.is_working_file():
-        from miraLibs.osLibs import get_parent_win
-        qc = QC(get_parent_win.get_parent_win())
+        qc = QC(PARENT_WIN)
         qc.show()
     else:
-        QMessageBox.critical(None, "Warming Tip", "This file is not a valid file.Please check it ^ ^")
+        mw = MessageWidget("Warning", "This file is not a valid file.Please check it ^ ^", PARENT_WIN)
+        mw.show()
 
 
 if __name__ == "__main__":

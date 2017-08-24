@@ -14,7 +14,7 @@ class check_lay_structure(BaseCheck):
 
     @staticmethod
     def get_outer_group():
-        valid_group = ["persp", "top", "front", "side", "camera", "char", "env", "prop", "_REF", "render"]
+        valid_group = ["persp", "top", "front", "side", "Camera", "Env", "_References"]
         outer_group = list()
         for group in mc.ls(assemblies=1):
             if group not in valid_group:

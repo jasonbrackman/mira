@@ -44,7 +44,7 @@ class Assembly(object):
         return ar_node
 
     @staticmethod
-    def get_all_ar_nodes(selected=None):
+    def get_all_ar_nodes(selected=None, include_hide=True):
         if selected:
             selected_objs = mc.ls(sl=1)
             if not selected_objs:
@@ -55,6 +55,8 @@ class Assembly(object):
             ar_nodes = list(set(ar_nodes))
         else:
             ar_nodes = mc.ls(type="assemblyReference")
+        if not include_hide:
+            ar_nodes = [ar_node for ar_node in ar_nodes if mc.getAttr("%s.visibility" % ar_node)]
         return ar_nodes
 
     def get_all_reps(self, selected=None):
@@ -70,8 +72,8 @@ class Assembly(object):
         all_reps = list(set(all_reps))
         return all_reps
 
-    def set_active(self, rep, selected=None):
-        ar_nodes = self.get_all_ar_nodes(selected)
+    def set_active(self, rep, selected=None, include_hide=True):
+        ar_nodes = self.get_all_ar_nodes(selected, include_hide)
         for ar_node in ar_nodes:
             reps = mc.assembly(ar_node, q=1, listRepresentations=1)
             if rep not in reps:
