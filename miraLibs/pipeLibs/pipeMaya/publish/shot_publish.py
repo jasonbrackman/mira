@@ -21,3 +21,13 @@ def create_shot_ad(context):
     node = assemb.create_assembly_node(ad_node_name, "assemblyDefinition")
     assemb.create_representation(node, "Scene", name, name, context.publish_path)
     save_file.save_file()
+
+
+def export_abc(switch_step):
+    # switch to rig
+    assemb = Assembly.Assembly()
+    assemb.set_active(switch_step)
+    # export env abc
+    
+
+    pass

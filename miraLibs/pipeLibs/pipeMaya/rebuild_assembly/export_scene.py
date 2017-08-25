@@ -29,9 +29,9 @@ def export_scene():
     logger = logging.getLogger(__name__)
     # get description path
     context = pipeFile.PathDetails.parse_path()
-    yml_path = context.definition_path
+    yml_path = context.description_path
     # get owner
-    owner = get_owner()
+    owner = str(get_owner())
     if not owner:
         logger.error("%s does not exist" % owner)
         return

@@ -12,7 +12,7 @@ def main(file_name, local):
     context = pipeFile.PathDetails.parse_path(file_name)
     asset_name = context.asset_name
     asset_type_short_name = context.asset_type_short_name
-    model_name = "%s_%s_MODEL" % (asset_type_short_name, asset_name)
+    model_name = "%s_%s_GROUP" % (asset_type_short_name, asset_name)
     # create default group
     mc.group(name=model_name, empty=1)
     save_as.save_as(file_name)
