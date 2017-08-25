@@ -5,7 +5,7 @@ from miraLibs.pipeLibs.pipeMaya import get_model_name
 from BaseCheck import BaseCheck
 
 
-class check_mdl_lock_central(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         selected = mc.ls(sl=1)

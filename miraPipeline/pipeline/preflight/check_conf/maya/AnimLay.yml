@@ -13,6 +13,11 @@ check_unloaded_reference:
   order: 20
   ignorable: True
   description: "检查是否有没加载的reference"
+check_lay_set_node_exist:
+  name: set node exist | set节点存在
+  order: 25
+  ignorable: False
+  description: "记录场景信息的时候，这个节点必须存在"
 check_lay_valid_camera:
   name: "Valid camera | 正确的相机"
   order: 30

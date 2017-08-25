@@ -3,7 +3,7 @@ import maya.cmds as mc
 from BaseCheck import BaseCheck
 
 
-class check_display_smooth(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         meshes = mc.ls(type="mesh", long=1)

@@ -3,7 +3,7 @@ import maya.cmds as mc
 from BaseCheck import BaseCheck
 
 
-class check_mdl_suffix(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         selected = mc.ls(sl=1)

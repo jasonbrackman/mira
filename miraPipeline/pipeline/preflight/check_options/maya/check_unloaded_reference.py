@@ -3,7 +3,7 @@ import pymel.core as pm
 from BaseCheck import BaseCheck
 
 
-class check_unloaded_reference(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         self.error_list = self.get_unload_reference()

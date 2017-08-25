@@ -7,7 +7,7 @@ from miraLibs.pipeLibs.pipeMaya import get_model_name
 from miraLibs.mayaLibs import hierarchy_opt
 
 
-class check_topology(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         context = pipeFile.PathDetails.parse_path()

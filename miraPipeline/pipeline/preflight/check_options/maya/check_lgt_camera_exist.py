@@ -4,7 +4,7 @@ from miraLibs.pipeLibs.pipeMaya import get_valid_camera
 from BaseCheck import BaseCheck
 
 
-class check_lgt_camera_exist(BaseCheck):
+class Check(BaseCheck):
     def run(self):
         valid_camera = get_valid_camera.get_valid_camera()
         if not valid_camera:

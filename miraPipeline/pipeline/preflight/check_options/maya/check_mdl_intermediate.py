@@ -4,7 +4,7 @@ from BaseCheck import BaseCheck
 from miraLibs.mayaLibs import delete_history, delete_intermediate_object
 
 
-class check_mdl_intermediate(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         self.error_list = self.get_error_list()

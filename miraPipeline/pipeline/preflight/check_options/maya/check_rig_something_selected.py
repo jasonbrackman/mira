@@ -4,9 +4,9 @@ from miraLibs.pipeLibs.pipeMaya import get_model_name
 from BaseCheck import BaseCheck
 
 
-class check_rig_something_selected(BaseCheck):
+class Check(BaseCheck):
     def __init__(self):
-        super(check_rig_something_selected, self).__init__()
+        super(Check, self).__init__()
         self.rig_root_name = get_model_name.get_model_name(typ="rig")
 
     def run(self):

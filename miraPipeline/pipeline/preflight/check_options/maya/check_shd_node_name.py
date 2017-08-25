@@ -5,7 +5,7 @@ from miraLibs.pipeLibs import pipeFile
 from BaseCheck import BaseCheck
 
 
-class check_shd_node_name(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         selected = mc.ls(sl=1)

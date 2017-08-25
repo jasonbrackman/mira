@@ -4,7 +4,7 @@ from miraLibs.mayaLibs import delete_models
 from BaseCheck import BaseCheck
 
 
-class check_mdl_empty_mesh(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         selected = mc.ls(sl=1)

@@ -5,9 +5,9 @@ from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import get_frame_range
 
 
-class check_anim_frame_range(BaseCheck):
+class Check(BaseCheck):
     def __init__(self):
-        super(check_anim_frame_range, self).__init__()
+        super(Check, self).__init__()
         self.valid_camera = self.get_valid_camera()
         start_frame, end_frame = get_frame_range.get_frame_range()
         self.frame_range = "%s-%s" % (start_frame, end_frame)

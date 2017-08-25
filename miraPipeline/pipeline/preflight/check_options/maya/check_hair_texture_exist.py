@@ -4,7 +4,7 @@ from BaseCheck import BaseCheck
 from miraLibs.mayaLibs import Yeti, get_all_hair_textures
 
 
-class check_hair_texture_exist(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         self.error_list = self.get_error_list()

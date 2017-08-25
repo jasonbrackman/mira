@@ -3,7 +3,7 @@ import maya.cmds as mc
 from BaseCheck import BaseCheck
 
 
-class check_start_frame(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         start_frame = mc.playbackOptions(q=1, minTime=1)

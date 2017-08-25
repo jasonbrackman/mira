@@ -4,7 +4,7 @@ from miraLibs.mayaLibs import get_all_lights
 from BaseCheck import BaseCheck
 
 
-class check_light_exist(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         self.error_list = get_all_lights.get_all_lights()

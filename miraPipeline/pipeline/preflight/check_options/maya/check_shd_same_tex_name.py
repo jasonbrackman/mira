@@ -3,7 +3,7 @@ from miraLibs.pipeLibs.pipeMaya import get_same_base_name_textures
 from BaseCheck import BaseCheck
 
 
-class check_shd_same_tex_name(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         self.error_list = get_same_base_name_textures.get_same_base_name_textures()

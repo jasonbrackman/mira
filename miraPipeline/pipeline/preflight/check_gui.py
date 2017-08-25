@@ -318,7 +318,7 @@ class CheckGui(QDialog):
         module_name = check_btn.module_name
         ignorable = check_btn.ignorable
         exec("import {0};reload ({0})".format(module_name))
-        check_object = eval("{0}.{0}()".format(module_name))
+        check_object = eval("{0}.Check()".format(module_name))
         check_object.set_window_title(check_btn.name)
         check_object.show()
         try:

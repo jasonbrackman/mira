@@ -3,7 +3,7 @@ from miraLibs.mayaLibs import display_wireframe
 from BaseCheck import BaseCheck
 
 
-class check_display_wireframe(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         try:

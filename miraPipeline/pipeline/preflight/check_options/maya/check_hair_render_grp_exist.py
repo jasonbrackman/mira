@@ -4,9 +4,9 @@ from miraLibs.pipeLibs import pipeFile
 from BaseCheck import BaseCheck
 
 
-class check_hair_render_grp_exist(BaseCheck):
+class Check(BaseCheck):
     def __init__(self):
-        super(check_hair_render_grp_exist, self).__init__()
+        super(Check, self).__init__()
         obj = pipeFile.PathDetails.parse_path()
         asset_name = obj.asset_name
         asset_type_short_name = obj.asset_type_short_name

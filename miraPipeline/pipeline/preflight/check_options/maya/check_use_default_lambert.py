@@ -3,7 +3,7 @@ import maya.cmds as mc
 from BaseCheck import BaseCheck
 
 
-class check_use_default_lambert(BaseCheck):
+class Check(BaseCheck):
     def run(self):
         self.error_list = self.get_obj_assign_default_lambert()
         if self.error_list:

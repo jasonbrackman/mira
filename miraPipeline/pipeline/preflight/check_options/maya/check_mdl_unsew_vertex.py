@@ -4,7 +4,7 @@ import maya.mel as mel
 from BaseCheck import BaseCheck
 
 
-class check_mdl_unsew_vertex(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         selected = mc.ls(sl=1)

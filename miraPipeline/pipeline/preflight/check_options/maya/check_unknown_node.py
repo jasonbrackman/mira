@@ -4,7 +4,7 @@ import maya.cmds as mc
 from BaseCheck import BaseCheck
 
 
-class check_unknown_node(BaseCheck):
+class Check(BaseCheck):
     def run(self):
         self.error_list = self.get_unknown_nodes()
         if self.error_list:

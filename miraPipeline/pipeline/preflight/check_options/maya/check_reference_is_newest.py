@@ -5,7 +5,7 @@ from miraLibs.pyLibs import get_latest_version
 from BaseCheck import BaseCheck
 
 
-class check_reference_is_newest(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         self.error_list = self.get_error_list()

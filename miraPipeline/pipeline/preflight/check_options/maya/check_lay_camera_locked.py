@@ -4,7 +4,7 @@ from miraLibs.pipeLibs.pipeMaya import get_valid_camera
 from BaseCheck import BaseCheck
 
 
-class check_lay_camera_locked(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         self.error_list = self.get_unclock_attrs()

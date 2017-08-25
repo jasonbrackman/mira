@@ -4,7 +4,7 @@ from BaseCheck import BaseCheck
 from miraLibs.pipeLibs.pipeMaya import get_model_name
 
 
-class check_mdl_MODEL_unlock(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         self.error_list = self.get_error_list()
