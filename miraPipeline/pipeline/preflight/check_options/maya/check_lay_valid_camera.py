@@ -4,7 +4,7 @@ from miraLibs.pipeLibs import pipeFile
 from BaseCheck import BaseCheck
 
 
-class check_lay_valid_camera(BaseCheck):
+class Check(BaseCheck):
     def run(self):
         created_camera = self.get_created_cameras()
         if not created_camera:

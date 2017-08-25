@@ -3,7 +3,7 @@ import pymel.core as pm
 from BaseCheck import BaseCheck
 
 
-class check_mdl_transform_locked(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         selected = pm.ls(sl=1)

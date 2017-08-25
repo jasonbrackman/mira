@@ -7,7 +7,7 @@ attributes = ["castsShadows", "receiveShadows", "motionBlur", "primaryVisibility
               "smoothShading", "visibleInReflections", "visibleInRefractions", "doubleSided"]
 
 
-class check_mdl_render_property(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         selected = mc.ls(sl=1)

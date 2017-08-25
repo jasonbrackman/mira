@@ -5,7 +5,7 @@ from miraLibs.pipeLibs.pipeMaya import get_valid_camera
 from BaseCheck import BaseCheck
 
 
-class check_lgt_frame_range(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         frame_range = self.get_frame_range()

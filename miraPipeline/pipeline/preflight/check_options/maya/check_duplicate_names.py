@@ -3,7 +3,7 @@ import pymel.core as pm
 from BaseCheck import BaseCheck
 
 
-class check_duplicate_names(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         all_duplicate_names = self.get_all_duplicate_names()

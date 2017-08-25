@@ -4,7 +4,7 @@ from miraLibs.mayaLibs import get_selected_group_sg, get_shader_history_nodes
 from BaseCheck import BaseCheck
 
 
-class check_shd_reference_nodes(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         selected = mc.ls(sl=1)

@@ -4,7 +4,7 @@ from BaseCheck import BaseCheck
 from miraLibs.pipeLibs import pipeFile
 
 
-class check_hair_structure(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         context = pipeFile.PathDetails.parse_path()

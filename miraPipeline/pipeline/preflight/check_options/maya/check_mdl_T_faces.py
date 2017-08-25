@@ -4,7 +4,7 @@ import maya.mel as mel
 from BaseCheck import BaseCheck
 
 
-class check_mdl_T_faces(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         self.error_list = self.get_error_list()

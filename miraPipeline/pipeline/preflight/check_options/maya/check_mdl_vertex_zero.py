@@ -4,7 +4,7 @@ from BaseCheck import BaseCheck
 from miraLibs.mayaLibs import delete_history
 
 
-class check_mdl_vertex_zero(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         selected = mc.ls(sl=1)

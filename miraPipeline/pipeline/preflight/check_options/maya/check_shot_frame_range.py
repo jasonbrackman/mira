@@ -5,7 +5,7 @@ from miraLibs.pipeLibs import pipeFile
 from miraLibs.stLibs import St
 
 
-class check_shot_frame_range(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         self.db_frame_range = self.get_db_frame_range()

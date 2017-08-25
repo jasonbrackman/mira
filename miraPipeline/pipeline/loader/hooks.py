@@ -82,7 +82,7 @@ class Hook(object):
             if opt == "import":
                 maya_import.maya_import(publish_file)
             elif opt == "reference":
-                create_reference.create_reference(publish_file, asset_shot_name)
+                create_reference.create_reference(publish_file, asset_shot_name, True)
             elif opt == "open":
                 open_file.open_file(publish_file)
         if error_list:

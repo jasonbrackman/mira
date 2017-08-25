@@ -5,7 +5,7 @@ from miraLibs.pipeLibs import pipeFile
 from BaseCheck import BaseCheck
 
 
-class check_shd_texture_name(BaseCheck):
+class Check(BaseCheck):
 
     def __init__(self):
         BaseCheck.__init__(self)

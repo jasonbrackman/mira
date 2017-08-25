@@ -4,7 +4,7 @@ from miraLibs.mayaLibs import delete_render_layer
 from BaseCheck import BaseCheck
 
 
-class check_render_layer(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         self.error_list = self.get_render_layer()

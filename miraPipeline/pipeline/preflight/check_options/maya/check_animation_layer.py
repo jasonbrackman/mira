@@ -3,7 +3,7 @@ import maya.cmds as mc
 from BaseCheck import BaseCheck
 
 
-class check_animation_layer(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         self.error_list = self.get_animation_layer()

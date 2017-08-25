@@ -3,7 +3,7 @@ import maya.cmds as mc
 from BaseCheck import BaseCheck
 
 
-class check_save_file(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         file_unsaved = self.check_file_save()

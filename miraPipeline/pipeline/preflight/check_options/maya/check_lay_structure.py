@@ -3,7 +3,7 @@ import maya.cmds as mc
 from BaseCheck import BaseCheck
 
 
-class check_lay_structure(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         self.error_list = self.get_outer_group()

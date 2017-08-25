@@ -4,7 +4,7 @@ from miraLibs.pipeLibs import pipeFile
 from BaseCheck import BaseCheck
 
 
-class check_sceneset_no_char(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         self.error_list = self.get_not_env()

@@ -4,7 +4,7 @@ from miraLibs.pipeLibs import pipeFile
 from BaseCheck import BaseCheck
 
 
-class check_hair_yeti_node_exist(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         obj = pipeFile.PathDetails.parse_path()

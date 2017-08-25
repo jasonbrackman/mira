@@ -198,6 +198,10 @@ class PathDetails(object):
     def hair_path(self):
         return self.get_path("hair")
 
+    @property
+    def description_path(self):
+        return self.get_path("description")
+
 
 ########################################################################################################################
 # below is for get asset files

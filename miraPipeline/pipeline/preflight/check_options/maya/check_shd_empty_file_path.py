@@ -4,7 +4,7 @@ from miraLibs.mayaLibs import get_texture_real_path
 from BaseCheck import BaseCheck
 
 
-class check_shd_empty_file_path(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         file_nodes = pm.ls(type="file")

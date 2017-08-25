@@ -5,9 +5,9 @@ from miraLibs.mayaLibs import Yeti
 from BaseCheck import BaseCheck
 
 
-class check_hair_yeti_same_tex_name(BaseCheck):
+class Check(BaseCheck):
     def __init__(self):
-        super(check_hair_yeti_same_tex_name, self).__init__()
+        super(Check, self).__init__()
         self.yeti_nodes = mc.ls(type="pgYetiMaya")
 
     def run(self):

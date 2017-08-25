@@ -4,7 +4,7 @@ from BaseCheck import BaseCheck
 from miraLibs.pipeLibs import pipeFile
 
 
-class check_hair_only_one_collection(BaseCheck):
+class Check(BaseCheck):
 
     def run(self):
         self.error_list = self.get_error_list()
