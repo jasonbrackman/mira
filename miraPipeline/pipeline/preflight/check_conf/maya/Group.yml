@@ -3,7 +3,7 @@ check_display_wireframe:
   order: 0
   ignorable: False
   description: "以线框显示保存文件"
-check_mdl_something_selected:
+check_group_something_selected:
   name: "Something Selected | 选中模型大组"
   order: 10
   ignorable: False

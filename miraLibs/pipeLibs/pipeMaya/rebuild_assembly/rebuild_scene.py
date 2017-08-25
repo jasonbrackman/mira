@@ -33,7 +33,7 @@ def rebuild_scene():
     logger = logging.getLogger(__name__)
     # get conf data
     conf_data = get_conf_data()
-    name = conf_data.get("name")
+    name = conf_data.get("owner")
     def_path = conf_data.get("definition")
     # create AR node
     assemb = Assembly.Assembly()

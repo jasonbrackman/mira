@@ -18,4 +18,6 @@ def get_model_name(typ="model"):
         model_name = "%s_%s_AD" % (asset_type_short_name, asset_name)
     elif typ == "hair":
         model_name = "%s_%s_SCULP" % (asset_type_short_name, asset_name)
+    elif typ == "group":
+        model_name = "%s_%s_GROUP" % (asset_type_short_name, asset_name)
     return model_name

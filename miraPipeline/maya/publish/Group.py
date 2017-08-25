@@ -15,8 +15,8 @@ def main(file_name):
     publish.copy_image_and_video(context)
     logger.info("copy image and video done.")
     # export _MODEL group to publish path
-    publish.export_need_to_publish(context)
-    logger.info("Export _MODEL group to publish done.")
+    publish.export_need_to_publish(context, typ="group")
+    logger.info("Export _GROUP group to publish done.")
     # generate AD file
     publish.create_ad(context)
     logger.info("Create AD done.")
