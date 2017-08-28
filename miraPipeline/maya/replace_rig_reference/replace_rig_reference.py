@@ -41,7 +41,8 @@ class Maya(object):
     @staticmethod
     def is_rig(ref_file):
         ref_file = ref_file.replace("\\", "/")
-        is_rig = True if "/rig/" in ref_file else False
+        context = pipeFile.PathDetails.parse_path(ref_file)
+        is_rig = True if context.step == "HighRig" else False
         return is_rig
 
     @staticmethod
@@ -78,9 +79,7 @@ class AssetTableModel(QAbstractTableModel):
                 return self.arg[row].rig_path
         elif role == Qt.DecorationRole:
             if column == 2:
-                pix_map = QPixmap(self.arg[row].thumbnail)
-                scaled = pix_map.scaled(QSize(90, 90), Qt.KeepAspectRatio, Qt.SmoothTransformation)
-                return scaled
+                return self.arg[row].thumbnail
             if column == 0:
                 is_rig = self.arg[row].is_rig
                 if is_rig:
@@ -181,28 +180,30 @@ class ReplaceRigReference(ui.ReplaceUI):
         for grp in group:
             ref_file = self.maya.get_reference_file(grp)
             image_path = self.get_image_path(ref_file)
+            pix_map = QPixmap(image_path)
+            thumbnail = pix_map.scaled(QSize(90, 90), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
             is_rig = self.maya.is_rig(ref_file)
             rig_path = self.get_publish_path(ref_file)
-            asset = Asset(grp, image_path, is_rig, rig_path)
+            asset = Asset(grp, thumbnail, is_rig, rig_path)
             model_data.append(asset)
         return model_data
 
     @staticmethod
     def get_path(ref_file, get_type="image"):
-        obj = pipeFile.PathDetails.parse_path(ref_file)
-        if not obj:
+        context = pipeFile.PathDetails.parse_path(ref_file)
+        if not context:
             return
-        asset_type = obj.asset_type
-        asset_name = obj.asset_name
-        category = obj.category
-        project_name = obj.project
-        rig_version = obj.context_version
+        project_name = context.project
+        entity_type = context.entity_type
+        asset_type = context.asset_type
+        asset_name = context.asset_name
+        step = "HighRig"
+        task = "HighRig" if context.task == "MidRig" else context.task
         if get_type == "image":
-            path = pipeFile.get_asset_step_image_file(asset_type, asset_name, category,
-                                                      project_name, rig_version=rig_version)
+            path = pipeFile.get_task_file(project_name, asset_type, asset_name, step, task,
+                                          "maya_asset_image", version="")
         else:
-            path = pipeFile.get_asset_step_publish_file(asset_type, asset_name, "rig",
-                                                        project_name, rig_version=rig_version)
+            path = pipeFile.get_task_publish_file(project_name, entity_type, asset_type, asset_name, step, task)
         return path
 
     def get_image_path(self, ref_file):

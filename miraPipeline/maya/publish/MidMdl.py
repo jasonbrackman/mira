@@ -5,11 +5,10 @@ from miraLibs.mayaLibs import open_file, quit_maya
 from miraLibs.pipeLibs.pipeMaya import publish
 
 
-logger = logging.getLogger("MidMdl publish")
-
-
-def main(file_name):
-    open_file.open_file(file_name)
+def main(file_name, local):
+    logger = logging.getLogger("MidMdl publish")
+    if not local:
+        open_file.open_file(file_name)
     # get paths
     context = pipeFile.PathDetails.parse_path()
     publish.copy_image_and_video(context)
@@ -21,4 +20,5 @@ def main(file_name):
     publish.create_ad(context)
     logger.info("create ad done")
     # quit maya
-    quit_maya.quit_maya()
+    if not local:
+        quit_maya.quit_maya()

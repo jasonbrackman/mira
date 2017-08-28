@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+import maya.cmds as mc
 from Qt.QtWidgets import *
 from Qt.QtGui import *
+from Qt.QtCore import *
 from miraLibs.mayaLibs import Assembly
 
 
@@ -49,7 +51,37 @@ class SwitchAssembly(QDialog):
     def do_switch(self, action):
         rep = action.text()
         selected = None if self.selected_mod == "All" else True
-        self.assembly.set_active(rep, selected)
+        self.set_active(rep, selected)
+
+    @staticmethod
+    def get_all_ar_nodes(selected=None):
+        if selected:
+            selected_objs = mc.ls(sl=1)
+            if not selected_objs:
+                raise RuntimeError("Selected something")
+            sel_ar_nods = mc.listRelatives(selected_objs, ad=1, type="assemblyReference")
+            all_nodes = selected_objs + sel_ar_nods
+            ar_nodes = mc.ls(all_nodes, type="assemblyReference")
+            ar_nodes = list(set(ar_nodes))
+        else:
+            ar_nodes = mc.ls(type="assemblyReference")
+        return ar_nodes
+
+    def set_active(self, rep, selected=None):
+        ar_nodes = self.get_all_ar_nodes(selected)
+        progress_dialog = QProgressDialog('Switch Assembly, Please wait......', 'Cancel', 0, len(ar_nodes))
+        progress_dialog.setWindowModality(Qt.WindowModal)
+        progress_dialog.setMinimumWidth(600)
+        progress_dialog.show()
+        for index, ar_node in enumerate(ar_nodes):
+            progress_dialog.setValue(index)
+            reps = mc.assembly(ar_node, q=1, listRepresentations=1)
+            if rep not in reps:
+                print "%s not in the representations of node %s" % (rep, ar_node)
+                continue
+            mc.assembly(ar_node, e=1, activeLabel=rep)
+            if progress_dialog.wasCanceled():
+                break
 
 
 def main():

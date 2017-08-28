@@ -202,6 +202,9 @@ class PathDetails(object):
     def description_path(self):
         return self.get_path("description")
 
+    @property
+    def cache_dir(self):
+        return self.get_path("cache")
 
 ########################################################################################################################
 # below is for get asset files

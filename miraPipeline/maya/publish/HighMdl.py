@@ -5,11 +5,11 @@ from miraLibs.pipeLibs.pipeMaya import get_model_name
 from miraLibs.mayaLibs import open_file, quit_maya, hierarchy_opt
 from miraLibs.pipeLibs.pipeMaya import publish
 
-logger = logging.getLogger("HighMdl publish")
 
-
-def main(file_name):
-    open_file.open_file(file_name)
+def main(file_name, local):
+    logger = logging.getLogger("HighMdl publish")
+    if not local:
+        open_file.open_file(file_name)
     # get paths
     context = pipeFile.PathDetails.parse_path(file_name)
     asset_type = context.asset_type
@@ -34,4 +34,5 @@ def main(file_name):
     publish.add_gpu_to_ad(context)
     logger.info("Add to AD done.")
     # quit maya
-    quit_maya.quit_maya()
+    if not local:
+        quit_maya.quit_maya()

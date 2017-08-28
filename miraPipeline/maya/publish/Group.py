@@ -4,11 +4,11 @@ from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import open_file, quit_maya
 from miraLibs.pipeLibs.pipeMaya import publish
 
-logger = logging.getLogger("Group publish")
 
-
-def main(file_name):
-    open_file.open_file(file_name)
+def main(file_name, local):
+    logger = logging.getLogger("Group publish")
+    if not local:
+        open_file.open_file(file_name)
     # get paths
     context = pipeFile.PathDetails.parse_path(file_name)
     # copy image and video
@@ -21,4 +21,5 @@ def main(file_name):
     publish.create_ad(context)
     logger.info("Create AD done.")
     # quit maya
-    quit_maya.quit_maya()
+    if not local:
+        quit_maya.quit_maya()

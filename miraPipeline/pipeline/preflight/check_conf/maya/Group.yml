@@ -10,31 +10,36 @@ check_group_something_selected:
   description: "选中模型大组"
 check_mdl_keyframe:
   name: "keyframe | 不允许K帧"
-  order: 12
+  order: 15
   ignorable: False
   description: "检查模型是否有K帧，流程不允许在模型阶段对模型K帧"
+check_unused_nodes:
+  name: "Unused nodes | 删除无用节点"
+  order: 20
+  ignorable: False
+  description: "删除无用节点"
 check_unknown_node:
   name: "Unknown nodes | 删除unknown节点"
-  order: 13
+  order: 25
   ignorable: False
   description: "删除unkonwn节点"
 check_unknown_plugin:
   name: "Unknown plugin | 删除unknown插件"
-  order: 15
+  order: 30
   ignorable: False
   description: "删除unkonwn插件"
 check_display_layer:
   name: "display layer | 显示层"
-  order: 20
+  order: 35
   ignorable: False
   description: "不能有显示层的存在"
 check_render_layer:
   name: "Render layer | 多余的渲染层"
-  order: 25
+  order: 40
   ignorable: False
   description: "检查是否有多余的渲染层"
 check_save_file:
   name: "Save file | 保存文件"
-  order: 30
+  order: 45
   ignorable: True
   description: "保存检查后的文件"

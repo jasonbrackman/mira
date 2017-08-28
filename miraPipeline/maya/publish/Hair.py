@@ -5,11 +5,10 @@ from miraLibs.pipeLibs.pipeMaya import get_model_name, publish
 from miraLibs.mayaLibs import open_file, quit_maya, export_abc, Xgen
 
 
-logger = logging.getLogger("Hair publish")
-
-
-def main(file_name):
-    open_file.open_file(file_name)
+def main(file_name, local):
+    logger = logging.getLogger("Hair publish")
+    if not local:
+        open_file.open_file(file_name)
     # get paths
     context = pipeFile.PathDetails.parse_path(file_name)
     hair_cache_path = context.abc_cache_path
@@ -27,4 +26,5 @@ def main(file_name):
     xgen = Xgen.Xgen()
     xgen.export_palette(collection_node, hair_path)
     logger.info("Export .xgen file done.")
-    quit_maya.quit_maya()
+    if not local:
+        quit_maya.quit_maya()
