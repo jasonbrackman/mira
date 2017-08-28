@@ -11,7 +11,7 @@ def copy(src, dst):
         return
     if os.path.exists(dst):
         if filecmp.cmp(src, dst):
-            print "%s and %s is the same."
+            print "%s and %s is the same." % (src, dst)
             return
     if not os.path.isdir(dst_dir):
         os.makedirs(dst_dir)

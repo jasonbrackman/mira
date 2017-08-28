@@ -39,9 +39,10 @@ def rename_shd_mat_node(context):
                 pass
 
 
-def main(file_name):
+def main(file_name, local):
     logger = logging.getLogger("shd publish")
-    open_file.open_file(file_name)
+    if not local:
+        open_file.open_file(file_name)
     # get paths
     context = pipeFile.PathDetails.parse_path(file_name)
     publish_path = context.publish_path
@@ -73,4 +74,5 @@ def main(file_name):
     # add to AD
     publish.add_mesh_to_ad(context)
     logger.info("Add to AD done.")
-    quit_maya.quit_maya()
+    if not local:
+        quit_maya.quit_maya()

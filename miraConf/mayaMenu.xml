@@ -63,8 +63,8 @@
                  mode="python" name="去掉模型的细分【get rid model subdivision】" type="command"/>
         <command cmd="from miraPipeline.maya.replace_rig_reference import replace_rig_reference;reload(replace_rig_reference);replace_rig_reference.main()"
                  mode="python" name="低模绑定切换为高模绑定【switch lowRig to rig】" type="command"/>
-        <command cmd="from miraPipeline.maya.switch_asset_version import switch_asset_version;reload(switch_asset_version);switch_asset_version.main()"
-                 mode="python" name="切换资产版本【switch asset version】" type="command"/>
+        <!--<command cmd="from miraPipeline.maya.switch_asset_version import switch_asset_version;reload(switch_asset_version);switch_asset_version.main()"-->
+                 <!--mode="python" name="切换资产版本【switch asset version】" type="command"/>-->
     </submenu>
     <!--sim tools-->
     <submenu name="sim" type="submenu">
@@ -110,5 +110,7 @@
                  mode="python" name="隐藏HUD【Hide hud】" type="command"/>
         <command cmd="from miraScripts.mayaTools.public_tool import switch_assembly;reload(switch_assembly);switch_assembly.main()"
                  mode="python" name="切换assembly【Switch Assembly】" type="command"/>
+        <command cmd="from miraScripts.mayaTools.public_tool import publish;reload(publish);publish.main()"
+                 mode="python" name="Publish【入库】" type="command"/>
     </submenu>
 </menu>

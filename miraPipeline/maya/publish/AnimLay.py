@@ -5,11 +5,11 @@ from miraLibs.mayaLibs import open_file, quit_maya
 from miraLibs.pipeLibs.pipeMaya import publish
 from miraLibs.pyLibs import copy
 
-logger = logging.getLogger("AnimLay publish")
 
-
-def main(file_name):
-    # open_file.open_file(file_name)
+def main(file_name, local):
+    logger = logging.getLogger("AnimLay publish")
+    if not local:
+        open_file.open_file(file_name)
     # get paths
     context = pipeFile.PathDetails.parse_path(file_name)
     publish_path = context.publish_path
@@ -20,4 +20,5 @@ def main(file_name):
     copy.copy(file_name, publish_path)
     logger.info("copy to %s" % publish_path)
     # quit maya
-    quit_maya.quit_maya()
+    if not local:
+        quit_maya.quit_maya()

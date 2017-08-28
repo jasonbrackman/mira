@@ -5,9 +5,10 @@ from miraLibs.mayaLibs import open_file, quit_maya
 from miraLibs.pipeLibs.pipeMaya import publish, rename_pipeline_shape
 
 
-def main(file_name):
+def main(file_name, local):
     logger = logging.getLogger("HighRig publish")
-    open_file.open_file(file_name)
+    if not local:
+        open_file.open_file(file_name)
     # get paths
     context = pipeFile.PathDetails.parse_path(file_name)
     # copy image
@@ -27,4 +28,5 @@ def main(file_name):
     publish.add_mesh_to_ad(context)
     logger.info("Add to AD done.")
     # quit maya
-    quit_maya.quit_maya()
+    if not local:
+        quit_maya.quit_maya()

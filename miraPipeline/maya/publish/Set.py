@@ -6,9 +6,10 @@ from miraLibs.mayaLibs import open_file, quit_maya, export_selected
 from miraLibs.pipeLibs.pipeMaya import publish
 
 
-def main(file_name):
+def main(file_name, local):
     logger = logging.getLogger("sceneset publish")
-    open_file.open_file(file_name)
+    if not local:
+        open_file.open_file(file_name)
     # get paths
     context = pipeFile.PathDetails.parse_path(file_name)
     sequence = context.sequence
@@ -24,4 +25,5 @@ def main(file_name):
     publish.create_shot_ad(context)
     logger.info("Create AD done.")
     # quit maya
-    quit_maya.quit_maya()
+    if not local:
+        quit_maya.quit_maya()
