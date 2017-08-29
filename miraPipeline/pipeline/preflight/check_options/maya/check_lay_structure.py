@@ -14,7 +14,7 @@ class Check(BaseCheck):
 
     @staticmethod
     def get_outer_group():
-        valid_group = ["persp", "top", "front", "side", "Camera", "Env", "_References"]
+        valid_group = ["persp", "top", "front", "side", "Camera", "Env", "Char", "Prop", "Temp"]
         outer_group = list()
         for group in mc.ls(assemblies=1):
             if group not in valid_group:
