@@ -21,7 +21,9 @@ def reference_in_env(context):
 
 
 def create_references_group():
-    create_group.create_group("_References")
+    create_group.create_group("Char")
+    create_group.create_group("Prop")
+    create_group.create_group("Temp")
 
 
 def fix_frame_range(context):
