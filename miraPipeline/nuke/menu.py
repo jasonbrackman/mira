@@ -29,7 +29,6 @@ class NukePipeline(object):
         self.icons_dir = os.path.join(self.parent_dir, 'icons')
         self.gizmo_dir = os.path.join(self.parent_dir, 'gizmo')
         self.conf_path = os.path.join(self.parent_dir, 'conf', 'nuke_menu.xml')
-
         self.add_gizmo_plugin_dir()
 
     def add_gizmo_plugin_dir(self):
@@ -51,6 +50,8 @@ class NukePipeline(object):
             menu.addCommand(gizmo_name, "nuke.createNode(\"%s\")" % gizmo_name)
 
     def add_pipeline_gizmo(self):
+        if not os.path.isdir(self.gizmo_dir):
+            return
         menu = self.create_menu("Nodes", "PipelineGizmo")
         for gizmo in os.listdir(self.gizmo_dir):
             gizmo = os.path.splitext(gizmo)[0]
