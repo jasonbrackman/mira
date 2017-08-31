@@ -3,16 +3,13 @@ import logging
 from miraLibs.pipeLibs.copy import Copy
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import get_scene_name
-from miraPipeline.maya.playblast import playblast_shot
 
 
 def main():
     logger = logging.getLogger(__name__)
-    # playblast
-    playblast_shot.playblast_shot()
-    # copy to workarea path
-    obj = pipeFile.PathDetails.parse_path()
-    work_path = obj.work_path
+    # copy to QCPublish path
+    context = pipeFile.PathDetails.parse_path()
+    work_path = context.work_path
     scene_name = get_scene_name.get_scene_name()
     if Copy.copy(scene_name, work_path):
         logger.info("copy %s >> %s" % (scene_name, work_path))

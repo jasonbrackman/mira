@@ -34,16 +34,23 @@ SnowKidTest:
     engine: maya
     up_step: ["HighMdl"]
     down_step: null
-  AnimLay:
-    entity: Asset
-    engine: maya
-    up_step: null
-    down_step: null
   Group:
     entity: Asset
     engine: maya
     up_step: null
     down_step: null
-
-
-
+  Set:
+    entity: Shot
+    engine: maya
+    up_step: null
+    down_step: null
+  AnimLay:
+    entity: Shot
+    engine: maya
+    up_step: null
+    down_step: null
+  Anim:
+    entity: Shot
+    engine: maya
+    up_step: ["AnimLay"]
+    down_step: null
