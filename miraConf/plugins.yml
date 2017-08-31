@@ -1,14 +1,14 @@
 plugins:
   load:
     - mtoa.mll
-    - pgYetiMaya.mll
-    - VectorRender.mll
     - MayaExocortexAlembic.mll
     - sceneAssembly.mll
     - AbcImport.mll
     - AbcExport.mll
     - redshift4maya.mll
   unload:
+    - VectorRender.mll
+    - pgYetiMaya.mll
     - MayaMuscle.mll
     - BifrostMain.mll
     - bifrostshellnode.mll
