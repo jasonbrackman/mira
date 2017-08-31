@@ -8,31 +8,21 @@ check_display_smooth:
   order: 10
   ignorable: False
   description: "所有模型按1显示"
-check_start_frame:
-  name: "start frame | 从101帧开始"
-  order: 15
-  ignorable: False
-  description: "镜头从101帧开始"
 check_unloaded_reference:
   name: "Unload reference | 没有加载的reference"
   order: 20
   ignorable: True
   description: "检查是否有没加载的reference"
-check_reference_is_newest:
-  name: "neweset reference | 最新的reference"
+check_lay_set_node_exist:
+  name: set node exist | set节点存在
   order: 25
-  ignorable: True
-  description: "检查文件中的reference文件是不是最新的"
-check_anim_valid_camera:
-  name: "valid camera | 正确的摄像机"
-  order: 30
-  ignorable: True
-  description: "检查相机cam_{场号}_{镜头号}是否存在,并且摄像机上有frame_range属性，添加这个属性用于灯光设置帧范围"
-check_anim_frame_range:
-  name: "frame range | 帧范围"
-  order: 35
   ignorable: False
-  description: "检查相机cam_{场号}_{镜头号}的frame_range属性值是否跟当前文件的帧范围是否一致。"
+  description: "记录场景信息的时候，这个节点必须存在"
+check_lay_valid_camera:
+  name: "Valid camera | 正确的相机"
+  order: 30
+  ignorable: False
+  description: "检查相机cam_{场号}_{镜头号}是否存在"
 check_lay_camera_locked:
   name: "Lock camera | 锁定摄像机"
   order: 40
@@ -48,18 +38,43 @@ check_lay_structure:
   order: 60
   ignorable: True
   description: "检查大纲结构是否正确"
-check_render_layer:
-  name: "Render layer | 删除渲染层"
+check_shot_frame_range:
+  name: "Frame Range | 帧范围"
   order: 70
-  ignorable: False
-  description: "检查是否有渲染层的存在"
-check_duplicate_names:
-  name: "Duplicate names | 同名物体"
+  ignorable: True
+  description: "检查帧范围是否正确"
+check_unknown_node:
+  name: "Unknown nodes | 删除unknown节点"
   order: 80
   ignorable: False
+  description: "删除unkonwn节点"
+check_unknown_plugin:
+  name: "Unknown plugin | 删除unknown插件"
+  order: 90
+  ignorable: False
+  description: "删除unkonwn插件"
+check_duplicate_names_again:
+  name: "Duplicate names | 同名物体"
+  order: 100
+  ignorable: False
   description: "检查是否有同名物体存在"
+check_display_layer:
+  name: "Display layer | 多余的显示层"
+  order: 110
+  ignorable: False
+  description: "检查是否有多余的显示层"
+check_render_layer:
+  name: "Render layer | 多余的渲染层"
+  order: 120
+  ignorable: False
+  description: "检查是否有多余的渲染层"
+#check_animation_layer:
+#  name: "Animation Layer | 多余的动画层"
+#  order: 130
+#  ignorable: False
+#  description: "检查是否有动画层"
 check_save_file:
   name: "Save file | 保存文件"
-  order: 90
+  order: 130
   ignorable: True
   description: "保存检查后的文件"

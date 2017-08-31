@@ -10,7 +10,7 @@ from miraLibs.pyLibs import start_file
 
 
 class FileListWidget(QListWidget):
-    def __init__(self, name, parent=None):
+    def __init__(self, name=None, parent=None):
         super(FileListWidget, self).__init__(parent)
         self.name = name
         self.__engine = get_engine.get_engine()
@@ -23,30 +23,6 @@ class FileListWidget(QListWidget):
     def set_signals(self):
         self.open_action.triggered.connect(self.do_open)
         self.show_in_filesystem_action.triggered.connect(self.show_in_filesystem)
-
-    def get_icon_path(self):
-        icons_dir = miraCore.get_icons_dir()
-        engine_icon_path = "%s/%s/%s" % (icons_dir, "engine", "%s.png" % self.__engine)
-        return engine_icon_path
-
-    def set_dir(self, file_dir):
-        self.clear()
-        icon_path = self.get_icon_path()
-        if self.__engine == "maya":
-            maya_mb_files = glob.glob("%s/*.mb" % (file_dir))
-            maya_ma_files = glob.glob("%s/*.ma" % (file_dir))
-            files = maya_mb_files + maya_ma_files
-            files.sort()
-            files.reverse()
-        if not files:
-            return
-        for f in files:
-            base_name = os.path.basename(f)
-            item = QListWidgetItem(base_name)
-            item.setSizeHint(QSize(self.width(), 30))
-            item.file_path = f
-            item.setIcon(QIcon(icon_path))
-            self.addItem(item)
 
     def contextMenuEvent(self, event):
         self.menu.clear()
@@ -81,6 +57,49 @@ class FileListWidget(QListWidget):
         start_file.start_file(dir_name)
 
 
+class StackedWidget(QStackedWidget):
+    def __init__(self, name=None, parent=None):
+        super(StackedWidget, self).__init__(parent)
+        self.resize(375, 500)
+        self.name = name
+        self.__engine = get_engine.get_engine()
+        label = QLabel()
+        label.resize(self.width(), self.height())
+        icon_path = os.path.abspath(os.path.join(__file__, "..", "no_file.png"))
+        pix_map = QPixmap(icon_path)
+        pix_map = pix_map.scaled(label.width(), label.height(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        label.setPixmap(pix_map)
+        self.list_widget = FileListWidget(self.name)
+        self.addWidget(label)
+        self.addWidget(self.list_widget)
+    
+    def get_engine_icon_path(self):
+        icons_dir = miraCore.get_icons_dir()
+        engine_icon_path = "%s/%s/%s" % (icons_dir, "engine", "%s.png" % self.__engine)
+        return engine_icon_path
+        
+    def set_dir(self, file_dir):
+        self.list_widget.clear()
+        icon_path = self.get_engine_icon_path()
+        if self.__engine == "maya":
+            maya_mb_files = glob.glob("%s/*.mb" % (file_dir))
+            maya_ma_files = glob.glob("%s/*.ma" % (file_dir))
+            files = maya_mb_files + maya_ma_files
+            files.sort()
+            files.reverse()
+        if files:
+            self.setCurrentIndex(1)
+            for f in files:
+                base_name = os.path.basename(f)
+                item = QListWidgetItem(base_name)
+                item.setSizeHint(QSize(self.width(), 30))
+                item.file_path = f
+                item.setIcon(QIcon(icon_path))
+                self.list_widget.addItem(item)
+        else:
+            self.setCurrentIndex(0)
+
+
 class TaskUI(QDialog):
     def __init__(self, parent=None):
         super(TaskUI, self).__init__(parent)
@@ -88,7 +107,7 @@ class TaskUI(QDialog):
 
     def setup_ui(self):
         self.setWindowFlags(Qt.Window)
-        self.setWindowTitle("Task Get")
+        self.setWindowTitle("Task Initialize")
         self.resize(750, 630)
         main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
@@ -118,12 +137,12 @@ class TaskUI(QDialog):
         init_layout.addWidget(self.init_btn)
 
         self.file_widget = QTabWidget()
-        self.local_list = FileListWidget("local")
-        self.work_list = FileListWidget("work")
-        self.publish_list = FileListWidget("publish")
-        self.file_widget.addTab(self.local_list, "Local")
-        self.file_widget.addTab(self.work_list, "Work")
-        self.file_widget.addTab(self.publish_list, "Publish")
+        self.local_stack = StackedWidget("local")
+        self.work_stack = StackedWidget("work")
+        self.publish_stack = StackedWidget("publish")
+        self.file_widget.addTab(self.local_stack, "Local")
+        self.file_widget.addTab(self.work_stack, "Work")
+        self.file_widget.addTab(self.publish_stack, "Publish")
 
         right_layout.addWidget(task_group)
         right_layout.addLayout(init_layout)

@@ -29,7 +29,7 @@ class TaskInit(TaskUI):
     def set_signals(self):
         self.my_task_widget.task_view.pressed.connect(self.on_task_pressed)
         self.init_btn.clicked.connect(self.init_task)
-        self.work_list.copy_to_local_action.triggered.connect(self.copy_to_local)
+        self.work_stack.list_widget.copy_to_local_action.triggered.connect(self.copy_to_local)
 
     def on_task_pressed(self, index):
         self.selected = index.data()
@@ -93,12 +93,12 @@ class TaskInit(TaskUI):
             local_dir = join_path.join_path2(local_dir, self.__engine)
             work_dir = join_path.join_path2(work_dir, self.__engine)
             publish_dir = join_path.join_path2(publish_dir, self.__engine)
-        self.local_list.set_dir(local_dir)
-        self.work_list.set_dir(work_dir)
-        self.publish_list.set_dir(publish_dir)
+        self.local_stack.set_dir(local_dir)
+        self.work_stack.set_dir(work_dir)
+        self.publish_stack.set_dir(publish_dir)
 
     def copy_to_local(self):
-        file_paths = self.work_list.get_selected()
+        file_paths = self.work_stack.get_selected()
         if not file_paths:
             return
         file_path = file_paths[0]

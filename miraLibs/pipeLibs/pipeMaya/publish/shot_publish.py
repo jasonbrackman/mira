@@ -91,3 +91,10 @@ def export_other_cache(context, category):
             namespace = get_namespace.get_namespace(model)
             cache_path = "%s/%s.abc" % (cache_dir, namespace)
             export_abc.export_abc(start, end, cache_path, model, False)
+
+
+# #####################################export asset info#####################################
+
+
+def export_asset_info():
+    pass
