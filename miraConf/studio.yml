@@ -56,5 +56,6 @@ SnowKidTest:
   maya_shot_definition: "{primary}/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_definition/{engine}/{project}_{sequence}_{shot}_{step}_{task}.ma"
   maya_shot_description: "{primary}/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_description/{engine}/{project}_{sequence}_{shot}_{step}_{task}.yml"
   maya_shot_cache:  "{primary}/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_cache"
+  maya_shot_assetInfo: "{primary}/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_publish/{engine}/{project}_{sequence}_{shot}_{step}_{task}.json"
   # photoshop
   photoshop_asset_publish: "{primary}/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_publish/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.psd"

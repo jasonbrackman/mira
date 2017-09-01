@@ -23,8 +23,4 @@ class Check(BaseCheck):
         render_layers = self.get_render_layer()
         for layer in render_layers:
             delete_render_layer.delete_render_layer(layer)
-        self.error_list = self.get_render_layer()
-        if self.error_list:
-            self.fail_check(u"有些渲染层不能被删除")
-        else:
-            self.pass_check(u"所有渲染层已被删除")
+        self.pass_check(u"所有渲染层已被删除")
