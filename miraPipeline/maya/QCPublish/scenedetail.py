@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 import logging
-import shutil
 import os
+import shutil
 import tempfile
-from miraLibs.pipeLibs.copy import Copy
+
+from miraLibs.mayaLibs import get_scene_name, save_file, open_file
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.pipeLibs.backup import backup
-from miraLibs.mayaLibs import get_scene_name, save_file, open_file
+from miraLibs.pipeLibs.copy import Copy
+from miraLibs.pipeLibs.pipeMaya.shd import export_shd_textures
 from miraLibs.pyLibs import join_path
-from miraLibs.pipeLibs.pipeMaya import export_shd_textures
 
 
 def main():

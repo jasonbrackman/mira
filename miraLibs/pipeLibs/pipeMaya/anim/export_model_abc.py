@@ -6,20 +6,20 @@ from miraLibs.pipeLibs.pipeMaya.get_assets_under_type_group import get_assets_un
 
 
 def export_single_abc(asset):
-    obj = pipeFile.PathDetails.parse_path()
+    context = pipeFile.PathDetails.parse_path()
     mc.parent(asset, world=1)
     namespace = get_namespace.get_namespace(asset)
     abc_name = "%s.abc" % namespace
-    abc_path = os.path.join(obj.cache_dir, abc_name).replace("\\", "/")
+    abc_path = os.path.join(context.cache_dir, abc_name).replace("\\", "/")
     start, end = get_frame_range.get_frame_range()
     meshes = mc.listRelatives(asset, ad=1, type="mesh")
     geo = [mc.listRelatives(mesh, p=1)[0] for mesh in meshes]
     objects = list(set(geo))
-    export_exocortex_abc.export_exocortex_abc(abc_path, 1, end, objects)
+    export_exocortex_abc.export_exocortex_abc(abc_path, 950, end, objects)
 
 
 def export_model_abc():
-    assets = get_assets_under_type_group("char")+get_assets_under_type_group("prop")
+    assets = get_assets_under_type_group("Char")+get_assets_under_type_group("Prop")
     if not assets:
         return
     for asset in assets:
