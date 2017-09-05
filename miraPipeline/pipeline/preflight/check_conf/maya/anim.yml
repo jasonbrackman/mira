@@ -56,7 +56,7 @@ check_unknown_plugin:
 check_duplicate_names_again:
   name: "Duplicate names | 同名物体"
   order: 100
-  ignorable: False
+  ignorable: True
   description: "检查是否有同名物体存在"
 check_display_layer:
   name: "Display layer | 多余的显示层"
