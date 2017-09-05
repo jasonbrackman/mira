@@ -126,14 +126,16 @@ def display_mode():
 
 
 def set_camera_settings(camera):
-    mc.setAttr("%s.displayGateMaskColor" % camera, 0, 0, 0, type="double3")
-    mc.setAttr("%s.overscan" % camera, 1)
-    attr_list_0 = ["dfc", "dfg", "dfo", "dfp", "dst", "displaySafeAction"]
-    attr_list_1 = ["displayResolution", "displayGateMaskOpacity"]
-    for attr in attr_list_0:
-        mc.setAttr("{cam}.{attr}".format(cam=camera, attr=attr), 0)
-    for attr in attr_list_1:
-        mc.setAttr("{cam}.{attr}".format(cam=camera, attr=attr), 1)
+    try:
+        mc.setAttr("%s.displayGateMaskColor" % camera, 0, 0, 0, type="double3")
+        mc.setAttr("%s.overscan" % camera, 1)
+        attr_list_0 = ["dfc", "dfg", "dfo", "dfp", "dst", "displaySafeAction"]
+        attr_list_1 = ["displayResolution", "displayGateMaskOpacity"]
+        for attr in attr_list_0:
+            mc.setAttr("{cam}.{attr}".format(cam=camera, attr=attr), 0)
+        for attr in attr_list_1:
+            mc.setAttr("{cam}.{attr}".format(cam=camera, attr=attr), 1)
+    except:pass
 
 
 def get_cameras():
