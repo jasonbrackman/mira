@@ -14,7 +14,7 @@
 
     <!--shading tools-->
     <submenu name="shading" type="submenu">
-        <command cmd="import miraPipeline.maya.liberay_manage.character_base_light as character_base_light;reload(character_base_light);reload(character_base_light);character_base_light.main()"
+        <command cmd="import miraPipeline.maya.templates_manage as tm;reload(tm);al=tm.AssetLight();al.import_char_light()"
                  mode="python" name="导入角色灯光【import character light】" type="command"/>
     </submenu>
     <!--rig tools-->
