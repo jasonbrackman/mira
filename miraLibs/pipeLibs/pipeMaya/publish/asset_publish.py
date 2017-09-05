@@ -47,7 +47,7 @@ def export_model_to_abc(context):
     model_name = get_model_name.get_model_name()
     directory = os.path.dirname(context.abc_cache_path)
     filename = os.path.splitext(os.path.basename(context.abc_cache_path))[0]
-    if context.asset_type in ["Prop", "Character", "Cprop"]:
+    if context.asset_type in ["Prop", "Character", "Cprop", "Building"]:
         logger.info("Exporting abc...")
         export_gpu_cache.export_gpu_cache(model_name, directory, filename)
         logger.info("Exporting abc to %s" % context.abc_cache_path)

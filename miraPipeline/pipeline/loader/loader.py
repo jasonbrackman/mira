@@ -8,6 +8,8 @@ reload(loader_ui)
 import hooks
 reload(hooks)
 from hooks import Hook
+import tasks_ui
+reload(tasks_ui)
 import miraCore
 from miraLibs.pipeLibs import pipeMira, get_current_project
 from miraLibs.dbLibs import db_api
@@ -15,7 +17,6 @@ from miraLibs.qtLibs import create_round_rect_thumbnail
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.pyLibs import join_path, yml_operation
 from miraLibs.osLibs import get_engine
-
 
 
 IMAGE_WIDTH = 100
@@ -66,6 +67,18 @@ class AssetItem(object):
         self.project = project
         self.name = name
         self.image = image
+
+
+class TaskItem(object):
+    def __init__(self, project, entity_type, asset_type_sequence, asset_name_shot, step, task, pix_map, actions):
+        self.project = project
+        self.entity_type = entity_type
+        self.asset_type_sequence = asset_type_sequence
+        self.asset_name_shot = asset_name_shot
+        self.step = step
+        self.task = task
+        self.pix_map = pix_map
+        self.actions = actions
 
 
 class LoaderModel(QAbstractListModel):
@@ -180,6 +193,7 @@ class Loader(loader_ui.LoaderUI):
         self.list_view.setContextMenuPolicy(Qt.CustomContextMenu)
         self.list_view.customContextMenuRequested.connect(self.show_context_menu)
         self.list_view.clicked.connect(self.show_selected)
+        self.list_view.doubleClicked.connect(self.__on_double_clicked)
 
     def __set_empty_model(self):
         self.model = QStandardItemModel()
@@ -295,6 +309,40 @@ class Loader(loader_ui.LoaderUI):
     def __get_publish_path(self, entity_type, typ, name, step, task):
         publish_file_path = pipeFile.get_task_publish_file(self.project, entity_type, typ, name, step, task)
         return publish_file_path
+
+    def __on_double_clicked(self, index):
+        asset_name_shot = index.data()
+        steps = self.__db.get_step(self.entity_type, self.asset_type_sequence, asset_name_shot)
+        steps = list(set(steps))
+        steps.sort()
+        if not steps:
+            print "No step"
+            return
+        model_data = list()
+        ui_text = "%s - %s - %s" % (self.entity_type, self.asset_type_sequence, asset_name_shot)
+        for step in steps:
+            tasks = self.__db.get_task(self.entity_type, self.asset_type_sequence, asset_name_shot, step)
+            if not tasks:
+                continue
+            for task in tasks:
+                task_name = task.get("name")
+                if self.entity_type == "Asset":
+                    format_str = "%s_asset_image" % self.__engine
+                else:
+                    format_str = "%s_shot_image" % self.__engine
+                image_path = pipeFile.get_task_file(self.project, self.asset_type_sequence, asset_name_shot, step,
+                                                    task_name, format_str, "", self.__engine)
+                if not os.path.isfile(image_path):
+                    image_path = "%s/%s" % (miraCore.get_icons_dir(), "unknown.png")
+                pix_map = QPixmap(image_path)
+                pix_map = pix_map.scaled(100, 75, Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
+                actions = self.__get_actions().get(self.entity_type)
+                task_actions = actions.get("task").get("actions")
+                item = TaskItem(self.project, self.entity_type, self.asset_type_sequence, asset_name_shot, step,
+                                task_name, pix_map, task_actions)
+                model_data.append(item)
+        detail_widget = tasks_ui.TaskUI(ui_text, model_data)
+        detail_widget.exec_()
 
     @staticmethod
     def __on_action_triggered(action):
