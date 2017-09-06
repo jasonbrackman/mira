@@ -33,50 +33,24 @@
     </submenu>
     <!--sceneset tools-->
     <submenu name="sceneset" type="submenu">
-        <command cmd="from miraPipeline.maya.ass_operations import import_ass;reload(import_ass);import_ass.main()"
-                 mode="python" name="导入ASS工具【reference in ASS】" type="command"/>
         <command cmd="from miraScripts.pipeTools.plantTree import plant_tree;reload(plant_tree);plant_tree.main()"
                  mode="python" name="刷代理工具【proxy brush】" type="command"/>
     </submenu>
-    <!--layout tools-->
-    <submenu name="layout" type="submenu">
-        <!--<command cmd="from miraPipeline.maya.layout_producer import layout_producer;reload(layout_producer);layout_producer.main()"-->
-                 <!--mode="python" name="导入资产工具【reference in assets】" type="command"/>-->
-        <!--<command cmd="from miraLibs.pipeLibs.pipeMaya.rebuild_scene import rebuild_scene;reload(rebuild_scene);rebuild_scene.rebuild_scene()"-->
-                 <!--mode="python" name="更新场景工具【refresh env】" type="command"/>-->
-        <!--<command cmd="from miraScripts.pipeTools.camera_sequencer import camera_sequencer;reload(camera_sequencer);camera_sequencer.main()"-->
-                 <!--mode="python" name="创建镜头【create shot】" type="command"/>-->
-        <!--<command cmd="from miraScripts.pipeTools.publish_single_lay import publish_single_lay;reload(publish_single_lay);publish_single_lay.main()"-->
-                 <!--mode="python" name="单个镜头入库【single shot publish】" type="command"/>-->
-    </submenu>
     <!--anim tools-->
     <submenu name="anim" type="submenu">
-        <!--<command cmd="from miraLibs.pipeLibs.pipeMaya.rebuild_scene import rebuild_scene;reload(rebuild_scene);rebuild_scene.rebuild_scene()"-->
-                 <!--mode="python" name="更新场景工具【refresh env】" type="command"/>-->
         <command cmd="from miraScripts.mayaTools.animation_tool import run_animation_library;run_animation_library.main()"
                  mode="python" name="动作库【Animation library】" type="command"/>
         <command cmd="from miraScripts.mayaTools.animation_tool import find_edge;reload(find_edge);find_edge.find_edge()"
                  mode="python" name="获取模型边缘线【get model edge】" type="command"/>
-        <!--<command cmd="from miraScripts.pipeTools.export_single_abc import single_publish;reload(single_publish);single_publish.main()"-->
-                 <!--mode="python" name="单个资产入库【single asset publish】" type="command"/>-->
         <command cmd="from miraScripts.mayaTools.animation_tool import remove_model_smooth;reload(remove_model_smooth);remove_model_smooth.main()"
                  mode="python" name="去掉模型的细分【get rid model subdivision】" type="command"/>
         <command cmd="from miraPipeline.maya.replace_rig_reference import replace_rig_reference;reload(replace_rig_reference);replace_rig_reference.main()"
                  mode="python" name="低模绑定切换为高模绑定【switch lowRig to rig】" type="command"/>
-        <!--<command cmd="from miraPipeline.maya.switch_asset_version import switch_asset_version;reload(switch_asset_version);switch_asset_version.main()"-->
-                 <!--mode="python" name="切换资产版本【switch asset version】" type="command"/>-->
-    </submenu>
-    <!--sim tools-->
-    <submenu name="sim" type="submenu">
-        <command cmd="from miraPipeline.maya.replace_asset import replace_asset;reload(replace_asset);replace_asset.main()"
-                 mode="python" name="切换资产【Switch Asset】" type="command"/>
     </submenu>
     <!--vfx tools-->
     <submenu name="vfx" type="submenu">
         <command cmd="from miraPipeline.maya.sim_reference_in import sim_reference_in;reload(sim_reference_in);sim_reference_in.main()"
                  mode="python" name="参考动画缓存【reference in anim cache】" type="command"/>
-        <!--<command cmd="from miraScripts.pipeTools.gpu_to_mdl import gpu_to_mdl;reload(gpu_to_mdl);gpu_to_mdl.main()"-->
-                 <!--mode="python" name="GPU&ndash;&gt;模型【GPU&ndash;&gt;model】" type="command"/>-->
     </submenu>
     <!--lighting tools-->
     <submenu name="lighting" type="submenu">
@@ -84,17 +58,9 @@
                  mode="python" name="lightingTool(arnold)" type="command"/>
         <command cmd="import miraScripts.mayaTools.lighting_tool.foreground_render.ForegroundRender as fr; reload(fr); fr.main()"
                  mode="python" name="窗口渲染【foreground render】" type="command"/>
-        <command cmd="from miraPipeline.maya.switch_shader import switch_shader; reload(switch_shader); switch_shader.main()"
-                 mode="python" name="切换材质【switch shader】" type="command"/>
     </submenu>
     <submenu name= "----------" type="separator"/>
-    <!--TD tools-->
-    <submenu name="TD" type="submenu">
-        <command cmd="from miraPipeline.maya.ass_operations import export_ass;reload(export_ass);export_ass.export_ass()"
-                 mode="python" name="导出ASS【export ass】" type="command"/>
-    </submenu>
     <!--public tools-->
-    <submenu name= "----------" type="separator"/>
     <submenu name="public" type="submenu">
         <command cmd="import miraPipeline.maya.maya_save_timer.ResetUI as UI; reload(UI);dlg=UI.ResetUI();dlg.show()"
                  mode="python" name="设置保存提醒时间【SetSaveTimer】" type="command"/>

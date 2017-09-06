@@ -135,6 +135,27 @@ class LoaderModel(QAbstractListModel):
             self.removeRows(0, 1)
 
 
+class FilterProxyModel(QSortFilterProxyModel):
+    def __init__(self, parent=None):
+        super(FilterProxyModel, self).__init__(parent)
+        self.name_regexp = QRegExp()
+        self.name_regexp.setCaseSensitivity(Qt.CaseInsensitive)
+        self.name_regexp.setPatternSyntax(QRegExp.RegExp)
+
+    def filterAcceptsRow(self, source_row, source_parent):
+        name_index = self.sourceModel().index(source_row, 0, source_parent)
+        item = self.sourceModel().data(name_index, Qt.ToolTipRole)
+        if self.name_regexp.isEmpty():
+            return True
+        else:
+            return self.name_regexp.exactMatch(item)
+
+    def set_name_filter(self, regexp):
+        regexp = ".*%s.*" % regexp if regexp else ""
+        self.name_regexp.setPattern(regexp)
+        self.invalidateFilter()
+
+
 class Loader(loader_ui.LoaderUI):
 
     def __init__(self, parent=None):
@@ -203,12 +224,12 @@ class Loader(loader_ui.LoaderUI):
         if not model_data:
             self.__set_empty_model()
             return
-        self.proxy_model = QSortFilterProxyModel()
+        self.proxy_model = FilterProxyModel()
         self.proxy_model.setDynamicSortFilter(True)
         self.proxy_model.setFilterCaseSensitivity(Qt.CaseInsensitive)
         self.proxy_model .setSortCaseSensitivity(Qt.CaseInsensitive)
         self.proxy_model.sort(0, Qt.AscendingOrder)
-        self.filter_le.textChanged.connect(self.proxy_model.setFilterRegExp)
+        self.filter_le.textChanged.connect(self.proxy_model.set_name_filter)
         self.model = LoaderModel(model_data)
         self.proxy_model.setSourceModel(self.model)
         self.list_view.setModel(self.proxy_model)

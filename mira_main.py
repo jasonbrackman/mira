@@ -90,6 +90,7 @@ def init_user_setup():
     load_plugins()
     init_render_setting()
     init_scene_break_down()
+    init_resolution()
     add_system_python_path_env()
     # init_shotgun()
     open_port()
@@ -150,6 +151,11 @@ def init_current_project():
     from miraPipeline.maya.switch_project import switch_project
     switch_project.main()
     logger.info("Initialize current project done.")
+
+
+def init_resolution():
+    mc.setAttr("defaultResolution.width", 2048)
+    mc.setAttr("defaultResolution.height", 858)
 
 
 def open_port():
