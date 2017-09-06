@@ -111,7 +111,7 @@ check_mdl_extra_shape:
 check_shd_uvset:
   name: "multi uv set | 多个uvset"
   order: 170
-  ignorable: False
+  ignorable: True
   description: "检查是否有多个uv set存在"
 check_duplicate_names:
   name: "Duplicate names | 同名物体"

@@ -3,6 +3,7 @@ import os
 
 
 mira_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+mira_dir = mira_dir.replace("\\", "/")
 
 
 def get_package_dir(package_name):
