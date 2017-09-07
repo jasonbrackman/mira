@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 from miraLibs.pipeLibs import pipeFile
-from miraLibs.mayaLibs import open_file, quit_maya
+from miraLibs.mayaLibs import open_file, quit_maya, delete
 from miraLibs.pipeLibs.pipeMaya import publish, rename_pipeline_shape
 
 
@@ -17,6 +17,8 @@ def main(file_name, local):
     # import all reference
     publish.reference_opt()
     logger.info("Import reference done.")
+    # delete blends
+    delete.delete("_BLENDS")
     # rename shape
     if not rename_pipeline_shape.rename_pipeline_shape():
         raise RuntimeError("Rename shape error.")
