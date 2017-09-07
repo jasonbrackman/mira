@@ -8,7 +8,7 @@ from miraLibs.pipeLibs.pipeMaya.anim import export_anim_asset_info
 
 
 def main(file_name, local):
-    logger = logging.getLogger("AnimLay publish")
+    logger = logging.getLogger("Anim publish")
     if not local:
         open_file.open_file(file_name)
     # get paths
