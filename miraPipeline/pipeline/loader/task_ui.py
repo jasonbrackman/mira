@@ -80,6 +80,7 @@ class TaskDelegate(QItemDelegate):
             info = "<font size=4 face=Arial><b>%s</b>  -  %s</font>" % (item.step, item.task)
             editor.set_info(info)
             editor.set_action(item.actions)
+            editor.set_status(item.status_name, item.status_color)
             editor.item = item
 
     def sizeHint(self, option, index):
@@ -99,17 +100,24 @@ class CellTaskWidget(QWidget):
         group_layout = QHBoxLayout(group_box)
         group_layout.setContentsMargins(0, 0, 0, 0)
         self.thumb_label = QLabel()
+
+        info_layout = QVBoxLayout()
         self.info_label = QLabel()
+        self.status_label = QLabel()
+        info_layout.addWidget(self.info_label)
+        info_layout.addWidget(self.status_label)
+        info_layout.setAlignment(Qt.AlignVCenter)
+
         self.actions_btn = QPushButton("Actions")
         self.actions_btn.setStyleSheet("QPushButton{color: #00b4ff; font: bold;}QPushButton:hover{color:#ff8c00;}")
         group_layout.addWidget(self.thumb_label)
-        group_layout.addWidget(self.info_label)
+        group_layout.addLayout(info_layout)
         group_layout.addWidget(self.actions_btn)
         group_layout.setStretch(0, 3)
         group_layout.setStretch(1, 10)
         group_layout.setStretch(2, 1)
         group_layout.setStretchFactor(self.thumb_label, 0)
-        group_layout.setStretchFactor(self.info_label, 1)
+        group_layout.setStretchFactor(info_layout, 1)
         group_layout.setStretchFactor(self.actions_btn, 0)
         self.action_group.triggered.connect(self.__on_acton_triggered)
 
@@ -118,6 +126,9 @@ class CellTaskWidget(QWidget):
 
     def set_info(self, info):
         self.info_label.setText(info)
+
+    def set_status(self, status_name, status_color):
+        self.status_label.setText("<font size=4 color=%s>%s</font>" % (status_color, status_name))
 
     def set_action(self, actions):
         self.menu.clear()

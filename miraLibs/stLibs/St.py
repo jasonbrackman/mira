@@ -107,10 +107,10 @@ class St(object):
         if step:
             step_info = self.get_step_by_name(step)
             task_filters = "item_id=%s and step_id=%s" % (entity_info.get("id"), step_info.get("id"))
-            tasks = self.st.task.select(filters=task_filters, fields=["name", "step.name"])
+            tasks = self.st.task.select(filters=task_filters, fields=["name", "step.name", "status.color", "status.name"])
         else:
             task_filters = "item_id=%s" % entity_info.get("id")
-            tasks = self.st.task.select(filters=task_filters, fields=["name", "step.name"])
+            tasks = self.st.task.select(filters=task_filters, fields=["name", "step.name", "status.color", "status.name"])
         return tasks
 
     def get_step(self, entity_type, asset_type_or_sequence, asset_or_shot):
