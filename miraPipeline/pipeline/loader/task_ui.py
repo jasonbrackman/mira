@@ -1,31 +1,25 @@
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
+from hooks import Hook
 
 
-class TaskUI(QDialog):
-    def __init__(self, text, model_data, parent=None):
-        super(TaskUI, self).__init__(parent)
-        self.text = text
-        self.model_data = model_data
-        self.resize(450, 500)
+class Task(QWidget):
+    def __init__(self, parent=None):
+        super(Task, self).__init__(parent)
         main_layout = QVBoxLayout(self)
         self.entity_label = QLabel()
         self.list_view = QListView()
-        self.list_view.setSpacing(2)
+        self.list_view.setFocusPolicy(Qt.NoFocus)
         main_layout.addWidget(self.entity_label)
         main_layout.addWidget(self.list_view)
 
-        self.set_label()
-        self.set_model()
-        self.set_delegate()
+    def set_label(self, text):
+        self.entity_label.setText(text)
 
-    def set_label(self):
-        self.entity_label.setText(self.text)
-
-    def set_model(self):
-        if self.model_data:
-            self.model = DetailModel(self.model_data)
+    def set_model(self, model_data):
+        if model_data:
+            self.model = DetailModel(model_data)
         else:
             self.model = QStandardItemModel()
         self.list_view.setModel(self.model)
@@ -83,8 +77,10 @@ class TaskDelegate(QItemDelegate):
         item = index.model().data(index, Qt.DisplayRole)
         if item:
             editor.set_image(item.pix_map)
-            info = "%s - %s" % (item.step, item.task)
+            info = "<font size=4 face=Arial><b>%s</b>  -  %s</font>" % (item.step, item.task)
             editor.set_info(info)
+            editor.set_action(item.actions)
+            editor.item = item
 
     def sizeHint(self, option, index):
         return QSize(300, 90)
@@ -94,7 +90,9 @@ class CellTaskWidget(QWidget):
     def __init__(self, parent=None):
         super(CellTaskWidget, self).__init__(parent)
         main_layout = QHBoxLayout(self)
-        # self.setAutoFillBackground(True)
+        self.item = None
+        self.menu = QMenu()
+        self.action_group = QActionGroup(self)
         self.thumb_label = QLabel()
         self.info_label = QLabel()
         self.actions_btn = QPushButton("Actions")
@@ -107,12 +105,29 @@ class CellTaskWidget(QWidget):
         main_layout.setStretchFactor(self.thumb_label, 0)
         main_layout.setStretchFactor(self.info_label, 1)
         main_layout.setStretchFactor(self.actions_btn, 0)
-        # palette = QPalette()
-        # palette.setColor(QPalette.Background, QColor("#ff0000"))
-        # self.setPalette(palette)
+        self.action_group.triggered.connect(self.__on_acton_triggered)
 
     def set_image(self, pix_map):
         self.thumb_label.setPixmap(pix_map)
 
     def set_info(self, info):
         self.info_label.setText(info)
+
+    def set_action(self, actions):
+        self.menu.clear()
+        for action in actions:
+            task_action = self.action_group.addAction(action)
+            self.menu.addAction(task_action)
+        self.actions_btn.setMenu(self.menu)
+
+    def __on_acton_triggered(self, action):
+        project = self.item.project
+        entity_type = self.item.entity_type
+        asset_type_sequence = self.item.asset_type_sequence
+        asset_shot_names = self.item.asset_name_shot
+        step = self.item.step
+        task = self.item.task
+        action_name = action.text()
+        hooker = Hook(project, entity_type, asset_type_sequence, asset_shot_names, step, task, action_name)
+        hooker.execute()
+

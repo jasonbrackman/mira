@@ -7,14 +7,18 @@ from miraLibs.pyLibs import start_file
 
 
 class Hook(object):
-    def __init__(self, action=None):
-        self.__action = action
-        self.__project, self.__entity_type, self.__asset_type_sequence, self.__asset_shot_names = self.__action.attr
-        if hasattr(self.__action, "up_level"):
-            self.__task = self.__action.up_level.title()
-            self.__step = self.__action.up_level.up_level.title()
+    def __init__(self, project, entity_type, asset_type_sequence, asset_shot_names, step, task, action_name):
+        self.__project = project
+        self.__entity_type = entity_type
+        self.__asset_type_sequence = asset_type_sequence
+        self.__asset_shot_names = asset_shot_names
+        if isinstance(self.__asset_shot_names, basestring):
+            self.__asset_shot_names = [self.__asset_shot_names]
+        self.__step = step
+        self.__task = task
+        if self.__step:
             self.__engine = Step(self.__project, self.__step).engine
-        self.__action_name = self.__action.text()
+        self.__action_name = action_name
 
     def execute(self):
         if self.__action_name == "AR":
