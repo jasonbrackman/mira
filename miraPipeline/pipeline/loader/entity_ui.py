@@ -10,6 +10,7 @@ from miraFramework.combo import ProjectCombo
 import miraCore
 from miraLibs.pipeLibs import pipeMira
 from miraLibs.dbLibs import db_api
+reload(db_api)
 from miraLibs.qtLibs import create_round_rect_thumbnail
 from miraLibs.pipeLibs import pipeFile, Step
 from miraLibs.pyLibs import join_path, yml_operation

@@ -11,7 +11,8 @@ import miraCore
 
 
 class TaskItem(object):
-    def __init__(self, project, entity_type, asset_type_sequence, asset_name_shot, step, task, pix_map, actions):
+    def __init__(self, project, entity_type, asset_type_sequence, asset_name_shot, step, task, pix_map, actions,
+                 status_name, status_color):
         self.project = project
         self.entity_type = entity_type
         self.asset_type_sequence = asset_type_sequence
@@ -20,6 +21,8 @@ class TaskItem(object):
         self.task = task
         self.pix_map = pix_map
         self.actions = actions
+        self.status_name = status_name
+        self.status_color = status_color
 
 
 class Loader(QDialog):
@@ -78,6 +81,8 @@ class Loader(QDialog):
                 continue
             for task in tasks:
                 task_name = task.get("name")
+                status_name = task.get("status").get("name")
+                status_color = task.get("status").get("color")
                 if entity_type == "Asset":
                     format_str = "%s_asset_image" % engine
                 else:
@@ -91,7 +96,7 @@ class Loader(QDialog):
                 actions = self.__actions.get(entity_type)
                 task_actions = actions.get("task").get("actions")
                 item = TaskItem(self.project, entity_type, asset_type_sequence, asset_name_shot, step,
-                                task_name, pix_map, task_actions)
+                                task_name, pix_map, task_actions, status_name, status_color)
                 model_data.append(item)
         self.task_ui.set_label(ui_text)
         self.task_ui.set_model(model_data)
