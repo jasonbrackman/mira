@@ -13,7 +13,7 @@ def main(file_name, local):
     sequence = context.sequence
     shot = context.shot
     task = context.task
-    lay_publish_file = pipeFile.get_task_publish_file(project, "Shot", sequence, shot, "AnimLay", task)
+    lay_publish_file = pipeFile.get_task_publish_file(project, "Shot", sequence, shot, "AnimLay", "AnimLay")
     if not os.path.isfile(lay_publish_file):
         logger.warning("%s is not an exist file" % lay_publish_file)
         if local:
