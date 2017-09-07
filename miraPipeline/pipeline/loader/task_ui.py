@@ -62,7 +62,7 @@ class DetailModel(QAbstractListModel):
             return self.__model_data[row]
 
     def flags(self, index):
-        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
+        return Qt.ItemIsEnabled
 
 
 class TaskDelegate(QItemDelegate):
@@ -89,22 +89,28 @@ class TaskDelegate(QItemDelegate):
 class CellTaskWidget(QWidget):
     def __init__(self, parent=None):
         super(CellTaskWidget, self).__init__(parent)
-        main_layout = QHBoxLayout(self)
         self.item = None
         self.menu = QMenu()
         self.action_group = QActionGroup(self)
+        main_layout = QHBoxLayout(self)
+        main_layout.setContentsMargins(0, 0, 0, 3)
+        group_box = QGroupBox()
+        main_layout.addWidget(group_box)
+        group_layout = QHBoxLayout(group_box)
+        group_layout.setContentsMargins(0, 0, 0, 0)
         self.thumb_label = QLabel()
         self.info_label = QLabel()
         self.actions_btn = QPushButton("Actions")
-        main_layout.addWidget(self.thumb_label)
-        main_layout.addWidget(self.info_label)
-        main_layout.addWidget(self.actions_btn)
-        main_layout.setStretch(0, 3)
-        main_layout.setStretch(1, 10)
-        main_layout.setStretch(2, 1)
-        main_layout.setStretchFactor(self.thumb_label, 0)
-        main_layout.setStretchFactor(self.info_label, 1)
-        main_layout.setStretchFactor(self.actions_btn, 0)
+        self.actions_btn.setStyleSheet("QPushButton{color: #00b4ff; font: bold;}QPushButton:hover{color:#ff8c00;}")
+        group_layout.addWidget(self.thumb_label)
+        group_layout.addWidget(self.info_label)
+        group_layout.addWidget(self.actions_btn)
+        group_layout.setStretch(0, 3)
+        group_layout.setStretch(1, 10)
+        group_layout.setStretch(2, 1)
+        group_layout.setStretchFactor(self.thumb_label, 0)
+        group_layout.setStretchFactor(self.info_label, 1)
+        group_layout.setStretchFactor(self.actions_btn, 0)
         self.action_group.triggered.connect(self.__on_acton_triggered)
 
     def set_image(self, pix_map):
