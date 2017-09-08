@@ -44,8 +44,9 @@ def post_qcpublish(context, version_file):
     db.update_task_status(task, "Supervisor Review")
     db.upload_thumbnail(task, context.work_image_path)
     # upload version
-    db.upload_version(task, media_path=version_file, file_path=context.work_path)
-    logger.info("Upload version done.")
+    if version_file:
+        db.upload_version(task, media_path=version_file, file_path=context.work_path)
+        logger.info("Upload version done.")
     # update task
     db.update_file_path(task, work_file_path=context.work_path)
     db.update_task(task, current_version=int(context.version))
@@ -254,8 +255,6 @@ class QC(QDialog):
                 logger.error(str(e))
                 self.playblast_widget.fail()
         else:
-            if self.step in self.not_submit_version_step:
-                return
             version_files = self.version_widget.widget.file_list.all_items_text()
             if len(version_files) > 1:
                 QMessageBox.warning(None, "Warming Tip", "Only one file can submit once a time.")
@@ -265,6 +264,8 @@ class QC(QDialog):
             elif len(version_files) == 1:
                 origin_file = version_files[0]
             else:
+                if self.step in self.not_submit_version_step:
+                    return
                 origin_file = thumbnail_path
             try:
                 ext = os.path.splitext(origin_file)[-1]
