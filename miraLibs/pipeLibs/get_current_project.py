@@ -9,11 +9,11 @@ def get_current_project():
     run_app = sys.executable
     current_project = None
     if run_app.endswith("maya.exe"):
-        context = pipeFile.PathDetails.parse_path()
-        if context:
+        try:
+            context = pipeFile.PathDetails.parse_path()
             current_project = context.project
             logger.info("Get project from scene name.")
-        else:
+        except:
             from miraLibs.mayaLibs import get_maya_globals
             maya_globals = get_maya_globals.get_maya_globals()
             if maya_globals.exists("currentProject"):
