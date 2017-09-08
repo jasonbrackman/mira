@@ -48,7 +48,7 @@ class HierarchyOpt(object):
             return [], []
         old_hierarchy_list = old_dict.keys()
         new_hierarchy_list = new_dict.keys()
-        new_hierarchy_list = ["|%s%s" % (self.group, obj.split(self.group)[1]) for obj in new_hierarchy_list]
+        new_hierarchy_list = ["|".join(("", self.group, obj.split("%s|" % self.group)[1])) for obj in new_hierarchy_list]
         decrease_list = list(set(new_hierarchy_list)-set(old_hierarchy_list))
         increase_list = list(set(old_hierarchy_list)-set(new_hierarchy_list))
         return increase_list, decrease_list
