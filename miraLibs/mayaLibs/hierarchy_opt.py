@@ -59,7 +59,7 @@ class HierarchyOpt(object):
         new_dict = self.get_topology()
         temp_dict = dict()
         for key in new_dict:
-            new_name = "|%s%s" % (self.group, key.split(self.group)[1])
+            new_name = "|".join(("", self.group, key.split("%s|" % self.group)[1]))
             temp_dict[new_name] = new_dict[key]
         if old_dict == temp_dict:
             return []
