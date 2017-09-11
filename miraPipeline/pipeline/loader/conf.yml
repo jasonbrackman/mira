@@ -10,3 +10,8 @@ maya:
       actions: ["AR", "Launch Folder"]
     task:
       actions: ["QA", "open", "import", "reference", "Launch Workarea", "Launch Publish"]
+  Shot:
+    entity:
+      actions: ["AR", "Launch Folder"]
+    task:
+      actions: ["QA", "open", "cache", "Launch Cache", "Launch Workarea", "Launch Publish"]

@@ -24,8 +24,9 @@ class ComboModel(QAbstractListModel):
 
 
 class CombBox(QComboBox):
-    def __init__(self, model_data, parent=None):
+    def __init__(self, parent=None):
         super(CombBox, self).__init__(parent)
-        self.__model_data = model_data
-        self.model = ComboModel(self.__model_data)
-        self.setModel(self.model)
+
+    def set_model(self, model_data):
+        model = ComboModel(model_data, self)
+        self.setModel(model)

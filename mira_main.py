@@ -8,7 +8,7 @@ import maya.cmds as mc
 import maya.mel as mel
 import maya.utils as mu
 import miraCore
-from miraLibs.mayaLibs import set_image_size
+from miraLibs.mayaLibs import set_image_size, get_maya_version
 
 
 logger = logging.getLogger(u"MIRA MAIN")
@@ -38,7 +38,9 @@ def load_menu():
     menu_conf_path = get_menu_conf_path()
     dom_tree = xml.dom.minidom.parse(menu_conf_path)
     collection = dom_tree.documentElement
-    main_maya_menu = mc.menu('test', label=collection.getAttribute("name"), tearOff=True, parent='MayaWindow')
+    maya_version = get_maya_version.get_maya_version()
+    main_maya_menu = mc.menu('test', label=collection.getAttribute("name"), tearOff=True,
+                             parent='MayaWindow', version=maya_version)
 
     sub_menus = collection.getElementsByTagName("submenu")
     for sub_menu in sub_menus:
@@ -56,7 +58,8 @@ def load_menu():
                 elif mode == "mel":
                     mel_path = os.path.join(miraCore.mira_dir, cmd)
                     mel_path = mel_path.replace("\\", "/")
-                    mc.menuItem(label=cmd_menu_name, tearOff=True, parent=sub_maya_menu, c=lambda *args: run_mel_cmd(mel_path))
+                    mc.menuItem(label=cmd_menu_name, tearOff=True, parent=sub_maya_menu,
+                                c=lambda *args: run_mel_cmd(mel_path))
 
         elif menu_type == "command":
             mc.menuItem(label=name, tearOff=True, parent=main_maya_menu, c=sub_menu.getAttribute('cmd'))

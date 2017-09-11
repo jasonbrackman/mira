@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
+import glob
 from Qt.QtWidgets import *
 from miraLibs.pipeLibs import pipeFile, Step
 from miraLibs.osLibs import FileOpener
 from miraLibs.pyLibs import start_file
+from miraLibs.log import Log
 
 
 class Hook(object):
@@ -41,17 +43,31 @@ class Hook(object):
             self.launch_workarea()
         elif self.__action_name == "Launch Publish":
             self.launch_publish()
+        elif self.__action_name == "cache":
+            self.import_cache()
+        elif self.__action_name == "Launch Cache":
+            self.launch_cache()
 
     def ad_opt(self):
         from miraLibs.mayaLibs.Assembly import Assembly
         error_list = list()
-        for name in self.__asset_shot_names:
-            ad_file_path = pipeFile.get_asset_AD_file(self.__project, self.__asset_type_sequence, name)
-            if not os.path.isfile(ad_file_path):
-                error_list.append(ad_file_path)
-                continue
-            assemb = Assembly()
-            assemb.reference_ad("%s_AR" % name, ad_file_path)
+        if self.__entity_type == "Asset":
+            for name in self.__asset_shot_names:
+                ad_file_path = pipeFile.get_asset_AD_file(self.__project, self.__asset_type_sequence, name)
+                if not os.path.isfile(ad_file_path):
+                    error_list.append(ad_file_path)
+                    continue
+                assemb = Assembly()
+                assemb.reference_ad("%s_AR" % name, ad_file_path)
+        else:
+            for name in self.__asset_shot_names:
+                ad_file_path = pipeFile.get_task_file(self.__project, self.__asset_type_sequence, name,
+                                                      "Set", "Set", "%s_shot_definition" % self.__engine, "")
+                if not os.path.isfile(ad_file_path):
+                    error_list.append(ad_file_path)
+                    continue
+                assemb = Assembly()
+                assemb.reference_ad("%s_%s_set" % (self.__asset_type_sequence, name.split("_")[-1]), ad_file_path)
         if error_list:
             QMessageBox.warning(None, "Warming Tip", "%s \n\nis not an exist file." % "\n\n".join(error_list))
 
@@ -126,3 +142,24 @@ class Hook(object):
             start_file.start_file(publish_dir)
         else:
             QMessageBox.warning(None, "Warming Tip", "%s \n\nis not an exist file." % publish_dir)
+
+    def import_cache(self):
+        cache_dir = pipeFile.get_task_file(self.__project, self.__asset_type_sequence, self.__asset_shot_names[0],
+                                           self.__step, self.__task, "%s_shot_cache" % self.__engine, "")
+        if not os.path.isdir(cache_dir):
+            Log.warning("%s is not an exist directory" % cache_dir)
+            return
+        from miraLibs.mayaLibs import import_abc
+        abc_files = glob.glob("%s/*.abc" % cache_dir)
+        for f in abc_files:
+            import_abc.import_abc(f)
+            Log.info("Import %s done" % f)
+
+    def launch_cache(self):
+        cache_dir = pipeFile.get_task_file(self.__project, self.__asset_type_sequence, self.__asset_shot_names[0],
+                                           self.__step, self.__task, "%s_shot_cache" % self.__engine, "")
+        if not os.path.isdir(cache_dir):
+            print "%s is not an exist directory"
+            return
+        print cache_dir
+        start_file.start_file(cache_dir)
