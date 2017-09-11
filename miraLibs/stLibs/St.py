@@ -90,6 +90,12 @@ class St(object):
             assets = self.st.asset.select(filters=filters, fields=["name"])
         return assets
 
+    def get_all_sequences(self):
+        sequences = self.st.sequence.select("project_id=%s" % self.project_id, ["name"])
+        if sequences:
+            sequences = [sequence.get("name") for sequence in sequences]
+        return sequences
+
     def get_all_shots(self, sequence_name=None):
         if not sequence_name:
             shots = self.st.shot.select(filters="project_id=%s" % self.project_id, fields=["name"])
@@ -230,9 +236,7 @@ class St(object):
 
 if __name__ == "__main__":
     st = St("SnowKidTest")
-    for i in st.get_my_tasks():
-        print i
-        break
+    print st.st.sequence.select("project_id=%s" % st.project_id, ["name"])
     # st.update_task(task, current_version=10)
     # st.st.task.update(615, {"json": {"work_file_path": "W:/SnowKidTest/workarea/assets/Prop/TdTest/Hair/Hair/_workarea/maya/SnowKidTest_TdTest_Hair_Hair_v005.ma"}})
     # print st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")

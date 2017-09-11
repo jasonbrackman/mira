@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pymel.core as pm
+from miraLibs.mayaLibs import get_maya_version
 
 
 def get_top_shelf():
@@ -21,7 +22,7 @@ def delete_shelf(parent, shelf_name):
 
 
 def create_shelf(parent, shelf_name):
-    shelf = pm.shelfLayout(shelf_name, parent=parent)
+    shelf = pm.shelfLayout(shelf_name, parent=parent, version=get_maya_version.get_maya_version())
     return shelf
 
 

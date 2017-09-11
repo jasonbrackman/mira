@@ -1,6 +1,8 @@
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
+import hooks
+reload(hooks)
 from hooks import Hook
 
 
@@ -77,7 +79,7 @@ class TaskDelegate(QItemDelegate):
         item = index.model().data(index, Qt.DisplayRole)
         if item:
             editor.set_image(item.pix_map)
-            info = "<font size=4 face=Arial><b>%s</b>  -  %s</font>" % (item.step, item.task)
+            info = "<font size=4 face=Arial color=#fff><b>%s</b>  -  %s</font>" % (item.step, item.task)
             editor.set_info(info)
             editor.set_action(item.actions)
             editor.set_status(item.status_name, item.status_color)

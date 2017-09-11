@@ -17,7 +17,7 @@ from miraLibs.pyLibs import join_path, yml_operation
 from miraLibs.osLibs import get_engine
 
 
-IMAGE_WIDTH = 100
+IMAGE_WIDTH, IMAGE_HEIGHT = [110, 80]
 
 
 class ThumbListView(QListView):
@@ -32,6 +32,7 @@ class ThumbListView(QListView):
         self.setMovement(QListView.Static)
         self.setFocusPolicy(Qt.NoFocus)
         self.setWrapping(True)
+        self.setSpacing(10)
 
     def mousePressEvent(self, event):
         pos = event.pos()
@@ -75,7 +76,12 @@ class EntityUI(QWidget):
         self.entity_tab.setMaximumHeight(60)
 
         shot_widget = QWidget()
-        #todo: add shot
+        shot_layout = QHBoxLayout(shot_widget)
+        sequence_label = QLabel("Sequence")
+        sequence_label.setFixedWidth(60)
+        self.sequence_le = QLineEdit()
+        shot_layout.addWidget(sequence_label)
+        shot_layout.addWidget(self.sequence_le)
         self.entity_tab.addTab(shot_widget, "Shot")
 
         filter_layout = QHBoxLayout()
@@ -125,21 +131,28 @@ class RunThread(QThread):
             task = "MidMdl"
         else:
             format_str = project_data.get("maya_shot_image")
-            step = "Layout"
-            task = "Layout"
+            step = "AnimLay"
+            task = "AnimLay"
         engine = Step(self.__project, step).engine
         for entity in self.__entities:
             entity_name = entity.get("name")
             image_path = format_str.format(primary=primary, project=self.__project,
-                                           asset_type=self.__asset_type_sequence,
-                                           asset_name=entity_name, step=step, task=task, engine=engine)
-            if not os.path.isfile(image_path):
+                                           asset_type=self.__asset_type_sequence, sequence=self.__asset_type_sequence,
+                                           asset_name=entity_name, shot=entity_name.split("_")[-1],
+                                           step=step, task=task, engine=engine)
+
+            if self.__entity_type == "Asset" and not os.path.isfile(image_path):
                 image_path = format_str.format(primary=primary, project=self.__project,
                                                asset_type=self.__asset_type_sequence,
                                                asset_name=entity_name, step="Group", task="Group", engine=engine)
+            if self.__entity_type == "Shot" and not os.path.isfile(image_path):
+                image_path = format_str.format(primary=primary, project=self.__project,
+                                               sequence=self.__asset_type_sequence,
+                                               shot=entity_name.split("_")[-1], step="Set", task="Set", engine=engine)
             if not os.path.isfile(image_path):
                 image_path = join_path.join_path2(self.__image_dir, "unknown.png")
             self.__collect_data.append([entity_name, image_path])
+
         self.signal.emit(self.__collect_data)
 
 
@@ -163,9 +176,13 @@ class EntityModel(QAbstractListModel):
         item = self.model_data[row]
         if role == Qt.DisplayRole:
             name = item.name
-            elidfont = QFontMetrics(QFont("Arial", 12))
+            elidfont = QFontMetrics(QFont("Arial", 8, QFont.Bold))
             text = elidfont.elidedText(name, Qt.ElideRight, IMAGE_WIDTH)
             return text
+        if role == Qt.FontRole:
+            return QFont("Arial", 8, QFont.Bold)
+        if role == Qt.ForegroundRole:
+            return QColor("#fff")
         if role == Qt.ToolTipRole:
             return item.name
         if role == Qt.DecorationRole:
@@ -245,6 +262,8 @@ class Entity(EntityUI):
     def asset_type_sequence(self):
         if self.entity_type == "Asset":
             return self.asset_btn_grp.checkedButton().text()
+        else:
+            return self.sequence_le.text()
 
     @property
     def entity_type(self):
@@ -268,6 +287,16 @@ class Entity(EntityUI):
             self.asset_btn_grp.addButton(self.asset_type_check)
             self.asset_layout.addWidget(self.asset_type_check)
 
+    def __init_sequence(self):
+        sequences = self.db.get_all_sequences()
+        if not sequences:
+            return
+        sequences.sort()
+        completer = QCompleter(sequences)
+        completer.setCaseSensitivity(Qt.CaseInsensitive)
+        completer.setCompletionMode(QCompleter.UnfilteredPopupCompletion)
+        self.sequence_le.setCompleter(completer)
+
     def __set_signals(self):
         self.asset_btn_grp.buttonClicked.connect(self.__calculate_entities)
         self.__task_action_group.triggered.connect(self.__on_action_triggered)
@@ -275,6 +304,19 @@ class Entity(EntityUI):
         self.list_view.setContextMenuPolicy(Qt.CustomContextMenu)
         self.list_view.customContextMenuRequested.connect(self.show_context_menu)
         self.list_view.clicked.connect(self.show_selected)
+        self.entity_tab.currentChanged.connect(self.__switch_entity)
+        self.sequence_le.returnPressed.connect(self.__calculate_entities)
+
+    def __switch_entity(self, index):
+        if index == 0:
+            self.asset_btn_grp.setExclusive(False)
+            for btn in self.asset_btn_grp.buttons():
+                btn.setChecked(False)
+            self.asset_btn_grp.setExclusive(True)
+        else:
+            self.sequence_le.setText("")
+            self.__init_sequence()
+        self.__set_empty_model()
 
     def __set_empty_model(self):
         self.model = QStandardItemModel()
@@ -298,6 +340,9 @@ class Entity(EntityUI):
         self.waiting_widget.show()
         if self.entity_type == "Asset":
             entities = self.db.get_all_assets(self.asset_type_sequence)
+        else:
+            sequence = self.sequence_le.text()
+            entities = self.db.get_all_shots(sequence) if sequence else []
         if not entities:
             self.__set_empty_model()
             self.waiting_widget.hide()
@@ -311,7 +356,7 @@ class Entity(EntityUI):
         model_data = list()
         for data in value:
             entity_name, image_path = data
-            image = create_round_rect_thumbnail.create_round_rect_thumbnail(image_path, IMAGE_WIDTH, IMAGE_WIDTH, 10)
+            image = create_round_rect_thumbnail.create_round_rect_thumbnail(image_path, IMAGE_WIDTH, IMAGE_HEIGHT, 10)
             item = AssetItem(self.project, entity_name, image)
             model_data.append(item)
         self.__set_model(model_data)
