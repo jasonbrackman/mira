@@ -13,6 +13,12 @@ from miraFramework.combo import ProjectCombo
 from miraLibs.pipeLibs import pipeFile
 
 
+LIST_VIEW_STYLE = "QListView::item:selected {background: #29475a; border: 1px solid #00b4ff; border-radius: 3px;}" \
+                  "QListView::item:hover {background: #345f71; border-radius: 3px;}"\
+                  "QListView::item:selected:!active {background: #29475a;}" \
+                  "QListView::item:selected:active {background: #29475a;}"
+
+
 class TaskItem(object):
     def __init__(self, project, entity_type, asset_type_sequence, asset_name_shot, step, task,
                  status, status_color, start_date, due_date, pix_map):
@@ -29,7 +35,7 @@ class TaskItem(object):
         self.pix_map = pix_map
 
 
-class TaskDelegate(QItemDelegate):
+class TaskDelegate(QStyledItemDelegate):
     def __init__(self, parent=None):
         super(TaskDelegate, self).__init__(parent)
 
@@ -45,6 +51,9 @@ class TaskDelegate(QItemDelegate):
             editor.set_step_task(item.step, item.task)
             editor.set_status(item.status, item.status_color)
             editor.set_date(item.start_date, item.due_date)
+
+    def updateEditorGeometry(self, editor, option, index):
+        editor.setGeometry(option.rect)
 
     def sizeHint(self, option, index):
         return QSize(300, 100)
@@ -79,6 +88,8 @@ class MyTaskForm(QWidget):
         layout.addWidget(self.refresh_btn)
 
         self.task_view = QListView()
+        self.task_view.setFocusPolicy(Qt.NoFocus)
+        self.task_view.setStyleSheet(LIST_VIEW_STYLE)
 
         main_layout.addLayout(project_layout)
         main_layout.addWidget(self.filter_le)
