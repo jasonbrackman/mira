@@ -18,6 +18,9 @@ from miraLibs.osLibs import get_engine
 
 
 IMAGE_WIDTH, IMAGE_HEIGHT = [110, 80]
+LIST_VIEW_STYLE = "QListView::item:selected {color: #fff; background: #29475a; " \
+                  "border: 1px solid #00b4ff; border-radius: 5px;}" \
+                  "QListView::item:hover {color: #ff8c00}"
 
 
 class ThumbListView(QListView):
@@ -33,6 +36,7 @@ class ThumbListView(QListView):
         self.setFocusPolicy(Qt.NoFocus)
         self.setWrapping(True)
         self.setSpacing(10)
+        self.setStyleSheet(LIST_VIEW_STYLE)
 
     def mousePressEvent(self, event):
         pos = event.pos()
