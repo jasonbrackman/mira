@@ -3,12 +3,15 @@ import glob
 import logging
 from miraLibs.mayaLibs import new_file, save_as, import_abc, quit_maya
 from miraLibs.pipeLibs import pipeFile
+from miraLibs.pipeLibs.pipeMaya import fix_frame_range
 
 
 def main(file_name, local):
     logger = logging.getLogger("LgtLay start")
     new_file.new_file()
     context = pipeFile.PathDetails.parse_path(file_name)
+    # fix frame range
+    fix_frame_range.fix_frame_range(context)
     # get the AnimLay cache
     abc_files = get_cache_files(context)
     if abc_files:

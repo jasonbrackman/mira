@@ -19,7 +19,9 @@ def auto_publish():
         return
     message_box = QMessageBox.information(None, "Warming Tip",
                                           "Do you want to change current task status to Delivered ?",
-                                          QMessageBox.Yes | QMessageBox.Cancel)
+                                          QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
+    if message_box.name == "Cancel":
+        return
     change_task_status = True if message_box.name == "Yes" else False
     # copy image
     publish.copy_image_and_video(context)
@@ -50,7 +52,7 @@ def post_publish(context, change_task_status=False):
     current_task = task_from_db_path.task_from_db_path(db, context.work_path)
     logger.info("Current Task: %s" % current_task)
     db.update_file_path(current_task, publish_file_path=context.publish_path)
-    logger.info("update task sg_publishfile: %s" % context.publish_path)
+    logger.info("update task publish file: %s" % context.publish_path)
     # change task status
     if change_task_status:
         db.update_task_status(current_task, "Delivered")
