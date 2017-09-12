@@ -4,6 +4,7 @@ import logging
 from miraLibs.mayaLibs import new_file, save_as, import_abc, quit_maya
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.pipeLibs.pipeMaya import fix_frame_range
+from miraLibs.mayaLibs import create_group
 
 
 def main(file_name, local):
@@ -12,13 +13,16 @@ def main(file_name, local):
     context = pipeFile.PathDetails.parse_path(file_name)
     # fix frame range
     fix_frame_range.fix_frame_range(context)
+    logger.info("Fix frame range done.")
+    # create Light group
+    create_group.create_group("Light")
     # get the AnimLay cache
     abc_files = get_cache_files(context)
     if abc_files:
         for abc_file in abc_files:
             import_abc.import_abc(abc_file)
         save_as.save_as(file_name)
-        logger.info("%s publish successful!" % file_name)
+    logger.info("%s publish successful!" % file_name)
     if not local:
         quit_maya.quit_maya()
 
