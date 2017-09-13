@@ -26,5 +26,7 @@ def main(file_name, local):
     xgen = Xgen.Xgen()
     xgen.export_palette(collection_node, hair_path)
     logger.info("Export .xgen file done.")
+    # export shd
+
     if not local:
         quit_maya.quit_maya()
