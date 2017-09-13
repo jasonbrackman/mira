@@ -10,5 +10,5 @@ def fix_frame_range(context):
     if not frame_range:
         Log.warning("PA doesn't set the frame range")
         return
-    start, end = frame_range.split("_")
+    start, end = frame_range.split("-")
     set_frame_range.set_frame_range(int(start), int(end))

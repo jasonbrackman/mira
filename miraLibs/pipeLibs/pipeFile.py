@@ -210,6 +210,10 @@ class PathDetails(object):
     def asset_info_path(self):
         return self.get_path("assetInfo")
 
+    @property
+    def shd_path(self):
+        return self.get_path("shd")
+
 
 ########################################################################################################################
 # below is for get asset files
