@@ -7,18 +7,19 @@ import maya.cmds as mc
 import ui
 from get_icon import get_icon
 from miraLibs.pipeLibs import pipeFile
-from miraLibs.mayaLibs import get_maya_win, replace_reference
+from miraLibs.mayaLibs import replace_reference
+from miraLibs.log import Log
 
 
 OBJECTNAME = "Replace Rig Reference"
 
 
 class Asset(object):
-    def __init__(self, name, thumbnail, is_rig, rig_path):
+    def __init__(self, name, thumbnail, is_rig, ref_file):
         self.name = name
         self.thumbnail = thumbnail
         self.is_rig = is_rig
-        self.rig_path = rig_path
+        self.ref_file = ref_file
 
 
 class Maya(object):
@@ -76,7 +77,7 @@ class AssetTableModel(QAbstractTableModel):
             if column == 1:
                 return self.arg[row].name
             if column == 3:
-                return self.arg[row].rig_path
+                return self.arg[row].ref_file
         elif role == Qt.DecorationRole:
             if column == 2:
                 return self.arg[row].thumbnail
@@ -101,7 +102,7 @@ class AssetTableModel(QAbstractTableModel):
         return False
 
     def headerData(self, section, orientation, role):
-        header_data = ["is_rig", "Assets", "Thumbnail", "rig_path", ""]
+        header_data = ["is_rig", "Assets", "Thumbnail", "file path", ""]
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:
                 return header_data[section]
@@ -122,7 +123,7 @@ class ReplaceRigReference(ui.ReplaceUI):
             selection.selectionChanged.connect(self.select_model)
         self.table_view.clicked.connect(self.select_model)
         self.update_btn.clicked.connect(self.do_update)
-        self.switch_btn.clicked.connect(self.replace_lowRig_to_rig)
+        self.switch_btn.clicked.connect(self.do_replace)
         self.check_btn_group.buttonClicked.connect(self.do_filter)
 
     def do_update(self):
@@ -181,10 +182,9 @@ class ReplaceRigReference(ui.ReplaceUI):
             ref_file = self.maya.get_reference_file(grp)
             image_path = self.get_image_path(ref_file)
             pix_map = QPixmap(image_path)
-            thumbnail = pix_map.scaled(QSize(90, 90), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
+            thumbnail = pix_map.scaled(QSize(100, 90), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
             is_rig = self.maya.is_rig(ref_file)
-            rig_path = self.get_publish_path(ref_file)
-            asset = Asset(grp, thumbnail, is_rig, rig_path)
+            asset = Asset(grp, thumbnail, is_rig, ref_file)
             model_data.append(asset)
         return model_data
 
@@ -197,8 +197,13 @@ class ReplaceRigReference(ui.ReplaceUI):
         entity_type = context.entity_type
         asset_type = context.asset_type
         asset_name = context.asset_name
-        step = "HighRig"
-        task = "HighRig" if context.task == "MidRig" else context.task
+        current_step = context.step
+        if current_step == "HighRig":
+            step = "MidRig"
+            task = "MidRig" if context.task == "HighRig" else context.task
+        else:
+            step = "HighRig"
+            task = "HighRig" if context.task == "MidRig" else context.task
         if get_type == "image":
             path = pipeFile.get_task_file(project_name, asset_type, asset_name, step, task,
                                           "maya_asset_image", version="")
@@ -209,7 +214,7 @@ class ReplaceRigReference(ui.ReplaceUI):
     def get_image_path(self, ref_file):
         return self.get_path(ref_file)
 
-    def get_publish_path(self, ref_file):
+    def get_rig_publish_path(self, ref_file):
         return self.get_path(ref_file, "publish")
 
     def get_selected(self):
@@ -228,23 +233,22 @@ class ReplaceRigReference(ui.ReplaceUI):
         selected_maya_obj = [asset_item.name for asset_item in selected]
         self.maya.select(selected_maya_obj)
 
-    def replace_lowRig_to_rig(self):
+    def do_replace(self):
         selected = self.get_selected()
         if not selected:
             return
         for asset_item in selected:
             group_name = asset_item.name
-            rig_path = asset_item.rig_path
+            ref_file = self.maya.get_reference_file(group_name)
+            rig_path = self.get_rig_publish_path(ref_file)
             if not rig_path:
+                Log.warning("%s is not an exist file" % rig_path)
                 continue
             ref_node = self.maya.get_reference_node(group_name)
             replace_reference.replace_reference(ref_node, rig_path)
-            asset_item.is_rig = True
         self.do_update()
 
 
 def main():
-    if mc.window(OBJECTNAME, q=1, ex=1):
-        mc.deleteUI(OBJECTNAME)
-    rrr = ReplaceRigReference(get_maya_win.get_maya_win("PySide"))
-    rrr.show()
+    from miraLibs.qtLibs import render_ui
+    render_ui.render(ReplaceRigReference)
