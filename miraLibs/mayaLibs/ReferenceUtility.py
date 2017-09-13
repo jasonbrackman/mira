@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import maya.cmds as mc
+import pymel.core as pm
 
 
 class ReferenceUtility(object):
@@ -65,15 +66,16 @@ class ReferenceUtility(object):
                     mc.file(ref, removeReference=1)
 
     def import_loaded_ref(self):
-        while 1:
-            all_ref = mc.file(q=1, r=1)
-            if all_ref:
-                for ref in all_ref:
-                    a = self.check_loaded(ref)
-                    if a:
-                        mc.file(ref, importReference=1)
-            else:
-                break
+        done = False
+        while done is False and (len(pm.listReferences()) != 0):
+            refs = pm.listReferences()
+            for ref in refs:
+                if ref.isLoaded():
+                    done = False
+                    ref.importContents()
+                else:
+                    done = True
+        return True
 
     def check_loaded(self, ref_node):
         result = mc.referenceQuery(ref_node, isLoaded=1)

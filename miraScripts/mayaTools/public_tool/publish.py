@@ -4,9 +4,10 @@ import imp
 from Qt.QtWidgets import *
 import miraCore
 from miraLibs.pipeLibs import pipeFile
+from miraLibs.log import Log
 
 
-PASSWORD = "aierpingfang"
+PASSWORD = "Aierpingfang"
 
 
 def main():

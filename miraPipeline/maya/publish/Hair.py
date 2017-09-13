@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import logging
+import maya.cmds as mc
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.pipeLibs.pipeMaya import get_model_name, publish
-from miraLibs.mayaLibs import open_file, quit_maya, export_abc, Xgen
+from miraLibs.mayaLibs import open_file, quit_maya, export_abc, Xgen, export_selected
 
 
 def main(file_name, local):
@@ -14,6 +15,8 @@ def main(file_name, local):
     hair_cache_path = context.abc_cache_path
     hair_path = context.hair_path
     asset_name = context.asset_name
+    # import reference
+    publish.reference_opt()
     # copy image
     publish.copy_image_and_video(context)
     logger.info("Copy image done.")
@@ -27,6 +30,41 @@ def main(file_name, local):
     xgen.export_palette(collection_node, hair_path)
     logger.info("Export .xgen file done.")
     # export shd
-
+    export_shd(context)
+    logger.info("Export shader done.")
     if not local:
         quit_maya.quit_maya()
+
+
+def get_descriptions():
+    import xgenm as xgen
+    collections = xgen.palettes()
+    needed_collection = collections[0]
+    descriptions = xgen.descriptions(needed_collection)
+    return descriptions
+
+
+def get_all_hair_sg_nodes():
+    hair_sg_nodes = list()
+    descriptions = get_descriptions()
+    if not descriptions:
+        return
+    for description in descriptions:
+        shapes = mc.listRelatives(description, s=1)
+        if not shapes:
+            continue
+        shape = shapes[0]
+        sg_nodes = mc.listConnections(shape, s=0, d=1, type="shadingEngine")
+        if not sg_nodes:
+            continue
+        sg_node = sg_nodes[0]
+        hair_sg_nodes.append(sg_node)
+    return hair_sg_nodes
+
+
+def export_shd(context):
+    sg_nodes = get_all_hair_sg_nodes()
+    if not sg_nodes:
+        return
+    mc.select(sg_nodes, r=1, ne=1)
+    export_selected.export_selected(context.shd_path)
