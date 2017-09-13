@@ -45,7 +45,7 @@
         <command cmd="from miraScripts.mayaTools.animation_tool import remove_model_smooth;reload(remove_model_smooth);remove_model_smooth.main()"
                  mode="python" name="去掉模型的细分【get rid model subdivision】" type="command"/>
         <command cmd="from miraPipeline.maya.replace_rig_reference import replace_rig_reference;reload(replace_rig_reference);replace_rig_reference.main()"
-                 mode="python" name="低模绑定切换为高模绑定【switch lowRig to rig】" type="command"/>
+                 mode="python" name="低高模绑定相互切换【rig switch】" type="command"/>
     </submenu>
     <!--vfx tools-->
     <submenu name="vfx" type="submenu">
