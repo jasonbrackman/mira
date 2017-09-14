@@ -39,6 +39,8 @@ SnowKidTest:
   maya_asset_xgen: "{primary}/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_xgen/{engine}"
   maya_asset_shd: "{primary}/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_shd/{engine}/{project}_{asset_name}_{step}_{task}.ma"
   maya_asset_hair: "{primary}/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_hair/{engine}/{project}_{asset_name}_{step}_{task}.xgen"
+  maya_asset_hairDelta: "{primary}/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_hair/{engine}/{project}_{asset_name}_{step}_{task}.xgd"
+  maya_asset_connection: "{primary}/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_connection/{engine}/{project}_{asset_name}_{step}_{task}.json"
   # -shot
   shot_template: "{primary}/{project}/{category}/shots/{sequence}/{shot}/{step}/{task}/{area}/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.{ext}"
   # --local

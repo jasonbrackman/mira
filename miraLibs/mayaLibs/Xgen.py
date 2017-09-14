@@ -3,6 +3,7 @@ import os
 import logging
 import xgenm as xgen
 import xgenm.xgGlobal as xgg
+from miraLibs.pyLibs import copy
 import xgenm.XgExternalAPI as xge
 
 
@@ -17,11 +18,21 @@ class Xgen(object):
             os.makedirs(xgen_dir)
         xgen.exportPalette(palette, xgen_path)
 
-    def import_palette(self, xgen_path):
+    def import_palette(self, xgen_path, deltas):
+        if isinstance(deltas, basestring):
+            deltas = [deltas]
         if not os.path.isfile(xgen_path):
             logger.warning("%s is not an exist path." % xgen_path)
             return
-        xgen.importPalette(xgen_path)
+        xgen.importPalette(xgen_path, deltas)
+
+    def create_delta(self, palette, delta_path):
+        delta_dir = os.path.dirname(delta_path)
+        if not os.path.isdir(delta_dir):
+            os.makedirs(delta_dir)
+        xgen.createDelta(palette, "D:/temp.xgd")
+        copy.copy("D:/temp.xgd", delta_path)
+        os.remove("D:/temp.gxd")
         
     def set_abs_path(self, xgen_dir):
         if not xgg.Maya:

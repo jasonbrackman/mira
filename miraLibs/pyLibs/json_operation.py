@@ -13,6 +13,9 @@ def get_json_data(path):
 
 
 def set_json_data(path, data):
+    d = os.path.dirname(path)
+    if not os.path.isdir(d):
+        os.makedirs(d)
     with open(path, 'w') as f:
         json_data = json.dumps(data)
         f.write(json_data)

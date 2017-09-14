@@ -4,6 +4,7 @@ import maya.cmds as mc
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.pipeLibs.pipeMaya import get_model_name, publish
 from miraLibs.mayaLibs import open_file, quit_maya, export_abc, Xgen, export_selected
+from miraLibs.pyLibs import json_operation
 
 
 def main(file_name, local):
@@ -14,6 +15,7 @@ def main(file_name, local):
     context = pipeFile.PathDetails.parse_path(file_name)
     hair_cache_path = context.abc_cache_path
     hair_path = context.hair_path
+    delta_path = context.delta_path
     asset_name = context.asset_name
     # import reference
     publish.reference_opt()
@@ -28,6 +30,7 @@ def main(file_name, local):
     collection_node = str("%s_collection" % asset_name)
     xgen = Xgen.Xgen()
     xgen.export_palette(collection_node, hair_path)
+    xgen.create_delta(collection_node, delta_path)
     logger.info("Export .xgen file done.")
     # export shd
     export_shd(context)
@@ -46,6 +49,7 @@ def get_descriptions():
 
 def get_all_hair_sg_nodes():
     hair_sg_nodes = list()
+    connection_dict = dict()
     descriptions = get_descriptions()
     if not descriptions:
         return
@@ -59,12 +63,14 @@ def get_all_hair_sg_nodes():
             continue
         sg_node = sg_nodes[0]
         hair_sg_nodes.append(sg_node)
-    return hair_sg_nodes
+        connection_dict[description] = sg_node
+    return hair_sg_nodes, connection_dict
 
 
 def export_shd(context):
-    sg_nodes = get_all_hair_sg_nodes()
+    sg_nodes, connection_dict = get_all_hair_sg_nodes()
     if not sg_nodes:
         return
     mc.select(sg_nodes, r=1, ne=1)
     export_selected.export_selected(context.shd_path)
+    json_operation.set_json_data(context.connection_path, connection_dict)

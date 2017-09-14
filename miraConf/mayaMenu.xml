@@ -47,6 +47,11 @@
         <command cmd="from miraPipeline.maya.replace_rig_reference import replace_rig_reference;reload(replace_rig_reference);replace_rig_reference.main()"
                  mode="python" name="低高模绑定相互切换【rig switch】" type="command"/>
     </submenu>
+    <!--sim tools-->
+    <submenu name="Sim" type="submenu">
+        <command cmd="from miraPipeline.maya.import_hair import import_hair;reload(import_hair);import_hair.main()"
+                 mode="python" name="导入毛发【Import Hair】" type="command"/>
+    </submenu>
     <!--vfx tools-->
     <submenu name="vfx" type="submenu">
         <command cmd="from miraPipeline.maya.sim_reference_in import sim_reference_in;reload(sim_reference_in);sim_reference_in.main()"
