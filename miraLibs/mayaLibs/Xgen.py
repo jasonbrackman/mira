@@ -18,13 +18,13 @@ class Xgen(object):
             os.makedirs(xgen_dir)
         xgen.exportPalette(palette, xgen_path)
 
-    def import_palette(self, xgen_path, deltas):
+    def import_palette(self, xgen_path, deltas, namespace=None):
         if isinstance(deltas, basestring):
             deltas = [deltas]
         if not os.path.isfile(xgen_path):
             logger.warning("%s is not an exist path." % xgen_path)
             return
-        xgen.importPalette(xgen_path, deltas)
+        xgen.importPalette(xgen_path, deltas, namespace)
 
     def create_delta(self, palette, delta_path):
         delta_dir = os.path.dirname(delta_path)

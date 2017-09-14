@@ -7,6 +7,7 @@ from miraLibs.dbLibs import db_api
 from miraLibs.pipeLibs.pipeMaya.hair import import_xgen_hair
 
 
+
 class HairUI(QDialog):
     def __init__(self, parent=None):
         super(HairUI, self).__init__(parent)
@@ -23,12 +24,16 @@ class HairUI(QDialog):
         self.asset_type_combo = CombBox()
         asset_name_label = QLabel("Asset Name")
         self.asset_name_le = QLineEdit()
+        namespace_label = QLabel("namespace")
+        self.namespace_le = QLineEdit()
         layout.addWidget(project_label, 0, 0, 1, 1)
         layout.addWidget(self.project_combo, 0, 1, 1, 3)
         layout.addWidget(asset_type_label, 1, 0, 1, 1)
         layout.addWidget(self.asset_type_combo, 1, 1, 1, 3)
         layout.addWidget(asset_name_label, 2, 0, 1, 1)
         layout.addWidget(self.asset_name_le, 2, 1, 1, 3)
+        layout.addWidget(namespace_label, 3, 0, 1, 1)
+        layout.addWidget(self.namespace_le, 3, 1, 1, 3)
         layout.setSpacing(20)
         self.import_btn = QPushButton("Import")
 
@@ -69,11 +74,15 @@ class HairUI(QDialog):
     def asset_name(self):
         return self.asset_name_le.text()
 
+    @property
+    def namespace(self):
+        return self.namespace_le.text()
+
     def do_import(self):
         publish_file = pipeFile.get_task_file(self.project, self.asset_type, self.asset_name,
                                               "Hair", "Hair", "maya_asset_publish", "")
         context = pipeFile.PathDetails.parse_path(publish_file)
-        import_xgen_hair(context)
+        import_xgen_hair(context, str(self.namespace))
 
 
 def main():
