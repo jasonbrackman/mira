@@ -8,7 +8,7 @@ import ui
 from get_icon import get_icon
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import replace_reference
-from miraLibs.log import Log
+from miraLibs.log import Logger
 
 
 OBJECTNAME = "Replace Rig Reference"
@@ -242,7 +242,8 @@ class ReplaceRigReference(ui.ReplaceUI):
             ref_file = self.maya.get_reference_file(group_name)
             rig_path = self.get_rig_publish_path(ref_file)
             if not rig_path:
-                Log.warning("%s is not an exist file" % rig_path)
+                logger = Logger(__name__)
+                logger.warning("%s is not an exist file" % rig_path)
                 continue
             ref_node = self.maya.get_reference_node(group_name)
             replace_reference.replace_reference(ref_node, rig_path)

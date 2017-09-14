@@ -5,7 +5,7 @@ from Qt.QtWidgets import *
 from miraLibs.pipeLibs import pipeFile, Step
 from miraLibs.osLibs import FileOpener
 from miraLibs.pyLibs import start_file
-from miraLibs.log import Log
+from miraLibs.log import Logger
 
 
 class Hook(object):
@@ -144,16 +144,17 @@ class Hook(object):
             QMessageBox.warning(None, "Warming Tip", "%s \n\nis not an exist file." % publish_dir)
 
     def import_cache(self):
+        logger = Logger(__name__)
         cache_dir = pipeFile.get_task_file(self.__project, self.__asset_type_sequence, self.__asset_shot_names[0],
                                            self.__step, self.__task, "%s_shot_cache" % self.__engine, "")
         if not os.path.isdir(cache_dir):
-            Log.warning("%s is not an exist directory" % cache_dir)
+            logger.warning("%s is not an exist directory" % cache_dir)
             return
         from miraLibs.mayaLibs import import_abc
         abc_files = glob.glob("%s/*.abc" % cache_dir)
         for f in abc_files:
             import_abc.import_abc(f)
-            Log.info("Import %s done" % f)
+            logger.info("Import %s done" % f)
 
     def launch_cache(self):
         cache_dir = pipeFile.get_task_file(self.__project, self.__asset_type_sequence, self.__asset_shot_names[0],

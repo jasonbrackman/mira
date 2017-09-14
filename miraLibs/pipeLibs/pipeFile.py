@@ -199,6 +199,10 @@ class PathDetails(object):
         return self.get_path("hair")
 
     @property
+    def delta_path(self):
+        return self.get_path("hairDelta")
+
+    @property
     def description_path(self):
         return self.get_path("description")
 
@@ -213,6 +217,10 @@ class PathDetails(object):
     @property
     def shd_path(self):
         return self.get_path("shd")
+
+    @property
+    def connection_path(self):
+        return self.get_path("connection")
 
 
 ########################################################################################################################

@@ -1,13 +1,18 @@
-class Log(object):
+class Logger(object):
 
-    @classmethod
-    def info(cls, text):
+    def __init__(self, lib=None):
+        self.__lib = lib
+
+    def info(self, text):
+        print self.__lib
         print "[MIRA] info: %s" % text
 
-    @classmethod
-    def warning(cls, text):
+    def warning(self, text):
+        print self.__lib
         print "[MIRA] warning: %s" % text
 
-    @classmethod
-    def error(cls, text):
+    def error(self, text):
+        print self.__lib
         print "[MIRA] error: %s" % text
+
+
