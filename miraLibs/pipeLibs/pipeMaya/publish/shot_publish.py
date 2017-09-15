@@ -31,9 +31,9 @@ def create_shot_ad(context):
 def export_cache(context):
     step = context.step
     if step == "AnimLay":
-        switch_step = "MidRig"
+        switch_step = "MidMdl"
     else:
-        switch_step = "HighRig"
+        switch_step = "HighMdl"
     # switch to rig
     assemb = Assembly.Assembly()
     assemb.set_active(switch_step)
@@ -65,8 +65,10 @@ def export_env_cache(context):
     cache_dir = context.cache_dir
     env_cache_path = "%s/env.abc" % cache_dir
     children = mc.listRelatives("Env", ad=1, type="transform")
-    models = [child for child in children
-              if child.endswith("_MODEL") and not child.split(":")[-1].startswith("env_")]
+    models = list()
+    for child in children:
+        if child.endswith("_MODEL") and not child.split(":")[-1].startswith("env_") and mc.getAttr("%s.visibility" % child):
+            models.append(child)
     export_abc.export_abc(1000, 1000, env_cache_path, models)
 
 

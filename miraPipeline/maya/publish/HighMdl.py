@@ -31,7 +31,7 @@ def main(file_name, local):
         ho.write_out(topology_path)
         logger.info("write out topology done.")
     # add to AD file
-    publish.add_gpu_to_ad(context)
+    publish.add_high_mdl_ad(context)
     logger.info("Add to AD done.")
     # quit maya
     if not local:
