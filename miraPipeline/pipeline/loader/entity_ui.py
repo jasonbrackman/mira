@@ -3,6 +3,8 @@ from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
 import os
+import hooks
+reload(hooks)
 from hooks import Hook
 from miraFramework.Filter import Filter
 from miraFramework.waiting import Waiting

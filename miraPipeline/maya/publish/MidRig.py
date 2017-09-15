@@ -20,9 +20,6 @@ def main(file_name, local):
     # export needed
     publish.export_need_to_publish(context, "rig")
     logger.info("Export to publish path done.")
-    # add to AD
-    publish.add_mesh_to_ad(context)
-    logger.info("Add to AD done.")
     # quit maya
     if not local:
         quit_maya.quit_maya()

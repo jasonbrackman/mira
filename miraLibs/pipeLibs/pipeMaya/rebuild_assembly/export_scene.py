@@ -20,7 +20,7 @@ def get_all_edits(owner):
         edits = editUtils.getEdits(owner, ar_node)
         if not edits:
             continue
-        edits = [str(i.getString()) for i in edits]
+        edits = [str(i.getString()) for i in edits if ".isCollapsed" not in i.getString()]
         all_edits.extend(edits)
     return all_edits
 

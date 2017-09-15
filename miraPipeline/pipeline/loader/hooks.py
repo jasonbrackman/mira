@@ -61,8 +61,8 @@ class Hook(object):
                 assemb.reference_ad("%s_AR" % name, ad_file_path)
         else:
             for name in self.__asset_shot_names:
-                ad_file_path = pipeFile.get_task_file(self.__project, self.__asset_type_sequence, name,
-                                                      "Set", "Set", "%s_shot_definition" % self.__engine, "")
+                ad_file_path = pipeFile.get_task_file(self.__project, self.__asset_type_sequence, name, "Set", "Set", "maya_shot_definition", "")
+                print ad_file_path
                 if not os.path.isfile(ad_file_path):
                     error_list.append(ad_file_path)
                     continue

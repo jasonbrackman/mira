@@ -68,6 +68,7 @@ def create_ad(context):
         assemb = Assembly.Assembly()
         node = assemb.create_assembly_node(ad_node_name, "assemblyDefinition")
         assemb.create_representation(node, "Cache", gpu_name, gpu_name, context.abc_cache_path)
+        assemb.create_representation(node, "Scene", context.step, context.step, context.publish_path)
         save_file.save_file()
     else:
         new_file.new_file()
@@ -79,7 +80,7 @@ def create_ad(context):
         save_file.save_file()
 
 
-def add_gpu_to_ad(context):
+def add_high_mdl_ad(context):
     if not os.path.isfile(context.abc_cache_path):
         logger.error("%s is not an exist file" % context.abc_cache_path)
         return
@@ -92,6 +93,7 @@ def add_gpu_to_ad(context):
     gpu_name = "%s_gpu" % context.step
     assemb = Assembly.Assembly()
     assemb.create_representation(ad_node_name, "Cache", gpu_name, gpu_name, context.abc_cache_path)
+    assemb.create_representation(ad_node_name, "Scene", context.step, context.step, context.publish_path)
     save_file.save_file()
 
 
