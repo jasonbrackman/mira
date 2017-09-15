@@ -12,6 +12,7 @@ from miraLibs.pyLibs import start_file
 class FileListWidget(QListWidget):
     def __init__(self, name=None, parent=None):
         super(FileListWidget, self).__init__(parent)
+        self.setFocusPolicy(Qt.NoFocus)
         self.name = name
         self.__engine = get_engine.get_engine()
         self.menu = QMenu(self)
@@ -19,6 +20,7 @@ class FileListWidget(QListWidget):
         self.copy_to_local_action = QAction("Receive The Task", self)
         self.show_in_filesystem_action = QAction("Show in File System", self)
         self.set_signals()
+        self.set_style()
 
     def set_signals(self):
         self.open_action.triggered.connect(self.do_open)
@@ -55,6 +57,18 @@ class FileListWidget(QListWidget):
         elif os.path.isdir(file_path):
             dir_name = file_path
         start_file.start_file(dir_name)
+
+    def set_style(self):
+        style_sheet = "QListWidget::item:selected {background: #29475a;}" \
+                      "QListView::item:hover {color: #ff8c00;}"
+        self.setStyleSheet(style_sheet)
+
+    def mousePressEvent(self, event):
+        pos = event.pos()
+        item = self.itemAt(pos)
+        if not item:
+            self.clearSelection()
+        super(FileListWidget, self).mousePressEvent(event)
 
 
 class StackedWidget(QStackedWidget):
