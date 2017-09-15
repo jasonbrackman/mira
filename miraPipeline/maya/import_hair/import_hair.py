@@ -7,7 +7,6 @@ from miraLibs.dbLibs import db_api
 from miraLibs.pipeLibs.pipeMaya.hair import import_xgen_hair
 
 
-
 class HairUI(QDialog):
     def __init__(self, parent=None):
         super(HairUI, self).__init__(parent)

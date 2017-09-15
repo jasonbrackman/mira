@@ -91,7 +91,7 @@ class PathDetails(object):
     def is_local_file(self):
         return self.__is_local_file
 
-    def get_path(self, format_area, local=False):
+    def as_template(self, format_area, local=False):
         if not self.edition:
             self.edition = "000"
         if self.entity_type == "Asset":
@@ -129,98 +129,114 @@ class PathDetails(object):
         if self.is_local_file():
             next_edition_file = re.sub("_e\d{%s}\." % self.edition_format_spec, "_e%s." % self.next_edition, self.path)
             return next_edition_file
+        
+    @property
+    def task_info(self):
+        from miraLibs.dbLibs import db_api
+        db = db_api.DbApi(self.project).db_obj
+        entity_type = self.entity_type
+        step = self.step
+        task = self.task
+        if entity_type in ["Asset"]:
+            asset_type_or_sequence = self.asset_type
+            asset_or_shot = self.asset_name
+        else:
+            asset_type_or_sequence = self.sequence
+            asset_or_shot = "%s_%s" % (self.sequence, self.shot)
+        task_info = db.get_current_task(entity_type, asset_type_or_sequence, asset_or_shot, step, task)
+        return task_info
 
     @property
     def local_work_path(self):
-        return self.get_path("local", True)
+        return self.as_template("local", True)
 
     @property
     def local_image_path(self):
-        return self.get_path("localImage", True)
+        return self.as_template("localImage", True)
 
     @property
     def local_video_path(self):
-        return self.get_path("localVideo", True)
+        return self.as_template("localVideo", True)
 
     @property
     def work_path(self):
-        return self.get_path("work")
+        return self.as_template("work")
 
     @property
     def work_image_path(self):
-        return self.get_path("workImage")
+        return self.as_template("workImage")
 
     @property
     def work_video_path(self):
-        return self.get_path("workVideo")
+        return self.as_template("workVideo")
 
     @property
     def other_dir(self):
-        return self.get_path("other")
+        return self.as_template("other")
 
     @property
     def publish_path(self):
-        return self.get_path("publish")
+        return self.as_template("publish")
 
     @property
     def image_path(self):
-        return self.get_path("image")
+        return self.as_template("image")
 
     @property
     def video_path(self):
-        return self.get_path("video")
+        return self.as_template("video")
 
     @property
     def topology_path(self):
-        return self.get_path("topology")
+        return self.as_template("topology")
 
     @property
     def abc_cache_path(self):
-        return self.get_path("cache")
+        return self.as_template("cache")
 
     @property
     def gpu_wrap_path(self):
-        return self.get_path("gpuwrap")
+        return self.as_template("gpuwrap")
 
     @property
     def definition_path(self):
-        return self.get_path("definition")
+        return self.as_template("definition")
 
     @property
     def tex_dir(self):
-        return self.get_path("tex")
+        return self.as_template("tex")
 
     @property
     def xgen_dir(self):
-        return self.get_path("xgen")
+        return self.as_template("xgen")
 
     @property
     def hair_path(self):
-        return self.get_path("hair")
+        return self.as_template("hair")
 
     @property
     def delta_path(self):
-        return self.get_path("hairDelta")
+        return self.as_template("hairDelta")
 
     @property
     def description_path(self):
-        return self.get_path("description")
+        return self.as_template("description")
 
     @property
     def cache_dir(self):
-        return self.get_path("cache")
+        return self.as_template("cache")
 
     @property
     def asset_info_path(self):
-        return self.get_path("assetInfo")
+        return self.as_template("assetInfo")
 
     @property
     def shd_path(self):
-        return self.get_path("shd")
+        return self.as_template("shd")
 
     @property
     def connection_path(self):
-        return self.get_path("connection")
+        return self.as_template("connection")
 
 
 ########################################################################################################################

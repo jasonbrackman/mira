@@ -20,7 +20,7 @@ class Step(object):
                 value = yml_data[self.__project][self.__step]
                 return value
             else:
-                logging.error("Step: KeyError")
+                logging.error("Step KeyError: %s not in the config file" % self.__step)
         else:
             logging.error("Step: %s not in the config file: %s" % (self.__project, conf_path))
 
