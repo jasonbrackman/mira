@@ -22,8 +22,3 @@ class Check(BaseCheck):
             try:
                 mc.unknownPlugin(plugin, remove=True)
             except:pass
-        self.error_list = self.get_unknown_plugins()
-        if self.error_list:
-            self.fail_check("There are some unknown can not be deleted.")
-        else:
-            self.pass_check("All unknown nodes has been deleted.")
