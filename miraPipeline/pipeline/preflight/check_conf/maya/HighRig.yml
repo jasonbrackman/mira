@@ -46,7 +46,7 @@ check_rig_structure:
 check_extra_camera:
   name: "Extra Camera | 多余的相机"
   order: 60
-  ignorable: False
+  ignorable: True
   description: "场景中多余的相机"
 check_unloaded_reference:
   name: "Unload reference | 没有加载的reference"
