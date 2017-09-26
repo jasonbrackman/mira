@@ -5,7 +5,7 @@ from miraLibs.pipeLibs import pipeFile
 
 
 def main(file_name, local):
-    logger = logging.getLogger("sceneset start")
+    logger = logging.getLogger("Set start")
     new_file.new_file()
     context = pipeFile.PathDetails.parse_path(file_name)
     sequence = context.sequence
