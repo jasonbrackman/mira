@@ -13,11 +13,6 @@ check_reference_is_newest:
   order: 8
   ignorable: True
   description: "检查文件中的reference文件是不是最新的"
-check_topology:
-  name: "topology | 拓扑结构"
-  order: 12
-  ignorable: False
-  description: "检查大纲结构是否与模型一致"
 check_rig_something_selected:
   name: "Something Selected<选中大组>"
   order: 15
@@ -58,6 +53,11 @@ check_duplicate_names:
   order: 120
   ignorable: False
   description: "检查是否有同名物体存在"
+check_topology:
+  name: "topology | 拓扑结构"
+  order: 122
+  ignorable: False
+  description: "检查大纲结构是否与模型一致"
 check_unknown_node:
   name: "Unknown nodes | 删除unknown节点"
   order: 125
