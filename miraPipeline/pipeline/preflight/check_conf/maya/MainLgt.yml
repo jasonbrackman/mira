@@ -1,0 +1,20 @@
+check_display_wireframe:
+  name: "Display wireframe | 线框显示"
+  order: 0
+  ignorable: False
+  description: "以线框显示保存文件"
+check_mainLgt_lights_exist:
+  name: "Lights exist | Lights 组是否存在"
+  order: 10
+  ignorable: False
+  description: "检查Lights组是否存在"
+check_mainLgt_no_namespace:
+  name: "No namespace | 灯光没有namespace"
+  order: 20
+  ignorable: False
+  description: "检查灯光是否有namespace存在"
+check_save_file:
+  name: "Save file | 保存文件"
+  order: 30
+  ignorable: True
+  description: "保存检查后的文件"
