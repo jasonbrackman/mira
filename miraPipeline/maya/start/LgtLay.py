@@ -5,7 +5,7 @@ import logging
 from miraLibs.mayaLibs import new_file, save_as, quit_maya
 from miraLibs.pipeLibs import pipeFile, pipeMira
 from miraLibs.pipeLibs.pipeMaya import fix_frame_range
-from miraLibs.mayaLibs import create_group, create_reference, set_image_size
+from miraLibs.mayaLibs import create_group, create_reference, set_image_size, Assembly
 from miraLibs.pipeLibs.pipeMaya.rebuild_assembly import rebuild_scene
 
 
@@ -19,6 +19,9 @@ def main(file_name, local):
     # AR set
     rebuild_scene()
     logger.info("Rebuild scene done.")
+    # switch to midmdl
+    assemb = Assembly.Assembly()
+    assemb.set_active("MidMdl")
     # get the AnimLay cache
     abc_files = get_cache_files(context)
     if abc_files:
