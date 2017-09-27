@@ -2,22 +2,29 @@
 import os
 import glob
 import logging
-from miraLibs.mayaLibs import new_file, save_as, import_abc, quit_maya
-from miraLibs.pipeLibs import pipeFile
+from miraLibs.mayaLibs import new_file, save_as, quit_maya
+from miraLibs.pipeLibs import pipeFile, pipeMira
 from miraLibs.pipeLibs.pipeMaya import fix_frame_range
-from miraLibs.mayaLibs import create_group, create_reference
+from miraLibs.mayaLibs import create_group, create_reference, set_image_size
+from miraLibs.pipeLibs.pipeMaya.rebuild_assembly import rebuild_scene
 
 
 def main(file_name, local):
     logger = logging.getLogger("LgtLay start")
     new_file.new_file()
     context = pipeFile.PathDetails.parse_path(file_name)
+    save_as.save_as(file_name)
     # create Light group
-    create_group.create_group("Light")
+    create_group.create_group("Lights")
+    # AR set
+    rebuild_scene()
+    logger.info("Rebuild scene done.")
     # get the AnimLay cache
     abc_files = get_cache_files(context)
     if abc_files:
         for abc_file in abc_files:
+            if abc_file.endswith("env.abc"):
+                continue
             namespace = os.path.splitext(os.path.basename(abc_file))[0]
             create_reference.create_reference(abc_file, namespace)
     logger.info("Reference cache done.")
@@ -25,6 +32,9 @@ def main(file_name, local):
     fix_frame_range.fix_frame_range(context)
     logger.info("Fix frame range done.")
     logger.info("%s publish successful!" % file_name)
+    # set resolution
+    resolution = pipeMira.get_resolution(context.project)
+    set_image_size.set_image_size(*resolution)
     save_as.save_as(file_name)
     if not local:
         quit_maya.quit_maya()
