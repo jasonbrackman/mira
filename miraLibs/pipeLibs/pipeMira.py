@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import miraCore
 import logging
 import miraLibs.pyLibs.yml_operation as yml
@@ -9,12 +10,13 @@ conf_dir = miraCore.get_conf_dir()
 
 
 # ******************************get studio value****************************** #
-def get_value(name, project_name, option):
-    conf_path = join_path.join_path2(conf_dir, "%s.yml" % name)
-    yml_data = yml.get_yaml_data(conf_path)
-    if yml_data. has_key(project_name):
-        if yml_data[project_name]. has_key(option):
-            value = yml_data[project_name][option]
+def get_value(project_name, name, option):
+    conf_path = join_path.join_path2(conf_dir, project_name, "%s.yml" % name)
+    if os.path.isfile(conf_path):
+        dcp = yml.DeepConfParser(conf_path)
+        yml_data = dcp.parse()
+        if yml_data. has_key(option):
+            value = yml_data[option]
             return value
         else:
             logging.error("pipeMira: KeyError")
@@ -23,12 +25,12 @@ def get_value(name, project_name, option):
 
 
 def get_studio_value(project_name, option):
-    studio_value = get_value("studio", project_name, option)
+    studio_value = get_value(project_name, "studio", option)
     return studio_value
 
 
 def get_step_value(project_name, step):
-    step_value = get_value("step", project_name, step)
+    step_value = get_value(project_name, "step", step)
     return step_value
 
 

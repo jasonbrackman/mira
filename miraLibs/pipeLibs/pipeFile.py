@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-import os
 import re
 import logging
 from miraLibs.pyLibs.Path import Path
 from miraLibs.pyLibs import opposite_format, get_latest_version
-from miraLibs.pipeLibs.pipeMira import get_projects, get_local_root_dir, get_primary_dir, get_studio_value
+from miraLibs.pipeLibs.pipeMira import get_projects, get_studio_value
 
 
 type_dict = {"Character": "char", "Prop": "prop", "Cprop": "cprop", "Environment": "env", "Building": "build"}
@@ -91,17 +90,17 @@ class PathDetails(object):
     def is_local_file(self):
         return self.__is_local_file
 
-    def as_template(self, format_area, local=False):
+    def as_template(self, format_area):
         if not self.edition:
             self.edition = "000"
         if self.entity_type == "Asset":
             format_str = "%s_asset_%s" % (self.engine, format_area)
             return get_task_file(self.project, self.asset_type, self.asset_name, self.step, self.task,
-                                 format_str, self.version, self.engine, local, self.edition)
+                                 format_str, self.version, self.engine, self.edition)
         else:
             format_str = "%s_shot_%s" % (self.engine, format_area)
             return get_task_file(self.project, self.sequence, self.shot, self.step, self.task,
-                                 format_str, self.version, self.engine, local, self.edition)
+                                 format_str, self.version, self.engine, self.edition)
 
     @property
     def next_version(self):
@@ -148,15 +147,15 @@ class PathDetails(object):
 
     @property
     def local_work_path(self):
-        return self.as_template("local", True)
+        return self.as_template("local")
 
     @property
     def local_image_path(self):
-        return self.as_template("localImage", True)
+        return self.as_template("localImage")
 
     @property
     def local_video_path(self):
-        return self.as_template("localVideo", True)
+        return self.as_template("localVideo")
 
     @property
     def work_path(self):
@@ -247,11 +246,7 @@ class PathDetails(object):
 # below is for get asset files
 ########################################################################################################################
 def get_task_file(project, asset_type_sequence, asset_name_shot, step, task,
-                  format_str, version=None, engine="maya", local=False, edition=None):
-    if local:
-        primary = get_local_root_dir(project)
-    else:
-        primary = get_primary_dir(project)
+                  format_str, version=None, engine="maya", edition=None):
     file_format = get_studio_value(project, format_str)
     if not file_format:
         return
@@ -259,7 +254,7 @@ def get_task_file(project, asset_type_sequence, asset_name_shot, step, task,
         version_str = "000"
     else:
         version_str = version
-    file_name = file_format.format(primary=primary, project=project, asset_type=asset_type_sequence,
+    file_name = file_format.format(project=project, asset_type=asset_type_sequence,
                                    sequence=asset_type_sequence, shot=asset_name_shot.split("_")[-1],
                                    asset_name=asset_name_shot.split("_")[-1], step=step,
                                    task=task.split("_")[-1], version=version_str, edition=edition, engine=engine)
@@ -270,7 +265,6 @@ def get_task_file(project, asset_type_sequence, asset_name_shot, step, task,
 
 
 def get_entity_dir(project, entity_type, category, asset_type_sequence, asset_name_shot):
-    # "{primary}/{project}/{category}/{entity_type}/{asset_type_sequence}/{asset_name_shot}"
     entity_type = "assets" if entity_type == "Asset" else "shots"
     primary = get_studio_value(project, "primary")
     template = get_studio_value(project, "entity_dir")
@@ -282,37 +276,37 @@ def get_entity_dir(project, entity_type, category, asset_type_sequence, asset_na
 
 def get_task_work_file(project, entity_type, asset_type_sequence, asset_name_shot, step, task, version=None, engine="maya", local=False):
     if entity_type == "Asset":
-        format_str = "%s_asset_work" % engine
+        format_str = "%s_asset_local" % engine if local else "%s_asset_work" % engine
     else:
-        format_str = "%s_shot_work" % engine
-    work_file = get_task_file(project, asset_type_sequence, asset_name_shot, step, task, format_str, version, engine, local)
+        format_str = "%s_shot_local" % engine if local else "%s_asset_work" % engine
+    work_file = get_task_file(project, asset_type_sequence, asset_name_shot, step, task, format_str, version, engine)
     return work_file
 
 
-def get_task_workImage_file(project, entity_type, asset_type_sequence, asset_name_shot, step, task, version=None, engine="maya", local=False):
+def get_task_workImage_file(project, entity_type, asset_type_sequence, asset_name_shot, step, task, version=None, engine="maya"):
     if entity_type == "Asset":
         format_str = "%s_asset_workImage" % engine
     else:
         format_str = "%s_shot_workImage" % engine
-    image_file = get_task_file(project, asset_type_sequence, asset_name_shot, step, task, format_str, version, engine, local)
+    image_file = get_task_file(project, asset_type_sequence, asset_name_shot, step, task, format_str, version, engine)
     return image_file
 
 
-def get_task_publish_file(project, entity_type, asset_type_sequence, asset_name_shot, step, task, version="", engine="maya", local=False):
+def get_task_publish_file(project, entity_type, asset_type_sequence, asset_name_shot, step, task, version="", engine="maya"):
     if entity_type == "Asset":
         format_str = "%s_asset_publish" % engine
     else:
         format_str = "%s_shot_publish" % engine
-    publish_file = get_task_file(project, asset_type_sequence, asset_name_shot, step, task, format_str, version, engine, local)
+    publish_file = get_task_file(project, asset_type_sequence, asset_name_shot, step, task, format_str, version, engine)
     return publish_file
 
 
-def get_task_video_file(project, entity_type, asset_type_sequence, asset_name_shot, step, task, version="", engine="maya", local=False):
+def get_task_video_file(project, entity_type, asset_type_sequence, asset_name_shot, step, task, version="", engine="maya"):
     if entity_type == "Asset":
         format_str = "%s_asset_video" % engine
     else:
         format_str = "%s_shot_video" % engine
-    publish_file = get_task_file(project, asset_type_sequence, asset_name_shot, step, task, format_str, version, engine, local)
+    publish_file = get_task_file(project, asset_type_sequence, asset_name_shot, step, task, format_str, version, engine)
     return publish_file
 
 

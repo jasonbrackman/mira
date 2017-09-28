@@ -13,16 +13,13 @@ class Step(object):
         self.__value = self.value()
 
     def value(self):
-        conf_path = join_path.join_path2(self.__conf_dir, "step.yml")
+        conf_path = join_path.join_path2(self.__conf_dir, self.__project, "step.yml")
         yml_data = yml.get_yaml_data(conf_path)
-        if yml_data. has_key(self.__project):
-            if yml_data[self.__project]. has_key(self.__step):
-                value = yml_data[self.__project][self.__step]
-                return value
-            else:
-                logging.error("Step KeyError: %s not in the config file" % self.__step)
+        if yml_data. has_key(self.__step):
+            value = yml_data.get(self.__step)
+            return value
         else:
-            logging.error("Step: %s not in the config file: %s" % (self.__project, conf_path))
+            logging.error("Step KeyError: %s not in the config file" % self.__step)
 
     @property
     def engine(self):

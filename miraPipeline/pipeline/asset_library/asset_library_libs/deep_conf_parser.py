@@ -48,6 +48,6 @@ class DeepConfParser(object):
 
 
 if __name__ == "__main__":
-    path = r"E:\mira\miraScripts\pipeTools\asset_library\conf\templates.yml"
+    path = r"E:\mira\miraConf\SnowKidTest\studio.yml"
     dcp = DeepConfParser(path)
-    print dcp.parse()
+    print dcp.parse().get("maya_asset_local")
