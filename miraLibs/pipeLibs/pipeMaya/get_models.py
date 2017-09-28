@@ -7,5 +7,7 @@ def get_models(indicate=None):
         all_transforms = mc.listRelatives(indicate, ad=1, type="transform")
     else:
         all_transforms = mc.ls(type="transform")
+    if not all_transforms:
+        return
     models = [i for i in all_transforms if i.endswith("_MODEL")]
     return models
