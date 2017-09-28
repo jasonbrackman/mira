@@ -43,6 +43,11 @@ check_extra_camera:
   order: 60
   ignorable: True
   description: "场景中多余的相机"
+check_rig_ctrl_exist:
+  name: "Ctrls exist | 控制器是否存在"
+  order: 65
+  ignorable: True
+  description: "角色绑定的控制器是否都存在"
 check_unloaded_reference:
   name: "Unload reference | 没有加载的reference"
   order: 70

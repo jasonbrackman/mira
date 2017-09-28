@@ -13,12 +13,12 @@ class Check(BaseCheck):
         valid_camera = self.get_valid_camera()
         if not mc.objExists(valid_camera):
             self.fail_check(u"摄像机%s不存在" % valid_camera)
-            return
-        self.error_list = list(set(created_camera)-set([valid_camera]))
-        if self.error_list:
-            self.fail_check(u"有多余的摄像机")
         else:
-            self.pass_check(u"摄像机正确")
+            camera_list = mc.ls(valid_camera)
+            if len(camera_list) == 1:
+                self.pass_check(u"摄像机正确")
+            else:
+                self.fail_check(u"有同名摄像机")
 
     @staticmethod
     def get_created_cameras():

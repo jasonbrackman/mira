@@ -238,6 +238,10 @@ class PathDetails(object):
     def connection_path(self):
         return self.as_template("connection")
 
+    @property
+    def light_path(self):
+        return self.as_template("light")
+
 
 ########################################################################################################################
 # below is for get asset files

@@ -5,7 +5,7 @@ import logging
 from miraLibs.mayaLibs import new_file, save_as, quit_maya
 from miraLibs.pipeLibs import pipeFile, pipeMira
 from miraLibs.pipeLibs.pipeMaya import fix_frame_range
-from miraLibs.mayaLibs import create_group, create_reference, set_image_size, Assembly
+from miraLibs.mayaLibs import create_group, create_reference, set_image_size, Assembly, maya_import
 from miraLibs.pipeLibs.pipeMaya.rebuild_assembly import rebuild_scene
 
 
@@ -15,7 +15,7 @@ def main(file_name, local):
     context = pipeFile.PathDetails.parse_path(file_name)
     save_as.save_as(file_name)
     # create Light group
-    create_group.create_group("Lights")
+    import_lights(context)
     # AR set
     rebuild_scene()
     logger.info("Rebuild scene done.")
@@ -41,6 +41,15 @@ def main(file_name, local):
     save_as.save_as(file_name)
     if not local:
         quit_maya.quit_maya()
+
+
+def import_lights(context):
+    light_file = pipeFile.get_task_file(context.project, context.sequence, "c000",
+                                        "MainLgt", "MainLgt", "maya_shot_light", "")
+    if os.path.isfile(light_file):
+        maya_import.maya_import(light_file)
+    else:
+        create_group.create_group("Lights")
 
 
 def get_cache_files(context):
