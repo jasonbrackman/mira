@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import miraCore
 import logging
 import miraLibs.pyLibs.yml_operation as yml
@@ -12,10 +13,10 @@ class Studio(object):
         self.__value = self.value()
 
     def value(self):
-        conf_path = join_path.join_path2(self.__conf_dir, "studio.yml")
-        yml_data = yml.get_yaml_data(conf_path)
-        if yml_data. has_key(self.__project):
-            value = yml_data.get(self.__project)
-            return value
+        conf_path = join_path.join_path2(self.__conf_dir, self.__project, "studio.yml")
+        if os.path.isfile(conf_path):
+            dcp = yml.DeepConfParser(conf_path)
+            yml_data = dcp.parse()
+            return yml_data
         else:
             logging.error("Step: %s not in the config file: %s" % (self.__project, conf_path))

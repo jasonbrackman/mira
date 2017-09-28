@@ -7,9 +7,8 @@ from miraLibs.pyLibs import join_path
 
 
 def get_logger(project, logger_type, task_name):
-    primary = pipeMira.get_primary_dir(project)
     logger_dir = pipeMira.get_studio_value(project, "task_log_dir")
-    logger_dir = logger_dir.format(primary=primary, project=project)
+    logger_dir = logger_dir.format(project=project)
     logger_dir = join_path.join_path2(logger_dir, logger_type)
     if not os.path.isdir(logger_dir):
         os.makedirs(logger_dir)

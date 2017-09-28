@@ -127,9 +127,9 @@ class RunThread(QThread):
         self.__collect_data = list()
 
     def run(self):
-        studio_conf_path = join_path.join_path2(miraCore.get_conf_dir(), "studio.yml")
-        yml_data = yml_operation.get_yaml_data(studio_conf_path)
-        project_data = yml_data.get(self.__project)
+        studio_conf_path = join_path.join_path2(miraCore.get_conf_dir(), self.__project, "studio.yml")
+        dcp = yml_operation.DeepConfParser(studio_conf_path)
+        project_data = dcp.parse()
         primary = project_data.get("primary")
         if self.__entity_type == "Asset":
             format_str = project_data.get("maya_asset_image")

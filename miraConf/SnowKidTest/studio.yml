@@ -1,0 +1,68 @@
+primary: "W:"
+local_root_dir: "D:"
+render_root_dir: "W:"
+vfx_cache_root_dir: "W:"
+database: "strack"
+resolution: "2048*858"
+maya_path: "C:/Program Files/Autodesk/Maya2017/bin/maya.exe"
+mayabatch_path: "C:/Program Files/Autodesk/Maya2017/bin/mayabatch.exe"
+playblast_percent: 100
+task_log_dir: "@primary/{project}/log"
+priority: ["A", "B", "C", "D"]
+asset_type: ["Character", "Cprop", "Prop", "Environment", "Building"]
+asset_steps: ["LowMdl","MidMdl","HighMdl","Shd","MidRig","HighRig","Hair","Group"]
+shot_steps: ["Set","MainLgt","AnimLay","VfxLay","LgtLay","CompLay","Anim","Vfx","Cfx","Lgt","Comp","Cut"]
+not_playblast_step: ["HighRig","MidRig","Shd","Hair", "Group", "Set", "LgtLay", "MainLgt"]
+not_submit_version_step: ["HighRig","MidRig", "Set", "Group", "LgtLay", "MainLgt"]
+entity_dir: "@primary/{project}/{category}/{entity_type}/{asset_type_sequence}/{asset_name_shot}"
+# maya
+# -asset
+asset_template: "{primary}/{project}/{category}/assets/{asset_type}/{asset_name}/{step}/{task}/{area}/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.{ext}"
+# --local
+maya_asset_local: "@local_root_dir/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_workarea/{engine}/{project}_{asset_name}_{step}_{task}_v{version}_e{edition}.ma"
+maya_asset_localImage: "@local_root_dir/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_image/{engine}/{project}_{asset_name}_{step}_{task}_v{version}_e{edition}.png"
+maya_asset_localVideo: "@local_root_dir/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_video/{engine}/{project}_{asset_name}_{step}_{task}_v{version}_e{edition}.mov"
+# --work
+maya_asset_work: "@primary/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_workarea/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.ma"
+maya_asset_workImage: "@primary/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_image/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.png"
+maya_asset_workVideo: "@primary/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_video/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.mov"
+maya_asset_other: "@primary/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_other/v{version}"
+# --publish
+maya_asset_publish: "@primary/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_publish/{engine}/{project}_{asset_name}_{step}_{task}.ma"
+maya_asset_image: "@primary/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_image/{engine}/{project}_{asset_name}_{step}_{task}.png"
+maya_asset_video: "@primary/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_video/{engine}/{project}_{asset_name}_{step}_{task}.mov"
+maya_asset_topology: "@primary/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_topology/{engine}/{project}_{asset_name}_{step}_{task}.json"
+maya_asset_cache: "@primary/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_cache/{engine}/{project}_{asset_name}_{step}_{task}.abc"
+maya_asset_gpuwrap: "@primary/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_gpuwrap/{engine}/{project}_{asset_name}_{step}_{task}.ma"
+maya_asset_definition: "@primary/{project}/publish/assets/{asset_type}/{asset_name}/{project}_{asset_name}_AD.ma"
+maya_asset_tex: "@primary/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_tex/{engine}"
+maya_asset_xgen: "@primary/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_xgen/{engine}"
+maya_asset_shd: "@primary/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_shd/{engine}/{project}_{asset_name}_{step}_{task}.ma"
+maya_asset_hair: "@primary/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_hair/{engine}/{project}_{asset_name}_{step}_{task}.xgen"
+maya_asset_hairDelta: "@primary/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_hair/{engine}/{project}_{asset_name}_{step}_{task}.xgd"
+maya_asset_connection: "@primary/{project}/publish/assets/{asset_type}/{asset_name}/{step}/{task}/_connection/{engine}/{project}_{asset_name}_{step}_{task}.json"
+# -shot
+shot_template: "{primary}/{project}/{category}/shots/{sequence}/{shot}/{step}/{task}/{area}/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.{ext}"
+# --local
+maya_shot_local: "@local_root_dir/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_workarea/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}_e{edition}.ma"
+maya_shot_localImage: "@local_root_dir/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}_e{edition}.png"
+maya_shot_localVideo: "@local_root_dir/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_video/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}_e{edition}.mov"
+# -- work
+maya_shot_work: "@primary/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_workarea/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.ma"
+maya_shot_workImage: "@primary/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.png"
+maya_shot_workVideo: "@primary/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_video/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.mov"
+maya_shot_other: "@primary/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_other/v{version}"
+# --publish
+maya_shot_publish: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_publish/{engine}/{project}_{sequence}_{shot}_{step}_{task}.ma"
+maya_shot_image: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}.png"
+maya_shot_video: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_video/{engine}/{project}_{sequence}_{shot}_{step}_{task}.mov"
+maya_shot_definition: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_definition/{engine}/{project}_{sequence}_{shot}_{step}_{task}.ma"
+maya_shot_description: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_description/{engine}/{project}_{sequence}_{shot}_{step}_{task}.yml"
+maya_shot_cache:  "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_cache"
+maya_shot_assetInfo: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_publish/{engine}/{project}_{sequence}_{shot}_{step}_{task}.json"
+maya_shot_light: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_light/{engine}/{project}_{sequence}_{shot}_{step}_{task}.ma"
+# --render
+maya_shot_workRender: "@render_root_dir/{project}/render/{sequence}/{shot}/{step}/{task}/_workarea"
+maya_shot_publishRender: "@render_root_dir/{project}/render/{sequence}/{shot}/{step}/{task}/_publish"
+# photoshop
+photoshop_asset_publish: "{primary}/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_publish/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.psd"
