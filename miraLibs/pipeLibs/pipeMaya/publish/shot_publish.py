@@ -89,10 +89,11 @@ def export_other_cache(context, category):
         else:
             children = mc.listRelatives("Char", ad=1, type="transform")
             models = [i for i in children if i.endswith("DeformationSystem") or i.endswith("_MODEL")]
-        for model in models:
-            namespace = get_namespace.get_namespace(model)
-            cache_path = "%s/%s.abc" % (cache_dir, namespace)
-            export_abc.export_abc(start, end, cache_path, model, False)
+        if models:
+            for model in models:
+                namespace = get_namespace.get_namespace(model)
+                cache_path = "%s/%s.abc" % (cache_dir, namespace)
+                export_abc.export_abc(start, end, cache_path, model, False)
     elif context.step == "Anim":
         from miraLibs.pipeLibs.pipeMaya.anim import export_model_abc
         export_model_abc.export_model_abc()
