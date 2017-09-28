@@ -23,8 +23,10 @@ def edit(conf_data=None):
         print "No edits found."
         return
     for e in edits:
-        print e
-        mel.eval(e)
+        try:
+            mel.eval(e)
+        except:
+            print "Error: %s" % e
     print "Edit done."
 
 
