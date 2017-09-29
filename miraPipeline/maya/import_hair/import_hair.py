@@ -80,7 +80,7 @@ class HairUI(QDialog):
         return self.namespace_le.text()
 
     def do_import(self):
-        load_plugin.load_plugin("xgenToolKit.mll")
+        load_plugin.load_plugin("xgenToolkit.mll")
         mel.eval("XgCreateDescriptionEditor;")
         publish_file = pipeFile.get_task_file(self.project, self.asset_type, self.asset_name,
                                               "Hair", "Hair", "maya_asset_publish", "")
