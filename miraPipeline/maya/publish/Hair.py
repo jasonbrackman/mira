@@ -3,7 +3,7 @@ import logging
 import maya.cmds as mc
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.pipeLibs.pipeMaya import get_model_name, publish
-from miraLibs.mayaLibs import open_file, quit_maya, export_abc, Xgen, export_selected
+from miraLibs.mayaLibs import open_file, quit_maya, export_abc, Xgen, export_selected, save_as
 from miraLibs.pyLibs import json_operation
 
 
@@ -35,6 +35,7 @@ def main(file_name, local):
     # export shd
     export_shd(context)
     logger.info("Export shader done.")
+    save_as.save_as(context.publish_path)
     if not local:
         quit_maya.quit_maya()
 
