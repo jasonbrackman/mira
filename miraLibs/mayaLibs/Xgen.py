@@ -32,7 +32,7 @@ class Xgen(object):
             os.makedirs(delta_dir)
         xgen.createDelta(palette, "D:/temp.xgd")
         copy.copy("D:/temp.xgd", delta_path)
-        os.remove("D:/temp.gxd")
+        os.remove("D:/temp.xgd")
         
     def set_abs_path(self, xgen_dir):
         if not xgg.Maya:
