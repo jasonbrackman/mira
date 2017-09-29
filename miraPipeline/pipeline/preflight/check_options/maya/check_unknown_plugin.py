@@ -22,3 +22,4 @@ class Check(BaseCheck):
             try:
                 mc.unknownPlugin(plugin, remove=True)
             except:pass
+        self.pass_check("unknown plugins has been deleted.")

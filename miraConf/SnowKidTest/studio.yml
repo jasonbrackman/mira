@@ -62,7 +62,10 @@ maya_shot_cache:  "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{ta
 maya_shot_assetInfo: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_publish/{engine}/{project}_{sequence}_{shot}_{step}_{task}.json"
 maya_shot_light: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_light/{engine}/{project}_{sequence}_{shot}_{step}_{task}.ma"
 # --render
-maya_shot_workRender: "@render_root_dir/{project}/render/{sequence}/{shot}/{step}/{task}/_workarea"
-maya_shot_publishRender: "@render_root_dir/{project}/render/{sequence}/{shot}/{step}/{task}/_publish"
+shot_render_work: "@render_root_dir/{project}/render/{sequence}/{shot}/{step}/{task}/_workarea"
+shot_render_publish: "@render_root_dir/{project}/render/{sequence}/{shot}/{step}/{task}/_publish"
+# -- cache
+shot_cache_work: "@render_root_dir/{project}/cache/{sequence}/{shot}/{step}/{task}/_workarea"
+shot_cache_publish: "@render_root_dir/{project}/cache/{sequence}/{shot}/{step}/{task}/_publish"
 # photoshop
 photoshop_asset_publish: "{primary}/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_publish/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.psd"
