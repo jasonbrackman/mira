@@ -28,6 +28,11 @@ HighRig:
   engine: maya
   up_step: ["HighMdl", "MidRig"]
   down_step: null
+HairRig:
+  entity: Asset
+  engine: maya
+  up_step: ["HighRig", "Hair"]
+  down_step: null
 Hair:
   entity: Asset
   engine: maya

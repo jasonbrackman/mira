@@ -10,10 +10,10 @@ playblast_percent: 100
 task_log_dir: "@primary/{project}/log"
 priority: ["A", "B", "C", "D"]
 asset_type: ["Character", "Cprop", "Prop", "Environment", "Building"]
-asset_steps: ["LowMdl","MidMdl","HighMdl","Shd","MidRig","HighRig","Hair","Group"]
+asset_steps: ["LowMdl","MidMdl","HighMdl","Shd","MidRig","HighRig","Hair","Group", "HairRig"]
 shot_steps: ["Set","MainLgt","AnimLay","VfxLay","LgtLay","CompLay","Anim","Vfx","Cfx","Lgt","Comp","Cut"]
-not_playblast_step: ["HighRig","MidRig","Shd","Hair", "Group", "Set", "LgtLay", "MainLgt"]
-not_submit_version_step: ["HighRig","MidRig", "Set", "Group", "LgtLay", "MainLgt"]
+not_playblast_step: ["HighRig","MidRig","Shd","Hair", "Group", "Set", "LgtLay", "MainLgt", "HairRig"]
+not_submit_version_step: ["HighRig","MidRig", "Set", "Group", "LgtLay", "MainLgt", "HairRig"]
 entity_dir: "@primary/{project}/{category}/{entity_type}/{asset_type_sequence}/{asset_name_shot}"
 # maya
 # -asset

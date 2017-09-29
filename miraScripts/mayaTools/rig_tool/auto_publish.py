@@ -2,7 +2,7 @@
 import os
 import logging
 from Qt.QtWidgets import *
-from miraLibs.mayaLibs import get_scene_name, save_file, new_file
+from miraLibs.mayaLibs import get_scene_name, save_file, new_file, save_as
 from miraLibs.osLibs import get_parent_win
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.pipeLibs.pipeMaya import publish
@@ -23,11 +23,11 @@ def auto_publish(context, change_task_status):
     publish.reference_opt()
     logger.info("Import reference done.")
     # export needed
-    publish.export_need_to_publish(context)
-    logger.info("Export to publish path done.")
-    # add to AD
-    publish.add_mesh_to_ad(context)
-    logger.info("Add to AD done.")
+    if context.step in ["MidRig", "HighRig"]:
+        publish.export_need_to_publish(context)
+        logger.info("Export to publish path done.")
+    else:
+        save_as.save_as(context.publish_path)
     # post publish
     post_publish(context, change_task_status)
     # open current file
@@ -99,7 +99,7 @@ class AutoPublish(QDialog):
         scene_name = get_scene_name.get_scene_name()
         save_file.save_file()
         context = pipeFile.PathDetails.parse_path(scene_name)
-        if context.step not in ["MidRig", "HighRig"]:
+        if context.step not in ["MidRig", "HighRig", "HairRig"]:
             mw = MessageWidget("Warning", "This step is not Rig step", PARENT_WIN)
             mw.show()
             return
