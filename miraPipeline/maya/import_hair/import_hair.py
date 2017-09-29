@@ -1,10 +1,12 @@
 from Qt.QtWidgets import *
 from Qt.QtCore import *
+import maya.mel as mel
 from miraFramework.combo import CombBox
 from miraFramework.combo.project_combo import ProjectCombo
 from miraLibs.pipeLibs import pipeMira, pipeFile
 from miraLibs.dbLibs import db_api
 from miraLibs.pipeLibs.pipeMaya.hair import import_xgen_hair
+from miraLibs.mayaLibs import load_plugin
 
 
 class HairUI(QDialog):
@@ -78,6 +80,8 @@ class HairUI(QDialog):
         return self.namespace_le.text()
 
     def do_import(self):
+        load_plugin.load_plugin("xgenToolKit.mll")
+        mel.eval("XgCreateDescriptionEditor;")
         publish_file = pipeFile.get_task_file(self.project, self.asset_type, self.asset_name,
                                               "Hair", "Hair", "maya_asset_publish", "")
         context = pipeFile.PathDetails.parse_path(publish_file)
