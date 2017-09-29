@@ -6,7 +6,7 @@ plugins:
     - AbcImport.mll
     - AbcExport.mll
     - redshift4maya.mll
-    - xgenToolKit.mll
+    - xgenToolkit.mll
   unload:
     - VectorRender.mll
     - pgYetiMaya.mll
