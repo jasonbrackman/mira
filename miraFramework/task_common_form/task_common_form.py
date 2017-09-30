@@ -325,13 +325,13 @@ class CommonForm(QWidget):
             if self.db.typ == "shotgun":
                 asset_names = [asset["code"] for asset in assets]
             elif self.db.typ == "strack":
-                asset_names = [asset["name"] for asset in assets]
+                asset_names = [asset["code"] for asset in assets]
             else:
                 return
             self.second_widget.set_model_data(asset_names)
         elif self.entity_type == "Shot":
             shots = self.db.get_all_shots(selected)
-            shot_names = [shot["name"] for shot in shots]
+            shot_names = [shot["code"] for shot in shots]
             self.second_widget.set_model_data(shot_names)
 
     def show_step(self, index):
@@ -358,7 +358,7 @@ class CommonForm(QWidget):
         if self.db.typ == "shotgun":
             task_names = [task["content"] for task in tasks]
         elif self.db.typ == "strack":
-            task_names = [task["name"] for task in tasks]
+            task_names = [task["code"] for task in tasks]
         else:
             return
         self.fourth_widget.set_model_data(task_names)
