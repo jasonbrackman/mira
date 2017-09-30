@@ -141,7 +141,7 @@ class RunThread(QThread):
             task = "AnimLay"
         engine = Step(self.__project, step).engine
         for entity in self.__entities:
-            entity_name = entity.get("name")
+            entity_name = entity.get("code")
             image_path = format_str.format(primary=primary, project=self.__project,
                                            asset_type=self.__asset_type_sequence, sequence=self.__asset_type_sequence,
                                            asset_name=entity_name, shot=entity_name.split("_")[-1],
@@ -422,7 +422,7 @@ class Entity(EntityUI):
             step_menu.up_level = self.__main_menu
             if len(selected) == 1:
                 tasks = self.db.get_task(self.entity_type, self.asset_type_sequence, asset_shot_names[0], step)
-                tasks = [task.get("name") for task in tasks]
+                tasks = [task.get("code") for task in tasks]
             else:
                 tasks = [step]
             if not tasks:

@@ -115,7 +115,7 @@ class MyTaskForm(QWidget):
             entity_type = self.db.get_task_entity_type(task)
             task_entity_id = task.get("item_id")
             task_entity_name = task.get("item").get("item_name")
-            task_name = task.get("name")
+            task_name = task.get("code")
             step = task.get("step").get("name")
             status = task.get("status").get("name")
             status_color = task.get("status").get("color")

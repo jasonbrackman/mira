@@ -80,7 +80,7 @@ class Loader(QDialog):
             if not tasks:
                 continue
             for task in tasks:
-                task_name = task.get("name")
+                task_name = task.get("code")
                 status_name = task.get("status").get("name")
                 status_color = task.get("status").get("color")
                 if entity_type == "Asset":

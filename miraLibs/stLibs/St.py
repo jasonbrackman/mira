@@ -18,7 +18,7 @@ class St(object):
         return user_info.get("id")
 
     def get_project_by_name(self):
-        project_info = self.st.project.find(filters="name=%s" % self.project_name)
+        project_info = self.st.project.find(filters="code=%s" % self.project_name)
         return project_info
 
     def get_category_by_name(self, category_name):
@@ -54,13 +54,13 @@ class St(object):
         if entity_type == "Asset":
             category_info = self.get_category_by_name(asset_type_or_sequence)
             category_id = category_info.get("id")
-            asset_filters = "name=%s and category_id=%s and project_id=%s" % \
+            asset_filters = "code=%s and category_id=%s and project_id=%s" % \
                             (asset_or_shot, category_id, self.project_id)
             entity_info = self.st.asset.find(filters=asset_filters)
         elif entity_type == "Shot":
             sequence_info = self.get_sequence_by_name(asset_type_or_sequence)
             sequence_id = sequence_info.get("id")
-            shot_filters = "name=%s and sequence_id=%s and project_id=%s" % \
+            shot_filters = "code=%s and sequence_id=%s and project_id=%s" % \
                            (asset_or_shot, sequence_id, self.project_id)
             entity_info = self.st.shot.find(filters=shot_filters)
         else:
@@ -69,41 +69,41 @@ class St(object):
         return entity_info
 
     def get_sequence_by_name(self, sequence_name):
-        sequence_filters = "project_id=%s and name=%s" % (self.project_id, sequence_name)
+        sequence_filters = "project_id=%s and code=%s" % (self.project_id, sequence_name)
         sequence_info = self.st.sequence.find(filters=sequence_filters)
         return sequence_info
 
     def get_sequence(self):
-        all_sequence = self.st.sequence.select(filters="project_id=%s" % self.project_id, fields=["name"])
+        all_sequence = self.st.sequence.select(filters="project_id=%s" % self.project_id, fields=["code"])
         if not all_sequence:
             return
-        all_sequence_name = [sequence['name'] for sequence in all_sequence]
+        all_sequence_name = [sequence['code'] for sequence in all_sequence]
         all_sequence_name.sort()
         return all_sequence_name
 
     def get_all_assets(self, asset_type=None):
         if asset_type is None:
-            assets = self.st.asset.select(filters="project_id=%s" % self.project_id, fields=["name"])
+            assets = self.st.asset.select(filters="project_id=%s" % self.project_id, fields=["code"])
         else:
             category = self.get_category_by_name(asset_type)
             filters = "project_id=%s and category_id=%s" % (self.project_id, category.get("id"))
-            assets = self.st.asset.select(filters=filters, fields=["name"])
+            assets = self.st.asset.select(filters=filters, fields=["code"])
         return assets
 
     def get_all_sequences(self):
-        sequences = self.st.sequence.select("project_id=%s" % self.project_id, ["name"])
+        sequences = self.st.sequence.select("project_id=%s" % self.project_id, ["code"])
         if sequences:
-            sequences = [sequence.get("name") for sequence in sequences]
+            sequences = [sequence.get("code") for sequence in sequences]
         return sequences
 
     def get_all_shots(self, sequence_name=None):
         if not sequence_name:
-            shots = self.st.shot.select(filters="project_id=%s" % self.project_id, fields=["name"])
+            shots = self.st.shot.select(filters="project_id=%s" % self.project_id, fields=["code"])
         else:
             sequence_info = self.get_sequence_by_name(sequence_name)
             sequence_id = sequence_info.get("id")
-            shots = self.st.shot.select(filters="sequence_id=%s" % sequence_id, fields=["name"])
-            shots = [shot for shot in shots if '_000' not in shot['name']]
+            shots = self.st.shot.select(filters="sequence_id=%s" % sequence_id, fields=["code"])
+            shots = [shot for shot in shots if '_000' not in shot['code']]
         return shots
 
     def get_task(self, entity_type, asset_type_or_sequence, asset_or_shot, step=None):
@@ -113,10 +113,10 @@ class St(object):
         if step:
             step_info = self.get_step_by_name(step)
             task_filters = "item_id=%s and step_id=%s" % (entity_info.get("id"), step_info.get("id"))
-            tasks = self.st.task.select(filters=task_filters, fields=["name", "step.name", "status.color", "status.name"])
+            tasks = self.st.task.select(filters=task_filters, fields=["code", "step.name", "status.color", "status.name"])
         else:
             task_filters = "item_id=%s" % entity_info.get("id")
-            tasks = self.st.task.select(filters=task_filters, fields=["name", "step.name", "status.color", "status.name"])
+            tasks = self.st.task.select(filters=task_filters, fields=["code", "step.name", "status.color", "status.name"])
         return tasks
 
     def get_step(self, entity_type, asset_type_or_sequence, asset_or_shot):
@@ -135,7 +135,7 @@ class St(object):
         step_id = step_info.get("id")
         entity_info = self.get_entity_info(entity_type, asset_type_or_sequence, asset_or_shot)
         entity_id = entity_info.get("id")
-        task_filters = "item_id=%s and step_id=%s and name=%s" % (entity_id, step_id, task_name)
+        task_filters = "item_id=%s and step_id=%s and code=%s" % (entity_id, step_id, task_name)
         task_info = self.st.task.find(filters=task_filters, fields=["json", "status.color", "status.name"])
         return task_info
 
@@ -159,7 +159,7 @@ class St(object):
             task_filters = "assignee=%s and project_id=%s and status_id != %s" % (user_id, self.project_id, finished_status_id)
         else:
             task_filters = "assignee=%s and project_id=%s" % (user_id, self.project_id)
-        fields = ["item", "step.name", "status.name", "priority", "name", "due_date", "status.color", "sub_date"]
+        fields = ["item", "step.name", "status.name", "priority", "code", "due_date", "status.color", "sub_date"]
         my_tasks = self.st.task.select(filters=task_filters, fields=fields)
         return my_tasks
 
@@ -198,8 +198,8 @@ class St(object):
         return asset_info.get("category").get("name")
 
     def get_sequence_by_shot_id(self, shot_id):
-        shot_info = self.st.shot.find("id=%s" % shot_id, ["sequence.name"])
-        return shot_info.get("sequence").get("name")
+        shot_info = self.st.shot.find("id=%s" % shot_id, ["sequence.code"])
+        return shot_info.get("sequence").get("code")
 
     @staticmethod
     def get_task_entity_type(task):
@@ -210,7 +210,7 @@ class St(object):
         return task_entity_type
 
     def get_shot_task_frame_range(self, shot_name):
-        shot = self.st.shot.find("name=%s" % shot_name, ["frame_range"])
+        shot = self.st.shot.find("code=%s" % shot_name, ["frame_range"])
         frame_range = shot["frame_range"]
         return frame_range
 
@@ -236,8 +236,10 @@ class St(object):
 
 if __name__ == "__main__":
     st = St("SnowKidTest")
+    # print st.st.project.select(fields=["code"])
+    print st.st.user.select(fields=["name"])
     # print st.st.sequence.select("project_id=%s" % st.project_id, ["name"])
-    print st.get_shot_task_frame_range("s996_c037c")
+    # print st.get_shot_task_frame_range("s996_c037c")
     # st.update_task(task, current_version=10)
     # st.st.task.update(615, {"json": {"work_file_path": "W:/SnowKidTest/workarea/assets/Prop/TdTest/Hair/Hair/_workarea/maya/SnowKidTest_TdTest_Hair_Hair_v005.ma"}})
     # print st.get_current_task("Asset", "Prop", "TdTest", "MidMdl", "MidMdl")

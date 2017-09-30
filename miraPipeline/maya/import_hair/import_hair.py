@@ -57,7 +57,7 @@ class HairUI(QDialog):
 
     def set_asset_name(self):
         assets = self.__db.get_all_assets(self.asset_type)
-        asset_names = [asset.get("name") for asset in assets]
+        asset_names = [asset.get("code") for asset in assets]
         completer = QCompleter(asset_names)
         completer.setCaseSensitivity(Qt.CaseInsensitive)
         completer.setCompletionMode(QCompleter.UnfilteredPopupCompletion)
