@@ -115,3 +115,24 @@ def add_mesh_to_ad(context):
     assemb = Assembly.Assembly()
     assemb.create_representation(ad_node_name, "Scene", mesh_name, mesh_name, context.publish_path)
     save_file.save_file()
+
+
+def export_material(context):
+    from miraLibs.mayaLibs import get_selected_group_sg, export_selected
+    sg_nodes = get_selected_group_sg.get_selected_group_sg()
+    init_sg_nodes = ["initialParticleSE", "initialShadingGroup"]
+    for sg_node in init_sg_nodes:
+        if sg_node in sg_nodes:
+            sg_nodes.remove(sg_node)
+    if not sg_nodes:
+        logger.info("No sg nodes found")
+        return
+    mc.select(sg_nodes, r=1, ne=1)
+    shd_path = context.shd_path
+    export_selected.export_selected(shd_path)
+
+
+def export_connection(context):
+    from miraLibs.pipeLibs.pipeMaya.shd import export_shd_json_data
+    connection_path = context.connection_path
+    export_shd_json_data.export_shd_json_data(connection_path)

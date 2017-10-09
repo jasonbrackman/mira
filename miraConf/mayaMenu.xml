@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu name="[MIRA]">
     <!--model tools-->
-    <submenu name="model" type="submenu">
+    <submenu name="Model" type="submenu">
         <command cmd="import miraScripts.mayaTools.model_tool.uv_mover.UVMoverMainUI as uv;reload(uv);uv.main()"
                  mode="python" name="移动UV【move UV】" type="command"/>
         <command cmd="miraScripts/mayaTools/model_tool/UVSDTransfer/UVSDTransfer.mel"
@@ -13,12 +13,12 @@
     </submenu>
 
     <!--shading tools-->
-    <submenu name="shading" type="submenu">
+    <submenu name="Shading" type="submenu">
         <command cmd="import miraPipeline.maya.templates_manage as tm;reload(tm);al=tm.AssetLight();al.import_char_light()"
                  mode="python" name="导入角色灯光【import character light】" type="command"/>
     </submenu>
     <!--rig tools-->
-    <submenu name="rig" type="submenu">
+    <submenu name="Rigging" type="submenu">
         <command cmd="import SoftClusterEX;SoftClusterEX.launch()"
                  mode="python" name="SoftClusterEX" type="command"/>
         <command cmd="from miraScripts.mayaTools.rig_tool import auto_publish;reload(auto_publish);auto_publish.main()"
@@ -32,12 +32,12 @@
                  mode="python" name="Set Project" type="command"/>
     </submenu>
     <!--sceneset tools-->
-    <submenu name="sceneset" type="submenu">
+    <submenu name="Set" type="submenu">
         <command cmd="from miraScripts.pipeTools.plantTree import plant_tree;reload(plant_tree);plant_tree.main()"
                  mode="python" name="刷代理工具【proxy brush】" type="command"/>
     </submenu>
     <!--anim tools-->
-    <submenu name="anim" type="submenu">
+    <submenu name="Anim" type="submenu">
         <command cmd="from miraScripts.mayaTools.animation_tool import run_animation_library;run_animation_library.main()"
                  mode="python" name="动作库【Animation library】" type="command"/>
         <command cmd="from miraScripts.mayaTools.animation_tool import find_edge;reload(find_edge);find_edge.find_edge()"
@@ -53,12 +53,12 @@
                  mode="python" name="导入毛发【Import Hair】" type="command"/>
     </submenu>
     <!--vfx tools-->
-    <submenu name="vfx" type="submenu">
+    <submenu name="Vfx" type="submenu">
         <command cmd="from miraPipeline.maya.sim_reference_in import sim_reference_in;reload(sim_reference_in);sim_reference_in.main()"
                  mode="python" name="参考动画缓存【reference in anim cache】" type="command"/>
     </submenu>
     <!--lighting tools-->
-    <submenu name="lighting" type="submenu">
+    <submenu name="Lighting" type="submenu">
         <command cmd="import miraScripts.mayaTools.lighting_tool.OF.lighting_UI.main_UI as mu; reload(mu); mu.run()"
                  mode="python" name="lightingTool(arnold)" type="command"/>
         <command cmd="import miraScripts.mayaTools.lighting_tool.foreground_render.ForegroundRender as fr; reload(fr); fr.main()"
@@ -66,7 +66,7 @@
     </submenu>
     <submenu name= "----------" type="separator"/>
     <!--public tools-->
-    <submenu name="public" type="submenu">
+    <submenu name="Public" type="submenu">
         <command cmd="import miraPipeline.maya.maya_save_timer.ResetUI as UI; reload(UI);dlg=UI.ResetUI();dlg.show()"
                  mode="python" name="设置保存提醒时间【SetSaveTimer】" type="command"/>
         <!--<command cmd="from miraPipeline.maya.ass_display_mode import ass_display_mode;reload(ass_display_mode);ass_display_mode.main()"-->
@@ -75,6 +75,8 @@
                  <!--mode="python" name="更新reference【refresh reference】" type="command"/>-->
         <!--<command cmd="import miraPipeline.maya.scene_break_down.ResetUI as UI; reload(UI);dlg=UI.ResetUI();dlg.show()"-->
                  <!--mode="python" name="设置版本更新时间【ReferenceUpdateTimer】" type="command"/>-->
+        <command cmd="from miraLibs.pipeLibs.pipeMaya.shd import assign_shader;reload(assign_shader);assign_shader.main()"
+                 mode="python" name="赋材质【Assign Shader】" type="command"/>
         <command cmd="from miraLibs.pipeLibs.pipeMaya import hud;reload(hud);hu=hud.get_hud_object();hu.show()"
                  mode="python" name="显示HUD【Show hud】" type="command"/>
         <command cmd="from miraLibs.pipeLibs.pipeMaya import hud;reload(hud);hu=hud.get_hud_object();hu.clear()"
