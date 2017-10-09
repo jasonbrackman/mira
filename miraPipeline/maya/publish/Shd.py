@@ -46,6 +46,8 @@ def main(file_name, local):
     # get paths
     context = pipeFile.PathDetails.parse_path(file_name)
     publish_path = context.publish_path
+    publish.copy_image_and_video(context)
+    logger.info("copy image and video done.")
     # import all reference
     publish.reference_opt()
     logger.info("Import all reference.")
@@ -70,7 +72,13 @@ def main(file_name, local):
     # export _MODEL to publish path
     delete_layer.delete_layer()
     export_selected.export_selected(publish_path)
-    logger.info("Save to %s" % publish_path)
+    logger.info("Export to %s" % publish_path)
+    # export material
+    publish.export_material(context)
+    logger.info("Export material done.")
+    # export connection
+    publish.export_connection(context)
+    logger.info("Export connection done.")
     # add to AD
     publish.add_mesh_to_ad(context)
     logger.info("Add to AD done.")
