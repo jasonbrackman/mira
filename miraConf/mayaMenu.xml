@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu name="[MIRA]">
+<menu name="L²-Studio">
     <!--model tools-->
     <submenu name="Model" type="submenu">
         <command cmd="import miraScripts.mayaTools.model_tool.uv_mover.UVMoverMainUI as uv;reload(uv);uv.main()"

@@ -98,19 +98,21 @@ class TaskInit(TaskUI):
         self.publish_stack.set_dir(publish_dir)
 
     def copy_to_local(self):
-        file_paths = self.work_stack.get_selected()
+        file_paths = self.work_stack.list_widget.get_selected()
         if not file_paths:
             return
         file_path = file_paths[0]
         if not os.path.isfile(file_path):
             return
         try:
-            context = pipeFile.PathDetails.parse_path(file_path)
+            temp_context = pipeFile.PathDetails.parse_path(file_path)
+            next_version_file = temp_context.next_version_file
+            context = pipeFile.PathDetails.parse_path(next_version_file)
             local_path = context.local_work_path
             copy.copy(file_path, local_path)
             work_dir = os.path.dirname(os.path.dirname(local_path))
             work_engine_dir = join_path.join_path2(work_dir, self.__engine)
-            self.local_file_widget.set_dir(work_engine_dir)
+            self.local_stack.set_dir(work_engine_dir)
             self.update_task_status(file_path)
             self.file_widget.setCurrentIndex(0)
         except RuntimeError as e:

@@ -13,16 +13,16 @@ def main(file_name, local):
     project = context.project
     sequence = context.sequence
     shot = context.shot
-    task = "AnimLay" if context.task == "Anim" else context.task
-    lay_publish_file = pipeFile.get_task_publish_file(project, "Shot", sequence, shot, "AnimLay", task)
-    if not os.path.isfile(lay_publish_file):
-        logger.warning("%s is not an exist file" % lay_publish_file)
+    task = "Anim" if context.task == "Sim" else context.task
+    anim_publish_file = pipeFile.get_task_publish_file(project, "Shot", sequence, shot, "Anim", task)
+    if not os.path.isfile(anim_publish_file):
+        logger.warning("%s is not an exist file" % anim_publish_file)
         if local:
             return
         else:
             quit_maya.quit_maya()
-    copy.copy(lay_publish_file, file_name)
-    logger.info("copy %s to %s" % (lay_publish_file, file_name))
+    copy.copy(anim_publish_file, file_name)
+    logger.info("copy %s to %s" % (anim_publish_file, file_name))
     if local:
         open_file.open_file(file_name)
     else:

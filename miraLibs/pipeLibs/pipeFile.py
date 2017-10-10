@@ -74,7 +74,7 @@ class PathDetails(object):
                 x.__is_local_file = True
                 x.version, x.edition = x.version.split("_e")
                 x.edition_format_spec = len(x.edition)
-                x.version_format_spec = len(x.version)
+            x.version_format_spec = len(x.version)
         else:
             x.version = ""
         if x.entity_type == "Asset":
