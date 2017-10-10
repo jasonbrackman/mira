@@ -48,6 +48,11 @@ Set:
   engine: maya
   up_step: null
   down_step: null
+MainLgt:
+  entity: Shot
+  engine: maya
+  up_step: null
+  down_step: null
 AnimLay:
   entity: Shot
   engine: maya
