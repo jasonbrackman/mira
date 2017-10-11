@@ -3,11 +3,11 @@ check_display_wireframe:
   order: 0
   ignorable: False
   description: "以线框显示保存文件"
-check_group_something_selected:
-  name: "Something Selected | 选中模型大组"
+check_group_structure:
+  name: "Structure | 层级结构"
   order: 10
   ignorable: False
-  description: "选中模型大组"
+  description: "大纲里只能有一个大组存在"
 check_mdl_keyframe:
   name: "keyframe | 不允许K帧"
   order: 15
@@ -38,8 +38,13 @@ check_render_layer:
   order: 40
   ignorable: False
   description: "检查是否有多余的渲染层"
+check_duplicate_names:
+  name: "Duplicate names | 同名物体"
+  order: 50
+  ignorable: False
+  description: "检查是否有同名物体存在"
 check_save_file:
   name: "Save file | 保存文件"
-  order: 45
+  order: 60
   ignorable: True
   description: "保存检查后的文件"

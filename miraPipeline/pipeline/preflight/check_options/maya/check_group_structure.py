@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 import maya.cmds as mc
+from miraLibs.pipeLibs.pipeMaya import get_model_name
 from BaseCheck import BaseCheck
-from miraLibs.pipeLibs import pipeFile
 
 
 class Check(BaseCheck):
     def __init__(self):
         super(Check, self).__init__()
-        context = pipeFile.PathDetails.parse_path()
-        self.model_name = "%s_env" % context.sequence
+        self.model_name = get_model_name.get_model_name("group")
 
     def run(self):
         if not mc.objExists(self.model_name):
