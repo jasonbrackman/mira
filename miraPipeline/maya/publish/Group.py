@@ -3,6 +3,7 @@ import logging
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import open_file, quit_maya
 from miraLibs.pipeLibs.pipeMaya import publish
+from miraLibs.pyLibs import copy
 
 
 def main(file_name, local):
@@ -14,9 +15,9 @@ def main(file_name, local):
     # copy image and video
     publish.copy_image_and_video(context)
     logger.info("copy image and video done.")
-    # export _MODEL group to publish path
-    publish.export_need_to_publish(context, typ="group")
-    logger.info("Export _GROUP group to publish done.")
+    # copy to publish path
+    copy.copy(file_name, context.publish_path)
+    logger.info("Copy to publish path.")
     # generate AD file
     publish.create_ad(context)
     logger.info("Create AD done.")
