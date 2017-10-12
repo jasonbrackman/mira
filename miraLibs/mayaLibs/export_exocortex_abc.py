@@ -3,7 +3,7 @@ import os
 import maya.cmds as mc
 
 
-def export_exocortex_abc(filename, start, end, objects, uvs="false", facesets="false", purepointcache="false", ogawa="true"):
+def export_exocortex_abc(filename, start, end, objects, uvs=0, facesets=0, purepointcache=1, ogawa=1):
     """
     :param filename: abc path
     :param start: start frame

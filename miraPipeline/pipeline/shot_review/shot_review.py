@@ -6,7 +6,7 @@ from Qt.QtCore import *
 from Qt.QtGui import *
 from miraLibs.pipeLibs import pipeMira, pipeFile
 reload(pipeFile)
-from miraLibs.sgLibs import Sg
+from miraLibs.stLibs import St
 
 
 class ListWidget(QListWidget):
@@ -86,7 +86,7 @@ class ShotReview(QDialog):
         self.setWindowFlags(Qt.Window)
         self.__projects = pipeMira.get_projects()
         self.current_project = pipeMira.get_current_project()
-        self.__sg = Sg.Sg(self.current_project)
+        self.__sg = St.St(self.current_project)
         self.__shot_step = pipeMira.get_shot_step()
         self.play_list = list()
 
@@ -161,7 +161,7 @@ class ShotReview(QDialog):
 
     def change_project(self, index):
         self.current_project = self.__projects[index]
-        self.__sg = Sg.Sg(self.current_project)
+        self.__sg = St.St(self.current_project)
         self.init_sequence()
         self.shot_group.list_widget.clear()
         self.shot_group.check_box.setChecked(False)
