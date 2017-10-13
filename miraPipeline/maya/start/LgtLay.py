@@ -16,6 +16,7 @@ def main(file_name, local):
     save_as.save_as(file_name)
     # create Light group
     import_lights(context)
+    logger.info("Import light done.")
     # AR set
     rebuild_scene()
     logger.info("Rebuild scene done.")
@@ -34,11 +35,12 @@ def main(file_name, local):
     # fix frame range
     fix_frame_range.fix_frame_range(context)
     logger.info("Fix frame range done.")
-    logger.info("%s publish successful!" % file_name)
+
     # set resolution
     resolution = pipeMira.get_resolution(context.project)
     set_image_size.set_image_size(*resolution)
     save_as.save_as(file_name)
+    logger.info("%s publish successful!" % file_name)
     if not local:
         quit_maya.quit_maya()
 

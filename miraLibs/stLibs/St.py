@@ -237,7 +237,9 @@ class St(object):
 if __name__ == "__main__":
     st = St("SnowKidTest")
     # print st.st.project.select(fields=["code"])
-    print st.st.user.select(fields=["name"])
+    # print st.st.user.relations
+    print st.st.user.select(fields=st.st.user.relations)
+
     # print st.st.sequence.select("project_id=%s" % st.project_id, ["name"])
     # print st.get_shot_task_frame_range("s996_c037c")
     # st.update_task(task, current_version=10)

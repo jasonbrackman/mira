@@ -8,8 +8,12 @@ from miraLibs.mayaLibs import Assembly, create_group
 
 def get_conf_data():
     context = pipeFile.PathDetails.parse_path()
-    description_path = pipeFile.get_task_file(context.project, context.sequence, context.shot,
-                                              "AnimLay", "AnimLay", "maya_shot_description", "")
+    if context.step == "LgtLay":
+        description_path = pipeFile.get_task_file(context.project, context.sequence, context.shot,
+                                                  "AnimLay", "AnimLay", "maya_shot_description", "")
+    elif context.step == "Lgt":
+        description_path = pipeFile.get_task_file(context.project, context.sequence, context.shot,
+                                                  "Anim", "Anim", "maya_shot_description", "")
     cp = conf_parser.ConfParser(description_path)
     conf_data = cp.parse().get()
     return conf_data

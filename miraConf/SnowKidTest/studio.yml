@@ -59,7 +59,7 @@ maya_shot_video: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{tas
 maya_shot_definition: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_definition/{engine}/{project}_{sequence}_{shot}_{step}_{task}.ma"
 maya_shot_description: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_description/{engine}/{project}_{sequence}_{shot}_{step}_{task}.yml"
 maya_shot_cache:  "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_cache"
-maya_shot_assetInfo: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_publish/{engine}/{project}_{sequence}_{shot}_{step}_{task}.json"
+maya_shot_assetInfo: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_assetInfo/{engine}/{project}_{sequence}_{shot}_{step}_{task}.json"
 maya_shot_light: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_light/{engine}/{project}_{sequence}_{shot}_{step}_{task}.ma"
 # --render
 shot_render_work: "@render_root_dir/{project}/render/{sequence}/{shot}/{step}/{task}/_workarea"
