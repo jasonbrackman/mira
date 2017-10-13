@@ -27,6 +27,8 @@ def export_rs_normal_map_textures(tex_dir, change_file_texture_name):
         if not texture:
             continue
         texture = texture.replace("\\", "/")
+        if not os.path.splitdrive(texture)[0]:
+            texture = "%s%s" % (mc.workspace(q=1, rootDirectory=1, fullName=1), texture)
         real_path = get_texture_real_path.get_texture_real_path(texture)
         if not real_path:
             continue
@@ -50,6 +52,8 @@ def export_file_node_textures(tex_dir, change_file_texture_name):
         if not texture:
             continue
         texture = texture.replace("\\", "/")
+        if not os.path.splitdrive(texture)[0]:
+            texture = "%s%s" % (mc.workspace(q=1, rootDirectory=1, fullName=1), texture)
         real_path = get_texture_real_path.get_texture_real_path(texture)
         if not real_path:
             continue
