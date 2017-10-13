@@ -7,7 +7,7 @@ MidMdl:
   entity: Asset
   engine: maya
   up_step: null
-  down_step: ["MidRig"]
+  down_step: ["MidRig", "HighMdl"]
 HighMdl:
   entity: Asset
   engine: maya
@@ -51,27 +51,27 @@ Set:
 MainLgt:
   entity: Shot
   engine: maya
-  up_step: null
+  up_step: ["Set"]
   down_step: null
 AnimLay:
   entity: Shot
   engine: maya
-  up_step: null
-  down_step: null
+  up_step: ["Set"]
+  down_step: ["Anim", "VfxLay"]
 LgtLay:
   entity: Shot
   engine: maya
-  up_step: null
+  up_step: ["AnimLay"]
   down_step: null
 VfxLay:
   entity: Shot
   engine: maya
-  up_step: null
+  up_step: ["AnimLay"]
   down_step: null
 CompLay:
   entity: Shot
   engine: nuke
-  up_step: null
+  up_step: ["LgtLay"]
   down_step: null
 Anim:
   entity: Shot

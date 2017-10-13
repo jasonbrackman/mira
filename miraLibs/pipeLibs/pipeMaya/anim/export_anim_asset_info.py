@@ -11,7 +11,8 @@ def export_anim_asset_info(path):
     char_asset_list = get_asset_type_list("Char")
     prop_asset_list = get_asset_type_list("Prop")
     asset_info_list = char_asset_list + prop_asset_list
-    json_operation.set_json_data(path, asset_info_list)
+    if asset_info_list:
+        json_operation.set_json_data(path, asset_info_list)
 
 
 def get_asset_type_list(group):

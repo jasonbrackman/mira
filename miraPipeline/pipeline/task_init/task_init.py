@@ -6,7 +6,7 @@ import miraCore
 import ui
 reload(ui)
 from ui import TaskUI
-from miraLibs.pipeLibs import pipeFile
+from miraLibs.pipeLibs import pipeFile, get_up_step_tasks
 from miraLibs.osLibs import get_engine
 from miraLibs.pipeLibs.pipeDb import task_from_db_path
 from miraLibs.pyLibs import join_path, copy
@@ -21,11 +21,6 @@ class TaskInit(TaskUI):
         self.__db = self.my_task_widget.db
         self.__logger = logging.getLogger("Task Init")
 
-    def show_task(self, item):
-        self.info_label.setText("<font color=#00b4ff size=4><b>%s - %s - %s - %s - %s</b></font>"
-                                % (item.entity_type, item.asset_type_sequence,
-                                   item.asset_name_shot, item.step, item.task))
-
     def set_signals(self):
         self.my_task_widget.task_view.pressed.connect(self.on_task_pressed)
         self.init_btn.clicked.connect(self.init_task)
@@ -33,12 +28,23 @@ class TaskInit(TaskUI):
 
     def on_task_pressed(self, index):
         self.selected = index.data()
-        self.show_task_info()
         self.set_dir()
+        self.show_up_step_task_status()
 
-    def show_task_info(self):
-        self.show_task(self.selected)
-    
+    def show_up_step_task_status(self):
+        self.up_step_table.clearContents()
+        self.up_step_table.setRowCount(0)
+        up_step_tasks = get_up_step_tasks.get_up_step_tasks(self.selected.project, self.selected.entity_type,
+                                                            self.selected.asset_type_sequence,
+                                                            self.selected.asset_name_shot, self.selected.step)
+        if up_step_tasks:
+            for task_info in up_step_tasks:
+                step = task_info.get("step").get("name")
+                task = task_info.get("code")
+                status = task_info.get("status").get("name")
+                status_color = task_info.get("status").get("color")
+                self.up_step_table.append_row(step, task, status, status_color)
+
     def init_task(self):
         work_file = pipeFile.get_task_work_file(self.selected.project, self.selected.entity_type,
                                                 self.selected.asset_type_sequence, self.selected.asset_name_shot,

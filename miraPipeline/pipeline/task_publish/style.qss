@@ -191,7 +191,7 @@ QSplitter::handle::vertical
 
 QHeaderView
 {
-    color: #DDDDDD;
+    color: #FF0000;
 }
 
 QHeaderView::section

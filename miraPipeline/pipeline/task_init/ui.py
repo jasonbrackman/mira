@@ -114,6 +114,37 @@ class StackedWidget(QStackedWidget):
             self.setCurrentIndex(0)
 
 
+class TableWidget(QTableWidget):
+    def __init__(self, parent=None):
+        super(TableWidget, self).__init__(parent)
+        self.setColumnCount(3)
+        self.setRowCount(0)
+        self.setFocusPolicy(Qt.NoFocus)
+        self.verticalHeader().setVisible(False)
+        self.setHorizontalHeaderLabels(["Step", "Task", "Status"])
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setSelectionMode(QAbstractItemView.NoSelection)
+        self.horizontalHeader().setStretchLastSection(True)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+    def append_row(self, step, task, status, status_color):
+        row_count = self.rowCount()
+        self.setRowCount(row_count + 1)
+        step_item = QTableWidgetItem(step)
+        step_item.setTextAlignment(Qt.AlignCenter)
+        task_item = QTableWidgetItem(task)
+        task_item.setTextAlignment(Qt.AlignCenter)
+        status_item = QTableWidgetItem(status)
+        font = QFont()
+        font.setWeight(QFont.Bold)
+        status_item.setFont(font)
+        status_item.setTextAlignment(Qt.AlignCenter)
+        status_item.setForeground(QColor(status_color))
+        self.setItem(row_count, 0, step_item)
+        self.setItem(row_count, 1, task_item)
+        self.setItem(row_count, 2, status_item)
+
+
 class TaskUI(QDialog):
     def __init__(self, parent=None):
         super(TaskUI, self).__init__(parent)
@@ -130,18 +161,8 @@ class TaskUI(QDialog):
         right_widget = QWidget()
         right_layout = QVBoxLayout(right_widget)
 
-        task_group = QGroupBox()
-        current_task_layout = QHBoxLayout(task_group)
-        task_label = QLabel()
-        task_label.setText("<font color=#00b4ff size=5>Task:</font>")
-        task_label.setMinimumHeight(50)
-        task_label.setFixedWidth(50)
-        self.info_label = QLabel()
-        self.info_label.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.info_label.setMinimumHeight(50)
-
-        current_task_layout.addWidget(task_label)
-        current_task_layout.addWidget(self.info_label)
+        self.up_step_table = TableWidget()
+        self.up_step_table.setMaximumHeight(85)
 
         init_layout = QHBoxLayout()
         init_layout.setContentsMargins(0, 0, 0, 0)
@@ -159,7 +180,7 @@ class TaskUI(QDialog):
         self.file_widget.addTab(self.work_stack, "Work")
         self.file_widget.addTab(self.publish_stack, "Publish")
 
-        right_layout.addWidget(task_group)
+        right_layout.addWidget(self.up_step_table)
         right_layout.addLayout(init_layout)
         right_layout.addWidget(self.file_widget)
 

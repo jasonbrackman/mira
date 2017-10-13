@@ -7,10 +7,45 @@ from miraLibs.pipeLibs.get_task_name import get_task_name
 from miraFramework.task_common_form import CommonForm
 from miraFramework.message_box import MessageWidget
 from miraLibs.pyLibs import Path, join_path
-from miraLibs.pipeLibs import pipeFile
+from miraLibs.pipeLibs import pipeFile, get_up_step_tasks
 from miraLibs.deadlineLibs import submit
 from miraLibs.qtLibs import render_ui
 import getpass
+
+
+class TableWidget(QTableWidget):
+    def __init__(self, parent=None):
+        super(TableWidget, self).__init__(parent)
+        self.setColumnCount(3)
+        self.setRowCount(0)
+        self.setFocusPolicy(Qt.NoFocus)
+        self.horizontalHeader().setVisible(False)
+        self.verticalHeader().setVisible(False)
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setSelectionMode(QAbstractItemView.NoSelection)
+        self.horizontalHeader().setStretchLastSection(True)
+        self.horizontalHeader().setClickable(False)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setColumnWidth(0, 220)
+        self.setColumnWidth(1, 220)
+        self.setColumnWidth(2, 290)
+
+    def append_row(self, step, task, status, status_color):
+        row_count = self.rowCount()
+        self.setRowCount(row_count + 1)
+        step_item = QTableWidgetItem(step)
+        step_item.setTextAlignment(Qt.AlignCenter)
+        task_item = QTableWidgetItem(task)
+        task_item.setTextAlignment(Qt.AlignCenter)
+        status_item = QTableWidgetItem(status)
+        font = QFont()
+        font.setWeight(QFont.Bold)
+        status_item.setFont(font)
+        status_item.setTextAlignment(Qt.AlignCenter)
+        status_item.setForeground(QColor(status_color))
+        self.setItem(row_count, 0, step_item)
+        self.setItem(row_count, 1, task_item)
+        self.setItem(row_count, 2, status_item)
 
 
 class TaskPublish(QDialog):
@@ -27,6 +62,15 @@ class TaskPublish(QDialog):
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         self.common_widget = CommonForm()
+
+        up_step_group = QGroupBox(u"up step tasks")
+        up_step_group.setMaximumHeight(120)
+        layout = QHBoxLayout(up_step_group)
+        layout.setAlignment(Qt.AlignTop)
+        self.up_step_table = TableWidget(self)
+        self.up_step_table.setMaximumHeight(120)
+        layout.addWidget(self.up_step_table)
+
         bottom_layout = QHBoxLayout()
         self.path_le = QLineEdit()
         self.path_btn = QToolButton()
@@ -50,6 +94,7 @@ class TaskPublish(QDialog):
         btn_layout.addWidget(self.publish_btn)
 
         main_layout.addWidget(self.common_widget)
+        main_layout.addWidget(up_step_group)
         main_layout.addLayout(bottom_layout)
         main_layout.addLayout(btn_layout)
 
@@ -59,7 +104,7 @@ class TaskPublish(QDialog):
         self.setStyleSheet(open(qss_path, 'r').read())
 
     def set_signals(self):
-        self.common_widget.fourth_widget.list_view.clicked.connect(self.show_path)
+        self.common_widget.fourth_widget.list_view.clicked.connect(self.on_task_clicked)
         self.path_btn.clicked.connect(self.open_dir)
         self.path_le.textChanged.connect(self.on_path_changed)
         self.publish_btn.clicked.connect(self.do_publish)
@@ -71,6 +116,20 @@ class TaskPublish(QDialog):
     @property
     def task_info(self):
         return self.common_widget.task_info
+
+    def show_up_step_task_status(self):
+        self.up_step_table.clearContents()
+        self.up_step_table.setRowCount(0)
+        up_step_tasks = get_up_step_tasks.get_up_step_tasks(self.common_widget.project, self.common_widget.entity_type,
+                                                            self.common_widget.asset_type_or_sequence,
+                                                            self.common_widget.asset_or_shot, self.common_widget.step)
+        if up_step_tasks:
+            for task_info in up_step_tasks:
+                step = task_info.get("step").get("name")
+                task = task_info.get("code")
+                status = task_info.get("status").get("name")
+                status_color = task_info.get("status").get("color")
+                self.up_step_table.append_row(step, task, status, status_color)
 
     def show_path(self):
         task_info = self.task_info
@@ -89,6 +148,10 @@ class TaskPublish(QDialog):
                 self.path_le.setText(json_data.get("work_file_path"))
             else:
                 self.path_le.setText("")
+
+    def on_task_clicked(self):
+        self.show_path()
+        self.show_up_step_task_status()
 
     def on_path_changed(self, work_file_path):
         if os.path.isfile(work_file_path):
