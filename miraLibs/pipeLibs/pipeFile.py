@@ -278,7 +278,7 @@ def get_task_work_file(project, entity_type, asset_type_sequence, asset_name_sho
     if entity_type == "Asset":
         format_str = "%s_asset_local" % engine if local else "%s_asset_work" % engine
     else:
-        format_str = "%s_shot_local" % engine if local else "%s_asset_work" % engine
+        format_str = "%s_shot_local" % engine if local else "%s_shot_work" % engine
     work_file = get_task_file(project, asset_type_sequence, asset_name_shot, step, task, format_str, version, engine)
     return work_file
 
