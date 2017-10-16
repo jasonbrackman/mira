@@ -51,6 +51,8 @@
     <submenu name="Sim" type="submenu">
         <command cmd="from miraPipeline.maya.import_hair import import_hair;reload(import_hair);import_hair.main()"
                  mode="python" name="导入毛发【Import Hair】" type="command"/>
+        <command cmd="from miraPipeline.maya.replace_to_hair_rig import replace_to_hair_rig;reload(replace_to_hair_rig);replace_to_hair_rig.replace_to_hair_rig()"
+                 mode="python" name="切换为毛发绑定【Replace to HairRig】" type="command"/>
     </submenu>
     <!--vfx tools-->
     <submenu name="Vfx" type="submenu">
