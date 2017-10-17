@@ -36,7 +36,7 @@ def get_maya_win(module="PySide"):
 def get_maya_main_win_pos():
     main_window = get_maya_win()
     for i in main_window.children():
-        if i.objectName() == 'formLayout1':
+        if i.objectName() == 'workspacePanel1':
             view_pos = main_window.mapToGlobal(i.pos())
             return [view_pos.x(), view_pos.y()]
 
@@ -44,7 +44,7 @@ def get_maya_main_win_pos():
 def get_maya_main_win_size():
     main_window = get_maya_win()
     for i in main_window.children():
-        if i.objectName() == 'formLayout1':
+        if i.objectName() == 'workspacePanel1':
             view_size = i.size()
             return [view_size.width(), view_size.height()]
 

@@ -1,1 +1,16 @@
 company: "AiErPingFang"
+
+EXE:
+  python:
+    py27:
+      pythonbin: "C:/Python27/python.exe"
+      pythonstartupdir: null
+
+  maya:
+    2017:
+      render: "C:/Program Files/Autodesk/Maya2017/bin/render.exe"
+      mayabatch: "C:/Program Files/Autodesk/Maya2017/bin/mayabatch.exe"
+
+  deadline:
+    path: "C:/Program Files/Thinkbox/Deadline8/bin/deadlinecommand.exe"
+    default_pool: null
