@@ -90,7 +90,9 @@ def rebuild_asset(context):
                 except:
                     log.error("Can't attach %s." % cache_file)
             else:
-                log.warning("%s is not an exist file" % cache_file)
+                log.warning("Cache: %s is not an exist file" % cache_file)
+        else:
+            log.warning("Shd: %s is not an exist file")
 
 
 def reference_in_camera(context):
