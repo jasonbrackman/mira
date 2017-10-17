@@ -99,11 +99,17 @@ def get_current_project():
     return current_project
 
 
-# ******************************get asset type value****************************** #
+# ******************************get company value****************************** #
 def get_company():
     company_conf_path = join_path.join_path2(conf_dir, "company.yml")
     yml_data = yml.get_yaml_data(company_conf_path)
-    return yml_data["company"]
+    return yml_data.get("company")
+
+
+def get_executable():
+    company_conf_path = join_path.join_path2(conf_dir, "company.yml")
+    yml_data = yml.get_yaml_data(company_conf_path)
+    return yml_data.get("EXE")
 
 
 # ******************************get load plugins value****************************** #
