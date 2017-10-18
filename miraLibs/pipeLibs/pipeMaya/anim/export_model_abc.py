@@ -3,6 +3,8 @@ import os
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import get_namespace, export_exocortex_abc, get_frame_range
 from miraLibs.pipeLibs.pipeMaya.get_assets_under_type_group import get_assets_under_type_group
+from miraLibs.pyLibs.Temporary import Temporary
+from miraLibs.pyLibs import copy
 
 
 def export_single_abc(asset):
@@ -19,12 +21,12 @@ def export_single_abc(asset):
         export_exocortex_abc.export_exocortex_abc(abc_path, 950, end, objects)
     else:
         cache_dir, base_name = os.path.split(abc_path)
-        temp_dir = "%s/tmp" % cache_dir
-        if not os.path.isdir(temp_dir):
-            os.makedirs(temp_dir)
-        temp_path = "%s/%s" % (temp_dir, base_name)
-        export_exocortex_abc.export_exocortex_abc(temp_path, start, end, objects)
-        os.system('mklink /H "%s" "%s"' % (abc_path, temp_path))
+        with Temporary(dir_="D:/") as temp_dir:
+            temp_path = "%s/tmp/%s" % (temp_dir, base_name)
+            link_path = "%s/%s" % (temp_dir, base_name)
+            export_exocortex_abc.export_exocortex_abc(temp_path, 950, end, objects)
+            os.system('mklink /H "%s" "%s"' % (link_path, temp_path))
+            copy.copy(link_path, abc_path)
 
 
 def export_model_abc():
