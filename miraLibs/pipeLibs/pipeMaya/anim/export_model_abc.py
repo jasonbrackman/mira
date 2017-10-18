@@ -15,7 +15,16 @@ def export_single_abc(asset):
     meshes = mc.listRelatives(asset, ad=1, type="mesh")
     geo = [mc.listRelatives(mesh, p=1)[0] for mesh in meshes]
     objects = list(set(geo))
-    export_exocortex_abc.export_exocortex_abc(abc_path, 950, end, objects)
+    if os.path.isfile(abc_path):
+        export_exocortex_abc.export_exocortex_abc(abc_path, 950, end, objects)
+    else:
+        cache_dir, base_name = os.path.split(abc_path)
+        temp_dir = "%s/tmp" % cache_dir
+        if not os.path.isdir(temp_dir):
+            os.makedirs(temp_dir)
+        temp_path = "%s/%s" % (temp_dir, base_name)
+        export_exocortex_abc.export_exocortex_abc(temp_path, start, end, objects)
+        os.system('mklink /H "%s" "%s"' % (abc_path, temp_path))
 
 
 def export_model_abc():
