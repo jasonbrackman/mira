@@ -51,6 +51,19 @@ def export_cache(context):
     logger.info("Export Char cache done.")
 
 
+def do_export(start, end, path, geos):
+    if os.path.isfile(path):
+        export_abc.export_abc(start, end, path, geos)
+    else:
+        cache_dir, base_name = os.path.split(path)
+        temp_dir = "%s/tmp" % cache_dir
+        if not os.path.isdir(temp_dir):
+            os.makedirs(temp_dir)
+        temp_path = "%s/%s" % (temp_dir, base_name)
+        export_abc.export_abc(start, end, temp_path, geos)
+        os.system('mklink /H "%s" "%s"' % (path, temp_path))
+
+
 def export_camera_cache(context):
     valid_camera = get_valid_camera.get_valid_camera()
     if not mc.objExists(valid_camera):
@@ -58,7 +71,7 @@ def export_camera_cache(context):
     cache_dir = context.cache_dir
     start, end = get_frame_range.get_frame_range()
     camera_cache_path = "%s/camera.abc" % cache_dir
-    export_abc.export_abc(start, end, camera_cache_path, valid_camera)
+    do_export(start, end, camera_cache_path, valid_camera)
 
 
 def export_env_cache(context):
@@ -69,7 +82,7 @@ def export_env_cache(context):
     for child in children:
         if child.endswith("_MODEL") and not child.split(":")[-1].startswith("env_") and mc.getAttr("%s.visibility" % child):
             models.append(child)
-    export_abc.export_abc(1000, 1000, env_cache_path, models)
+    do_export(1000, 1000, env_cache_path, models)
 
 
 def export_other_cache(context, category):
@@ -93,7 +106,7 @@ def export_other_cache(context, category):
             for model in models:
                 namespace = get_namespace.get_namespace(model)
                 cache_path = "%s/%s.abc" % (cache_dir, namespace)
-                export_abc.export_abc(start, end, cache_path, model, False)
+                do_export(start, end, cache_path, model)
     elif context.step == "Anim":
         from miraLibs.pipeLibs.pipeMaya.anim import export_model_abc
         export_model_abc.export_model_abc()
