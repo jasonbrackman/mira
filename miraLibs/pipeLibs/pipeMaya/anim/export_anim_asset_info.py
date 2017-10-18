@@ -13,6 +13,8 @@ def export_anim_asset_info(path):
     asset_info_list = char_asset_list + prop_asset_list
     if asset_info_list:
         json_operation.set_json_data(path, asset_info_list)
+    else:
+        print "No asset found"
 
 
 def get_asset_type_list(group):

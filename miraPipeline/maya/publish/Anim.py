@@ -19,16 +19,16 @@ def main(file_name, local):
     # copy image and video
     publish.copy_image_and_video(context)
     logger.info("Copy image and video done.")
+    # export asset info
+    asset_info_path = context.asset_info_path
+    export_anim_asset_info.export_anim_asset_info(asset_info_path)
+    logger.info("Export asset info done.")
     # write out assembly edits
     rebuild_assembly.export_scene()
     logger.info("Export assembly edits done.")
     # export cache
     publish.export_cache(context)
     logger.info("Export cache done.")
-    # export asset info
-    asset_info_path = context.asset_info_path
-    export_anim_asset_info.export_anim_asset_info(asset_info_path)
-    logger.info("Export asset info done.")
     # save to publish path
     copy.copy(file_name, publish_path)
     logger.info("Copy to %s" % publish_path)
