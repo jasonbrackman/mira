@@ -32,20 +32,27 @@ class Temporary(object):
         return self.name
 
     def cleanup(self, _warn=False):
-        if self.name and not self._closed:
+        if os.path.isdir(self.name):
+            if self.name and not self._closed:
+                try:
+                    self._rmtree(self.name)
+                except (TypeError, AttributeError) as ex:
+                    # Issue #10188: Emit a warning on
+                    # if the directory could not be cleaned
+                    # up due to missing globals
+                    if "None" not in str(ex):
+                        logging.info("ERROR: {!r} while cleaning up {!r}".format(ex, self, ))
+                        raise
+                    return
+                self._closed = True
+                if _warn:
+                    logging.warning("Implicitly cleaning up {!r}".format(self))
+        elif os.path.isfile(self.name):
             try:
-                self._rmtree(self.name)
-            except (TypeError, AttributeError) as ex:
-                # Issue #10188: Emit a warning on
-                # if the directory could not be cleaned
-                # up due to missing globals
-                if "None" not in str(ex):
-                    logging.info("ERROR: {!r} while cleaning up {!r}".format(ex, self, ))
-                    raise
-                return
-            self._closed = True
-            if _warn:
-                logging.warning("Implicitly cleaning up {!r}".format(self))
+                os.remove(self.name)
+                self._closed = True
+            except:
+                logging.warning("Can't cleanup %s" % self.name)
 
     def __exit__(self, exc, value, tb):
         self.cleanup()

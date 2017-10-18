@@ -4,6 +4,8 @@ import logging
 import maya.cmds as mc
 from miraLibs.mayaLibs import new_file, Assembly, save_file, rename_scene, export_abc, get_frame_range, get_namespace
 from miraLibs.pipeLibs.pipeMaya import get_models, get_valid_camera
+from miraLibs.pyLibs.Temporary import Temporary
+from miraLibs.pyLibs import copy
 
 
 logger = logging.getLogger("miraLibs.pipeLibs.pipeMaya.shot_publish")
@@ -56,12 +58,12 @@ def do_export(start, end, path, geos):
         export_abc.export_abc(start, end, path, geos)
     else:
         cache_dir, base_name = os.path.split(path)
-        temp_dir = "%s/tmp" % cache_dir
-        if not os.path.isdir(temp_dir):
-            os.makedirs(temp_dir)
-        temp_path = "%s/%s" % (temp_dir, base_name)
-        export_abc.export_abc(start, end, temp_path, geos)
-        os.system('mklink /H "%s" "%s"' % (path, temp_path))
+        with Temporary(dir_="D:/") as temp_dir:
+            temp_path = "%s/tmp/%s" % (temp_dir, base_name)
+            link_path = "%s/%s" % (temp_dir, base_name)
+            export_abc.export_abc(start, end, temp_path, geos)
+            os.system('mklink /H "%s" "%s"' % (link_path, temp_path))
+            copy.copy(link_path, path)
 
 
 def export_camera_cache(context):
