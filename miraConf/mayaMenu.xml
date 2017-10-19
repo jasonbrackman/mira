@@ -65,6 +65,12 @@
                  mode="python" name="lightingTool(arnold)" type="command"/>
         <command cmd="import miraScripts.mayaTools.lighting_tool.foreground_render.ForegroundRender as fr; reload(fr); fr.main()"
                  mode="python" name="窗口渲染【foreground render】" type="command"/>
+        <command cmd="from miraLibs.pipeLibs.pipeMaya.lgt import render_dir;reload(render_dir);render_dir.set_render_dir()"
+                 mode="python" name="设置渲染路径【Set render images】" type="command"/>
+        <command cmd="from miraLibs.pipeLibs.pipeMaya.lgt import render_dir;reload(render_dir);render_dir.open_render_dir()"
+                 mode="python" name="打开渲染路径【Open render images】" type="command"/>
+        <command cmd="from miraLibs.deadlineLibs import submit_maya;reload(submit_maya);submit_maya.submit_maya()"
+                 mode="python" name="提交渲染【Submit deadline】" type="command"/>
     </submenu>
     <submenu name= "----------" type="separator"/>
     <!--public tools-->
