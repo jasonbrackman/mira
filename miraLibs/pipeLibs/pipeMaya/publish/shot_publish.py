@@ -62,8 +62,11 @@ def do_export(start, end, path, geos):
             temp_path = "%s/tmp/%s" % (temp_dir, base_name)
             link_path = "%s/%s" % (temp_dir, base_name)
             export_abc.export_abc(start, end, temp_path, geos)
-            os.system('mklink /H "%s" "%s"' % (link_path, temp_path))
-            copy.copy(link_path, path)
+            if os.path.isfile(temp_path) and not os.path.isfile(link_path):
+                os.system('mklink /H "%s" "%s"' % (link_path, temp_path))
+                copy.copy(link_path, path)
+            else:
+                logger.error("mklink faild")
 
 
 def export_camera_cache(context):

@@ -25,8 +25,11 @@ def export_single_abc(asset):
             temp_path = "%s/tmp/%s" % (temp_dir, base_name)
             link_path = "%s/%s" % (temp_dir, base_name)
             export_exocortex_abc.export_exocortex_abc(temp_path, 950, end, objects)
-            os.system('mklink /H "%s" "%s"' % (link_path, temp_path))
-            copy.copy(link_path, abc_path)
+            if os.path.isfile(temp_path) and not os.path.isfile(link_path):
+                os.system('mklink /H "%s" "%s"' % (link_path, temp_path))
+                copy.copy(link_path, abc_path)
+            else:
+                print "mklink faild."
 
 
 def export_model_abc():

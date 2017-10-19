@@ -241,6 +241,10 @@ class PathDetails(object):
     def light_path(self):
         return self.as_template("light")
 
+    @property
+    def render_dir(self):
+        return self.as_template("render")
+
 
 ########################################################################################################################
 # below is for get asset files
