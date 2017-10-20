@@ -1,14 +1,26 @@
 # -*- coding: utf-8 -*-
 import os
 import shutil
-from PySide2.QtWidgets import *
-from PySide2.QtCore import *
+from Qt.QtWidgets import *
+from Qt.QtCore import *
 import maya.cmds as mc
 import maya.mel as mel
 import maya.OpenMayaUI as mui
 
 
+def get_render_images_dir():
+    images_dir = mc.workspace(fileRuleEntry="images")
+    if images_dir == "images":
+        images_dir = mc.workspace(expandName="images")
+    return images_dir
+
+
 def get_maya_win():
+    """
+    get a QMainWindow Object of maya main window
+    :param module (optional): string "PySide"(default) or "PyQt4"
+    :return main_window: QWidget or QMainWindow object
+    """
     prt = mui.MQtUtil.mainWindow()
     import shiboken2 as shiboken
     main_window = shiboken.wrapInstance(long(prt), QWidget)
@@ -44,6 +56,9 @@ class RenderLayer(object):
 
 
 class Maya(object):
+    def __init__(self):
+        self.renderer = mc.getAttr("defaultRenderGlobals.ren")
+
     @staticmethod
     def render(layer, camera, frame):
         mc.RenderViewWindow()
@@ -90,26 +105,46 @@ class Maya(object):
         mc.setAttr("defaultRenderGlobals.extensionPadding", 4)
         mc.setAttr("defaultRenderGlobals.periodInExt", 1)
 
-    @staticmethod
-    def get_current_render_frame_path(current_frame):
-        fist_image = mc.renderSettings(fin=1, fp=1)[0]
-        fist_image_list = fist_image.split(".")
-        prefix = ".".join(fist_image_list[:-2])
-        frame = str(current_frame).zfill(4)
-        ext = fist_image_list[-1]
-        current_frame_path = ".".join([prefix, frame, ext])
+    def get_current_render_frame_path(self, current_frame):
+        if self.renderer == "vray":
+            image_dir = get_render_images_dir()
+            file_name_prefix = mc.getAttr("vraySettings.fnprx")
+            ext = mc.getAttr("vraySettings.imageFormatStr")
+            full_path = "%s/%s.%s" % (image_dir, file_name_prefix, ext)
+            current_layer = mc.editRenderLayerGlobals(q=1, crl=1)
+            version = mc.getAttr("defaultRenderGlobals.rv")
+            current_frame_path = full_path.replace("<Layer>", current_layer).replace("<Version>", version)
+        else:
+            first_image = mc.renderSettings(fin=1, fp=1)[0]
+            first_image_list = first_image.split(".")
+            prefix = ".".join(first_image_list[:-2])
+            frame = str(current_frame).zfill(4)
+            ext = first_image_list[-1]
+            current_frame_path = ".".join([prefix, frame, ext])
         return current_frame_path
 
-    @staticmethod
-    def copy_from_temp(frame_path):
+    def copy_from_temp(self, frame_path):
+        frame_path = frame_path.replace("\\", "/")
         frame_dir = os.path.dirname(frame_path)
         if not os.path.isdir(frame_dir):
             os.makedirs(frame_dir)
-        if os.path.isfile(frame_path):
-            os.remove(frame_path)
-        prefix, suffix = frame_path.split("images")
-        temp_path = "%simages/tmp%s" % (prefix, suffix)
-        shutil.copyfile(temp_path, frame_path)
+        images_dir = get_render_images_dir()
+        prefix, suffix = frame_path.split(images_dir)
+        temp_path = "%s/tmp%s" % (images_dir, suffix)
+        if os.path.isfile(temp_path):
+            if self.renderer == "vray":
+                prefix, ext = os.path.splitext(frame_path)
+                current_frame = str(int(mc.currentTime(q=1))).zfill(4)
+                final_path = "%s.%s%s" % (prefix, current_frame, ext)
+            else:
+                final_path = frame_path
+            if os.path.isfile(final_path):
+                os.remove(final_path)
+            shutil.copyfile(temp_path, final_path)
+            os.remove(temp_path)
+            return final_path
+        else:
+            print "%s is not an exist file" % temp_path
 
 
 class SetFrameWidget(QWidget):
@@ -353,6 +388,8 @@ class ForegroundRender(QDialog):
         render_item.model = index_and_value[1].text()
 
     def do_render(self):
+        if self.maya.renderer == "vray":
+            mc.setAttr("vraySettings.animType", 0)
         self.maya.set_render_frame_ext()
         row_count = self.data_model.rowCount()
         mc.progressWindow(title="Rendering...",
@@ -384,8 +421,8 @@ class ForegroundRender(QDialog):
                     mc.currentTime(frame)
                     current_frame_render_path = self.maya.get_current_render_frame_path(frame)
                     mel.eval('renderWindowRenderCamera render renderView ' + camera)
-                    self.maya.copy_from_temp(current_frame_render_path)
-                    print "render to %s" % current_frame_render_path
+                    final_path = self.maya.copy_from_temp(current_frame_render_path)
+                    print "render to %s" % final_path
                     progress_bar.setValue(frame_index+1)
         mc.progressWindow(endProgress=1)
         if self.shut_down_check.isChecked():
