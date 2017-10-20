@@ -17,8 +17,9 @@ def submit_maya():
     # until we get our GUI up and running with this style of command line submission.
     driver, suffix = os.path.splitdrive(pm.sceneName())
     filein = "R:%s" % suffix
-    copy.copy(pm.sceneName(), filein)
     mel.eval('setMayaSoftwareFrameExt(3,0);')
+    pm.saveFile(f=1)
+    copy.copy(pm.sceneName(), filein)
     # dets = pft.PathDetails.parse_path(pm.sceneName())
     # fileout = dets.getRenderFullPath().split('.####.')[0]
     # pm.setAttr('defaultRenderGlobals.imageFilePrefix', fileout)
