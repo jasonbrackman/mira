@@ -19,7 +19,7 @@ def main():
         return
     context = pipeFile.PathDetails.parse_path()
     step = context.step
-    pipeline_dir = miraCore.get_pipeline_dir()
+    pipeline_dir = miraCore.pipeline_dir
     publish_dir = os.path.join(pipeline_dir, "maya", "publish").replace("\\", "/")
     fn_, path, desc = imp.find_module(step, [publish_dir])
     mod = imp.load_module(step, fn_, path, desc)

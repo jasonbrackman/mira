@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from miraPipeline.maya.QC import qc
+from miraPipeline.pipeline.QC import qc
 reload(qc)
 
 

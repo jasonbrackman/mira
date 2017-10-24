@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
-import os
-import logging
 import imp
-from Qt.QtWidgets import *
+import logging
+import os
+
 from Qt.QtCore import *
 from Qt.QtGui import *
+from Qt.QtWidgets import *
+
 import task_get_ui
+
 reload(task_get_ui)
 import miraCore
 from miraLibs.dbLibs import db_api
@@ -462,7 +465,7 @@ class TaskGet(task_get_ui.TaskGetUI):
             self.do_init_task(node, local_file)
 
     def do_init_task(self, node, local_file):
-        pipeline_dir = miraCore.get_pipeline_dir()
+        pipeline_dir = miraCore.pipeline_dir
         start_dir = os.path.join(pipeline_dir, self.__engine, "start").replace("\\", "/")
         fn_, path, desc = imp.find_module(node.step, [start_dir])
         mod = imp.load_module(node.step, fn_, path, desc)

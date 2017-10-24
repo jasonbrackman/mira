@@ -57,7 +57,7 @@ class ProjectButton(QPushButton):
                            "QPushButton:hover{background: #222222;}")
 
     def set_icon(self):
-        icon_dir = miraCore.get_icons_dir()
+        icon_dir = miraCore.icons_dir
         icon_path = os.path.join(icon_dir, "project_icon", "%s.png" % self.project)
         if not os.path.isfile(icon_path):
             icon_path = os.path.join(icon_dir, "project_icon", "company.png")

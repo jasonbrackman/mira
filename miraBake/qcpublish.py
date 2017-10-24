@@ -98,7 +98,7 @@ def qcpublish_screen_shot(entity_type, image_path):
 
 
 def qcpublish(step):
-    script_dir = miraCore.get_pipeline_dir()
+    script_dir = miraCore.pipeline_dir
     publish_dir = join_path.join_path2(script_dir, "maya", "QCPublish")
     if publish_dir not in sys.path:
         sys.path.insert(0, publish_dir)

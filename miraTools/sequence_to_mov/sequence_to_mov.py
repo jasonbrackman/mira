@@ -14,7 +14,7 @@ NO_USE_FILE = ["Thumbs.db"]
 
 
 def get_ffmpeg_path():
-    mira_bin_dir = miraCore.get_bin_dir()
+    mira_bin_dir = miraCore.bin_dir
     ffmpeg_dir = join_path.join_path2(mira_bin_dir, "ffmpeg/bin")
     ffmpeg_path = join_path.join_path2(ffmpeg_dir, "ffmpeg.exe")
     return ffmpeg_path

@@ -122,7 +122,7 @@ class CommonWidget(QWidget):
         main_layout.addWidget(self.group_box)
         group_layout = QVBoxLayout()
 
-        icon_dir = miraCore.get_icons_dir()
+        icon_dir = miraCore.icons_dir
         icon_path = join_path.join_path2(icon_dir, "search.png")
         self.filter_le = Filter(icon_path)
 

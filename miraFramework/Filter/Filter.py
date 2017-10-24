@@ -13,7 +13,7 @@ class Filter(QLineEdit):
 
         self.icon_file = icon_file
         if not self.icon_file:
-            icon_dir = miraCore.get_icons_dir()
+            icon_dir = miraCore.icons_dir
             self.icon_file = join_path.join_path2(icon_dir, "search.png")
         self.button = QToolButton(self)
         self.button.setEnabled(False)

@@ -56,7 +56,7 @@ class ListModel(QAbstractListModel):
                     return version
         if role == Qt.DecorationRole:
             pix_map_path = self.__model_data[row].image_path
-            icon_dir = miraCore.get_icons_dir()
+            icon_dir = miraCore.icons_dir
             if not pix_map_path:
                 pix_map_path = join_path.join_path2(icon_dir, "unknown.png")
             pix_map = QPixmap(pix_map_path)

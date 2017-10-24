@@ -64,8 +64,10 @@ class TaskInit(TaskUI):
         self.set_dir()
 
     def do_init_task(self, step, local_file):
-        pipeline_dir = miraCore.get_pipeline_dir()
-        start_dir = os.path.join(pipeline_dir, self.__engine, "start").replace("\\", "/")
+        custom_dir = miraCore.custom_dir
+        start_dir = os.path.join(custom_dir, self.selected.project, "start").replace("\\", "/")
+        if not os.path.isdir(start_dir):
+            start_dir = os.path.join(custom_dir, "defaultProject", "start").replace("\\", "/")
         fn_, path, desc = imp.find_module(step, [start_dir])
         mod = imp.load_module(step, fn_, path, desc)
         mod.main(local_file, True)
@@ -92,16 +94,16 @@ class TaskInit(TaskUI):
                                                       self.selected.asset_type_sequence, self.selected.asset_name_shot,
                                                       self.selected.step, self.selected.task, "000",
                                                       engine=self.__engine)
-        local_dir = os.path.dirname(os.path.dirname(local_file))
-        work_dir = os.path.dirname(os.path.dirname(work_file))
-        publish_dir = os.path.dirname(os.path.dirname(publish_file))
-        if self.__engine != "python":
-            local_dir = join_path.join_path2(local_dir, self.__engine)
-            work_dir = join_path.join_path2(work_dir, self.__engine)
-            publish_dir = join_path.join_path2(publish_dir, self.__engine)
-        self.local_stack.set_dir(local_dir)
-        self.work_stack.set_dir(work_dir)
-        self.publish_stack.set_dir(publish_dir)
+        self.set_widget_dir(self.local_stack, local_file)
+        self.set_widget_dir(self.work_stack, work_file)
+        self.set_widget_dir(self.publish_stack, publish_file)
+
+    def set_widget_dir(self, stack_widget, file_path):
+        if file_path:
+            file_dir = os.path.dirname(os.path.dirname(file_path))
+            if self.__engine != "python":
+                file_dir = join_path.join_path2(file_dir, self.__engine)
+            stack_widget.set_dir(file_dir)
 
     def copy_to_local(self):
         file_paths = self.work_stack.list_widget.get_selected()
@@ -128,6 +130,11 @@ class TaskInit(TaskUI):
 def main():
     from miraLibs.qtLibs import render_ui
     render_ui.render(TaskInit)
+
+
+def show_in_nuke():
+    from miraLibs.qtLibs import render_ui
+    render_ui.normal_render(TaskInit)
 
 
 if __name__ == "__main__":

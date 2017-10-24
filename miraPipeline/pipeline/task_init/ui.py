@@ -88,7 +88,7 @@ class StackedWidget(QStackedWidget):
         self.addWidget(self.list_widget)
     
     def get_engine_icon_path(self):
-        icons_dir = miraCore.get_icons_dir()
+        icons_dir = miraCore.icons_dir
         engine_icon_path = "%s/%s/%s" % (icons_dir, "engine", "%s.png" % self.__engine)
         return engine_icon_path
         
@@ -96,11 +96,13 @@ class StackedWidget(QStackedWidget):
         self.list_widget.clear()
         icon_path = self.get_engine_icon_path()
         if self.__engine == "maya":
-            maya_mb_files = glob.glob("%s/*.mb" % (file_dir))
-            maya_ma_files = glob.glob("%s/*.ma" % (file_dir))
+            maya_mb_files = glob.glob("%s/*.mb" % file_dir)
+            maya_ma_files = glob.glob("%s/*.ma" % file_dir)
             files = maya_mb_files + maya_ma_files
-            files.sort()
-            files.reverse()
+        elif self.__engine == "nuke":
+            files = glob.glob("%s/*.ma" % file_dir)
+        files.sort()
+        files.reverse()
         if files:
             self.setCurrentIndex(1)
             for f in files:
