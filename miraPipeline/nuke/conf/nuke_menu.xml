@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <nukeTools>
-    <tools name="pipeline" type="Nodes">
+    <tools name="Pipeline" type="Nuke">
+        <submenu name="Task initialize"
+                 command="from miraPipeline.pipeline.task_init import task_init;reload(task_init);task_init.main()"
+                 type="command"/>
+        <submenu name="Version Up"
+                 command="from miraPipeline.pipeline.version_up import version_up;reload(version_up);version_up.version_up()"
+                 type="command"/>
+        <submenu name="Preflight"
+                 command="from miraPipeline.pipeline.preflight import check_gui;reload(check_gui);check_gui.main()"
+                 type="command"/>
+        <submenu name="QCPublish"
+                 command="from miraPipeline.pipeline.QC import qc;reload(qc);qc.main()"
+                 type="command"/>
+        <submenu type="separator"/>
         <submenu name="HUD"
                  command="from miraPipeline.nuke.nuke_hud import create_hud;reload(create_hud);create_hud.create_hud()"
                  type="command"/>
         <submenu type="separator"/>
     </tools>
-
-    <!--<tools name="scripts" type="Nuke">-->
-        <!--<submenu name="script editor"-->
-                 <!--command="script_editor"-->
-                 <!--shortcut="Alt+D"-->
-                 <!--type="command"/>-->
-        <!--<submenu type="separator"/>-->
-    <!--</tools>-->
 </nukeTools>
+
+

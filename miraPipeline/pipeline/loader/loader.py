@@ -88,7 +88,7 @@ class Loader(QDialog):
                 else:
                     format_str = "%s_shot_image" % engine
                 image_path = pipeFile.get_task_file(self.project, asset_type_sequence, asset_name_shot, step,
-                                                    task_name, format_str, "", engine)
+                                                    task_name, format_str, "")
                 if not os.path.isfile(image_path):
                     image_path = "%s/%s" % (miraCore.icons_dir, "unknown.png")
                 pix_map = QPixmap(image_path)

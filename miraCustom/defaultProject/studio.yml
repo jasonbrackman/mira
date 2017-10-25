@@ -12,8 +12,8 @@ priority: ["A", "B", "C", "D"]
 asset_type: ["Character", "Cprop", "Prop", "Environment", "Building"]
 asset_steps: ["LowMdl","MidMdl","HighMdl","Shd","MidRig","HighRig","Hair","Group", "HairRig"]
 shot_steps: ["Set","MainLgt","AnimLay","VfxLay","LgtLay","CompLay","Anim","Vfx","Cfx","Lgt","Comp","Cut"]
-not_playblast_step: ["HighRig","MidRig","Shd","Hair", "Group", "Set", "LgtLay", "MainLgt", "HairRig"]
-not_submit_version_step: ["HighRig","MidRig", "Set", "Group", "LgtLay", "MainLgt", "HairRig"]
+not_playblast_step: ["HighRig","MidRig","Shd","Hair", "Group", "Set", "LgtLay", "MainLgt", "HairRig", "CompLay", "Comp"]
+not_submit_version_step: ["HighRig", "MidRig", "Set", "Group", "LgtLay", "MainLgt", "HairRig"]
 entity_dir: "@primary/{project}/{category}/{entity_type}/{asset_type_sequence}/{asset_name_shot}"
 # maya
 # -asset
@@ -64,12 +64,18 @@ maya_shot_light: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{tas
 # --render
 maya_shot_render: "@render_root_dir/{project}/render/workarea/{sequence}/{shot}/{step}/_sequence"
 maya_shot_renderPublish: "@render_root_dir/{project}/render/publish/{sequence}/{shot}/{step}/_sequence"
-# -- cache
-shot_cache_work: "@render_root_dir/{project}/cache/{sequence}/{shot}/{step}/{task}/_workarea"
-shot_cache_publish: "@render_root_dir/{project}/cache/{sequence}/{shot}/{step}/{task}/_publish"
 # nuke
-nuke_shot_local: "@local_root_dir/{project}/Comp/{step}/{sequence}/{shot}/{sequence}_{shot}_{step}_v{version}.nk"
-nuke_shot_work: "@render_root_dir/{project}/Comp/{step}/{sequence}/{shot}/{sequence}_{shot}_{step}_v{version}.nk"
-nuke_shot_publish: "@render_root_dir/{project}/Comp/{step}/{sequence}/{shot}/{sequence}_{shot}_{step}_v{version}.nk"
+# -local
+nuke_shot_local: "@render_root_dir/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_workarea/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}_e{edition}.nk"
+nuke_shot_localImage: "@render_root_dir/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}_e{edition}.png"
+# -work
+nuke_shot_work: "@primary/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_workarea/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.nk"
+nuke_shot_workImage: "@primary/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.png"
+nuke_shot_workVideo: "@primary/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_video/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.mov"
+# -publish
+nuke_shot_image: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}.png"
+nuke_shot_video:   "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_video/{engine}/{project}_{sequence}_{shot}_{step}_{task}.mov"
+nuke_shot_publish: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_publish/{engine}/{project}_{sequence}_{shot}_{step}_{task}.nk"
+nuke_shot_render: "@render_root_dir/{project}/render/workarea/{sequence}/{shot}/{step}/_sequence/v{version}/{project}_{sequence}_{shot}_{step}.%04d.png"
 # photoshop
 photoshop_asset_publish: "{primary}/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_publish/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.psd"

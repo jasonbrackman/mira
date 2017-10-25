@@ -36,6 +36,17 @@ class Step(object):
     def down_step(self):
         return self.__value.get("down_step")
 
+    @property
+    def entity_type(self):
+        return self.__value.get("entity")
+
+    @property
+    def entity(self):
+        if self.entity_type == "Asset":
+            return "asset"
+        else:
+            return "shot"
+
 
 if __name__ == "__main__":
     print repr(Step("SnowKidTest", "AnimLay").down_step)

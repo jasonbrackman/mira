@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from miraLibs.osLibs import get_parent_win
 from miraFramework.PipelineBaseUI import PipelineBaseUI
+from miraLibs.dccLibs import get_parent_win
 from miraLibs.qtLibs.splash import splash
 
 

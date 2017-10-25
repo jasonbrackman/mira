@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-import os
 import glob
+import os
+
 from Qt.QtWidgets import *
-from miraLibs.pipeLibs import pipeFile, Step
-from miraLibs.osLibs import FileOpener
-from miraLibs.pyLibs import start_file
+
+from miraLibs.dccLibs import FileOpener
 from miraLibs.log import Logger
+from miraLibs.pipeLibs import pipeFile, Step
+from miraLibs.pyLibs import start_file
 
 
 class Hook(object):
@@ -84,8 +86,7 @@ class Hook(object):
 
     def quality_control(self):
         work_file = pipeFile.get_task_work_file(self.__project, self.__entity_type, self.__asset_type_sequence,
-                                                self.__asset_shot_names[0], self.__step, self.__task,
-                                                engine=self.__engine)
+                                                self.__asset_shot_names[0], self.__step, self.__task)
         fo = FileOpener.FileOpener(work_file)
         fo.run()
 
@@ -95,7 +96,7 @@ class Hook(object):
         for asset_shot_name in self.__asset_shot_names:
             publish_file = pipeFile.get_task_publish_file(self.__project, self.__entity_type,
                                                           self.__asset_type_sequence, asset_shot_name,
-                                                          self.__step, self.__task, engine=self.__engine)
+                                                          self.__step, self.__task)
             if not publish_file or not os.path.isfile(publish_file):
                 error_list.append(publish_file)
                 continue
@@ -119,8 +120,7 @@ class Hook(object):
 
     def launch_workarea(self):
         work_file = pipeFile.get_task_work_file(self.__project, self.__entity_type, self.__asset_type_sequence,
-                                                self.__asset_shot_names[0], self.__step, self.__task,
-                                                version="000", engine=self.__engine)
+                                                self.__asset_shot_names[0], self.__step, self.__task, version="000")
         if not work_file:
             print "Maybe no format exist."
             return
@@ -132,8 +132,7 @@ class Hook(object):
 
     def launch_publish(self):
         publish_file = pipeFile.get_task_publish_file(self.__project, self.__entity_type, self.__asset_type_sequence,
-                                                      self.__asset_shot_names[0], self.__step, self.__task,
-                                                      engine=self.__engine)
+                                                      self.__asset_shot_names[0], self.__step, self.__task)
         if not publish_file:
             print "Maybe no format exist."
             return

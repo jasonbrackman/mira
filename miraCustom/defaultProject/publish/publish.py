@@ -12,6 +12,8 @@ def publish(file_name, local=True):
     step = context.step
     custom_dir = miraCore.custom_dir
     publish_dir = os.path.join(custom_dir, project, "publish")
+    if not os.path.isdir(publish_dir):
+        publish_dir = os.path.join(custom_dir, "defaultProject", "publish")
     fn_, path, desc = imp.find_module(step, [publish_dir])
     mod = imp.load_module(step, fn_, path, desc)
     mod.main(file_name, local)

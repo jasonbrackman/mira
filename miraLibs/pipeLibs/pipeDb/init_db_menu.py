@@ -1,6 +1,7 @@
-from miraLibs.pipeLibs import pipeFile
 import task_from_path
-from miraLibs.osLibs import get_engine, get_scene_name
+from miraLibs.dccLibs import get_scene_name
+from miraLibs.dccLibs import get_engine
+from miraLibs.pipeLibs import pipeFile
 
 
 def start_engine(tk, path, template_name):

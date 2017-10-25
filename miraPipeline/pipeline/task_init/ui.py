@@ -1,11 +1,12 @@
-import os
 import glob
-from Qt.QtWidgets import *
-from Qt.QtGui import *
+import os
 from Qt.QtCore import *
+from Qt.QtGui import *
+from Qt.QtWidgets import *
 import miraCore
 from miraFramework.task_form import my_task_form
-from miraLibs.osLibs import get_engine, FileOpener
+from miraLibs.dccLibs import FileOpener
+from miraLibs.dccLibs import get_engine
 from miraLibs.pyLibs import start_file
 
 
@@ -76,7 +77,6 @@ class StackedWidget(QStackedWidget):
         super(StackedWidget, self).__init__(parent)
         self.resize(375, 500)
         self.name = name
-        self.__engine = get_engine.get_engine()
         label = QLabel()
         label.resize(self.width(), self.height())
         icon_path = os.path.abspath(os.path.join(__file__, "..", "no_file.png"))
@@ -87,20 +87,21 @@ class StackedWidget(QStackedWidget):
         self.addWidget(label)
         self.addWidget(self.list_widget)
     
-    def get_engine_icon_path(self):
+    def get_engine_icon_path(self, engine):
         icons_dir = miraCore.icons_dir
-        engine_icon_path = "%s/%s/%s" % (icons_dir, "engine", "%s.png" % self.__engine)
+        engine_icon_path = "%s/%s/%s" % (icons_dir, "engine", "%s.png" % engine)
         return engine_icon_path
         
     def set_dir(self, file_dir):
         self.list_widget.clear()
-        icon_path = self.get_engine_icon_path()
-        if self.__engine == "maya":
+        engine = os.path.basename(file_dir)
+        icon_path = self.get_engine_icon_path(engine)
+        if engine == "maya":
             maya_mb_files = glob.glob("%s/*.mb" % file_dir)
             maya_ma_files = glob.glob("%s/*.ma" % file_dir)
             files = maya_mb_files + maya_ma_files
-        elif self.__engine == "nuke":
-            files = glob.glob("%s/*.ma" % file_dir)
+        elif engine == "nuke":
+            files = glob.glob("%s/*.nk" % file_dir)
         files.sort()
         files.reverse()
         if files:

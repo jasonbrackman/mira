@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from miraLibs.pipeLibs.pipeMaya import version_up
+from miraPipeline.pipeline.version_up import version_up
 reload(version_up)
 
 

@@ -1,0 +1,20 @@
+check_read_node:
+  name: "invalid path"
+  order: 0
+  ignorable: True
+  description: "read node file path valid."
+check_write_node_exist:
+  name: "Write node | 输出节点存在"
+  order: 10
+  ignorable: False
+  description: "检查输出节点是否存在"
+check_write_node_settings:
+  name: "Write node | 输出路径"
+  order: 20
+  ignorable: False
+  description: "设置输出路径"
+check_file_save:
+  name: "Save file"
+  order: 30
+  ignorable: False
+  description: "Check save file."

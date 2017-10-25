@@ -4,9 +4,9 @@ import nuke
 from BaseCheck import BaseCheck
 
 
-class check_read_node(BaseCheck):
+class Check(BaseCheck):
     def __init__(self):
-        super(check_read_node, self).__init__()
+        super(Check, self).__init__()
         self.read_nodes = nuke.allNodes("Read")
 
     def run(self):

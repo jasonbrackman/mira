@@ -14,7 +14,7 @@ import miraCore
 from miraLibs.dbLibs import db_api
 from miraLibs.pipeLibs import pipeHistory, pipeFile
 from miraLibs.pyLibs import copy, join_path
-from miraLibs.osLibs import get_engine
+from miraLibs.dccLibs import get_engine
 from miraLibs.pipeLibs.pipeDb import task_from_db_path
 from miraLibs.qtLibs.create_round_rect_thumbnail import create_round_rect_thumbnail
 
@@ -425,11 +425,11 @@ class TaskGet(task_get_ui.TaskGetUI):
         due_date = node.due_date
         # show path
         local_file = pipeFile.get_task_work_file(self.project, entity_type, asset_type_sequence, asset_name_shot, step,
-                                                 task, "000", engine=self.__engine, local=True)
+                                                 task, "000", local=True)
         work_file = pipeFile.get_task_work_file(self.project, entity_type, asset_type_sequence, asset_name_shot, step,
-                                                task, "000", engine=self.__engine, )
+                                                task, "000")
         publish_file = pipeFile.get_task_publish_file(self.project, entity_type, asset_type_sequence, asset_name_shot,
-                                                      step, task, "000", engine=self.__engine, )
+                                                      step, task, "000")
         local_dir = os.path.dirname(os.path.dirname(local_file))
         work_dir = os.path.dirname(os.path.dirname(work_file))
         publish_dir = os.path.dirname(os.path.dirname(publish_file))
@@ -451,7 +451,7 @@ class TaskGet(task_get_ui.TaskGetUI):
         if node.node_type != "task":
             return
         work_file = pipeFile.get_task_work_file(node.project, node.entity_type, node.parent().name, node.entity_name,
-                                                node.step, node.task, version="001", engine=self.__engine)
+                                                node.step, node.task, version="001")
         context = pipeFile.PathDetails.parse_path(work_file)
         local_file = context.local_work_path
         if os.path.isfile(local_file):

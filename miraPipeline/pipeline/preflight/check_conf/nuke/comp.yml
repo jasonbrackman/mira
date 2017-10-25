@@ -1,5 +1,0 @@
-check_read_node:
-  name: "invalid path"
-  order: 0
-  ignorable: False
-  description: "read node file path valid."

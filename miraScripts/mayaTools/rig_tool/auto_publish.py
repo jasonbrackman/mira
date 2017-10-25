@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
-import os
 import logging
+import os
+
 from Qt.QtWidgets import *
-from miraLibs.mayaLibs import get_scene_name, save_file, new_file, save_as
-from miraLibs.osLibs import get_parent_win
-from miraLibs.pipeLibs import pipeFile
-from miraLibs.pipeLibs.pipeMaya import publish
-from miraLibs.dbLibs import db_api
-from miraLibs.pipeLibs.pipeDb import task_from_db_path
-from miraFramework.screen_shot import screen_shot
+
 from miraFramework.message_box import MessageWidget
+from miraFramework.screen_shot import screen_shot
+from miraLibs.dbLibs import db_api
+from miraLibs.dccLibs import get_parent_win
+from miraLibs.mayaLibs import get_scene_name, save_file, new_file, save_as
+from miraLibs.pipeLibs import pipeFile
+from miraLibs.pipeLibs.pipeDb import task_from_db_path
+from miraLibs.pipeLibs.pipeMaya import publish
 
 logger = logging.getLogger("Rig auto publish")
 PARENT_WIN = get_parent_win.get_parent_win()

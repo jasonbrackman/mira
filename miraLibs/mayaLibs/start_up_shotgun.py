@@ -23,8 +23,8 @@ import tank
 import tank_vendor
 import pymel.core as pm
 
-import libs.sgLibs as sg_lib
-import libs.osLibs as os_lib
+import preflight_libs.sgLibs as sg_lib
+import preflight_libs.osLibs as os_lib
 
 
 # constants

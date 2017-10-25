@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 import os
-from Qt.QtWidgets import *
-from Qt.QtGui import *
+
 from Qt.QtCore import *
-from my_task_model import ListModel
-from my_task_model import FilterProxyModel
-from my_task_delegate import TaskCellWidget
+from Qt.QtGui import *
+from Qt.QtWidgets import *
+
 from miraFramework.Filter import Filter
+from miraFramework.combo import ProjectCombo
 from miraFramework.refresh_btn import RefreshButton
 from miraLibs.dbLibs import db_api
-from miraFramework.combo import ProjectCombo
 from miraLibs.pipeLibs import pipeFile
-
+from my_task_delegate import TaskCellWidget
+from my_task_model import FilterProxyModel
+from my_task_model import ListModel
 
 LIST_VIEW_STYLE = "QListView::item:selected {background: #29475a; border: 1px solid #00b4ff; border-radius: 3px;}" \
                   "QListView::item:hover {background: #345f71; border-radius: 3px;}"\
