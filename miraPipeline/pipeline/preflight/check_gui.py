@@ -4,7 +4,7 @@ import logging
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
-from libs import get_context, get_context_conf_path, add_environ, \
+from preflight_libs import get_context, get_context_conf_path, add_environ, \
     get_check_py_file, conf_parser, select_node, get_parent_win, get_icon_path
 
 

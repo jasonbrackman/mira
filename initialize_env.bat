@@ -1,4 +1,4 @@
 @echo off
 pushd %~dp0
-python .\initialize_env.py
+C:\Python27\python.exe .\initialize_env.py
 pause

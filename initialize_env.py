@@ -57,14 +57,29 @@ def copy_maya_env():
             shutil.copyfile(server_env_path, maya_env_path)
 
 
+def copy_nuke_env():
+    local_nuke_env_dir = os.path.join(os.environ["USERPROFILE"], ".nuke").replace("\\", "/")
+    if not os.path.isdir(local_nuke_env_dir):
+        print "%s is not an exist dir." % local_nuke_env_dir
+        return
+    local_nuke_env_path = "%s/%s" % (local_nuke_env_dir, "menu.py")
+    if not os.path.isfile(local_nuke_env_path):
+        f = open(local_nuke_env_path, 'w')
+        f.close()
+    with open(local_nuke_env_path, "a") as f:
+        f.write('nuke.pluginAddPath("Z:/mira/miraEnv/nuke")')
+
+
 def main():
     add_env_variable()
     print "Add environment variable done."
     copy_maya_env()
     print "Copy  maya env done."
-    print "Plugins Copying......."
-    copy_plugins()
-    print "Copy plugins done."
+    copy_nuke_env()
+    print "Copy nuke env done."
+    # print "Plugins Copying......."
+    # copy_plugins()
+    # print "Copy plugins done."
 
 
 if __name__ == "__main__":

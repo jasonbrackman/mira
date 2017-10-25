@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 import sys
+import getpass
+
+user = getpass.getuser()
 script_dir = "Z:/mira"
+if user == "heshuai":
+    script_dir = "E:/mira"
 if script_dir not in sys.path:
     sys.path.insert(0, script_dir)
 

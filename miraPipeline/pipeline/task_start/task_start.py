@@ -62,9 +62,9 @@ class TaskStart(QDialog):
     def task_info(self):
         return self.common_widget.task_info
 
-    def can_publish(self, project, entity_type, asset_type_or_sequence, asset_or_shot, step, task, engine):
+    def can_publish(self, project, entity_type, asset_type_or_sequence, asset_or_shot, step, task):
         file_path = pipeFile.get_task_work_file(project, entity_type, asset_type_or_sequence,
-                                                asset_or_shot, step, task, "000", engine)
+                                                asset_or_shot, step, task, "000")
         self.path_le.setText(file_path)
         self.start_btn.setEnabled(True)
 
@@ -75,7 +75,6 @@ class TaskStart(QDialog):
         asset_or_shot = self.common_widget.asset_or_shot
         step = self.common_widget.step
         task = self.common_widget.task
-        engine = Step(project, step).engine
         if not all((asset_type_or_sequence, asset_or_shot, step, task)):
             return
         up_steps = Step(project, step).up_step
@@ -83,17 +82,17 @@ class TaskStart(QDialog):
             up_step_published = True
             for up_step in up_steps:
                 publish_file = pipeFile.get_task_publish_file(project, entity_type, asset_type_or_sequence,
-                                                              asset_or_shot, up_step, up_step, "", engine)
+                                                              asset_or_shot, up_step, up_step, "")
                 if not publish_file or not os.path.isfile(publish_file):
                     up_step_published = False
                     break
             if up_step_published:
-                self.can_publish(project, entity_type, asset_type_or_sequence, asset_or_shot, step, task, engine)
+                self.can_publish(project, entity_type, asset_type_or_sequence, asset_or_shot, step, task)
             else:
                 self.path_le.setText(u"上一环节没有publish")
                 self.start_btn.setDisabled(True)
         else:
-            self.can_publish(project, entity_type, asset_type_or_sequence, asset_or_shot, step, task, engine)
+            self.can_publish(project, entity_type, asset_type_or_sequence, asset_or_shot, step, task)
 
     def open_dir(self):
         path = self.path_le.text()

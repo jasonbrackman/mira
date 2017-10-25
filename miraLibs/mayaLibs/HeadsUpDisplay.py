@@ -7,7 +7,7 @@ import miraCore
 
 
 def get_hud_conf():
-    hud_conf_dir = miraCore.get_conf_dir()
+    hud_conf_dir = miraCore.conf_dir
     hud_conf_path = join_path.join_path2(hud_conf_dir, "hud.yml")
     hud_data = yml_operation.get_yaml_data(hud_conf_path)
     return hud_data

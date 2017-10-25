@@ -14,7 +14,7 @@ from miraLibs.mayaLibs import set_image_size, get_maya_version
 logger = logging.getLogger(u"MIRA MAIN")
 logger.setLevel(logging.DEBUG)
 
-conf_dir = miraCore.get_conf_dir()
+conf_dir = miraCore.conf_dir
 
 # ------------------------------------------------------------------------------------------#
 # ----------------------------------load menu  ---------------------------------------------#
@@ -182,7 +182,7 @@ def add_system_python_path_env():
     if user in ["heshuai", "zhaopeng"]:
         return
     startup_dir = "C:/Users/%s/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup" % user
-    mira_batch_dir = miraCore.get_batch_dir()
+    mira_batch_dir = miraCore.batch_dir
     python_path_bat = os.path.join(mira_batch_dir, "PYTHONPATH.bat").replace("\\", "/")
     startup_python_path_bat = os.path.join(startup_dir, "PYTHONPATH.bat")
     try:

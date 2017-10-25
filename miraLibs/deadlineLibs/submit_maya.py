@@ -12,7 +12,7 @@ from miraLibs.pipeLibs import pipeFile
 
 def submit_maya():
     context = pipeFile.PathDetails.parse_path(pm.sceneName())
-    output_file_path = context.render_dir
+    output_file_path = context.render_output
     # this will submit a job to deadline with the current maya scene's settings. It's just a placeholder at the moment
     # until we get our GUI up and running with this style of command line submission.
     driver, suffix = os.path.splitdrive(pm.sceneName())

@@ -8,10 +8,12 @@ from miraLibs.pipeLibs import pipeFile
 
 def start(file_name, local=True):
     context = pipeFile.PathDetails.parse_path(file_name)
+    project = context.project
     step = context.step
-    engine = context.engine
-    pipeline_dir = miraCore.get_pipeline_dir()
-    start_dir = os.path.join(pipeline_dir, engine, "start")
+    custom_dir = miraCore.custom_dir
+    start_dir = os.path.join(custom_dir, project, "start")
+    if not os.path.isdir(start_dir):
+        start_dir = os.path.join(custom_dir, "defaultProject", "start")
     fn_, path, desc = imp.find_module(step, [start_dir])
     mod = imp.load_module(step, fn_, path, desc)
     mod.main(file_name, local)

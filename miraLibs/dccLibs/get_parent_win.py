@@ -1,7 +1,7 @@
-from Qt.QtWidgets import *
-from Qt.QtCore import *
-from Qt.QtGui import *
 from Qt import __binding__
+from Qt.QtCore import *
+from Qt.QtWidgets import *
+
 import get_engine
 
 
@@ -30,9 +30,12 @@ def get_maya_win(module="PySide"):
 
 
 def get_nuke_win():
+    main_window = None
     app = QApplication.instance()
-    nuke_win = app.activeWindow()
-    return nuke_win
+    for widgets in app.topLevelWidgets():
+        if widgets.metaObject().className() == "Foundry::UI::DockMainWindow":
+            main_window = widgets
+    return main_window
 
 
 def get_parent_win():

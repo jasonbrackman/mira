@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from Qt.QtWidgets import *
+import os
 from Qt.QtCore import *
 from Qt.QtGui import *
-import os
+from Qt.QtWidgets import *
 import hooks
 reload(hooks)
 from hooks import Hook
@@ -16,8 +16,7 @@ reload(db_api)
 from miraLibs.qtLibs import create_round_rect_thumbnail
 from miraLibs.pipeLibs import pipeFile, Step
 from miraLibs.pyLibs import join_path, yml_operation
-from miraLibs.osLibs import get_engine
-
+from miraLibs.dccLibs import get_engine
 
 IMAGE_WIDTH, IMAGE_HEIGHT = [110, 80]
 LIST_VIEW_STYLE = "QListView::item:selected {color: #fff; background: #29475a; " \
@@ -123,11 +122,13 @@ class RunThread(QThread):
         self.__asset_type_sequence = asset_type_sequence
         self.__entity_type = entity_type
         self.__entities = entities
-        self.__image_dir = miraCore.get_icons_dir()
+        self.__image_dir = miraCore.icons_dir
         self.__collect_data = list()
 
     def run(self):
-        studio_conf_path = join_path.join_path2(miraCore.get_conf_dir(), self.__project, "studio.yml")
+        studio_conf_path = join_path.join_path2(miraCore.custom_dir, self.__project, "studio.yml")
+        if not os.path.isfile(studio_conf_path):
+            studio_conf_path = join_path.join_path2(miraCore.custom_dir, "defaultProject", "studio.yml")
         dcp = yml_operation.DeepConfParser(studio_conf_path)
         project_data = dcp.parse()
         primary = project_data.get("primary")

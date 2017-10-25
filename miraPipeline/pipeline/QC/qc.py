@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
-import os
-import logging
 import imp
-from Qt.QtWidgets import *
+import logging
+import os
 from Qt.QtCore import *
 from Qt.QtGui import *
+from Qt.QtWidgets import *
 import miraCore
-from miraLibs.pyLibs import join_path, copy
-from miraFramework.screen_shot import screen_shot
 from miraFramework.drag_file_widget import DragFileWidget
 from miraFramework.message_box import MessageWidget
+from miraFramework.screen_shot import screen_shot
+from miraLibs.dccLibs import save_file
+from miraLibs.dccLibs import get_parent_win
+from miraLibs.dccLibs import save_as
 from miraLibs.pipeLibs import pipeFile, pipeMira
+from miraLibs.pyLibs import join_path, copy
 from miraPipeline.pipeline.preflight import check_gui
-from miraLibs.mayaLibs import save_as, save_file
-from miraPipeline.maya.playblast import playblast_turntable, playblast_shot
-from miraLibs.osLibs import get_parent_win
 
 PARENT_WIN = get_parent_win.get_parent_win()
 
@@ -24,9 +24,11 @@ logger.setLevel(logging.DEBUG)
 COLUMN_WIDTH = 30
 
 
-def qcpublish(step):
-    script_dir = miraCore.get_pipeline_dir()
-    qcpublish_dir = join_path.join_path2(script_dir, "maya", "QCPublish")
+def qcpublish(project, step):
+    custom_dir = miraCore.custom_dir
+    qcpublish_dir = join_path.join_path2(custom_dir, project, "QCPublish")
+    if not os.path.isdir(qcpublish_dir):
+        qcpublish_dir = join_path.join_path2(custom_dir, "defaultProject", "QCPublish")
     fn_, path, desc = imp.find_module(step, [qcpublish_dir])
     mod = imp.load_module(step, fn_, path, desc)
     mod.main()
@@ -243,6 +245,7 @@ class QC(QDialog):
 
     def submit_version(self, thumbnail_path=None):
         if self.has_playblast:
+            from miraPipeline.maya.playblast import playblast_turntable, playblast_shot
             self.playblast_widget.start()
             try:
                 if self.entity_type == "Asset":
@@ -270,6 +273,7 @@ class QC(QDialog):
             try:
                 ext = os.path.splitext(origin_file)[-1]
                 version_file = "%s%s" % (os.path.splitext(self.video_path)[0], ext)
+                print version_file
                 copy.copy(origin_file, version_file)
                 self.version_widget.success()
                 return version_file
@@ -279,7 +283,7 @@ class QC(QDialog):
     def submit_step_qc(self):
         self.qc_widget.start()
         try:
-            qcpublish(self.step)
+            qcpublish(self.project, self.step)
             self.qc_widget.success()
         except:
             self.qc_widget.fail()

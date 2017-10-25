@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 import os
-from Qt.QtWidgets import *
+
 from Qt.QtCore import *
 from Qt.QtGui import *
+from Qt.QtWidgets import *
+
 from miraFramework.Filter import Filter
-from miraFramework.refresh_btn import RefreshButton
 from miraFramework.combo import ProjectCombo
-from miraLibs.osLibs import FileOpener
+from miraFramework.refresh_btn import RefreshButton
+from miraLibs.dccLibs import FileOpener
+from miraLibs.dccLibs import get_engine
 from miraLibs.pyLibs import start_file
-from miraLibs.osLibs import get_engine
 
 
 class FileTreeView(QTreeView):

@@ -1,13 +1,13 @@
-import os
 import imp
 import logging
+import os
 from Qt.QtWidgets import *
 import miraCore
 import ui
 reload(ui)
 from ui import TaskUI
-from miraLibs.pipeLibs import pipeFile, get_up_step_tasks
-from miraLibs.osLibs import get_engine
+from miraLibs.pipeLibs import pipeFile, Step, get_up_step_tasks
+from miraLibs.dccLibs import get_engine
 from miraLibs.pipeLibs.pipeDb import task_from_db_path
 from miraLibs.pyLibs import join_path, copy
 
@@ -48,8 +48,7 @@ class TaskInit(TaskUI):
     def init_task(self):
         work_file = pipeFile.get_task_work_file(self.selected.project, self.selected.entity_type,
                                                 self.selected.asset_type_sequence, self.selected.asset_name_shot,
-                                                self.selected.step, self.selected.task, version="001",
-                                                engine=self.__engine)
+                                                self.selected.step, self.selected.task, version="001")
         context = pipeFile.PathDetails.parse_path(work_file)
         local_file = context.local_work_path
         if os.path.isfile(local_file):
@@ -64,8 +63,10 @@ class TaskInit(TaskUI):
         self.set_dir()
 
     def do_init_task(self, step, local_file):
-        pipeline_dir = miraCore.get_pipeline_dir()
-        start_dir = os.path.join(pipeline_dir, self.__engine, "start").replace("\\", "/")
+        custom_dir = miraCore.custom_dir
+        start_dir = os.path.join(custom_dir, self.selected.project, "start").replace("\\", "/")
+        if not os.path.isdir(start_dir):
+            start_dir = os.path.join(custom_dir, "defaultProject", "start").replace("\\", "/")
         fn_, path, desc = imp.find_module(step, [start_dir])
         mod = imp.load_module(step, fn_, path, desc)
         mod.main(local_file, True)
@@ -83,25 +84,24 @@ class TaskInit(TaskUI):
     def set_dir(self):
         local_file = pipeFile.get_task_work_file(self.selected.project, self.selected.entity_type,
                                                  self.selected.asset_type_sequence, self.selected.asset_name_shot,
-                                                 self.selected.step, self.selected.task, "000",
-                                                 engine=self.__engine, local=True)
+                                                 self.selected.step, self.selected.task, "000", local=True)
         work_file = pipeFile.get_task_work_file(self.selected.project, self.selected.entity_type,
                                                 self.selected.asset_type_sequence, self.selected.asset_name_shot,
-                                                self.selected.step, self.selected.task, "000", engine=self.__engine)
+                                                self.selected.step, self.selected.task, "000")
         publish_file = pipeFile.get_task_publish_file(self.selected.project, self.selected.entity_type,
                                                       self.selected.asset_type_sequence, self.selected.asset_name_shot,
-                                                      self.selected.step, self.selected.task, "000",
-                                                      engine=self.__engine)
-        local_dir = os.path.dirname(os.path.dirname(local_file))
-        work_dir = os.path.dirname(os.path.dirname(work_file))
-        publish_dir = os.path.dirname(os.path.dirname(publish_file))
-        if self.__engine != "python":
-            local_dir = join_path.join_path2(local_dir, self.__engine)
-            work_dir = join_path.join_path2(work_dir, self.__engine)
-            publish_dir = join_path.join_path2(publish_dir, self.__engine)
-        self.local_stack.set_dir(local_dir)
-        self.work_stack.set_dir(work_dir)
-        self.publish_stack.set_dir(publish_dir)
+                                                      self.selected.step, self.selected.task, "000")
+        self.set_widget_dir(self.local_stack, local_file)
+        self.set_widget_dir(self.work_stack, work_file)
+        self.set_widget_dir(self.publish_stack, publish_file)
+
+    def set_widget_dir(self, stack_widget, file_path):
+        if file_path:
+            file_dir = os.path.dirname(os.path.dirname(file_path))
+            if self.__engine != "python":
+                engine = Step(self.selected.project, self.selected.step).engine
+                file_dir = join_path.join_path2(file_dir, engine)
+            stack_widget.set_dir(file_dir)
 
     def copy_to_local(self):
         file_paths = self.work_stack.list_widget.get_selected()
@@ -114,10 +114,11 @@ class TaskInit(TaskUI):
             temp_context = pipeFile.PathDetails.parse_path(file_path)
             next_version_file = temp_context.next_version_file
             context = pipeFile.PathDetails.parse_path(next_version_file)
+            engine = Step(context.project, context.step).engine
             local_path = context.local_work_path
             copy.copy(file_path, local_path)
             work_dir = os.path.dirname(os.path.dirname(local_path))
-            work_engine_dir = join_path.join_path2(work_dir, self.__engine)
+            work_engine_dir = join_path.join_path2(work_dir, engine)
             self.local_stack.set_dir(work_engine_dir)
             self.update_task_status(file_path)
             self.file_widget.setCurrentIndex(0)

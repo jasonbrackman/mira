@@ -6,12 +6,15 @@ import miraLibs.pyLibs.yml_operation as yml
 import miraLibs.pyLibs.join_path as join_path
 
 
-conf_dir = miraCore.get_conf_dir()
+conf_dir = miraCore.conf_dir
+custom_dir = miraCore.custom_dir
 
 
 # ******************************get studio value****************************** #
 def get_value(project_name, name, option):
-    conf_path = join_path.join_path2(conf_dir, project_name, "%s.yml" % name)
+    conf_path = join_path.join_path2(custom_dir, project_name, "%s.yml" % name)
+    if not os.path.isfile(conf_path):
+        conf_path = join_path.join_path2(custom_dir, "defaultProject", "%s.yml" % name)
     if os.path.isfile(conf_path):
         dcp = yml.DeepConfParser(conf_path)
         yml_data = dcp.parse()
@@ -128,4 +131,4 @@ def get_unload_plugins():
 
 
 if __name__ == "__main__":
-    pass
+    print get_value("SnowKidTest", "studio", "maya_asset_work")

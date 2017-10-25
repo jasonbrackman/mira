@@ -35,25 +35,25 @@ class MayaOpener(object):
         self.maya_path_dict = {"2016": "C:/tools/Autodesk/Maya2016/bin/maya.exe",
                                "2017": "C:/Program Files/Autodesk/Maya2017/bin/maya.exe"}
 
-    def get_may_version(self):
+    def get_maya_version(self):
         ext = os.path.splitext(self.path)[1].lower()
-        f = open(self.path, "r")
-        line = f.readline()
-        if ext == ".ma":
-            r = re.findall(r'//Maya ASCII (\d+).* scene', line, re.I)
-            if r:
-                return int(r[0])
-        else:
-            r = re.findall(r'.*\rversion\x00(\d+).*', line, re.I)
-            if r:
-                return int(r[0])
+        with open(self.path, "r") as f:
+            line = f.readline()
+            if ext == ".ma":
+                r = re.findall(r'//Maya ASCII (\d+).* scene', line, re.I)
+                if r:
+                    return int(r[0])
+            else:
+                r = re.findall(r'.*\rversion\x00(\d+).*', line, re.I)
+                if r:
+                    return int(r[0])
 
     def run_in_maya(self):
         import maya.cmds as mc
         mc.file(self.path, open=1, f=1)
 
     def run_standalone(self):
-        maya_version = self.get_may_version()
+        maya_version = self.get_maya_version()
         if not maya_version:
             return
         maya_path = self.maya_path_dict[str(maya_version)]
@@ -66,7 +66,45 @@ class MayaOpener(object):
         app = get_engine()
         if app == "maya":
             self.run_in_maya()
-        elif app == "python":
+        else:
+            self.run_standalone()
+
+
+class NukeOpener(object):
+    def __init__(self, path):
+        self.path = path
+        self.threads = list()
+        self.nuke_path_dict = {"10.0v1": "C:/tools/Autodesk/Maya2016/bin/maya.exe"}
+
+    def get_nuke_version(self):
+        with open("D:/test.nk", "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                matched = re.match("^version (.*)", line)
+                if matched:
+                    nuke_version = matched.group(1)
+                    return nuke_version
+
+    def run_in_nuke(self):
+        import nuke
+        nuke.scriptClose(ignoreUnsavedChanges=True)
+        nuke.scriptOpen(self.path)
+
+    def run_standalone(self):
+        nuke_version = self.get_nuke_version()
+        if not nuke_version:
+            return
+        nuke_path = self.nuke_path_dict[str(nuke_version)]
+        cmd = "%s %s" % (nuke_path, self.path)
+        thread = RunCommandThread(cmd)
+        thread.start()
+        self.threads.append(thread)
+
+    def run(self):
+        app = get_engine()
+        if app == "nuke":
+            self.run_in_nuke()
+        else:
             self.run_standalone()
 
 
@@ -82,9 +120,8 @@ class FileOpener(object):
         opener = None
         if self.ext in [".ma", ".mb"]:
             opener = MayaOpener(self.path)
-        else:
-            # Todo add houdini nuke
-            opener = None
+        elif self.ext in [".nk"]:
+            opener = NukeOpener(self.path)
         if opener:
             opener.run()
 

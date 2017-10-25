@@ -10,7 +10,7 @@ import miraLibs.pyLibs.join_path as join_path
 
 
 def get_ffmpeg_path():
-    bin_dir = miraCore.get_bin_dir()
+    bin_dir = miraCore.bin_dir
     ffmpeg_path = join_path.join_path2(bin_dir, "ffmpeg", "bin", "ffmpeg.exe")
     return ffmpeg_path
 

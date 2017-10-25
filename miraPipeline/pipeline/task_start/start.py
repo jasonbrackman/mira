@@ -20,8 +20,10 @@ class Start(object):
         self.logger = self.get_logger()
 
     def get_start_py(self):
-        pipeline_dir = miraCore.get_pipeline_dir()
-        start_dir = join_path.join_path2(pipeline_dir, self.engine, "start")
+        custom_dir = miraCore.custom_dir
+        start_dir = join_path.join_path2(custom_dir, self.project, "start")
+        if not os.path.isdir(start_dir):
+            start_dir = join_path.join_path2(custom_dir, "defaultProject", "start")
         start_py = join_path.join_path2(start_dir, "start.py")
         return start_py
 

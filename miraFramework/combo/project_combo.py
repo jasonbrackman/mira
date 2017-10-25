@@ -13,7 +13,7 @@ class ProjectModel(QAbstractListModel):
         super(ProjectModel, self).__init__(parent)
         self.model_data = model_data
         self.parent = parent
-        self.__icon_dir = miraCore.get_icons_dir()
+        self.__icon_dir = miraCore.icons_dir
 
     def rowCount(self, parent):
         return len(self.model_data)
