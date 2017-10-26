@@ -20,8 +20,10 @@ class Publish(object):
         self.project = self.context.project
 
     def get_publish_py(self):
-        pipeline_dir = miraCore.pipeline_dir
-        publish_dir = join_path.join_path2(pipeline_dir, self.engine, "publish")
+        custom_dir = miraCore.custom_dir
+        publish_dir = join_path.join_path2(custom_dir, self.project, "publish")
+        if not os.path.isdir(publish_dir):
+            publish_dir = join_path.join_path2(custom_dir, "defaultProject", "publish")
         publish_py = join_path.join_path2(publish_dir, "publish.py")
         return publish_py
 
