@@ -13,6 +13,9 @@
         <submenu name="QCPublish"
                  command="from miraPipeline.pipeline.QC import qc;reload(qc);qc.main()"
                  type="command"/>
+        <submenu name="Submit to render"
+                 command="from miraLibs.deadlineLibs import submit_nuke;reload(submit_nuke);submit_nuke.submit_nuke()"
+                 type="command"/>
         <submenu type="separator"/>
         <submenu name="HUD"
                  command="from miraPipeline.nuke.nuke_hud import create_hud;reload(create_hud);create_hud.create_hud()"
