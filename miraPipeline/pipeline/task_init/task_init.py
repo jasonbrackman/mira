@@ -2,7 +2,7 @@ import imp
 import logging
 import os
 from Qt.QtWidgets import *
-import miraCore
+import pipeGlobal
 import ui
 reload(ui)
 from ui import TaskUI
@@ -63,7 +63,7 @@ class TaskInit(TaskUI):
         self.set_dir()
 
     def do_init_task(self, step, local_file):
-        custom_dir = miraCore.custom_dir
+        custom_dir = pipeGlobal.custom_dir
         start_dir = os.path.join(custom_dir, self.selected.project, "start").replace("\\", "/")
         if not os.path.isdir(start_dir):
             start_dir = os.path.join(custom_dir, "defaultProject", "start").replace("\\", "/")

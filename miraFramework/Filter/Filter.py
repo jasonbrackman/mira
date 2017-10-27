@@ -2,7 +2,7 @@
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
-import miraCore
+import pipeGlobal
 from miraLibs.pyLibs import join_path
 
 
@@ -13,7 +13,7 @@ class Filter(QLineEdit):
 
         self.icon_file = icon_file
         if not self.icon_file:
-            icon_dir = miraCore.icons_dir
+            icon_dir = pipeGlobal.icons_dir
             self.icon_file = join_path.join_path2(icon_dir, "search.png")
         self.button = QToolButton(self)
         self.button.setEnabled(False)

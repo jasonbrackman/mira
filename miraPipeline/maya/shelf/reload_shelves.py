@@ -5,12 +5,12 @@ import functools
 import pymel.core as pm
 from miraLibs.mayaLibs import maya_shelf_opt
 from miraLibs.pyLibs import join_path, yml_operation
-import miraCore
+import pipeGlobal
 
 
 def get_buttons():
     # get conf path
-    conf_dir = miraCore.conf_dir
+    conf_dir = pipeGlobal.conf_dir
     shelf_conf_path = join_path.join_path2(conf_dir, "maya_shelf.yml")
     shelf_conf_data = yml_operation.get_yaml_data(shelf_conf_path)
     pipeline_shelf = shelf_conf_data["pipeline_shelf"]
@@ -27,7 +27,7 @@ def main():
     maya_shelf_opt.delete_shelf(top_shelf, "PipeLine")
     maya_shelf_opt.create_shelf(top_shelf, "PipeLine")
     # get icon dir
-    icon_dir = miraCore.icons_dir
+    icon_dir = pipeGlobal.icons_dir
     shelf_icon_dir = join_path.join_path2(icon_dir, "maya_shelf_buttons")
     # create buttons
     sys.path.insert(0, os.path.dirname(__file__))

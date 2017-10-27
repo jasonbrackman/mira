@@ -6,7 +6,7 @@ import shutil
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
-import miraCore
+import pipeGlobal
 from miraLibs.pyLibs import join_path
 
 
@@ -14,7 +14,7 @@ NO_USE_FILE = ["Thumbs.db"]
 
 
 def get_ffmpeg_path():
-    mira_bin_dir = miraCore.bin_dir
+    mira_bin_dir = pipeGlobal.bin_dir
     ffmpeg_dir = join_path.join_path2(mira_bin_dir, "ffmpeg/bin")
     ffmpeg_path = join_path.join_path2(ffmpeg_dir, "ffmpeg.exe")
     return ffmpeg_path

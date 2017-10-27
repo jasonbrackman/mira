@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
 import sys
-from miraLibs.pipeLibs import pipeFile, pipeMira, pipeHistory
+import pipeGlobal
+from miraLibs.pipeLibs import pipeFile, pipeHistory
 
 
 def get_current_project():
@@ -24,9 +25,9 @@ def get_current_project():
         if current_project:
             logger.info("Get project from history.")
         else:
-            current_project = pipeMira.get_current_project()
+            current_project = pipeGlobal.current_project
             logger.info("Get project from configuration.")
-    if current_project and current_project not in pipeMira.get_projects():
-        current_project = pipeMira.get_current_project()
+    if current_project and current_project not in pipeGlobal.projects:
+        current_project = pipeGlobal.current_project
         logger.info("Get project from configuration.")
     return current_project

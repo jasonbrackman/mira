@@ -6,7 +6,7 @@ from Qt.QtCore import *
 from Qt.QtGui import *
 import maya.cmds as mc
 import pymel.core as pm
-import miraCore
+import pipeGlobal
 from miraLibs.pipeLibs.pipeMaya import get_asset_names, get_current_project, lgt_assign_shader_deformed
 reload(lgt_assign_shader_deformed)
 from miraLibs.mayaLibs import get_maya_win, replace_reference
@@ -119,7 +119,7 @@ class SwitchShader(QDialog):
         self.filter_layout.addStretch()
         self.filter_layout.addWidget(self.filter_le)
         self.update_btn = QToolButton()
-        icon_path = join_path.join_path2(miraCore.icons_dir, "update.png")
+        icon_path = join_path.join_path2(pipeGlobal.icons_dir, "update.png")
         self.update_btn.setIcon(QIcon(icon_path))
         self.update_btn.setStyleSheet("QToolButton{background:transparent;}"
                                       "QToolButton::hover{background:#00BFFF;border-color:#00BFFF;}")

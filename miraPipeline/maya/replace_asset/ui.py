@@ -3,7 +3,7 @@ from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
 from miraFramework.Filter import Filter
-import miraCore
+import pipeGlobal
 from miraLibs.pyLibs import join_path
 
 
@@ -36,7 +36,7 @@ class ReplaceAssetUI(QDialog):
         self.filter_le = Filter()
         self.filter_le.setPlaceholderText("Search...")
         self.update_btn = QToolButton()
-        icon_path = join_path.join_path2(miraCore.icons_dir, "update.png")
+        icon_path = join_path.join_path2(pipeGlobal.icons_dir, "update.png")
         self.update_btn.setIcon(QIcon(icon_path))
         self.update_btn.setStyleSheet("QToolButton{background:transparent;border: 0px;}"
                                       "QToolButton::hover{background:#AAAAAA;}")

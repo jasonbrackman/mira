@@ -3,7 +3,7 @@ import os
 import glob
 import logging
 from miraLibs.mayaLibs import new_file, save_as, quit_maya
-from miraLibs.pipeLibs import pipeFile, pipeMira
+from miraLibs.pipeLibs import pipeFile, Project
 from miraLibs.pipeLibs.pipeMaya import fix_frame_range
 from miraLibs.mayaLibs import create_group, create_reference, set_image_size, Assembly, maya_import
 from miraLibs.pipeLibs.pipeMaya.rebuild_assembly import rebuild_scene
@@ -37,7 +37,7 @@ def main(file_name, local):
     logger.info("Fix frame range done.")
 
     # set resolution
-    resolution = pipeMira.get_resolution(context.project)
+    resolution = Project(context.project).resolution
     set_image_size.set_image_size(*resolution)
     save_as.save_as(file_name)
     logger.info("%s publish successful!" % file_name)

@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import maya.cmds as mc
-from miraLibs.pipeLibs import pipeFile, pipeMira
+import pipeGlobal
+from miraLibs.pipeLibs import pipeFile
 import miraLibs.mayaLibs.HeadsUpDisplay as hu
 import miraLibs.mayaLibs.get_maya_globals as get_maya_globals
 
 
 def get_company():
-    company = pipeMira.get_company()
+    company = pipeGlobal.company
     return company
 
 
@@ -21,7 +22,7 @@ def get_project():
 def get_resolution():
     current_project = get_project()
     if current_project:
-        resolution = pipeMira.get_resolution(current_project)
+        resolution = pipeGlobal.Project(current_project).resolution
         resolution = "*".join([str(i) for i in resolution])
     else:
         resolution = ""

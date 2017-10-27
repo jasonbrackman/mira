@@ -2,12 +2,12 @@
 import os
 import logging
 import time
-from miraLibs.pipeLibs import pipeMira
+from miraLibs.pipeLibs import Project
 from miraLibs.pyLibs import join_path
 
 
 def get_logger(project, logger_type, task_name):
-    logger_dir = pipeMira.get_studio_value(project, "task_log_dir")
+    logger_dir = Project(project).task_log_dir
     logger_dir = logger_dir.format(project=project)
     logger_dir = join_path.join_path2(logger_dir, logger_type)
     if not os.path.isdir(logger_dir):

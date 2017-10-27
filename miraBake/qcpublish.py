@@ -5,7 +5,7 @@ import sys
 
 from Qt.QtWidgets import *
 
-import miraCore
+import pipeGlobal
 from miraFramework.drag_file_widget.FileListWidget import FileListWidget
 from miraLibs.mayaLibs import get_maya_win, save_as
 from miraLibs.pipeLibs import pipeFile
@@ -98,7 +98,7 @@ def qcpublish_screen_shot(entity_type, image_path):
 
 
 def qcpublish(step):
-    script_dir = miraCore.pipeline_dir
+    script_dir = pipeGlobal.pipeline_dir
     publish_dir = join_path.join_path2(script_dir, "maya", "QCPublish")
     if publish_dir not in sys.path:
         sys.path.insert(0, publish_dir)

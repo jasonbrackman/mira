@@ -5,7 +5,7 @@ import maya.cmds as mc
 import playblaster
 reload(playblaster)
 from miraLibs.mayaLibs import set_image_size
-from miraLibs.pipeLibs import pipeFile, pipeMira
+from miraLibs.pipeLibs import pipeFile, Project
 from miraLibs.pyLibs import create_parent_dir
 from miraLibs.pipeLibs.copy import Copy
 from miraLibs.mayaLibs import get_frame_range
@@ -16,10 +16,10 @@ class PlayblastLay(object):
         self.logger = logging.getLogger("Playblast Lay")
         self.obj = pipeFile.PathDetails.parse_path()
         self.current_project = self.obj.project
-        self.resolution = pipeMira.get_resolution(self.current_project)
+        self.resolution = Project(self.current_project).resolution
         set_image_size.set_image_size(*self.resolution)
-        self.percent = pipeMira.get_playblast_percent(self.current_project)
-        self.local_dir = pipeMira.get_local_root_dir(self.current_project)
+        self.percent = Project(self.current_project).playblast_percent
+        self.local_dir = Project(self.current_project).local_root_dir
 
     def playblast_lay(self):
         # get sequencer frame range
@@ -51,7 +51,7 @@ class PlayblastLay(object):
         start_frame = mc.getAttr("%s.startFrame" % shot_node)
         end_frame = mc.getAttr("%s.endFrame" % shot_node)
         shot_type, seq, shot = shot_node.split("_")
-        video_path = pipeFile.get_shot_task_video_file(seq, shot, "lay", self.current_project)
+        video_path = pipeFile.get_task_video_file(seq, shot, "lay", self.current_project)
         prefix, suffix = os.path.splitdrive(video_path)
         local_video_path = os.path.join(self.local_dir, suffix).replace("\\", "/")
         playblaster.playblaster(local_video_path, camera[0], start_frame, end_frame, self.resolution, self.percent,

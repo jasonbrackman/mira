@@ -27,7 +27,7 @@ def submit_maya():
     maya_exex = '%s\Render.exe' % maya_dir
     start_frame = int(pm.playbackOptions(animationStartTime=True, query=True))
     end_frame = int(pm.playbackOptions(animationEndTime=True, query=True))
-    name = os.path.split(filein)[1]
+    name = "maya_%s_%s_%s_%s" % (context.project, context.sequence, context.shot, context.step)
     # comment = ''
 
     maya_args = '-s <STARTFRAME>  -e <ENDFRAME>  -rd %s %s ' % (output_file_path, filein)

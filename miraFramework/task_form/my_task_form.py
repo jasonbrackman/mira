@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
-
 from Qt.QtCore import *
 from Qt.QtGui import *
 from Qt.QtWidgets import *
-
 from miraFramework.Filter import Filter
 from miraFramework.combo import ProjectCombo
 from miraFramework.refresh_btn import RefreshButton

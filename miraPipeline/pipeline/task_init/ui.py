@@ -3,7 +3,7 @@ import os
 from Qt.QtCore import *
 from Qt.QtGui import *
 from Qt.QtWidgets import *
-import miraCore
+import pipeGlobal
 from miraFramework.task_form import my_task_form
 from miraLibs.dccLibs import FileOpener
 from miraLibs.dccLibs import get_engine
@@ -88,7 +88,7 @@ class StackedWidget(QStackedWidget):
         self.addWidget(self.list_widget)
     
     def get_engine_icon_path(self, engine):
-        icons_dir = miraCore.icons_dir
+        icons_dir = pipeGlobal.icons_dir
         engine_icon_path = "%s/%s/%s" % (icons_dir, "engine", "%s.png" % engine)
         return engine_icon_path
         

@@ -4,17 +4,17 @@ from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
 import maya.OpenMaya as OpenMaya
+import pipeGlobal
 from miraLibs.mayaLibs.MayaToolBar import MayaToolBar
-from miraLibs.pipeLibs import pipeMira, pipeHistory
+from miraLibs.pipeLibs import pipeHistory
 from miraLibs.mayaLibs import get_maya_globals
 from miraLibs.pipeLibs.pipeMaya import get_current_project
-import miraCore
 
 
 def get_current_project_from_outside():
     current_project = pipeHistory.get("currentProject")
     if not current_project:
-        current_project = pipeMira.get_current_project()
+        current_project = pipeGlobal.current_project
     return current_project
 
 
@@ -29,7 +29,7 @@ def add_project_to_maya_globals(project_object):
 class ProjectButton(QPushButton):
     def __init__(self, parent=None):
         super(ProjectButton, self).__init__(parent)
-        self.projects = pipeMira.get_projects()
+        self.projects = pipeGlobal.projects
         self.project = get_current_project_from_outside()
         self.setFixedHeight(22)
         self.set_icon()
@@ -57,7 +57,7 @@ class ProjectButton(QPushButton):
                            "QPushButton:hover{background: #222222;}")
 
     def set_icon(self):
-        icon_dir = miraCore.icons_dir
+        icon_dir = pipeGlobal.icons_dir
         icon_path = os.path.join(icon_dir, "project_icon", "%s.png" % self.project)
         if not os.path.isfile(icon_path):
             icon_path = os.path.join(icon_dir, "project_icon", "company.png")

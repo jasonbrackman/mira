@@ -5,14 +5,14 @@ import os
 from Qt.QtCore import *
 from Qt.QtGui import *
 from Qt.QtWidgets import *
-import miraCore
+import pipeGlobal
 from miraFramework.drag_file_widget import DragFileWidget
 from miraFramework.message_box import MessageWidget
 from miraFramework.screen_shot import screen_shot
 from miraLibs.dccLibs import save_file
 from miraLibs.dccLibs import get_parent_win
 from miraLibs.dccLibs import save_as
-from miraLibs.pipeLibs import pipeFile, pipeMira
+from miraLibs.pipeLibs import pipeFile, Project
 from miraLibs.pyLibs import join_path, copy
 from miraPipeline.pipeline.preflight import check_gui
 
@@ -25,7 +25,7 @@ COLUMN_WIDTH = 30
 
 
 def qcpublish(project, step):
-    custom_dir = miraCore.custom_dir
+    custom_dir = pipeGlobal.custom_dir
     qcpublish_dir = join_path.join_path2(custom_dir, project, "QCPublish")
     if not os.path.isdir(qcpublish_dir):
         qcpublish_dir = join_path.join_path2(custom_dir, "defaultProject", "QCPublish")
@@ -149,8 +149,8 @@ class QC(QDialog):
         self.other_dir = self.context.other_dir
         self.video_path = self.context.work_video_path
         self.next_version_file = self.context.next_version_file
-        self.not_playblast_step = pipeMira.get_studio_value(self.project, "not_playblast_step")
-        self.not_submit_version_step = pipeMira.get_studio_value(self.project, "not_submit_version_step")
+        self.not_playblast_step = Project(self.project).not_playblast_step
+        self.not_submit_version_step = Project(self.project).not_submit_version_step
         self.has_playblast = self.step not in self.not_playblast_step
         self.setup_ui()
 
@@ -273,7 +273,6 @@ class QC(QDialog):
             try:
                 ext = os.path.splitext(origin_file)[-1]
                 version_file = "%s%s" % (os.path.splitext(self.video_path)[0], ext)
-                print version_file
                 copy.copy(origin_file, version_file)
                 self.version_widget.success()
                 return version_file

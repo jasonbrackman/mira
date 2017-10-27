@@ -1,20 +1,21 @@
 # -*- coding: utf-8 -*-
-import os
-import logging
 import getpass
+import logging
+import os
 import shutil
 import xml.dom.minidom
+
 import maya.cmds as mc
 import maya.mel as mel
 import maya.utils as mu
-import miraCore
-from miraLibs.mayaLibs import set_image_size, get_maya_version
 
+import pipeGlobal
+from miraLibs.mayaLibs import set_image_size, get_maya_version
 
 logger = logging.getLogger(u"MIRA MAIN")
 logger.setLevel(logging.DEBUG)
 
-conf_dir = miraCore.conf_dir
+conf_dir = pipeGlobal.conf_dir
 
 # ------------------------------------------------------------------------------------------#
 # ----------------------------------load menu  ---------------------------------------------#
@@ -56,7 +57,7 @@ def load_menu():
                 if mode == "python":
                     mc.menuItem(label=cmd_menu_name, tearOff=True, parent=sub_maya_menu, c=cmd)
                 elif mode == "mel":
-                    mel_path = os.path.join(miraCore.mira_dir, cmd)
+                    mel_path = os.path.join(pipeGlobal.mira_dir, cmd)
                     mel_path = mel_path.replace("\\", "/")
                     mc.menuItem(label=cmd_menu_name, tearOff=True, parent=sub_maya_menu,
                                 c=lambda *args: run_mel_cmd(mel_path))
@@ -112,9 +113,9 @@ def init_scene_break_down():
 
 
 def init_render_setting():
-    from miraLibs.pipeLibs import pipeMira
-    current_project = pipeMira.get_current_project()
-    resolution = pipeMira.get_resolution(current_project)
+    import pipeGlobal
+    current_project = pipeGlobal.current_project
+    resolution = pipeGlobal.Project(current_project).resolution
     set_image_size.set_image_size(*resolution)
     logger.info("Initialize render settings done.")
 
@@ -144,9 +145,9 @@ def init_maya_background_style():
 
 
 def load_plugins():
-    from miraLibs.pipeLibs.pipeMaya import load_plugins, unload_plugins
-    load_plugins.load_plugins()
-    unload_plugins.unload_plugins()
+    from miraLibs.pipeLibs.pipeMaya.plugins import plugins
+    plugins.load_plugins()
+    plugins.unload_plugins()
 
 
 def init_current_project():
@@ -159,7 +160,7 @@ def open_port():
     import subprocess
     from miraPipeline.pipeline.port_operation import add_user_info_to_db
     add_user_info_to_db.add_user_info_to_db()
-    open_port_path = os.path.join(miraCore.mira_dir, "miraPipeline/pipeline/port_operation/run_open_port.py")
+    open_port_path = os.path.join(pipeGlobal.mira_dir, "miraPipeline/pipeline/port_operation/run_open_port.py")
     open_port_path = open_port_path.replace("\\", "/")
     if not os.path.isfile(open_port_path):
         return
@@ -182,7 +183,7 @@ def add_system_python_path_env():
     if user in ["heshuai", "zhaopeng"]:
         return
     startup_dir = "C:/Users/%s/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup" % user
-    mira_batch_dir = miraCore.batch_dir
+    mira_batch_dir = pipeGlobal.batch_dir
     python_path_bat = os.path.join(mira_batch_dir, "PYTHONPATH.bat").replace("\\", "/")
     startup_python_path_bat = os.path.join(startup_dir, "PYTHONPATH.bat")
     try:
