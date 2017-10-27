@@ -1,0 +1,17 @@
+primary: "W:"
+local_root_dir: "D:"
+render_root_dir: "R:"
+vfx_cache_root_dir: "R:"
+database: "strack"
+resolution: [2048, 858]
+maya_path: "C:/Program Files/Autodesk/Maya2017/bin/maya.exe"
+mayabatch_path: "C:/Program Files/Autodesk/Maya2017/bin/mayabatch.exe"
+nuke_path: "C:/tools/Nuke10.0v1/Nuke10.0.exe"
+playblast_percent: 100
+task_log_dir: "@primary/{project}/log"
+priority: ["A", "B", "C", "D"]
+asset_type: ["Character", "Cprop", "Prop", "Environment", "Building"]
+asset_steps: ["LowMdl","MidMdl","HighMdl","Shd","MidRig","HighRig","Hair","Group", "HairRig"]
+shot_steps: ["Set","MainLgt","AnimLay","VfxLay","LgtLay","CompLay","Anim","Vfx","Cfx","Lgt","Comp","Cut"]
+not_playblast_step: ["HighRig","MidRig","Shd","Hair", "Group", "Set", "LgtLay", "MainLgt", "HairRig", "CompLay", "Comp"]
+not_submit_version_step: ["HighRig", "MidRig", "Set", "Group", "LgtLay", "MainLgt", "HairRig"]

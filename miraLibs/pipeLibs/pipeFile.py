@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import re
-
-from miraLibs.pipeLibs import Step
-from miraLibs.pipeLibs.pipeMira import get_projects, get_studio_value
+import pipeGlobal
 from miraLibs.pyLibs import opposite_format, get_latest_version
 from miraLibs.pyLibs.Path import Path
 
@@ -23,7 +21,7 @@ def get_entity_type(path):
 def get_project(path):
     base_name = Path(path).basename()
     project = base_name.split("_")[0]
-    if project in get_projects():
+    if project in pipeGlobal.projects:
         return project
 
 
@@ -59,9 +57,9 @@ class PathDetails(object):
         if not project:
             return
         if x.entity_type == "Asset":
-            template = get_studio_value(project, "asset_template")
+            template = pipeGlobal.Project(project).template("asset_template")
         else:
-            template = get_studio_value(project, "shot_template")
+            template = pipeGlobal.Project(project).template("shot_template")
         context_dict = opposite_format.opposite_format(template, path)
         if not context_dict:
             return x
@@ -252,8 +250,8 @@ class PathDetails(object):
 ########################################################################################################################
 def get_task_file(project, asset_type_sequence, asset_name_shot, step, task,
                   format_str, version=None, edition="000"):
-    file_format = get_studio_value(project, format_str)
-    engine = Step(project, step).engine
+    file_format = pipeGlobal.Project(project).template(format_str)
+    engine = pipeGlobal.Project(project).step(step).engine
     if not file_format:
         return
     if not version:
@@ -272,8 +270,8 @@ def get_task_file(project, asset_type_sequence, asset_name_shot, step, task,
 
 def get_entity_dir(project, entity_type, category, asset_type_sequence, asset_name_shot):
     entity_type = "assets" if entity_type == "Asset" else "shots"
-    primary = get_studio_value(project, "primary")
-    template = get_studio_value(project, "entity_dir")
+    primary = pipeGlobal.Project(project).primary
+    template = pipeGlobal.Project(project).entity_dir
     entity_dir = template.format(primary=primary, project=project, category=category, entity_type=entity_type,
                                  asset_type_sequence=asset_type_sequence,
                                  asset_name_shot=asset_name_shot.split("_")[-1])
@@ -281,7 +279,7 @@ def get_entity_dir(project, entity_type, category, asset_type_sequence, asset_na
 
 
 def get_task_work_file(project, entity_type, asset_type_sequence, asset_name_shot, step, task, version=None, local=False):
-    engine = Step(project, step).engine
+    engine = pipeGlobal.Project(project).step(step).engine
     if entity_type == "Asset":
         format_str = "%s_asset_local" % engine if local else "%s_asset_work" % engine
     else:
@@ -291,7 +289,7 @@ def get_task_work_file(project, entity_type, asset_type_sequence, asset_name_sho
 
 
 def get_task_workImage_file(project, entity_type, asset_type_sequence, asset_name_shot, step, task, version=None):
-    engine = Step(project, step).engine
+    engine = pipeGlobal.Project(project).step(step).engine
     if entity_type == "Asset":
         format_str = "%s_asset_workImage" % engine
     else:
@@ -301,7 +299,7 @@ def get_task_workImage_file(project, entity_type, asset_type_sequence, asset_nam
 
 
 def get_task_publish_file(project, entity_type, asset_type_sequence, asset_name_shot, step, task, version=""):
-    engine = Step(project, step).engine
+    engine = pipeGlobal.Project(project).step(step).engine
     if entity_type == "Asset":
         format_str = "%s_asset_publish" % engine
     else:
@@ -311,7 +309,7 @@ def get_task_publish_file(project, entity_type, asset_type_sequence, asset_name_
 
 
 def get_task_video_file(project, entity_type, asset_type_sequence, asset_name_shot, step, task, version=""):
-    engine = Step(project, step).engine
+    engine = pipeGlobal.Project(project).step(step).engine
     if entity_type == "Asset":
         format_str = "%s_asset_video" % engine
     else:
@@ -321,8 +319,8 @@ def get_task_video_file(project, entity_type, asset_type_sequence, asset_name_sh
 
 
 def get_asset_AD_file(project, asset_type, asset_name):
-    primary = get_studio_value(project, "primary")
-    template = get_studio_value(project, "maya_asset_definition")
+    primary = pipeGlobal.Project(project).primary
+    template = pipeGlobal.Project(project).template("maya_asset_definition")
     ad_file = template.format(primary=primary, project=project, asset_type=asset_type, asset_name=asset_name)
     return ad_file
 

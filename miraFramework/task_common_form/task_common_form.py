@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from Qt.QtWidgets import *
 from Qt.QtCore import *
-import miraCore
+import pipeGlobal
 from miraFramework.Filter import Filter
 from miraFramework.combo import ProjectCombo
 from miraLibs.pyLibs import join_path
-from miraLibs.pipeLibs import pipeMira, get_current_project
+from miraLibs.pipeLibs import get_current_project
 from miraLibs.dbLibs import db_api
 from miraLibs.pipeLibs import pipeHistory
 
@@ -122,7 +122,7 @@ class CommonWidget(QWidget):
         main_layout.addWidget(self.group_box)
         group_layout = QVBoxLayout()
 
-        icon_dir = miraCore.icons_dir
+        icon_dir = pipeGlobal.icons_dir
         icon_path = join_path.join_path2(icon_dir, "search.png")
         self.filter_le = Filter(icon_path)
 
@@ -174,7 +174,7 @@ class CommonForm(QWidget):
         self.init()
         self.set_signals()
         self.db = db_api.DbApi(self.project).db_obj
-        self.__asset_types = pipeMira.get_studio_value(self.project, "asset_type")
+        self.__asset_types = pipeGlobal.Project(self.project).asset_type
 
     def setup_ui(self):
         main_layout = QVBoxLayout(self)
@@ -238,11 +238,11 @@ class CommonForm(QWidget):
 
     @property
     def primary(self):
-        return pipeMira.get_primary_dir(self.project)
+        return pipeGlobal.Project(self.project).primary
 
     @property
     def mayabatch(self):
-        return pipeMira.get_mayabatch_path(self.project)
+        return pipeGlobal.Project(self.project).mayabatch_path
 
     @property
     def entity_type(self):
@@ -277,7 +277,7 @@ class CommonForm(QWidget):
         return self.db.get_current_task(*arg_list)
 
     def init(self):
-        projects = pipeMira.get_projects()
+        projects = pipeGlobal.projects
         self.project_cbox.addItems(projects)
         current_project = get_current_project.get_current_project()
         self.project_cbox.setCurrentIndex(self.project_cbox.findText(current_project))

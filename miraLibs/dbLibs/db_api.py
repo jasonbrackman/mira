@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from miraLibs.pipeLibs import pipeMira
+from miraLibs.pipeLibs import Project
 
 
 class DbApi(object):
@@ -13,7 +13,7 @@ class DbApi(object):
         :return: database instance
         """
         if self.project:
-            database = pipeMira.get_studio_value(self.project, "database")
+            database = Project(self.project).database
         else:
             database = "strack"
         if database == "shotgun":

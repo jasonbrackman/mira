@@ -6,8 +6,9 @@ from Qt.QtCore import *
 from Qt.QtGui import *
 import sim_reference_in_ui
 reload(sim_reference_in_ui)
+import pipeGlobal
 from miraLibs.mayaLibs import create_reference, get_maya_win
-from miraLibs.pipeLibs import pipeFile, pipeMira
+from miraLibs.pipeLibs import pipeFile
 from miraLibs.pipeLibs.pipeMaya import get_current_project
 
 
@@ -35,7 +36,7 @@ class SimReferenceIn(sim_reference_in_ui.SimReferenceInUI):
         self.reference_in_btn.clicked.connect(self.reference_in)
 
     def init_info_combo(self):
-        projects = pipeMira.get_projects()
+        projects = pipeGlobal.projects
         self.project_cbox.addItems(projects)
         current_project = get_current_project.get_current_project()
         self.project_cbox.setCurrentIndex(self.project_cbox.findText(current_project))

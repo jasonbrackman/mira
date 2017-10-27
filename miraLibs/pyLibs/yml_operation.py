@@ -5,6 +5,8 @@ import yaml
 
 
 def get_yaml_data(path):
+    if not os.path.isfile(path):
+        return
     with open(path, "r") as f:
         data = yaml.load(f)
         return data

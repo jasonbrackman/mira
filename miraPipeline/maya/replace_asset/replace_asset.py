@@ -7,7 +7,7 @@ reload(ui)
 import mayaOpt
 reload(mayaOpt)
 from miraLibs.mayaLibs import get_maya_win
-from miraLibs.pipeLibs import pipeMira, get_current_project
+from miraLibs.pipeLibs import Project, get_current_project
 
 
 class ComboModel(QAbstractListModel):
@@ -202,7 +202,7 @@ class ReplaceAsset(ui.ReplaceAssetUI):
         self.set_signals()
 
     def init(self):
-        asset_step_list = pipeMira.get_studio_value(self.project, "asset_steps").split(",")
+        asset_step_list = Project(self.project).asset_steps
         if "art" in asset_step_list:
             asset_step_list.remove("art")
         src_cbox_model = ComboModel(asset_step_list, self.src_cbox)

@@ -3,9 +3,9 @@ import os
 import sys
 sys.path.insert(0, "Z:/mira")
 from miraLibs.pipeLibs.get_task_name import get_task_name
-import miraCore
+import pipeGlobal
 from miraLibs.pyLibs import join_path
-from miraLibs.pipeLibs import pipeMira, pipeFile, get_logger
+from miraLibs.pipeLibs import Project, pipeFile, get_logger
 from miraLibs.dbLibs import db_api
 from miraLibs.pipeLibs.pipeDb import task_from_db_path, create_filesystem_structure
 
@@ -20,7 +20,7 @@ class Start(object):
         self.logger = self.get_logger()
 
     def get_start_py(self):
-        custom_dir = miraCore.custom_dir
+        custom_dir = pipeGlobal.custom_dir
         start_dir = join_path.join_path2(custom_dir, self.project, "start")
         if not os.path.isdir(start_dir):
             start_dir = join_path.join_path2(custom_dir, "defaultProject", "start")
@@ -37,7 +37,7 @@ class Start(object):
         if not os.path.isfile(start_py):
             self.logger.error("%s is not an exist file" % start_py)
             return
-        mayabatch = pipeMira.get_mayabatch_path(self.project)
+        mayabatch = Project(self.project).mayabatch_path
         cmd = '\"\"%s\" -command \"python \"\"file_name=\'%s\';execfile(\'%s\')\"\"\"\"' % (
             mayabatch, self.work_file, start_py)
         self.logger.info("cmd:\n\n%s\n\n" % cmd)

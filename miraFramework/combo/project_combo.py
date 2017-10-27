@@ -3,8 +3,7 @@ import os
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
-import miraCore
-from miraLibs.pipeLibs import pipeMira
+import pipeGlobal
 from miraLibs.pipeLibs import get_current_project
 
 
@@ -13,7 +12,7 @@ class ProjectModel(QAbstractListModel):
         super(ProjectModel, self).__init__(parent)
         self.model_data = model_data
         self.parent = parent
-        self.__icon_dir = miraCore.icons_dir
+        self.__icon_dir = pipeGlobal.icons_dir
 
     def rowCount(self, parent):
         return len(self.model_data)
@@ -43,7 +42,7 @@ class ProjectModel(QAbstractListModel):
 class ProjectCombo(QComboBox):
     def __init__(self, parent=None):
         super(ProjectCombo, self).__init__(parent)
-        self.__projects = pipeMira.get_projects()
+        self.__projects = pipeGlobal.projects
         self.model = ProjectModel(self.__projects, self)
         self.setModel(self.model)
         self.set_current_project()

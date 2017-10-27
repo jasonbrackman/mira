@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-import logging
-import sys
-import os
 import glob
-import maya.cmds as mc
+import logging
+import os
+import sys
 
+import maya.cmds as mc
 
 logger = logging.getLogger("userSetup.py")
 
@@ -39,11 +39,6 @@ def set_maya_env():
     if egg_files:
         for egg_file in egg_files:
             add_to_python_path(egg_file)
-
-
-def load_plugins():
-    from miraLibs.pipeLibs.pipeMaya import load_plugins
-    load_plugins.load_plugins()
 
 
 def run_mira_main():

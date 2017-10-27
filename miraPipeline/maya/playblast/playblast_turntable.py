@@ -4,7 +4,7 @@ import maya.cmds as mc
 import playblaster
 from miraBake import remove_turntable
 from miraLibs.mayaLibs import set_image_size
-from miraLibs.pipeLibs import pipeFile, pipeMira
+from miraLibs.pipeLibs import pipeFile, Project
 from miraLibs.pipeLibs.copy import Copy
 from miraLibs.pipeLibs.pipeMaya import get_model_name
 from miraLibs.pyLibs import create_parent_dir
@@ -21,8 +21,8 @@ def playblast_turntable(submit=True):
     current_project = obj.project
     # playblast
     model_name = get_model_name.get_model_name()
-    resolution = pipeMira.get_resolution(current_project)
-    percent = pipeMira.get_playblast_percent(current_project)
+    resolution = Project(current_project).resolution
+    percent = Project(current_project).playblast_percent
     set_image_size.set_image_size(*resolution)
     mc.select(model_name, r=1)
     create_turntable.create_turntable()

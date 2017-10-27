@@ -2,7 +2,7 @@
 import pymel.core as pm
 from BaseCheck import BaseCheck
 import maya.mel as mel
-import miraCore
+import pipeGlobal
 
 
 class Check(BaseCheck):
@@ -25,7 +25,7 @@ class Check(BaseCheck):
         return all_duplicate_names
 
     def auto_solve(self):
-        mira_dir = miraCore.mira_dir
+        mira_dir = pipeGlobal.mira_dir
         mel_path = "%s/miraLibs/mayaLibs/rename_duplicate.mel" % mira_dir
         mel_path = mel_path.replace("\\", "/")
         mel.eval("source \"%s\"" % mel_path)

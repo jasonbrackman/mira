@@ -7,7 +7,7 @@ reload(entity_ui)
 import task_ui
 reload(task_ui)
 from miraLibs.pipeLibs import pipeFile, Step
-import miraCore
+import pipeGlobal
 
 
 class TaskItem(object):
@@ -90,7 +90,7 @@ class Loader(QDialog):
                 image_path = pipeFile.get_task_file(self.project, asset_type_sequence, asset_name_shot, step,
                                                     task_name, format_str, "")
                 if not os.path.isfile(image_path):
-                    image_path = "%s/%s" % (miraCore.icons_dir, "unknown.png")
+                    image_path = "%s/%s" % (pipeGlobal.icons_dir, "unknown.png")
                 pix_map = QPixmap(image_path)
                 pix_map = pix_map.scaled(100, 75, Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
                 actions = self.__actions.get(entity_type)

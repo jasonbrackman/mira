@@ -2,7 +2,7 @@
 import os
 import imp
 import optparse
-import miraCore
+import pipeGlobal
 from miraLibs.pipeLibs import pipeFile
 
 
@@ -10,7 +10,7 @@ def start(file_name, local=True):
     context = pipeFile.PathDetails.parse_path(file_name)
     project = context.project
     step = context.step
-    custom_dir = miraCore.custom_dir
+    custom_dir = pipeGlobal.custom_dir
     start_dir = os.path.join(custom_dir, project, "start")
     if not os.path.isdir(start_dir):
         start_dir = os.path.join(custom_dir, "defaultProject", "start")

@@ -3,7 +3,7 @@ from Qt.QtCore import *
 import maya.mel as mel
 from miraFramework.combo import CombBox
 from miraFramework.combo.project_combo import ProjectCombo
-from miraLibs.pipeLibs import pipeMira, pipeFile
+from miraLibs.pipeLibs import Project, pipeFile
 from miraLibs.dbLibs import db_api
 from miraLibs.pipeLibs.pipeMaya.hair import import_xgen_hair
 from miraLibs.mayaLibs import load_plugin
@@ -47,7 +47,7 @@ class HairUI(QDialog):
         self.set_signals()
 
     def init(self):
-        asset_types = pipeMira.get_studio_value(self.project, "asset_type")
+        asset_types = Project(self.project).asset_type
         self.asset_type_combo.addItems(asset_types)
         self.set_asset_name()
 

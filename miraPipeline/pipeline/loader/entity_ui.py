@@ -9,8 +9,8 @@ from hooks import Hook
 from miraFramework.Filter import Filter
 from miraFramework.waiting import Waiting
 from miraFramework.combo import ProjectCombo
-import miraCore
-from miraLibs.pipeLibs import pipeMira
+import pipeGlobal
+from miraLibs.pipeLibs import Project
 from miraLibs.dbLibs import db_api
 reload(db_api)
 from miraLibs.qtLibs import create_round_rect_thumbnail
@@ -122,13 +122,13 @@ class RunThread(QThread):
         self.__asset_type_sequence = asset_type_sequence
         self.__entity_type = entity_type
         self.__entities = entities
-        self.__image_dir = miraCore.icons_dir
+        self.__image_dir = pipeGlobal.icons_dir
         self.__collect_data = list()
 
     def run(self):
-        studio_conf_path = join_path.join_path2(miraCore.custom_dir, self.__project, "studio.yml")
+        studio_conf_path = join_path.join_path2(pipeGlobal.custom_dir, self.__project, "template.yml")
         if not os.path.isfile(studio_conf_path):
-            studio_conf_path = join_path.join_path2(miraCore.custom_dir, "defaultProject", "studio.yml")
+            studio_conf_path = join_path.join_path2(pipeGlobal.custom_dir, "defaultProject", "template.yml")
         dcp = yml_operation.DeepConfParser(studio_conf_path)
         project_data = dcp.parse()
         primary = project_data.get("primary")
@@ -283,12 +283,12 @@ class Entity(EntityUI):
     @property
     def pipeline_steps(self):
         if self.entity_type == "Asset":
-            return pipeMira.get_studio_value(self.project, "asset_steps")
+            return Project(self.project).asset_steps
         else:
-            return pipeMira.get_studio_value(self.project, "shot_steps")
+            return Project(self.project).shot_steps
 
     def __init_asset_type(self):
-        asset_types = pipeMira.get_studio_value(self.project, "asset_type")
+        asset_types = Project(self.project).asset_type
         for asset_type in asset_types:
             self.asset_type_check = QCheckBox(asset_type)
             self.asset_btn_grp.addButton(self.asset_type_check)
@@ -409,9 +409,9 @@ class Entity(EntityUI):
         # add task menu and action
         if len(selected) > 1:
             if self.entity_type == "Asset":
-                steps = pipeMira.get_studio_value(self.project, "asset_steps")
+                steps = Project(self.project).asset_steps
             else:
-                steps = pipeMira.get_studio_value(self.project, "shot_steps")
+                steps = Project(self.project).shot_steps
         if len(selected) == 1:
             steps = self.db.get_step(self.entity_type, self.asset_type_sequence, asset_shot_names[0])
             if not steps:

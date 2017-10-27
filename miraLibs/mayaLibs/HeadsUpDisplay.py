@@ -3,11 +3,11 @@ import maya.cmds as mc
 import maya.OpenMayaUI as OpenMayaUI
 from miraLibs.pyLibs import yml_operation
 from miraLibs.pyLibs import join_path
-import miraCore
+import pipeGlobal
 
 
 def get_hud_conf():
-    hud_conf_dir = miraCore.conf_dir
+    hud_conf_dir = pipeGlobal.conf_dir
     hud_conf_path = join_path.join_path2(hud_conf_dir, "hud.yml")
     hud_data = yml_operation.get_yaml_data(hud_conf_path)
     return hud_data

@@ -6,7 +6,7 @@ from miraLibs.log import Logger
 log = Logger()
 from miraLibs.mayaLibs import new_file, save_as, maya_import, create_group, load_plugin, create_reference, \
     import_exocortex_abc, set_image_size, quit_maya
-from miraLibs.pipeLibs import pipeFile, pipeMira
+from miraLibs.pipeLibs import pipeFile, Project
 from miraLibs.pipeLibs.pipeMaya.rebuild_assembly import rebuild_scene
 from miraLibs.pyLibs import json_operation
 from miraLibs.pipeLibs.pipeMaya import fix_frame_range, get_assets, get_valid_camera
@@ -37,7 +37,7 @@ def main(file_name, local):
     fix_frame_range.fix_frame_range(context)
     logger.info("Fix frame range done.")
     # set resolution
-    resolution = pipeMira.get_resolution(context.project)
+    resolution = Project(context.project).resolution
     set_image_size.set_image_size(*resolution)
     save_as.save_as(file_name)
     logger.info("Publish done.")

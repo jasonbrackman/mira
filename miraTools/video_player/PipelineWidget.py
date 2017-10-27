@@ -2,7 +2,7 @@
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
-from miraLibs.pipeLibs import pipeMira
+import pipeGlobal
 from miraLibs.pipeLibs.pipeDb import sql_api
 
 
@@ -44,8 +44,8 @@ class PipelineWidget(QDialog):
         super(PipelineWidget, self).__init__(parent)
         self.resize(600, 420)
         self.setWindowFlags(Qt.Dialog | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint)
-        self.__projects = pipeMira.get_projects()
-        self.current_project = pipeMira.get_current_project()
+        self.__projects = pipeGlobal.projects
+        self.current_project = pipeGlobal.current_project
         self.__db = sql_api.SqlApi(self.current_project)
         self.__sequence_context = ["lay"]
         self.__shot_context = pipeMira.get_shot_step()

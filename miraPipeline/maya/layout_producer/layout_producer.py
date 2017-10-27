@@ -7,7 +7,7 @@ from Qt.QtGui import *
 import maya.cmds as mc
 import layout_producer_ui
 reload(layout_producer_ui)
-import miraCore
+import pipeGlobal
 from miraLibs.pipeLibs import pipeMira, pipeFile
 from miraLibs.pyLibs import join_path, get_latest_version_by_dir
 from miraLibs.mayaLibs import create_reference, import_gpu_cache, add_string_attr, show_as_panel
@@ -56,7 +56,7 @@ class ListModel(QAbstractListModel):
                     return version
         if role == Qt.DecorationRole:
             pix_map_path = self.__model_data[row].image_path
-            icon_dir = miraCore.icons_dir
+            icon_dir = pipeGlobal.icons_dir
             if not pix_map_path:
                 pix_map_path = join_path.join_path2(icon_dir, "unknown.png")
             pix_map = QPixmap(pix_map_path)

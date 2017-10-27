@@ -5,7 +5,7 @@ import os
 import re
 import logging
 from miraLibs.pyLibs.Temporary import Temporary
-from miraLibs.pipeLibs import pipeMira
+import pipeGlobal
 
 
 class DeadlineSubmission(object):
@@ -13,9 +13,9 @@ class DeadlineSubmission(object):
         object.__init__(self)
         self.jobid = None
 
-        self.executable = pipeMira.get_executable().get("python").get("py27").get("pythonbin")
+        self.executable = pipeGlobal.exe.get("python").get("py27").get("pythonbin")
         self.arguments = '-c "import time; time.sleep(10)"'
-        self.cwd = pipeMira.get_executable().get("python").get("py27").get('pythonstartupdir')
+        self.cwd = pipeGlobal.exe.get("python").get("py27").get('pythonstartupdir')
 
         self.details = {"Plugin": "CommandLine",
                         "Name": "",
@@ -37,7 +37,7 @@ class DeadlineSubmission(object):
                         "ChunkSize": "1",
                         "ExtraInfo0": ""
                         }
-        pool = pipeMira.get_executable().get("deadline").get("default_pool")
+        pool = pipeGlobal.exe.get("deadline").get("default_pool")
         if pool:
             self.setPool(pool)
 
@@ -68,7 +68,7 @@ class DeadlineSubmission(object):
     def submit(self):
         with Temporary() as tempdir:
             job_info, plugin_info = self.settingjobPlugininfo(tempdir)
-            command = '"%s" "%s" "%s"' % (pipeMira.get_executable().get("deadline").get("path"), job_info, plugin_info)
+            command = '"%s" "%s" "%s"' % (pipeGlobal.exe.get("deadline").get("path"), job_info, plugin_info)
             logging.info("submitting command %s", command)
             # in maya
             p = subprocess.Popen(command)
@@ -115,7 +115,7 @@ class DeadlineSubmission(object):
             time.sleep(1)
 
     def get_job_progress(self):
-        cmd = pipeMira.get_executable().get("deadline").get("path") + " GetTaskProgress " + self.jobid
+        cmd = pipeGlobal.exe.get("deadline").get("path") + " GetTaskProgress " + self.jobid
         p = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=False)
         p.wait()
         progress_match = re.compile("JobProgress=(?P<progress>[0-9]+)%")

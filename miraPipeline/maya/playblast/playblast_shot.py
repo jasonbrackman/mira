@@ -2,7 +2,7 @@
 import logging
 import playblaster
 from miraLibs.mayaLibs import set_image_size
-from miraLibs.pipeLibs import pipeFile, pipeMira
+from miraLibs.pipeLibs import pipeFile, Project
 from miraLibs.mayaLibs import get_frame_range
 from miraLibs.pipeLibs.pipeMaya import get_valid_camera
 from miraLibs.pyLibs import create_parent_dir
@@ -17,8 +17,8 @@ def playblast_shot(submit=True):
     frame_range = get_frame_range.get_frame_range()
     context = pipeFile.PathDetails.parse_path()
     current_project = context.project
-    resolution = pipeMira.get_resolution(current_project)
-    percent = pipeMira.get_playblast_percent(current_project)
+    resolution = Project(current_project).resolution
+    percent = Project(current_project).playblast_percent
     set_image_size.set_image_size(*resolution)
     local_video_path = context.local_video_path
     video_path = context.work_video_path

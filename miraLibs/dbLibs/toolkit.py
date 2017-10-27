@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from miraLibs.pipeLibs import pipeMira
+from miraLibs.pipeLibs import Project
 
 
 class Toolkit(object):
@@ -12,7 +12,7 @@ class Toolkit(object):
         get the toolkit instance
         :return: database instance
         """
-        database = pipeMira.get_studio_value(self.project, "database")
+        database = Project(self.project).data_base
         if database == "shotgun":
             from miraLibs.sgLibs import Tk
             tk = Tk.Tk(self.project)

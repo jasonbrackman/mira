@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+from miraLibs.pipeLibs import Project
 from miraLibs.pipeLibs.pipeMaya import get_current_project
-from miraLibs.pipeLibs import pipeMira
 import os
 import maya.cmds as mc
 
@@ -8,7 +8,7 @@ import maya.cmds as mc
 class AssetLight(object):
     def __init__(self):
         self.current_project = get_current_project.get_current_project()
-        self.current_root = pipeMira.get_studio_value(self.current_project, "primary")
+        self.current_root = Project(self.current_project).primary
 
     def import_char_light(self):
         current_light_path = "%s/%s/templates/assetLights/charLight/char_light.ma" % \

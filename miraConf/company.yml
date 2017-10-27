@@ -1,5 +1,10 @@
 company: "AiErPingFang"
 
+projects:
+  - "SnowKidTest"
+
+current_project: "SnowKidTest"
+
 
 EXE:
   python:
@@ -9,9 +14,14 @@ EXE:
 
   maya:
     2017:
+      path: "C:/Program Files/Autodesk/Maya2017/bin/maya.exe"
       render: "C:/Program Files/Autodesk/Maya2017/bin/render.exe"
       mayabatch: "C:/Program Files/Autodesk/Maya2017/bin/mayabatch.exe"
 
   deadline:
     path: "C:/Program Files/Thinkbox/Deadline8/bin/deadlinecommand.exe"
     default_pool: null
+
+  nuke:
+    10.0 v1:
+      path: "C:/tools/Nuke10.0v1/Nuke10.0.exe"

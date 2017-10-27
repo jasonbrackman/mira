@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import subprocess
-import sys
 import os
 import re
 import threading
 from get_engine import get_engine
+import pipeGlobal
 
 
 class RunCommandThread(threading.Thread):
@@ -32,8 +32,6 @@ class MayaOpener(object):
     def __init__(self, path):
         self.path = path
         self.threads = list()
-        self.maya_path_dict = {"2016": "C:/tools/Autodesk/Maya2016/bin/maya.exe",
-                               "2017": "C:/Program Files/Autodesk/Maya2017/bin/maya.exe"}
 
     def get_maya_version(self):
         ext = os.path.splitext(self.path)[1].lower()
@@ -56,7 +54,7 @@ class MayaOpener(object):
         maya_version = self.get_maya_version()
         if not maya_version:
             return
-        maya_path = self.maya_path_dict[str(maya_version)]
+        maya_path = pipeGlobal.exe.get("maya").get(maya_version).get("path")
         cmd = "%s %s" % (maya_path, self.path)
         thread = RunCommandThread(cmd)
         thread.start()
@@ -74,10 +72,9 @@ class NukeOpener(object):
     def __init__(self, path):
         self.path = path
         self.threads = list()
-        self.nuke_path_dict = {"10.0v1": "C:/tools/Autodesk/Maya2016/bin/maya.exe"}
 
     def get_nuke_version(self):
-        with open("D:/test.nk", "r") as f:
+        with open(self.path, "r") as f:
             lines = f.readlines()
             for line in lines:
                 matched = re.match("^version (.*)", line)
@@ -94,7 +91,7 @@ class NukeOpener(object):
         nuke_version = self.get_nuke_version()
         if not nuke_version:
             return
-        nuke_path = self.nuke_path_dict[str(nuke_version)]
+        nuke_path = pipeGlobal.exe.get("nuke").get(nuke_version).get("path")
         cmd = "%s %s" % (nuke_path, self.path)
         thread = RunCommandThread(cmd)
         thread.start()

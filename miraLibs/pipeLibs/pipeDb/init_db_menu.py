@@ -38,12 +38,12 @@ def init_shotgun_menu(project):
 
 
 def init_db_menu(*args):
-    from miraLibs.pipeLibs import pipeMira
+    from miraLibs.pipeLibs import Project
     path = get_scene_name.get_scene_name()
     obj = pipeFile.PathDetails.parse_path(path)
     if not obj:
         return
     project = obj.project
-    database = pipeMira.get_studio_value(project, "database")
+    database = Project(project).database
     if database == "shotgun":
         init_shotgun_menu(project)

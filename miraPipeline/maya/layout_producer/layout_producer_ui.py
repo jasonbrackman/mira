@@ -4,7 +4,7 @@ from Qt.QtCore import *
 from Qt.QtGui import *
 from miraFramework.Filter import Filter
 from miraLibs.pyLibs import join_path
-import miraCore
+import pipeGlobal
 
 
 class ThumbListView(QListView):
@@ -86,7 +86,7 @@ class LayoutProducerUI(QDialog):
         self.name_space_cbox = QComboBox()
         self.filter_le = Filter()
         self.update_btn = QToolButton()
-        icon_path = join_path.join_path2(miraCore.icons_dir, "update.png")
+        icon_path = join_path.join_path2(pipeGlobal.icons_dir, "update.png")
         self.update_btn.setIcon(QIcon(icon_path))
         self.update_btn.setStyleSheet("QToolButton{background:transparent;}"
                                       "QToolButton::hover{background:#00BFFF;border-color:#00BFFF;}")
@@ -109,7 +109,7 @@ class LayoutProducerUI(QDialog):
         self.add_btn = QToolButton()
         self.add_btn.setShortcut("Ctrl+D")
         self.add_btn.setToolTip("Ctrl+D")
-        icon_dir = miraCore.icons_dir
+        icon_dir = pipeGlobal.icons_dir
         arrow_down_path = join_path.join_path2(icon_dir, "arrow_dow.png")
         self.add_btn.setIcon(QIcon(arrow_down_path))
         add_btn_layout.addWidget(self.add_btn)

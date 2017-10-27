@@ -11,13 +11,18 @@ class Step(object):
         self.__project = project
         self.__step = step
         self.__custom_dir = miraCore.custom_dir
-        self.__value = self.value()
+        self.data = self.__get_value()
+        self.__dict__.update(self.data)
 
-    def value(self):
+    @property
+    def conf_path(self):
         conf_path = join_path.join_path2(self.__custom_dir, self.__project, "step.yml")
         if not os.path.isfile(conf_path):
             conf_path = join_path.join_path2(self.__custom_dir, "defaultProject", "step.yml")
-        yml_data = yml.get_yaml_data(conf_path)
+        return conf_path
+
+    def __get_value(self):
+        yml_data = yml.get_yaml_data(self.conf_path)
         if yml_data. has_key(self.__step):
             value = yml_data.get(self.__step)
             return value
@@ -25,20 +30,8 @@ class Step(object):
             logging.error("Step KeyError: %s not in the config file" % self.__step)
 
     @property
-    def engine(self):
-        return self.__value.get("engine")
-
-    @property
-    def up_step(self):
-        return self.__value.get("up_step")
-
-    @property
-    def down_step(self):
-        return self.__value.get("down_step")
-
-    @property
-    def entity_type(self):
-        return self.__value.get("entity")
+    def conf_options(self):
+        return self.data.keys()
 
     @property
     def entity(self):
@@ -49,4 +42,4 @@ class Step(object):
 
 
 if __name__ == "__main__":
-    print repr(Step("SnowKidTest", "AnimLay").down_step)
+    print Step("s", "Anim").conf_options
