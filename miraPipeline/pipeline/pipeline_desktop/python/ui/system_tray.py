@@ -9,8 +9,9 @@ from Qt.QtGui import *
 from ..libs import get_icon_dir
 from ..libs import get_department_of_user
 from ..libs import get_conf_data
+import pipeGlobal
 
-MIRA_DIR = "Z:/mira"
+MIRA_DIR = pipeGlobal.mira_dir
 
 
 def get_tray_icon_path():
