@@ -49,3 +49,7 @@ class MessageWidget(QDialog):
         pix_map = QPixmap(icon_path)
         scaled = pix_map.scaled(self.width(), 128, Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.icon_label.setPixmap(scaled)
+
+
+if __name__ == "__main__":
+    MessageWidget("Error", "test")

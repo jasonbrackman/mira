@@ -35,7 +35,8 @@ class DeadlineSubmission(object):
                         "OnJobComplete": "Nothing",
                         "Frames": "0",
                         "ChunkSize": "1",
-                        "ExtraInfo0": ""
+                        "ExtraInfo0": "",
+                        "UserName": ""
                         }
         pool = pipeGlobal.exe.get("deadline").get("default_pool")
         if pool:
@@ -64,6 +65,9 @@ class DeadlineSubmission(object):
 
     def setJobDependencies(self, dep):
         self.details['JobDependencies'] = dep
+
+    def setUserName(self, name):
+        self.details["UserName"] = name
 
     def submit(self):
         with Temporary() as tempdir:

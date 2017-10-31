@@ -7,6 +7,10 @@ Producer:
     name: "任务入库"
     command: "python {mira_dir}/miraPipeline/pipeline/task_publish/task_publish.py"
     order: 2
+  export_fbx_camera:
+    name: "导出fbx摄像机"
+    command: "python {mira_dir}/miraPipeline/maya/export_fbx_camera/export_fbx_camera.py"
+    order: 3
 
 TD:
   task_start:
@@ -17,3 +21,7 @@ TD:
     name: "任务入库"
     command: "python {mira_dir}/miraPipeline/pipeline/task_publish/task_publish.py"
     order: 2
+  export_fbx_camera:
+    name: "导出fbx摄像机"
+    command: "python {mira_dir}/miraPipeline/maya/export_fbx_camera/export_fbx_camera.py"
+    order: 3

@@ -13,6 +13,14 @@ class St(object):
             self.project_id = self.get_project_by_name().get("id")
 
     @property
+    def project(self):
+        return self.project_name
+
+    @project.setter
+    def project(self, value):
+        self.project_name = value
+
+    @property
     def user_id(self):
         user_info = self.get_user_by_name(self.user)
         return user_info.get("id")
