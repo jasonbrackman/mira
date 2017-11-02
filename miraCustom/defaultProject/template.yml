@@ -60,10 +60,14 @@ nuke_shot_localImage: "@render_root_dir/{project}/workarea/shots/{sequence}/{sho
 nuke_shot_work: "@primary/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_workarea/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.nk"
 nuke_shot_workImage: "@primary/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.png"
 nuke_shot_workVideo: "@primary/{project}/workarea/shots/{sequence}/{shot}/{step}/{task}/_video/{engine}/{project}_{sequence}_{shot}_{step}_{task}_v{version}.mov"
+nuke_shot_render: "@render_root_dir/{project}/render/workarea/{sequence}/{shot}/{step}/_sequence/v{version}/{project}_{sequence}_{shot}_{step}.%04d.png"
 # -publish
 nuke_shot_image: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_image/{engine}/{project}_{sequence}_{shot}_{step}_{task}.png"
 nuke_shot_video:   "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_video/{engine}/{project}_{sequence}_{shot}_{step}_{task}.mov"
 nuke_shot_publish: "@primary/{project}/publish/shots/{sequence}/{shot}/{step}/{task}/_publish/{engine}/{project}_{sequence}_{shot}_{step}_{task}.nk"
-nuke_shot_render: "@render_root_dir/{project}/render/workarea/{sequence}/{shot}/{step}/_sequence/v{version}/{project}_{sequence}_{shot}_{step}.%04d.png"
+nuke_shot_renderPublish: "@render_root_dir/{project}/render/publish/{sequence}/{shot}/{step}/_sequence"
+# vfx render dir
+vfx_shot_render: "@render_root_dir/{project}/render/workarea/{sequence}/{shot}/{step}/v{version}"
+vfx_shot_renderPublish: "@render_root_dir/{project}/render/publish/{sequence}/{shot}/{step}"
 # photoshop
 photoshop_asset_publish: "{primary}/{project}/workarea/assets/{asset_type}/{asset_name}/{step}/{task}/_publish/{engine}/{project}_{asset_name}_{step}_{task}_v{version}.psd"
