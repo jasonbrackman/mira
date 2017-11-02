@@ -17,7 +17,7 @@ except ImportError:
 import nuke
 from libs import get_parent_dir
 # global get hud, for display hud, don't delete it.
-from nuke_hud.get_hud import get_hud
+from scripts.nuke_hud.get_hud import get_hud
 
 
 class Utility(object):

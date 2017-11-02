@@ -17,8 +17,12 @@
                  command="from miraLibs.deadlineLibs import submit_nuke;reload(submit_nuke);submit_nuke.submit_nuke()"
                  type="command"/>
         <submenu type="separator"/>
+        <submenu name="Loader"
+                 command="from miraPipeline.nuke.scripts.loader import loader;reload(loader);loader.main()"
+                 type="command"/>
+        <submenu type="separator"/>
         <submenu name="HUD"
-                 command="from miraPipeline.nuke.nuke_hud import create_hud;reload(create_hud);create_hud.create_hud()"
+                 command="from miraPipeline.nuke.scripts.nuke_hud import create_hud;reload(create_hud);create_hud.create_hud()"
                  type="command"/>
         <submenu type="separator"/>
     </tools>
