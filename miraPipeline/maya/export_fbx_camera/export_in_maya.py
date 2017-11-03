@@ -28,7 +28,7 @@ def main():
     # export fbx
     fbx_file = "%s/%s.fbx" % (abc_dir, camera)
     mc.select(camera)
-    mc.file(fbx_file, options="", typ="Fbx", force=1, pr=1, es=1)
+    mc.file(fbx_file, options="", typ="FBX export ", force=1, pr=1, es=1)
     os.startfile(abc_dir)
     quit_maya.quit_maya()
 
