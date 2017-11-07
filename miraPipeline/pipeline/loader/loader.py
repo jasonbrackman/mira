@@ -59,7 +59,6 @@ class Loader(QDialog):
         self.entity_ui.list_view.left_pressed.connect(self.show_tasks)
 
     def show_tasks(self, index):
-        self.task_ui.waiting_widget.show()
         asset_name_shot = index.data(Qt.ToolTipRole)
         entity_type = self.entity_ui.entity_type
         asset_type_sequence = self.entity_ui.asset_type_sequence
@@ -103,7 +102,6 @@ class Loader(QDialog):
         self.task_ui.set_label(ui_text)
         self.task_ui.set_model(model_data)
         self.task_ui.set_delegate()
-        self.task_ui.waiting_widget.hide()
 
 
 def main():
