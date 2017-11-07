@@ -59,6 +59,7 @@ class Loader(QDialog):
         self.entity_ui.list_view.left_pressed.connect(self.show_tasks)
 
     def show_tasks(self, index):
+        self.task_ui.waiting_widget.show()
         asset_name_shot = index.data(Qt.ToolTipRole)
         entity_type = self.entity_ui.entity_type
         asset_type_sequence = self.entity_ui.asset_type_sequence
@@ -70,6 +71,7 @@ class Loader(QDialog):
         if not steps:
             self.task_ui.close_delegate()
             self.task_ui.set_model([])
+            self.task_ui.waiting_widget.hide()
             return
         model_data = list()
         ui_text = "<font face=Arial size=4 color=#00b4ff><b>%s  -  %s  -  %s</b></font>" \
@@ -101,6 +103,7 @@ class Loader(QDialog):
         self.task_ui.set_label(ui_text)
         self.task_ui.set_model(model_data)
         self.task_ui.set_delegate()
+        self.task_ui.waiting_widget.hide()
 
 
 def main():

@@ -71,6 +71,14 @@ class EntityUI(QWidget):
         project_layout.addWidget(project_label)
         project_layout.addWidget(self.project_cbox)
 
+        show_image_layout = QHBoxLayout()
+        self.show_image_btn = QPushButton("show image")
+        self.show_image_btn.setStyleSheet("QPushButton{color: #00b4ff; font: bold; font-size: 12px; font-family: Arial;"
+                                          "background:transparent; border: 0px;}"
+                                          "QPushButton:hover{color:#ff8c00;}QPushButton:pressed{color: #8B0000}")
+        show_image_layout.addStretch()
+        show_image_layout.addWidget(self.show_image_btn)
+
         self.entity_tab = QTabWidget()
         asset_widget = QWidget()
         self.asset_layout = QHBoxLayout(asset_widget)
@@ -104,6 +112,7 @@ class EntityUI(QWidget):
         show_layout.addWidget(self.show_le)
 
         main_layout.addLayout(project_layout)
+        main_layout.addLayout(show_image_layout)
         main_layout.addWidget(self.entity_tab)
         main_layout.addLayout(filter_layout)
         main_layout.addWidget(self.list_view)
@@ -116,50 +125,52 @@ class EntityUI(QWidget):
 class RunThread(QThread):
     signal = Signal(list)
 
-    def __init__(self, project, entity_type, asset_type_sequence, entities, parent=None):
+    def __init__(self, project, entity_type, asset_type_sequence, entities, show_image, parent=None):
         super(RunThread, self).__init__(parent)
         self.__project = project
         self.__asset_type_sequence = asset_type_sequence
         self.__entity_type = entity_type
         self.__entities = entities
         self.__image_dir = pipeGlobal.icons_dir
+        self.__show_image = show_image
         self.__collect_data = list()
 
     def run(self):
-        studio_conf_path = join_path.join_path2(pipeGlobal.custom_dir, self.__project, "template.yml")
-        if not os.path.isfile(studio_conf_path):
-            studio_conf_path = join_path.join_path2(pipeGlobal.custom_dir, "defaultProject", "template.yml")
-        dcp = yml_operation.DeepConfParser(studio_conf_path)
-        project_data = dcp.parse()
-        primary = project_data.get("primary")
-        if self.__entity_type == "Asset":
-            format_str = project_data.get("maya_asset_image")
-            step = "MidMdl"
-            task = "MidMdl"
+        default_image_path = join_path.join_path2(self.__image_dir, "unknown.png")
+        if self.__show_image:
+            project_data = Project(self.__project)
+            primary = project_data.primary
+            if self.__entity_type == "Asset":
+                format_str = project_data.template("maya_asset_image")
+                step = "MidMdl"
+                task = "MidMdl"
+            else:
+                format_str = project_data.template("maya_shot_image")
+                step = "AnimLay"
+                task = "AnimLay"
+            engine = Step(self.__project, step).engine
+            for entity in self.__entities:
+                entity_name = entity.get("code")
+                image_path = format_str.format(primary=primary, project=self.__project,
+                                               asset_type=self.__asset_type_sequence, sequence=self.__asset_type_sequence,
+                                               asset_name=entity_name, shot=entity_name.split("_")[-1],
+                                               step=step, task=task, engine=engine)
+
+                if self.__entity_type == "Asset" and not os.path.isfile(image_path):
+                    image_path = format_str.format(primary=primary, project=self.__project,
+                                                   asset_type=self.__asset_type_sequence,
+                                                   asset_name=entity_name, step="Group", task="Group", engine=engine)
+                if self.__entity_type == "Shot" and not os.path.isfile(image_path):
+                    image_path = format_str.format(primary=primary, project=self.__project,
+                                                   sequence=self.__asset_type_sequence,
+                                                   shot=entity_name.split("_")[-1], step="Set", task="Set", engine=engine)
+                if not os.path.isfile(image_path):
+                    image_path = default_image_path
+                self.__collect_data.append([entity_name, image_path])
         else:
-            format_str = project_data.get("maya_shot_image")
-            step = "AnimLay"
-            task = "AnimLay"
-        engine = Step(self.__project, step).engine
-        for entity in self.__entities:
-            entity_name = entity.get("code")
-            image_path = format_str.format(primary=primary, project=self.__project,
-                                           asset_type=self.__asset_type_sequence, sequence=self.__asset_type_sequence,
-                                           asset_name=entity_name, shot=entity_name.split("_")[-1],
-                                           step=step, task=task, engine=engine)
-
-            if self.__entity_type == "Asset" and not os.path.isfile(image_path):
-                image_path = format_str.format(primary=primary, project=self.__project,
-                                               asset_type=self.__asset_type_sequence,
-                                               asset_name=entity_name, step="Group", task="Group", engine=engine)
-            if self.__entity_type == "Shot" and not os.path.isfile(image_path):
-                image_path = format_str.format(primary=primary, project=self.__project,
-                                               sequence=self.__asset_type_sequence,
-                                               shot=entity_name.split("_")[-1], step="Set", task="Set", engine=engine)
-            if not os.path.isfile(image_path):
-                image_path = join_path.join_path2(self.__image_dir, "unknown.png")
-            self.__collect_data.append([entity_name, image_path])
-
+            for entity in self.__entities:
+                entity_name = entity.get("code")
+                self.__collect_data.append([entity_name, default_image_path])
         self.signal.emit(self.__collect_data)
 
 
@@ -260,6 +271,7 @@ class Entity(EntityUI):
         self.__set_signals()
         self.__threads = list()
         self.engine = get_engine.get_engine()
+        self.__show_image = False
 
     @property
     def project(self):
@@ -313,6 +325,7 @@ class Entity(EntityUI):
         self.list_view.clicked.connect(self.show_selected)
         self.entity_tab.currentChanged.connect(self.__switch_entity)
         self.sequence_le.returnPressed.connect(self.__calculate_entities)
+        self.show_image_btn.clicked.connect(self.show_image)
 
     def __switch_entity(self, index):
         if index == 0:
@@ -343,6 +356,11 @@ class Entity(EntityUI):
         self.proxy_model.setSourceModel(self.model)
         self.list_view.setModel(self.proxy_model)
 
+    def show_image(self):
+        self.__show_image = True
+        self.__calculate_entities()
+        self.__show_image = False
+
     def __calculate_entities(self):
         self.waiting_widget.show()
         if self.entity_type == "Asset":
@@ -354,7 +372,7 @@ class Entity(EntityUI):
             self.__set_empty_model()
             self.waiting_widget.hide()
             return
-        thread = RunThread(self.project, self.entity_type, self.asset_type_sequence, entities)
+        thread = RunThread(self.project, self.entity_type, self.asset_type_sequence, entities, self.__show_image)
         thread.signal.connect(self.__show_entities)
         self.__threads.append(thread)
         thread.start()
