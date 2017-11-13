@@ -18,8 +18,8 @@ def main(file_name, local):
     node = assemb.reference_ad("%s_c000_set" % sequence, set_ad_file)
     create_group.create_group("Env")
     mc.parent(node, "Env")
-    # set MidMdl active
-    assemb.set_active("MidMdl")
+    # set Shd active
+    assemb.set_active("Shd")
     save_as.save_as(file_name)
     logger.info("%s publish successful!" % file_name)
     if not local:

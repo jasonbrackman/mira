@@ -71,6 +71,8 @@
                  mode="python" name="打开渲染路径【Open render images】" type="command"/>
         <command cmd="from miraLibs.deadlineLibs import submit_maya;reload(submit_maya);submit_maya.submit_maya()"
                  mode="python" name="提交渲染【Submit deadline】" type="command"/>
+        <command cmd="from miraPipeline.maya.import_camera import import_camera;reload(import_camera);import_camera.main()"
+                 mode="python" name="导入摄像机【Import Camera】" type="command"/>
     </submenu>
     <submenu name= "----------" type="separator"/>
     <!--public tools-->
