@@ -5,12 +5,16 @@ from miraLibs.pyLibs import copy
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import open_file, quit_maya, export_selected
 from miraLibs.pipeLibs.pipeMaya import publish
+from miraLibs.pipeLibs.pipeMaya.rebuild_assembly import export_scene
 
 
 def main(file_name, local):
     logger = logging.getLogger("MainLgt publish")
     if not local:
         open_file.open_file(file_name)
+    # export edits
+    export_scene()
+    logger.info("Export edits done.")
     # delete Env
     try:
         mc.delete("Env")

@@ -4,9 +4,10 @@ import subprocess
 from Qt.QtWidgets import *
 from Qt.QtCore import *
 from Qt.QtGui import *
-from miraLibs.pipeLibs import pipeMira, pipeFile
+import pipeGlobal
+from miraLibs.pipeLibs import pipeFile
 reload(pipeFile)
-from miraLibs.stLibs import St
+from miraLibs.dbLibs import db_api
 
 
 class ListWidget(QListWidget):
@@ -84,10 +85,10 @@ class ShotReview(QDialog):
         self.resize(800, 730)
         self.setWindowTitle("Shot Review")
         self.setWindowFlags(Qt.Window)
-        self.__projects = pipeMira.get_projects()
-        self.current_project = pipeMira.get_current_project()
-        self.__sg = St.St(self.current_project)
-        self.__shot_step = pipeMira.get_shot_step()
+        self.__projects = pipeGlobal.projects
+        self.current_project = pipeGlobal.current_project
+        self.__db = db_api.DbApi(self.current_project).db_obj
+        self.__shot_step = pipeGlobal.Project(self.current_project).shot_steps
         self.play_list = list()
 
         main_layout = QVBoxLayout(self)
@@ -147,7 +148,7 @@ class ShotReview(QDialog):
         self.project_cbox.setCurrentIndex(self.project_cbox.findText(self.current_project))
 
     def init_sequence(self):
-        sequences = self.__sg.get_sequence()
+        sequences = self.__db.get_sequence()
         self.sequence_group.list_widget.clear()
         self.sequence_group.list_widget.addItems(sequences)
 
@@ -161,7 +162,7 @@ class ShotReview(QDialog):
 
     def change_project(self, index):
         self.current_project = self.__projects[index]
-        self.__sg = St.St(self.current_project)
+        self.__db = St.St(self.current_project)
         self.init_sequence()
         self.shot_group.list_widget.clear()
         self.shot_group.check_box.setChecked(False)
@@ -172,9 +173,9 @@ class ShotReview(QDialog):
         self.step_group.list_widget.clear()
         self.shot_group.check_box.setChecked(False)
         self.shot_group.list_widget.clear()
-        shots = self.__sg.get_all_shots_by_sequence(item.text())
+        shots = self.__db.get_all_shots(item.text())
         if shots:
-            shot_names = [shot["name"] for shot in shots]
+            shot_names = [shot["code"] for shot in shots]
             self.shot_group.list_widget.addItems(shot_names)
 
     def on_shot_clicked(self):
@@ -187,17 +188,12 @@ class ShotReview(QDialog):
             if custom_group is self.step_group:
                 return ["newest"]
             items = [custom_group.list_widget.item(i) for i in xrange(custom_group.list_widget.count())]
-            if not items:
-                return
-            items = [str(item.text()) for item in items]
-            items.sort()
-            return items
         else:
             items = custom_group.list_widget.selectedItems()
-            if not items:
-                return
-            items = [str(item.text()) for item in items]
-            items.sort()
+        if not items:
+            return
+        items = [str(item.text()) for item in items]
+        items.sort()
         return items
 
     def parse_selected(self):
@@ -211,9 +207,9 @@ class ShotReview(QDialog):
         for seq in sequence:
             for shot in shots:
                 if step_list == ["newest"]:
-                    step_list = ["comp", "lgt", "sim", "anim", "lay"]
+                    step_list = ["Comp", "CompLay", "Lgt", "LgtLay", "Sim", "Anim", "AnimLay"]
                 for step in step_list:
-                    video = pipeFile.get_shot_task_video_file(project, seq, shot, step, step)
+                    video = pipeFile.get_task_video_file(project, "Shot", seq, shot, step, step)
                     if video and os.path.isfile(video):
                         play_list.append(video)
                         break
@@ -223,8 +219,9 @@ class ShotReview(QDialog):
         play_list = self.parse_selected()
         if not play_list:
             return
-        else:
-            self.play_list.addItems(play_list)
+        all_items = [self.play_list.item(i).text() for i in xrange(self.play_list.count())]
+        play_list = [i for i in play_list if i not in all_items]
+        self.play_list.addItems(play_list)
 
     def play(self):
         items = [self.play_list.item(i) for i in xrange(self.play_list.count())]

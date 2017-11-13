@@ -2,13 +2,14 @@
 import os
 import logging
 import maya.cmds as mc
+import maya.mel as mel
 from miraLibs.log import Logger
 log = Logger()
 from miraLibs.mayaLibs import new_file, save_as, maya_import, create_group, load_plugin, create_reference, \
-    import_exocortex_abc, set_image_size, quit_maya
+    import_exocortex_abc, set_image_size, quit_maya, Assembly
 from miraLibs.pipeLibs import pipeFile, Project
 from miraLibs.pipeLibs.pipeMaya.rebuild_assembly import rebuild_scene
-from miraLibs.pyLibs import json_operation
+from miraLibs.pyLibs import json_operation, conf_parser
 from miraLibs.pipeLibs.pipeMaya import fix_frame_range, get_assets, get_valid_camera
 
 
@@ -25,6 +26,12 @@ def main(file_name, local):
     # rebuild scene
     rebuild_scene()
     logger.info("Rebuild scene done.")
+    # assembly switch to shd
+    assembly = Assembly.Assembly()
+    assembly.set_active("Shd")
+    # edit shd
+    edit_shd(context)
+    logger.info("Edit shd done.")
     # rebuild asset
     rebuild_asset(context)
     logger.info("Rebuild asset done.")
@@ -43,6 +50,32 @@ def main(file_name, local):
     logger.info("Publish done.")
     if not local:
         quit_maya.quit_maya()
+
+
+def get_shd_edit_data(context):
+    description_path = pipeFile.get_task_file(context.project, context.sequence, "c000",
+                                              "MainLgt", "MainLgt", "maya_shot_description", "")
+    if os.path.isfile(description_path):
+        cp = conf_parser.ConfParser(description_path)
+        conf_data = cp.parse().get()
+        return conf_data
+    else:
+        print "%s is not an exist file" % description_path
+
+
+def edit_shd(context):
+    shd_edit_data = get_shd_edit_data(context)
+    if shd_edit_data:
+        edits = shd_edit_data.get("edits")
+        if not edits:
+            print "No edits found."
+            return
+        for e in edits:
+            try:
+                mel.eval(e)
+            except:
+                print "Error: %s" % e
+        print "Edit done."
 
 
 def import_lights(context):
