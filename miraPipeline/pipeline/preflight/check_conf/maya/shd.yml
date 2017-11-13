@@ -13,6 +13,11 @@ check_display_smooth:
 #  order: 8
 #  ignorable: True
 #  description: "检查文件中的reference文件是不是最新的"
+check_shd_transfer_uv:
+  name: "uv transfer | 传递UV"
+  order: 8
+  ignorable: False
+  description: "检查是否有传递UV，如果有传递UV，不能直接在有reference的状态下删除中间物体。"
 check_topology:
   name: "topology | 拓扑结构"
   order: 10

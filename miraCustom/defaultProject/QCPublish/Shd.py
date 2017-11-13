@@ -2,7 +2,6 @@
 import logging
 import os
 import tempfile
-
 from miraLibs.mayaLibs import get_scene_name, save_file, open_file
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.pipeLibs.copy import Copy
@@ -35,6 +34,7 @@ def main():
         raise RuntimeError("copy to work path error.")
     # copy from temp file
     copy.copy(temp_file, scene_name)
+    logger.info("copy from temp.")
     # delete temp file
     os.remove(temp_file)
     # open scene name
