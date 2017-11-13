@@ -162,7 +162,7 @@ class ShotReview(QDialog):
 
     def change_project(self, index):
         self.current_project = self.__projects[index]
-        self.__db = St.St(self.current_project)
+        self.__db = db_api.DbApi(self.current_project).db_obj
         self.init_sequence()
         self.shot_group.list_widget.clear()
         self.shot_group.check_box.setChecked(False)
