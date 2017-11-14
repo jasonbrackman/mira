@@ -271,7 +271,7 @@ def get_task_file(project, asset_type_sequence, asset_name_shot, step, task,
 def get_entity_dir(project, entity_type, category, asset_type_sequence, asset_name_shot):
     entity_type = "assets" if entity_type == "Asset" else "shots"
     primary = pipeGlobal.Project(project).primary
-    template = pipeGlobal.Project(project).entity_dir
+    template = pipeGlobal.Project(project).template("entity_dir")
     entity_dir = template.format(primary=primary, project=project, category=category, entity_type=entity_type,
                                  asset_type_sequence=asset_type_sequence,
                                  asset_name_shot=asset_name_shot.split("_")[-1])
