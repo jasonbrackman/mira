@@ -38,6 +38,11 @@ Hair:
   engine: maya
   up_step: ["HighMdl"]
   down_step: null
+Lookdev:
+  entity_type: Asset
+  engine: maya
+  up_step: ["Shd", "Hair"]
+  down_step: null
 Group:
   entity_type: Asset
   engine: maya
