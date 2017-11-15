@@ -174,6 +174,10 @@ class DisplayLayer(QDialog):
 
 
 def main():
-    from miraLibs.qtLibs import render_ui
-    render_ui.render(DisplayLayer)
+    if mc.window("Display layer", q=1, ex=1):
+        print 1
+        mc.deleteUI("Display layer")
+    from miraLibs.mayaLibs import get_maya_win
+    dl = DisplayLayer(get_maya_win.get_maya_win("PySide"))
+    dl.show()
 
