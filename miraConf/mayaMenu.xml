@@ -73,6 +73,8 @@
                  mode="python" name="提交渲染【Submit deadline】" type="command"/>
         <command cmd="from miraPipeline.maya.import_camera import import_camera;reload(import_camera);import_camera.main()"
                  mode="python" name="导入摄像机【Import Camera】" type="command"/>
+        <command cmd="from miraScripts.mayaTools.lighting_tool.display_layer import display_layer;reload(display_layer);display_layer.main()"
+                 mode="python" name="显示层【Display Layer】" type="command"/>
     </submenu>
     <submenu name= "----------" type="separator"/>
     <!--public tools-->
