@@ -18,8 +18,13 @@ def import_camera(project, sequence, step):
         cache_dir = cache_template.format(project=project, sequence=sequence,
                                           shot=shot_name.split("_")[-1], step=step, task=step)
         camera_cache_path = "%s/camera.abc" % cache_dir
+        camera_cache_path = camera_cache_path.replace("\\", "/")
         if not os.path.isfile(camera_cache_path):
             print "%s is not exist." % camera_cache_path
+            continue
+        reference_files = mc.file(q=1, r=1, wcn=1)
+        if camera_cache_path in reference_files:
+            print "%s already exist" % camera_cache_path
             continue
         create_reference.create_reference(camera_cache_path)
     group_camera()
