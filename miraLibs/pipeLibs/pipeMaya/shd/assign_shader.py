@@ -184,21 +184,21 @@ def assign_shader(model_group_name):
                     tmp_mesh_list[1] = asset.name
                     final_mesh = "%s%s" % (prefix, "|".join(tmp_mesh_list))
         assign_shader_to_another(json_data, mesh, final_mesh)
+
+
+def main():
+    assets = mc.ls(sl=1)
+    if not assets:
+        return
+    for asset in assets:
+        if re.match(".*MODEL(\d+)?$", asset):
+            assign_shader(asset)
     print "#" * 100
     print "Not exist transform:\n", "\t\n".join(not_exist_geo_list)
     print "#" * 100
     print "Not exist shadingEngine:\n", "\t\n".join(not_exist_sg_list)
     print "#" * 100
-
-
-def main():
-    asset = mc.ls(sl=1)
-    if len(asset) == 1 and re.match(".*MODEL(\d+)?$", asset[0]):
-        assign_shader(asset[0])
-        QMessageBox.information(None, "Warming Tip", "Assign shader done.")
-    else:
-        logger.error("Select right group.")
-        QMessageBox.critical(None, "Warming Tip", "Select right group please.")
+    QMessageBox.information(None, "Warming Tip", "Assign shader done.")
 
 
 if __name__ == "__main__":
