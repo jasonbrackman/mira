@@ -48,7 +48,7 @@ class ImportCamera(QDialog):
     def on_btn_clicked(self):
         project = self.project_le.text()
         sequence = self.sequence_le.text()
-        step = self.sequence_le.text()
+        step = self.step_le.text()
         if not all((project, sequence, step)):
             print "Fill the blank"
             return
