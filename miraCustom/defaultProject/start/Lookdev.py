@@ -5,6 +5,7 @@ from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import new_file, quit_maya, create_reference, save_as, load_plugin
 import maya.mel as mel
 from miraLibs.pipeLibs.pipeMaya.hair import import_xgen_hair
+from miraPipeline.maya.templates_manage import reference_turntable
 
 
 def main(file_name, local):
@@ -21,12 +22,18 @@ def main(file_name, local):
         logger.info("%s is not an exist file" % shd_publish_file)
         return
     create_reference.create_reference(shd_publish_file, asset_name)
+    logger.info("reference shd done.")
+    # import hair
     load_plugin.load_plugin("xgenToolkit.mll")
     mel.eval("XgCreateDescriptionEditor;")
     publish_file = pipeFile.get_task_file(project, asset_type, asset_name,
                                           "Hair", "Hair", "maya_asset_publish", "")
     context = pipeFile.PathDetails.parse_path(publish_file)
     import_xgen_hair(context, "hair")
+    logger.info("import hair done.")
+    # reference turn table
+    reference_turntable()
+    logger.info("reference turntable done.")
     save_as.save_as(file_name)
     logger.info("%s publish successful!" % file_name)
     if not local:

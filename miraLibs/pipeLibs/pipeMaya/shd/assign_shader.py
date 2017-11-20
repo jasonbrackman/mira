@@ -3,6 +3,7 @@ import re
 import os
 import logging
 from Qt.QtWidgets import *
+from Qt.QtCore import *
 import maya.cmds as mc
 import miraLibs.pipeLibs.pipeFile as pipeFile
 from miraLibs.pyLibs import json_operation
@@ -61,12 +62,13 @@ def assign_shader_to_another(json_data, mesh, final_mesh):
 class Asset(object):
     def __init__(self, name=None):
         self.name = name
+        self.short_name = self.name.split("|")[-1]
         self.long_name = mc.ls(self.name, long=1)[0]
         self.project = get_project()
 
     @property
     def asset_type_short_name(self):
-        return self.name.split(":")[-1].split("_")[0]
+        return self.short_name.split(":")[-1].split("_")[0]
 
     @property
     def asset_type(self):
@@ -74,7 +76,7 @@ class Asset(object):
 
     @property
     def asset_name(self):
-        return self.name.split(":")[-1].split("_")[1]
+        return self.short_name.split(":")[-1].split("_")[1]
 
     @property
     def prefix(self):
@@ -98,16 +100,16 @@ class Asset(object):
     def json_path(self):
         json_path = pipeFile.get_task_file(self.project, self.asset_type, self.asset_name,
                                            "Shd", "Shd", "maya_asset_connection", "")
-        return json_path
+        if json_path and os.path.isfile(json_path):
+            return json_path
+        else:
+            logger.warning("%s is not an exist file" % json_path)
 
     @property
     def json_data(self):
         json_path = self.json_path
-        if json_path and os.path.isfile(json_path):
-            json_data = json_operation.get_json_data(json_path)
-            return json_data
-        else:
-            logger.warning("%s is not an exist file" % json_path)
+        json_data = json_operation.get_json_data(json_path)
+        return json_data
 
     @property
     def shd_path(self):
@@ -186,13 +188,34 @@ def assign_shader(model_group_name):
         assign_shader_to_another(json_data, mesh, final_mesh)
 
 
+def get_assets():
+    selected = mc.ls(sl=1)
+    if not selected:
+        return
+    assets = list()
+    for sel in selected:
+        children = mc.listRelatives(sel, ad=1, type="transform", fullPath=1)
+        children.append(sel)
+        for child in children:
+            if re.match(".*MODEL(\d+)?$", child):
+                assets.append(child)
+    assets = list(set(assets))
+    return assets
+
+
 def main():
-    assets = mc.ls(sl=1)
+    assets = get_assets()
     if not assets:
         return
-    for asset in assets:
-        if re.match(".*MODEL(\d+)?$", asset):
-            assign_shader(asset)
+    progress_dialog = QProgressDialog('Assign materials,Please wait......', 'Cancel', 0, len(assets))
+    progress_dialog.setWindowModality(Qt.WindowModal)
+    progress_dialog.setMinimumWidth(500)
+    progress_dialog.show()
+    for index, asset in enumerate(assets):
+        assign_shader(asset)
+        progress_dialog.setValue(index+1)
+        if progress_dialog.wasCanceled():
+            break
     print "#" * 100
     print "Not exist transform:\n", "\t\n".join(not_exist_geo_list)
     print "#" * 100
