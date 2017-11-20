@@ -155,3 +155,4 @@ def group_camera(file_path):
         create_group.create_group("Camera")
         mc.parent(camera, "Camera")
     print "group camera done."
+
