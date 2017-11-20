@@ -26,9 +26,6 @@ def main(file_name, local):
     # rebuild scene
     rebuild_scene()
     logger.info("Rebuild scene done.")
-    # assembly switch to shd
-    assembly = Assembly.Assembly()
-    assembly.set_active("Shd")
     # edit shd
     edit_shd(context)
     logger.info("Edit shd done.")
@@ -40,6 +37,9 @@ def main(file_name, local):
     # group assets
     group_assets()
     group_camera(file_name)
+    # assembly switch to shd
+    assembly = Assembly.Assembly()
+    assembly.set_active("Shd")
     # fix frame range
     fix_frame_range.fix_frame_range(context)
     logger.info("Fix frame range done.")
