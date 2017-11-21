@@ -2,9 +2,9 @@
 import maya.cmds as mc
 
 
-def import_exocortex_abc(file_name, normals=1, attachToExisting=1, uvs=0, facesets=1, multi=0):
+def import_exocortex_abc(file_name, normals=0, attachToExisting=1, uvs=0, facesets=0, multi=0):
     file_name_str = "filename=%s" % file_name
-    normals_str = "normal=%s" % normals
+    normals_str = "normals=%s" % normals
     attach_str = "attachToExisting=%s" % attachToExisting
     uvs_str = "uvs=%s" % uvs
     facesets_str = "facesets=%s" % facesets
