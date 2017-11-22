@@ -298,6 +298,16 @@ def get_task_workImage_file(project, entity_type, asset_type_sequence, asset_nam
     return image_file
 
 
+def get_task_workVideo_file(project, entity_type, asset_type_sequence, asset_name_shot, step, task, version=None):
+    engine = pipeGlobal.Project(project).step(step).engine
+    if entity_type == "Asset":
+        format_str = "%s_asset_workVideo" % engine
+    else:
+        format_str = "%s_shot_workVideo" % engine
+    image_file = get_task_file(project, asset_type_sequence, asset_name_shot, step, task, format_str, version)
+    return image_file
+
+
 def get_task_publish_file(project, entity_type, asset_type_sequence, asset_name_shot, step, task, version=""):
     engine = pipeGlobal.Project(project).step(step).engine
     if entity_type == "Asset":

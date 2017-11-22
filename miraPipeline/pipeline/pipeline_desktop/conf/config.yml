@@ -9,8 +9,12 @@ Producer:
     order: 2
   export_fbx_camera:
     name: "导出fbx摄像机"
-    command: "python {mira_dir}/miraPipeline/maya/export_fbx_camera/export_fbx_camera.py"
+    command: "python {mira_dir}/miraScripts/paTools/export_fbx_camera/export_fbx_camera.py"
     order: 3
+  copy_version_video:
+    name: "拷贝视频"
+    command: "python {mira_dir}/miraScripts/paTools/copy_version_video/copy_version_video.py"
+    order: 4
 
 TD:
   task_start:
@@ -23,5 +27,9 @@ TD:
     order: 2
   export_fbx_camera:
     name: "导出fbx摄像机"
-    command: "python {mira_dir}/miraPipeline/maya/export_fbx_camera/export_fbx_camera.py"
+    command: "python {mira_dir}/miraScripts/paTools/export_fbx_camera/export_fbx_camera.py"
     order: 3
+  copy_version_video:
+    name: "拷贝视频"
+    command: "python {mira_dir}/miraScripts/paTools/copy_version_video/copy_version_video.py"
+    order: 4

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import maya.cmds as mc
+import pymel.core as pm
 from Qt.QtWidgets import *
 from Qt.QtGui import *
 from Qt.QtCore import *
@@ -75,6 +76,9 @@ class SwitchAssembly(QDialog):
         progress_dialog.show()
         for index, ar_node in enumerate(ar_nodes):
             progress_dialog.setValue(index)
+            if not pm.PyNode(ar_node).isVisible():
+                print "%s is not visible" % ar_node
+                continue
             reps = mc.assembly(ar_node, q=1, listRepresentations=1)
             if rep not in reps:
                 print "%s not in the representations of node %s" % (rep, ar_node)
