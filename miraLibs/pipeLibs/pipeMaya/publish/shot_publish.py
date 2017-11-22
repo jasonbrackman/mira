@@ -2,6 +2,7 @@
 import os
 import logging
 import maya.cmds as mc
+import pymel.core as pm
 from miraLibs.mayaLibs import new_file, Assembly, save_file, rename_scene, export_abc, get_frame_range, get_namespace
 from miraLibs.pipeLibs.pipeMaya import get_models, get_valid_camera
 from miraLibs.pyLibs.Temporary import Temporary
@@ -85,7 +86,7 @@ def export_env_cache(context):
     children = mc.listRelatives("Env", ad=1, type="transform")
     models = list()
     for child in children:
-        if child.endswith("_MODEL") and not child.split(":")[-1].startswith("env_") and mc.getAttr("%s.visibility" % child):
+        if child.endswith("_MODEL") and not child.split(":")[-1].startswith("env_") and pm.PyNode(child).isVisible():
             models.append(child)
     do_export(1000, 1000, env_cache_path, models)
 
