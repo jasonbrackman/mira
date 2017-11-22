@@ -73,16 +73,20 @@ class Assembly(object):
         all_reps = list(set(all_reps))
         return all_reps
 
-    def set_active(self, rep, selected=None):
+    def set_active(self, rep, selected=None, not_include_hide=True):
         ar_nodes = self.get_all_ar_nodes(selected)
         for ar_node in ar_nodes:
+            if not_include_hide:
+                if not pm.PyNode(ar_node).isVisible():
+                    print "%s is not visible" % ar_node
+                    continue
             reps = mc.assembly(ar_node, q=1, listRepresentations=1)
             if rep not in reps:
                 print "%s not in the representations of node %s" % (rep, ar_node)
                 continue
             active_label = mc.assembly(ar_node, q=1, activeLabel=1)
             if active_label == rep:
-                print "Current active label is %s" % rep
+                print "%s current active label is %s" % (ar_node, rep)
                 continue
             mc.assembly(ar_node, e=1, activeLabel=rep)
 
