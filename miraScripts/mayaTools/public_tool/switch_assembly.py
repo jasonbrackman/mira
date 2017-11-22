@@ -79,6 +79,10 @@ class SwitchAssembly(QDialog):
             if rep not in reps:
                 print "%s not in the representations of node %s" % (rep, ar_node)
                 continue
+            active_label = mc.assembly(ar_node, q=1, activeLabel=1)
+            if active_label == rep:
+                print "Current active label is %s" % rep
+                continue
             mc.assembly(ar_node, e=1, activeLabel=rep)
             if progress_dialog.wasCanceled():
                 break
