@@ -138,6 +138,11 @@ check_mdl_vertex_zero:
   order: 242
   ignorable: False
   description: "检查模型的点是否归零"
+check_unlock_normal:
+  name: "Unlock Normals | 解锁法线"
+  order: 243
+  ignorable: False
+  description: "解锁所有法线"
 check_mdl_delete_history:
   name: "Delete History | 删除历史"
   order: 245

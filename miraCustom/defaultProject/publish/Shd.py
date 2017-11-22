@@ -3,7 +3,7 @@ import logging
 import maya.cmds as mc
 from miraLibs.pipeLibs import pipeFile
 from miraLibs.mayaLibs import open_file, quit_maya, export_selected, \
-    delete_history, delete_unused_nodes, delete_layer, \
+    delete_history, delete_unused_nodes, delete_layer, unlock_normal, \
     get_selected_group_sg, get_shader_history_nodes, remove_namespace, delete_intermediate_object
 from miraLibs.pipeLibs.pipeMaya import rename_pipeline_shape, publish, get_model_name
 
@@ -39,6 +39,12 @@ def rename_shd_mat_node(context):
                 pass
 
 
+def unlock_normals():
+    meshes = mc.ls(type="mesh")
+    mc.select(meshes, r=1)
+    unlock_normal.unlock_normal()
+
+
 def main(file_name, local):
     logger = logging.getLogger("shd publish")
     if not local:
@@ -51,6 +57,8 @@ def main(file_name, local):
     # import all reference
     publish.reference_opt()
     logger.info("Import all reference.")
+    # unlock normals
+    unlock_normals()
     # delete history and delete unused nodes
     delete_history.delete_history()
     delete_unused_nodes.delete_unused_nodes()

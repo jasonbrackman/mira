@@ -117,12 +117,12 @@ def init_render_setting():
     current_project = pipeGlobal.current_project
     resolution = pipeGlobal.Project(current_project).resolution
     set_image_size.set_image_size(*resolution)
-    renderer = pipeGlobal.Project(current_project).renderer
-    user = getpass.getuser()
-    if user in ["lvxiaolong", "xuwenliang", "liwenyang", "fengjingshi", "heshuai"]:
-        mel.eval('unifiedRenderGlobalsWindow')
-        mc.setAttr("defaultRenderGlobals.ren", renderer, type="string")
-        logger.info("Initialize render settings done.")
+    # renderer = pipeGlobal.Project(current_project).renderer
+    # user = getpass.getuser()
+    # if user in ["lvxiaolong", "xuwenliang", "liwenyang", "fengjingshi", "heshuai"]:
+    #     mel.eval('unifiedRenderGlobalsWindow')
+    #     mc.setAttr("defaultRenderGlobals.ren", renderer, type="string")
+    #     logger.info("Initialize render settings done.")
 
 
 def close_panel_when_open_and_save():
