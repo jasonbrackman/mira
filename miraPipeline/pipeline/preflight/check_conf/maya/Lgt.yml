@@ -1,0 +1,15 @@
+check_display_wireframe:
+  name: "Display wireframe | 线框显示"
+  order: 0
+  ignorable: False
+  description: "以线框显示保存文件"
+check_shot_frame_range:
+  name: "Frame range | 检查帧范围"
+  order: 20
+  ignorable: False
+  description: "检查帧范围是否跟动画环节一致"
+check_save_file:
+  name: "Save file | 保存文件"
+  order: 30
+  ignorable: True
+  description: "保存检查后的文件"
