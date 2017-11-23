@@ -75,6 +75,10 @@
                  mode="python" name="导入摄像机【Import Camera】" type="command"/>
         <command cmd="from miraScripts.mayaTools.lighting_tool.display_layer import display_layer;reload(display_layer);display_layer.main()"
                  mode="python" name="显示层【Display Layer】" type="command"/>
+        <command cmd="from miraPipeline.maya.switch_texture import switch_texture;reload(switch_texture);switch_texture.switch_texture('half')"
+                 mode="python" name="切换为半尺寸贴图" type="command"/>
+        <command cmd="from miraPipeline.maya.switch_texture import switch_texture;reload(switch_texture);switch_texture.switch_texture('full')"
+                 mode="python" name="切换为全尺寸贴图" type="command"/>
     </submenu>
     <submenu name= "----------" type="separator"/>
     <!--public tools-->
