@@ -7,6 +7,7 @@ from miraLibs.pipeLibs import pipeFile
 from miraLibs.pipeLibs.copy import Copy
 from miraLibs.pipeLibs.pipeMaya.shd import export_shd_textures
 from miraLibs.pyLibs import join_path, copy
+from miraLibs.pyLibs.image import resize_image
 
 
 def main():
@@ -26,8 +27,11 @@ def main():
     # save current file
     save_file.save_file()
     # copy to QCPublish path
-    obj = pipeFile.PathDetails.parse_path()
-    work_path = obj.work_path
+    context = pipeFile.PathDetails.parse_path()
+    work_path = context.work_path
+    # convert image
+    convert_image(context)
+    logger.info("Convert image done.")
     if Copy.copy(scene_name, work_path):
         logger.info("copy %s >> %s" % (scene_name, work_path))
     else:
@@ -40,6 +44,24 @@ def main():
     # open scene name
     open_file.open_file(scene_name)
     logger.info("Reopen %s" % scene_name)
+
+
+def convert_image(context):
+    tex_dir = context.tex_dir
+    ext_list = [".tif", ".tiff", ".png", ".tga", ".jpg", ".jpeg", ".exr", ".psd", ".bmp"]
+    for i in os.listdir(tex_dir):
+        tex_name = "%s/%s" % (tex_dir, i)
+        if not os.path.isfile(tex_name):
+            continue
+        ext = os.path.splitext(tex_name)[-1]
+        if ext not in ext_list:
+            continue
+        prefix, suffix = os.path.split(tex_name)
+        half_tex_name = "%s/half/%s" % (prefix, suffix)
+        half_tex_dir = os.path.dirname(half_tex_name)
+        if not os.path.isdir(half_tex_dir):
+            os.makedirs(half_tex_dir)
+        resize_image(tex_name, half_tex_name)
 
 
 if __name__ == "__main__":
