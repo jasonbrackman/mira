@@ -19,7 +19,7 @@ def submit_maya():
     filein = "R:%s" % suffix
     mel.eval('setMayaSoftwareFrameExt(3,0);')
     pm.saveFile(f=1)
-    copy.copy(pm.sceneName(), filein)
+    pm.saveAs(filein)
     submit(output_file_path, filein)
 
 
