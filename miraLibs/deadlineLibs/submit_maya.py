@@ -20,16 +20,21 @@ def submit_maya():
     mel.eval('setMayaSoftwareFrameExt(3,0);')
     pm.saveFile(f=1)
     copy.copy(pm.sceneName(), filein)
+    submit(output_file_path, filein)
+
+
+def submit(output_file_path, filein=None):
     # dets = pft.PathDetails.parse_path(pm.sceneName())
     # fileout = dets.getRenderFullPath().split('.####.')[0]
     # pm.setAttr('defaultRenderGlobals.imageFilePrefix', fileout)
+    if not filein:
+        filein = pm.sceneName()
     maya_dir = os.path.dirname(sys.executable)
     maya_exex = '%s\Render.exe' % maya_dir
     start_frame = int(pm.playbackOptions(animationStartTime=True, query=True))
     end_frame = int(pm.playbackOptions(animationEndTime=True, query=True))
-    name = "maya_%s_%s_%s_%s" % (context.project, context.sequence, context.shot, context.step)
+    name = os.path.basename(filein)
     # comment = ''
-
     maya_args = '-s <STARTFRAME>  -e <ENDFRAME>  -rd %s %s ' % (output_file_path, filein)
 
     sub = DeadlineSubmission()
